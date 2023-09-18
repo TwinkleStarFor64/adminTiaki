@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { IntranetComponent } from './intranet.component';
+import { IntranetModule } from './intranet.module'; // Import du module Intranet contenant RouterModule pour l'utilisation de <router-outlet>
 
 describe('IntranetComponent', () => {
   let component: IntranetComponent;
@@ -8,7 +8,8 @@ describe('IntranetComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [IntranetComponent]
+      declarations: [IntranetComponent],
+      imports: [IntranetModule]
     });
     fixture = TestBed.createComponent(IntranetComponent);
     component = fixture.componentInstance;

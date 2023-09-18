@@ -11,6 +11,7 @@ import { ProgrammeOptoComponent } from './opto/programme-opto/programme-opto.com
 import { MenusComponent } from './nutrition/menus/menus.component';
 import { IngredientsComponent } from './nutrition/ingredients/ingredients.component';
 import { ComplementsComponent } from './nutrition/complements/complements.component';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { ComplementsComponent } from './nutrition/complements/complements.compon
   ],
   imports: [
     CommonModule,
-    IntranetRoutingModule
+    IntranetRoutingModule, 
+    RouterModule   
   ]
 })
 export class IntranetModule { }
