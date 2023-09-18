@@ -4,7 +4,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { ConnexionComponent } from './extranet/connexion/connexion.component';
-import { IntranetComponent } from './intranet/intranet.component';
 import { CommonModule } from '@angular/common';
 
 
@@ -13,7 +12,7 @@ import { CommonModule } from '@angular/common';
   declarations: [
     AppComponent,
     ConnexionComponent,
-    IntranetComponent,
+    
     
     
   ],
