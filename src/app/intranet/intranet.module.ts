@@ -11,7 +11,8 @@ import { ProgrammeOptoComponent } from './opto/programme-opto/programme-opto.com
 import { MenusComponent } from './nutrition/menus/menus.component';
 import { IngredientsComponent } from './nutrition/ingredients/ingredients.component';
 import { ComplementsComponent } from './nutrition/complements/complements.component';
-import { RouterModule } from '@angular/router';
+import { AsideBarComponent } from './template/aside-bar/aside-bar.component';
+import { AllergenesComponent } from './nutrition/allergenes/allergenes.component';
 
 
 @NgModule({
@@ -25,13 +26,15 @@ import { RouterModule } from '@angular/router';
     ProgrammeOptoComponent,
     MenusComponent,
     IngredientsComponent,
-    ComplementsComponent
+    ComplementsComponent,
+    AsideBarComponent,
+    AllergenesComponent,
+   
     
   ],
   imports: [
     CommonModule,
     IntranetRoutingModule, 
-    RouterModule   
   ]
 })
 export class IntranetModule { }
