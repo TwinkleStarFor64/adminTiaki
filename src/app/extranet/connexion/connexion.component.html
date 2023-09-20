@@ -5,6 +5,7 @@
         <input type="password" formControlName="password" value="password">
         <button type="submit">Login</button>
     </form>
+    <div *ngIf="badLogin">
+        <p>Identifiants incorrects !</p>
+    </div>
 </section>
-<a routerLink="intranet">Intranet ici</a>
-<button routerLink="intranet">Intranet ici</button>

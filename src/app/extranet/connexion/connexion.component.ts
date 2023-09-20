@@ -14,6 +14,8 @@ export class ConnexionComponent {
     password: new FormControl(''),
   })
 
+  badLogin = false;
+
   constructor(private router:Router) {}
 
   onSubmitForm(): any {
@@ -28,7 +30,8 @@ export class ConnexionComponent {
       localStorage.setItem('token', 'myFakeToken');
       this.router.navigate(['intranet']);
     } else {
-      console.log('Identifiants incorrects !');      
+      console.log('Identifiants incorrects !'); 
+      this.badLogin = true;     
     }
   }
 
