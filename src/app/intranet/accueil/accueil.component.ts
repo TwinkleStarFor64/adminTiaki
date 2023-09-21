@@ -12,15 +12,8 @@ export class AccueilComponent implements OnInit {
   constructor(private router:Router, public supa: SupabaseService) {}
 
   async ngOnInit(): Promise<void> {
-    this.supa.getAdmin();   
+    this.supa.getAdmin();  
   }
 
- 
 
-
-  logout() {
-  // J'enléve le token de session - accès aux routes plus possible et retour à la page de connexion    
-    sessionStorage.removeItem('token');
-    this.router.navigate(['']);
-  }
 }

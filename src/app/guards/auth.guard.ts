@@ -4,9 +4,9 @@ export const authGuard: CanActivateFn = (route, state) => {
   const router = new Router();  
   const token = sessionStorage.getItem('token');
 
-  console.log('token dans auth.guard.ts', token);
+  /* console.log('token dans auth.guard.ts', token);
   console.log(route);
-  console.log(state);
+  console.log(state); */
 
   if (token) {     
     return true;      

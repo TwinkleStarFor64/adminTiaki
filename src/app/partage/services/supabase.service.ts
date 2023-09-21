@@ -33,10 +33,10 @@ export class SupabaseService {
       .from('admin')
       .select('*')
       if (data) {
-        console.log(data);        
+        //console.log(data);        
       }
       if (error) {
-        console.log(error);        
+        //console.log(error);        
       }
   }
 
