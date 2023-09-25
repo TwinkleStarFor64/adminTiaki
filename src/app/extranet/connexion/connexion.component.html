@@ -1,3 +1,11 @@
-<p>connexion works!</p>
-<a routerLink="intranet">Intranet ici</a>
-<button routerLink="intranet">Intranet ici</button>
+<section>
+    <p>Page de connexion</p>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmitForm()">
+        <input type="email" formControlName="email" value="email">
+        <input type="password" formControlName="password" value="password">
+        <button type="submit">Login</button>
+    </form>
+    <div *ngIf="badLogin">
+        <p>Identifiants incorrects !</p>
+    </div>
+</section>

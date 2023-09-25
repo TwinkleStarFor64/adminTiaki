@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AsideI } from 'src/app/partage/modeles/Types';
 
 @Component({
@@ -100,8 +101,18 @@ export class AsideBarComponent  {
   ];
   public hoveredIndex: number | null = null;
   
+  constructor(private router: Router) {}
   
   toggleNavbar() {
     this.navbarVisible = !this.navbarVisible;
+  }
+
+  logout(index: number) {
+    if (index === 1) { // Pour récupérer le 2e icône sur la Navbar
+      // J'enléve le token de session - accès aux routes plus possible et retour à la page de connexion    
+      sessionStorage.removeItem('token');
+      this.router.navigate(['']);
+    }
+    
   }
 }
