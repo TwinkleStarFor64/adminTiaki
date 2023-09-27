@@ -8,11 +8,33 @@ import { SupabaseService } from 'src/app/partage/services/supabase.service';
   styleUrls: ['./accueil.component.scss']
 })
 export class AccueilComponent implements OnInit {
-
+  public cards:any = [
+      {
+        title:"Optométrie",
+        text:" Ajoutez des exercices et créez les programmes pour les utilisateurs de l’interface optométrie.",
+        button:"Accéder à l'espace Optométrie",
+        image:"assets/images/accueil/acc1.png",
+        url:'opto'
+      },
+      {
+        title:"Nutrition",
+        text:" Réalisez des plats et des menus adaptés, utilisez ou ajoutez des ingrédients de façons détaillés.",
+        button:"Accéder à l'espace Nutrition",
+        image:"assets/images/accueil/acc2.png",
+        url:'nutrition'
+      },
+      {
+        title:"Kinésithérapie",
+        text:"Ajoutez des exercices et créez les programmes pour les utilisateurs de l’interface kinésithérapie",
+        button:"Accéder à l'espace Kinésithérapie",
+        image:"assets/images/accueil/acc3.png",
+        url:'kine'
+      },
+    ]
   constructor(private router:Router, public supa: SupabaseService) {}
 
   async ngOnInit(): Promise<void> {
-    this.supa.getAdmin();  
+    this.supa.getAdmin(); 
   }
 
 

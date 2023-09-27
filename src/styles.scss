@@ -49,3 +49,227 @@ main{
   width:100vw;
   height:100vh;
 }
+button{
+  padding:25px 20px;
+  border:none;
+  transition:all .3s ease;
+  cursor: pointer;
+  font-weight:600;
+  width: fit-content;
+  background-color:$clair;
+  color:$aside-color1;
+  font-size: 16px;
+}
+button:hover{
+  background-color: $aside-color3;
+  color: $aside-color1;
+  transform: scale(1.1);
+}
+/** CLASSES GENERIQUES */
+.logo{
+  width:150px;
+}
+.ariane{
+  display:flex;
+  flex-flow: row nowrap;
+  align-items: flex-end;
+  color: $aside-color2;
+  height:$head;
+}
+.ariane h1, .ariane h2{
+  font-weight: 100;
+  margin-left:20px;
+}
+.ariane h2:before{
+  content:'...... '
+}
+.ariane h2:after{
+  content:' ......'
+}
+/** CLASSES POUR LES COULEURS DE LA CHARTE GRAPHIQUE */
+.bg-nutrition{
+  color:$clair;
+  background-color: $card-nutri;
+}
+.bg-opto{
+  color:$clair;
+  background-color: $card-opto;
+}
+.bg-kine{
+  color:$clair;
+  background-color: $card-kine;
+}
+.bg-admin{
+  color:$clair;
+  background-color: $aside-color1;
+}
+.nutrition{
+  color: $card-nutri;
+}
+.opto{
+  color:$card-opto
+}
+.kine{
+  color:$card-kine;
+}
+app-accueil {
+  height: 100vh;
+  flex-direction: column;
+}
+section.accueil {
+  flex-direction: row;
+  height: calc(100vh - $head);
+}
+article.cartel {
+  margin: auto 2% 0;
+  flex-direction: column;
+  text-align: center;
+  color: $clair;
+  transition: all .3s ease;
+  height: 75%;
+  flex: 1 1 0px;
+  overflow: hidden;
+  justify-content: space-between;
+
+  h2 {
+    font-size: 2rem;
+  }
+  p {
+    padding: 15px;
+  }
+
+  a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &:nth-child(1) {
+    background-color: $card-opto ;
+
+    button {
+      color: $card-opto;
+    }
+  }
+
+  &:nth-child(2) {
+    background-color: $card-nutri ;
+
+    button {
+      color: $card-nutri;
+    }
+  }
+
+  &:nth-child(3) {
+    background-color: $card-kine ;
+
+    button {
+      color: $card-kine;
+    }
+  }
+
+  &:nth-child(4) {
+    background-color: $aside-color3 ;
+
+    button {
+      color: $aside-color3;
+    }
+  }
+  & > div{
+    height:66%;
+    display:flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    padding:20px;
+    transition:all .3s ease;
+  }
+  & > div > *{
+    margin:0 auto;
+  }
+  figure{
+    margin:0 -20px -20px;
+    padding:0;
+    border-top-left-radius:70%;
+    border-top-right-radius: 50%;
+    height:34%;
+    overflow: hidden;
+    transition:all .5s ease;
+  }
+  figure > div{
+    width:100%;
+    height:100%;
+    margin:0 -20px -20px;
+    // background-position:0 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    img {
+      width: 100%;
+    }
+    button:hover{
+      background-color: $clair;
+    }
+    &:nth-child(2) {
+      color: $card-nutri;
+    }
+  }
+  // Animation sur le hover
+  &:hover {
+    padding:30px 50px 0;
+    transform: scale(1.1);
+  }
+  &:hover > div {
+    height:50%;
+    padding-bottom:40px;
+  }
+  &:hover > figure {
+    margin:0 -70px 0;
+    border-radius: 0;
+    height:50%;
+  }
+
+}
+
+@media screen and (max-width: 960px) {
+  section.accueil {
+    flex-direction: column;
+  }
+  article.cartel {
+    flex-direction: row;
+    margin:0;
+
+    &:hover {
+      padding:0;
+      transform: scale(1);
+    }
+    &:hover > div {
+      height:100%;
+      padding-bottom:0;
+    }
+    &:hover > figure {
+      margin:0 -70px 0;
+      border-radius: 0;
+      height:100%;
+    }
+  }
+  article.cartel div{
+    width:55%;
+    height:100%;
+  }
+  article.cartel figure{
+    width:45%;
+    height:100%;
+    border-top-right-radius: 0;
+    border-top-left-radius: 15%;
+    border-bottom-left-radius: 15%;
+  }
+
+}

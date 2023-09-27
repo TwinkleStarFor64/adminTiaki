@@ -1,5 +1,19 @@
-<main>
-    <section>
-        <p>accueil</p>
-    </section>
-</main>
+<header class="ariane">
+    <h1><a routerLink="/intranet">Tiaki</a></h1>
+    <h2>Interface administrateur de l'application</h2>
+  </header>
+  <section class="accueil">
+    <article *ngFor="let card of cards" class="cartel">
+      <div>
+        <h2>{{ card.title }}</h2>
+        <p>{{ card.text }}</p>
+        <a [routerLink]="[card.url]">
+          <button>{{ card.button }}</button>
+        </a>
+      </div>
+      <figure>
+        <img [src]="card.image" alt="Images d'illustrations">
+      </figure>
+    </article>
+  </section>
+  
