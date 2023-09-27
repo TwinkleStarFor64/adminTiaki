@@ -27,7 +27,6 @@ export class SupabaseService {
     return this.supabase.auth.signInWithPassword({email, password});
   }
 
-
   async getAdmin() {
     const {data, error } = await this.supabase
       .from('admin')
@@ -39,10 +38,6 @@ export class SupabaseService {
         //console.log(error);        
       }
   }
-
-
-
-
 }
 
 
