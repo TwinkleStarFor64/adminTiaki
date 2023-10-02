@@ -27,13 +27,11 @@ export class SupabaseService {
     return this.supabase.auth.signInWithPassword({email, password});
   }
 
-
   async getAdmin() {
     const data = await this.supabase.from('admin').select('*');
     console.log(data);
     return data;    
   }
-
   
   async getUser() {
     const { data, error } = await this.supabase.auth.admin.getUserById('b3108489-62d7-45d4-8e02-0096dc12b78b');
@@ -68,11 +66,7 @@ async listUser() {
 }
 
 
-
-
-
-
-  
+ 
 
 }
 
