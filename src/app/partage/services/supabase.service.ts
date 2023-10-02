@@ -29,20 +29,42 @@ export class SupabaseService {
 
 
   async getAdmin() {
-    const {data, error } = await this.supabase
-      .from('admin')
-      .select('*')
-      if (data) {
-        //console.log(data);        
-      }
-      if (error) {
-        //console.log(error);        
-      }
+    const data = await this.supabase.from('admin').select('*');
+    console.log(data);
+    return data;    
   }
 
+  
+  async getUser() {
+    const { data, error } = await this.supabase.auth.admin.getUserById('b3108489-62d7-45d4-8e02-0096dc12b78b');
+    if (data) {
+      console.log("getUser fonction ", data);
+    }
+    if (error) {
+      console.log(error);      
+    }    
+  }
+// '3845e166-dd29-47b4-924a-de0a1e50d454' Denver
+// 'b3108489-62d7-45d4-8e02-0096dc12b78b' Toto
 
+async deleteUser() {
+  const { data, error } = await this.supabase.auth.admin.deleteUser('b3108489-62d7-45d4-8e02-0096dc12b78b');
+  if (data) {
+    console.log(data);    
+  }
+  if (error) {
+    console.log(error);    
+  }
+}
 
-
+async listUser() {
+  const { data, error } = await this.supabase.auth.admin.listUsers();
+  if (data) {
+    console.log("listUser data : ", data.users);    
+  }
+  if (error) {
+    console.log("listUser error : ", error);    
+  }
 }
 
 
@@ -50,8 +72,11 @@ export class SupabaseService {
 
 
 
-/* 
-getAuth(){
-    this.supabase.auth.signInWithPassword({email:'coucou', password:'leChat'}).then().catch();
-  }
-*/
+  
+
+}
+
+
+
+
+
