@@ -41,5 +41,5 @@ export class AuthService {
       return of({ name: 'Toto', email: 'a@a.com' }); // Un retour de valeur - Utile ?
     }
     return throwError(() => new Error('Failed to login')); // Si identifiant pas bon 
-  }
+  } 
 }
