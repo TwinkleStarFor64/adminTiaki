@@ -28,7 +28,7 @@ export class SupabaseService {
   }
 
   async getAdmin() {
-    const data = await this.supabase.from('admin').select('*');
+    const data = await this.supabase.from('utilisateur').select('*');
     console.log(data);
     return data;    
   }
@@ -55,16 +55,13 @@ async deleteUser() {
   }
 }
 
-async listUser() {
-  const { data, error } = await this.supabase.auth.admin.listUsers();
-  if (data) {
-    console.log("listUser data : ", data.users);    
-  }
-  if (error) {
-    console.log("listUser error : ", error);    
-  }
-}
 
+
+async listUser() {
+  const response = await this.supabase.auth.admin.listUsers();
+  console.log("ici response.data", response.data.users);
+  return response.data.users; // Retournez les données des utilisateurs  
+}
 
  
 
