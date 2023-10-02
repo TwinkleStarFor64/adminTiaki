@@ -18,7 +18,10 @@ authUsers: UtilisateurI[] = [];
     //this.supa.getUser();
     //this.supa.deleteUser(); 
     this.supa.listUser();
-    this.fetchAuthUsers();   
+    this.fetchAuthUsers();  
+    this.supa.getRoles();
+    this.supa.fetchAttribuerRoles(); 
+    this.supa.getAllUsersWithRoles();
   }
 
 async fetchUtilisateur() {
