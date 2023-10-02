@@ -6,3 +6,13 @@ export interface AsideI {
     image: string;
     url: string;
 }
+
+/**
+ * @description Interface des utilisateurs
+ */
+export interface UtilisateurI {
+    id?: string;
+    email: string;
+    nom: string;
+}
+
