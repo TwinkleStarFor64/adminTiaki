@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AccueilComponent } from './accueil.component';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 
 describe('AccueilComponent', () => {
   let component: AccueilComponent;
@@ -10,7 +10,9 @@ describe('AccueilComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [AccueilComponent],
-      imports: [RouterModule]
+      imports: [RouterModule],
+      providers: [{ provide: ActivatedRoute, useValue: {} } // Simuler ActivatedRoute
+    ],
     });
     fixture = TestBed.createComponent(AccueilComponent);
     component = fixture.componentInstance;
