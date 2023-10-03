@@ -19,33 +19,25 @@ export class SupabaseService {
 
   constructor() { this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey) }
   
-  /* getAuth(){
-    const data = this.supabase.auth.signInWithPassword({email:'coucou', password:'leChat'}).then().catch();
-    console.log("getAuth", data);    
-  } */
-
   // Connexion à l'application - Tuto : https://www.youtube.com/watch?v=hPI8OegHPYc
   signIn(email: string, password: string) {
     return this.supabase.auth.signInWithPassword({email, password});
   }
 
-  async getAdmin() {
+  // Récupérer les utilisateurs sur la table public.utilisateur
+  async getUtilisateur() {
     const data = await this.supabase.from('utilisateur').select('*');
-    console.log(data);
+    console.log("Méthode getUtilisateur", data);
     return data;    
   }
   
-  async getUser() {
-    const { data, error } = await this.supabase.auth.admin.getUserById('b3108489-62d7-45d4-8e02-0096dc12b78b');
-    if (data) {
-      console.log("getUser fonction ", data);
-    }
-    if (error) {
-      console.log(error);      
-    }    
+  // Récupérer les utilisateurs sur la table auth.users (table d'authentification de supabase)
+  async listUser() {
+    const response = await this.supabase.auth.admin.listUsers();
+    console.log("Méthode listUser - response.data.users", response.data.users);
+    return response.data.users; // Retournez les données des utilisateurs  
   }
-// '3845e166-dd29-47b4-924a-de0a1e50d454' Denver
-// 'b3108489-62d7-45d4-8e02-0096dc12b78b' Toto
+  
 
 async deleteUser() {
   const { data, error } = await this.supabase.auth.admin.deleteUser('b3108489-62d7-45d4-8e02-0096dc12b78b');
@@ -57,12 +49,12 @@ async deleteUser() {
   }
 }
 
+// Récupérer les rôles utilisateurs (Admin, rédacteur, etc..) sur la table roles
 async getRoles() {
   try {
     const { data } = await this.supabase.from('roles').select('*');
-
     if (data) {
-      console.log("Données récupérées :", data);
+      console.log("Méthode getRoles - Données récupérées :", data);
       return data;
     } else {
       throw new Error("Aucune donnée n'a été récupérée pour les rôles.");
@@ -73,11 +65,12 @@ async getRoles() {
   }
 }
 
+// Table attribuerRoles contient en tant que Foreign Key l'id de la table roles(int) et l'id de la table utilisateur(uuid)
 async fetchAttribuerRoles() {
   const { data, error } = await this.supabase
   .from('attribuerRoles')
   .select('idRole');
-  if(data)console.log("data attribuerRoles", data);
+  if(data)console.log("Méthode fetchAttribuerRoles", data);
   if(error)console.log(error);
 }
 
@@ -85,7 +78,7 @@ async getAllUsersWithRoles() {
   // Récupérez uniquement l'email et le nom des utilisateurs depuis la table utilisateur.
   const { data: utilisateursData, error: utilisateursError } = await this.supabase
     .from('utilisateur')
-    .select('id,email, nom');
+    .select('id, email, nom');
   
   if (utilisateursError) {
     console.error('Erreur lors de la récupération des utilisateurs :', utilisateursError);
@@ -94,11 +87,15 @@ async getAllUsersWithRoles() {
   
   // Récupérez les rôles associés à chaque utilisateur depuis la table attribuerRoles.
   for (const utilisateur of utilisateursData as UtilisateurData[]) {
-    const idUtilisateur = utilisateur.id; // Utilisez le champ correct de l'utilisateur.
+    const idUtilisateur = utilisateur.id; // Contient l'id des utilisateurs de la table utilisateur
+    console.log("heyhey", idUtilisateur);
+    
     const { data: rolesData, error: rolesError } = await this.supabase
       .from('attribuerRoles')
       .select('idRole')
-      .eq('idUtilisateur', idUtilisateur);
+      .eq('idUtilisateur', idUtilisateur); // Comparaison de l'id de la table avec l'id de la variable
+      console.log("coucou", rolesData);
+      
     
     if (rolesError) {
       console.error('Erreur lors de la récupération des rôles de l\'utilisateur :', rolesError);
@@ -106,11 +103,12 @@ async getAllUsersWithRoles() {
     }
     
     // Récupérez les détails des rôles depuis la table des rôles.
-    const idRoles = rolesData.map(entry => entry.idRole);
+    const idRoles = rolesData.map(entry => entry.idRole);    
+    console.log("idRoles", idRoles);    
     const { data: rolesDetailsData, error: rolesDetailsError } = await this.supabase
       .from('roles')
       .select('*')
-      .in('id', idRoles);
+      .eq('id', idRoles);
     
     if (rolesDetailsError) {
       console.error('Erreur lors de la récupération des détails des rôles :', rolesDetailsError);
@@ -119,19 +117,17 @@ async getAllUsersWithRoles() {
     
     // Ajoutez les détails des rôles à l'objet utilisateur.
     utilisateur.roles = rolesDetailsData as RoleData[]; // Utilisez le type correct.
+    console.log("utilisateurs.roles ici : ",utilisateur.roles);
+    
   }
   
   // Les utilisateurs avec email, nom et rôles sont maintenant dans utilisateursData.
   console.log('Utilisateurs avec email, nom et rôles :', utilisateursData);
-  console.log('Roles:', this.utilisateurData.map((item) => item['id']).join(', '));
+  console.log('Roles:', this.utilisateurData.map((item) => item['id']).map((toto) => toto['roles']));
   
 }
 
-async listUser() {
-  const response = await this.supabase.auth.admin.listUsers();
-  console.log("ici response.data", response.data.users);
-  return response.data.users; // Retournez les données des utilisateurs  
-}
+
 
  
 
@@ -141,3 +137,14 @@ async listUser() {
 
 
 
+/* async getUser() {
+    const { data, error } = await this.supabase.auth.admin.getUserById('b3108489-62d7-45d4-8e02-0096dc12b78b');
+    if (data) {
+      console.log("getUser fonction ", data);
+    }
+    if (error) {
+      console.log(error);      
+    }    
+  } */
+// '3845e166-dd29-47b4-924a-de0a1e50d454' Denver
+// 'b3108489-62d7-45d4-8e02-0096dc12b78b' Toto

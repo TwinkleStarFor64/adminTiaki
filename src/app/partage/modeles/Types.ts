@@ -20,8 +20,11 @@ export interface UtilisateurData {
     id: any;
     email: string;
     nom: string;
-    roles: any[]; 
-  }
+    roles: any[
+      string
+    ]; 
+}
+
 export interface RoleData {
   id: number;
   role: string;
