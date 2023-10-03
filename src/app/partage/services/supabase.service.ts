@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   AuthSession,
   createClient,
-  PostgrestSingleResponse,
-  SupabaseClient,
+  SupabaseClient
 } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
 import { RoleData, UtilisateurData } from '../modeles/Types';
@@ -85,7 +84,7 @@ async getAllUsersWithRoles() {
   // Récupérez uniquement l'email et le nom des utilisateurs depuis la table utilisateur.
   const { data: utilisateursData, error: utilisateursError } = await this.supabase
     .from('utilisateur')
-    .select('id,email, nom');
+    .select('id, email, nom'); // Incluez le champ "id" pour l'utilisateur.
   
   if (utilisateursError) {
     console.error('Erreur lors de la récupération des utilisateurs :', utilisateursError);
@@ -123,9 +122,14 @@ async getAllUsersWithRoles() {
   
   // Les utilisateurs avec email, nom et rôles sont maintenant dans utilisateursData.
   console.log('Utilisateurs avec email, nom et rôles :', utilisateursData);
-  console.log('Roles:', this.utilisateurData.map((item) => item['id']).join(', '));
-  
+
+  // Pour afficher les rôles, vous pouvez utiliser une boucle ou une fonction map.
+  for (const utilisateur of utilisateursData as UtilisateurData[]) {
+    const roles = utilisateur.roles.map(nomRole => nomRole.role).join(', ');
+    console.log(`Rôles de ${utilisateur.nom}: ${roles}`);
+  }
 }
+
 
 async listUser() {
   const response = await this.supabase.auth.admin.listUsers();
