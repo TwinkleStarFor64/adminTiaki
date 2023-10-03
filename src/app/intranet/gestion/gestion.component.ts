@@ -17,11 +17,11 @@ authUsers: UtilisateurI[] = [];
     this.fetchUtilisateur();
     this.fetchAuthUsers();  
     
-    this.supa.listUser();
-    this.supa.getRoles();
     this.supa.fetchAttribuerRoles(); 
     this.supa.getAllUsersWithRoles();
-
+    
+    //this.supa.getRoles();
+    //this.supa.listUser();
     //this.supa.getUser();
     //this.supa.deleteUser(); 
   }
