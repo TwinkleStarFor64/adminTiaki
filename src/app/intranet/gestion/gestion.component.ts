@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UtilisateurI } from 'src/app/partage/modeles/Types';
+import { RoleData, UtilisateurData, UtilisateurI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 
 @Component({
@@ -9,17 +9,26 @@ import { SupabaseService } from 'src/app/partage/services/supabase.service';
 })
 export class GestionComponent implements OnInit {
 utilisateur: UtilisateurI[] = []; 
-authUsers: UtilisateurI[] = []; 
+authUsers: UtilisateurI[] = [];
+allUsersData: UtilisateurData[] = []; 
 
   constructor(public supa:SupabaseService) {}
 
  async ngOnInit(): Promise <void> {
-    this.fetchUtilisateur();
-    this.fetchAuthUsers();  
-    
-    this.supa.fetchAttribuerRoles(); 
-    this.supa.getAllUsersWithRoles();
-    
+  try {
+    // Utilisation de Promise.all() pour attendre que toutes les opérations se terminent.
+    await Promise.all([
+      this.fetchUtilisateur(),
+      this.fetchAuthUsers(),
+      this.fetchAllUsersWithRoles(),
+      this.supa.fetchAttribuerRoles(),
+      this.supa.getAllUsersWithRoles()
+    ]);
+
+    // Une fois que toutes les opérations sont terminées, vous pouvez continuer ici.
+  } catch (error) {
+    console.error("Erreur lors de l'initialisation :", error);
+  }
     //this.supa.getRoles();
     //this.supa.listUser();
     //this.supa.getUser();
@@ -61,6 +70,38 @@ async fetchAuthUsers() {
     throw new Error("Echec de la méthode fetchAuthUsers. Veuillez consulter les logs pour plus d'informations.");
   }
 }
+
+
+async fetchAllUsersWithRoles() {
+  try {
+    const usersWithRolesData: UtilisateurData[] = await this.supa.getAllUsersWithRoles();
+    if (usersWithRolesData !== undefined) { // Vérification de nullité
+      this.allUsersData = usersWithRolesData.map((item) => ({
+        id: item.id,
+        email: item.email,
+        nom: item.nom,
+        roles: item.roles
+      }));
+
+      // Afficher les utilisateurs avec leurs emails et rôles dans la console
+       this.allUsersData.forEach((user) => {
+        const allRoles = user.roles.map((role: RoleData) => role.role).join(', ');
+        console.log(`Nom: ${user.nom}, Email: ${user.email}, Rôles: ${allRoles}`);
+      });
+      return;
+
+    } else {
+      throw new Error('Aucune donnée utilisateur et rôles disponibles');
+    }
+  } catch (error) {
+    console.error("Erreur lors de la récupération des données rôles et utilisateurs", error);
+    throw new Error("Echec de la méthode fetchAllUsersWithRoles. Veuillez consulter les logs pour plus d'informations.");
+  }
+}
+getRolesText(user: UtilisateurData): string {
+  return user.roles.map((allRole: RoleData) => allRole.role).join(', ');
+}
+
 
 
 

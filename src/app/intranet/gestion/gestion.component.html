@@ -1,7 +1,9 @@
 <section>
     <p>gestion works!</p>
-    <article *ngFor="let users of authUsers">
-        <p>{{ users.email }}</p>
-    </article>
+    <div *ngFor="let user of allUsersData">
+        <p>Nom: {{ user.nom }}</p>
+        <p>Email: {{ user.email }}</p>
+        <p>Rôles: {{ getRolesText(user) }}</p>
+      </div>
 
 </section>

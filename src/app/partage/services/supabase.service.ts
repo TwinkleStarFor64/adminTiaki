@@ -74,7 +74,7 @@ export class SupabaseService {
   }
 
   // Méthode pour récupérer les utilisateurs et leur rôles
-  async getAllUsersWithRoles() {
+  async getAllUsersWithRoles(): Promise<UtilisateurData[]> {
     // Récupérez uniquement l'email et le nom des utilisateurs depuis la table utilisateur.
     const { data: utilisateursData, error: utilisateursError } = await this.supabase
       .from('utilisateur')
@@ -82,7 +82,6 @@ export class SupabaseService {
 
     if (utilisateursError) {
       console.error('Erreur lors de la récupération des utilisateurs :', utilisateursError);
-      return;
     }
 
     // Récupérez les rôles associés à chaque utilisateur depuis la table attribuerRoles.
@@ -124,12 +123,12 @@ export class SupabaseService {
     }
     // Les utilisateurs avec email, nom et rôles sont maintenant dans utilisateursData.
     //console.log('Utilisateurs avec email, nom et rôles :', utilisateursData);
-
     // Pour afficher les rôles, vous pouvez utiliser une boucle ou une fonction map.
     for (const utilisateur of utilisateursData as UtilisateurData[]) { // Utilisez le type correct - interface RoleData
       const roles = utilisateur.roles.map((nomRole: RoleData) => nomRole.role).join(', ');
       console.log(`Rôles de ${utilisateur.nom}: ${roles}`);
     }
+    return utilisateursData as UtilisateurData[];
   }
 }
 
