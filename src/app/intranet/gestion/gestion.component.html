@@ -1,9 +1,30 @@
+<header class="ariane">
+  <h1><a routerLink="/intranet">Tiaki</a></h1>
+  <h2>Les Utilisateur</h2>
+</header>
 <section>
-    <p>gestion works!</p>
-    <div *ngFor="let user of allUsersData">
-        <p>Nom: {{ user.nom }}</p>
-        <p>Email: {{ user.email }}</p>
-        <p>Rôles: {{ getRolesText(user) }}</p>
-      </div>
-
+      <table>
+        <thead>
+          <tr>
+            <th>Selectionner</th>
+            <th colspan="1">Nom utilisateur</th>
+            <th colspan="1">Adresse mail</th>
+            <th colspan="1">Rôles</th>
+            <th>Favoris</th>
+            <th>Editer</th>
+            <th>Supprimer</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let user of allUsersData" >
+          <tr>
+            <td><input type="checkbox"></td>
+            <td> {{ user.nom }}</td>
+            <td> {{ user.email }}</td>
+            <td>{{ getRolesText(user) }}</td>
+            <td><figure><img src="assets/images/icones/gestion-utilisateur/coeur.png" alt="favoris"></figure></td>
+            <td><figure><img src="assets/images/icones/gestion-utilisateur/editer.png"alt=""></figure></td>
+            <td><figure><img src="assets/images/icones/gestion-utilisateur/corbeille.png"alt=""></figure></td>
+          </tr>
+        </tbody>
+      </table>
 </section>

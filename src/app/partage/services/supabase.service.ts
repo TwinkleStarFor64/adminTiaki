@@ -108,7 +108,7 @@ export class SupabaseService {
       const { data: rolesDetailsData, error: rolesDetailsError } = await this.supabase
         .from('roles')
         .select('*')
-        .eq('id', idRoles); // Comparaison de la ForeignKey avec les id de la table roles
+        .in('id', idRoles); // Comparaison de la ForeignKey avec les id de la table roles
         // rolesDetailsData contient les résultats de la comparaison au dessus
         //console.log(rolesDetailsData);        
 
@@ -130,6 +130,30 @@ export class SupabaseService {
     }
     return utilisateursData as UtilisateurData[];
   }
+//   async attribuerRolesAUtilisateur(idUtilisateur: string, idRolesAAttribuer: string[]) {
+//     try {
+//       // Boucle à travers la liste d'ID de rôles et créez une entrée pour chaque rôle attribué
+//       for (const idRole of idRolesAAttribuer) {
+//         // Insérez une nouvelle entrée dans la table attribuerRoles
+//         const { data, error } = await this.supabase
+//           .from('attribuerRoles')
+//           .upsert([
+//             {
+//               idUtilisateur: idUtilisateur,
+//               idRole: idRole
+//             }
+//           ]);
+        
+//         if (error) {
+//           console.error('Erreur lors de l\'attribution du rôle à l\'utilisateur :', error);
+//           // Gérez l'erreur comme vous le souhaitez
+//         }
+//       }
+//     } catch (error) {
+//       console.error('Erreur lors de l\'attribution des rôles à l\'utilisateur :', error);
+//       // Gérez l'erreur comme vous le souhaitez
+//     }
+//   }
 }
 
 
