@@ -16,3 +16,15 @@ export interface UtilisateurI {
     nom: string;
 }
 
+export interface UtilisateurData {
+    id: any;
+    email: string;
+    nom: string;
+    roles: RoleData[];
+}
+
+export interface RoleData {
+  id: number;
+  role: string;
+}
+

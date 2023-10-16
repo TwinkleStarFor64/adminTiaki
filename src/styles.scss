@@ -79,6 +79,9 @@ button:hover{
 .ariane h1, .ariane h2{
   font-weight: 100;
   margin-left:20px;
+  a{
+    text-decoration: none;
+  }
 }
 .ariane h2:before{
   content:'...... '
@@ -138,13 +141,6 @@ article.cartel {
     padding: 15px;
   }
 
-  a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-  }
-
   &:nth-child(1) {
     background-color: $card-opto ;
 
@@ -166,6 +162,7 @@ article.cartel {
 
     button {
       color: $card-kine;
+
     }
   }
 
@@ -196,13 +193,17 @@ article.cartel {
     overflow: hidden;
     transition:all .5s ease;
   }
-  figure > div{
+  figure > div {
     width:100%;
     height:100%;
     margin:0 -20px -20px;
     // background-position:0 50%;
     background-repeat: no-repeat;
     background-size: cover;
+
+    img {
+      width: 100%;
+    }
   }
   a {
     display: flex;
@@ -210,10 +211,7 @@ article.cartel {
     align-items: center;
     justify-content: space-between;
     width: 100%;
-
-    img {
-      width: 100%;
-    }
+    text-decoration: none;
     button:hover{
       background-color: $clair;
     }
