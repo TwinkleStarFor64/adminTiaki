@@ -29,6 +29,7 @@ import { AllergenesComponent } from './nutrition/allergenes/allergenes.component
     ComplementsComponent,
     AsideBarComponent,
     AllergenesComponent,
+
    
     
   ],
