@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ConnexionComponent } from './connexion.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
 
 describe('ConnexionComponent', () => {
   let component: ConnexionComponent;
@@ -10,7 +11,7 @@ describe('ConnexionComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ConnexionComponent],
-      imports: [ReactiveFormsModule]
+      imports: [ReactiveFormsModule, ButtonModule]
     });
     fixture = TestBed.createComponent(ConnexionComponent);
     component = fixture.componentInstance;
