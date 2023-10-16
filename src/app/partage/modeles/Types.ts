@@ -11,7 +11,7 @@ export interface AsideI {
  * @description Interface des utilisateurs
  */
 export interface UtilisateurI {
-    id?: string;
+    id: string;
     email: string;
     nom: string;
 }

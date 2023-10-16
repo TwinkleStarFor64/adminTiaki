@@ -11,6 +11,7 @@ export class GestionComponent implements OnInit {
 utilisateur: UtilisateurI[] = []; 
 authUsers: UtilisateurI[] = [];
 allUsersData: UtilisateurData[] = []; 
+selectedUtilisateur!: string;
 
   constructor(public supa:SupabaseService) {}
 
@@ -22,7 +23,8 @@ allUsersData: UtilisateurData[] = [];
       this.fetchAuthUsers(),
       this.fetchAllUsersWithRoles(),
       this.supa.fetchAttribuerRoles(),
-      this.supa.getAllUsersWithRoles()
+      this.supa.getAllUsersWithRoles(),
+      
     ]);
 
     // Une fois que toutes les opérations sont terminées, vous pouvez continuer ici.
@@ -103,7 +105,35 @@ getRolesText(user: UtilisateurData): string {
 }
 
 
+async onSelect(users: UtilisateurI): Promise <any> {
+  this.selectedUtilisateur = users.id;
+  console.log("La méthode onSelect",this.selectedUtilisateur);
 
+  this.supa.deleteUser(this.selectedUtilisateur)
+  .then(() => {
+    this.fetchAllUsersWithRoles();    
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+  
+    
+}
+
+/* async deleteUser(id: string) {
+  this.onSelect()
+  .subscribe((res) => {
+    if (res) {
+      this.supa.deleteUser(id)
+      .then(() => {
+        console.log("delete réussi !");        
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
+  })
+} */
 
 
 

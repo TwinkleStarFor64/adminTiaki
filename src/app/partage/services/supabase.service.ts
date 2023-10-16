@@ -39,10 +39,10 @@ export class SupabaseService {
   }
 
 
-  async deleteUser() {
-    const { data, error } = await this.supabase.auth.admin.deleteUser('b3108489-62d7-45d4-8e02-0096dc12b78b');
+  async deleteUser(test: string) {
+    const { data, error } = await this.supabase.auth.admin.deleteUser(test);
     if (data) {
-      console.log(data);
+      console.log("suppression réussie");
     }
     if (error) {
       console.log(error);
