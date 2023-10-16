@@ -19,6 +19,7 @@ export class SupabaseService {
   constructor() { this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey) }
 
   // Connexion à l'application - Tuto : https://www.youtube.com/watch?v=hPI8OegHPYc
+  
   signIn(email: string, password: string) {
     return this.supabase.auth.signInWithPassword({ email, password });
   }

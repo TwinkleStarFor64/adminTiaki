@@ -9,10 +9,10 @@ import { SupabaseService } from 'src/app/partage/services/supabase.service';
   styleUrls: ['./connexion.component.scss']
 })
 export class ConnexionComponent implements OnInit {
+ 
+  badLogin = false;
 
   loginForm!: FormGroup;
-
-  badLogin = false;
 
   constructor(private router: Router, private formbuilder: FormBuilder, public supa: SupabaseService) {}
 

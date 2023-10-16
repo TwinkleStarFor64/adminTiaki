@@ -13,10 +13,11 @@
         <input placeholder="Mot de passe" type="password" formControlName="password" value="password">
         <div>
             <p><a href="/">Mot de passe oublié?</a></p>
-            <button type="submit">Se connecter</button>
+            <p-button class="connexion" styleClass="p-button-help" type="submit">Se connecter</p-button>                   
         </div>
     </form>
     <div *ngIf="badLogin">
         <p>Identifiants incorrects !</p>
     </div>
 </section>
+

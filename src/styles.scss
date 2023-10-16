@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;400;600;800&display=swap');
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "assets/tiaki.css";
 
-$font-family: 'Raleway', sans-serif;
 /** Variables SCSS */
 $font-family: 'Raleway', sans-serif;
 $card-nutri: #D9042B;
@@ -16,6 +18,24 @@ $sombre: black;
 $head: 60px; // Hauteur de l'entête des pages
 $foot: 150px; // Hauteur des menus du bas
 $l: 75px; // Largeur du menu de droite qui permet de calculer la largeur des éléments de la page
+
+/* .connexion {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  button {
+    color: #fff;
+    background-color: #805E96;
+    font-size: 0.8rem;
+    height: 2vh;
+    
+  }
+} */
+
+p-button-label {
+  font-size: 15rem;
+  
+}
 
 /** BALISES GENERIQUES HTML */
 html,

@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { ConnexionComponent } from './extranet/connexion/connexion.component';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ButtonModule } from 'primeng/button';
 
 
 
@@ -14,15 +16,15 @@ import { ReactiveFormsModule } from '@angular/forms';
     AppComponent,
     ConnexionComponent,
     
-    
-    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     RouterModule,
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    ButtonModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
