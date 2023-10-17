@@ -5,6 +5,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DeleteDataComponent } from '../template/dialog/delete-data/delete-data.component';
+import { DialogModule } from 'primeng/dialog';
+import { EditUserComponent } from '../template/dialog/edit-user/edit-user.component';
 
 describe('GestionComponent', () => {
   let component: GestionComponent;
@@ -12,8 +14,8 @@ describe('GestionComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [GestionComponent,DeleteDataComponent],
-      imports:[ButtonModule,ConfirmDialogModule],
+      declarations: [GestionComponent,DeleteDataComponent,EditUserComponent],
+      imports:[ButtonModule,ConfirmDialogModule,DialogModule],
       providers:[ConfirmationService,MessageService]
     });
     fixture = TestBed.createComponent(GestionComponent);

@@ -1,4 +1,63 @@
 section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5vh;
+
+  .search {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 4vw;
+    background-color: #FFF1C6;
+    width: 80%;
+    height: 10vh;
+
+    input{
+      margin-left: 50px;
+    }
+  }
+
+  .table {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    table {
+      width: 80%;
+
+      thead {
+        width: 80%;
+
+        tr {
+
+          th {
+            border-bottom: 1px solid #000000;
+            font-weight: 600;
+          }
+
+          .tri {
+            cursor: pointer;
+            i{
+              height: 4vh;
+            }
+          }
+        }
+
+      }
+
+      tbody {
+
+        td {
+          border-bottom: 1px dashed #000000;
+
+          figure {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+      }
+
+    }
+  }
 }
