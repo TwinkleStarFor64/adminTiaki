@@ -15,3 +15,11 @@
         <h3>Gérer mon profil</h3>
     </article>
 </header>
+<main>
+    <section>
+        <article *ngFor="let user of utilisateur">
+            <p>{{ user.nom }}</p>
+            <p>{{ user.email }}</p>
+        </article>
+    </section>
+</main>

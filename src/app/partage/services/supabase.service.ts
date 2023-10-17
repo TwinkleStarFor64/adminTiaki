@@ -131,6 +131,52 @@ export class SupabaseService {
     }
     return utilisateursData as UtilisateurData[];
   }
+
+
+  /* async getUserById(id: string) {
+    const { data, error } = await this.supabase.auth.admin.getUserById(id);
+    if (data) {
+      console.log("getUserById fonction ", data);
+    }
+    if (error) {
+      console.log(error);
+    }
+  } */
+
+  async getLoggedInUser() {
+    const { data: { user } } = await this.supabase.auth.getUser()
+    console.log( "Méthode getLoggedInUser : ", user );
+    return user;    
+  }
+
+  // Récupérer les utilisateurs sur la table public.utilisateur
+  async getUtilisateurById(id: string) {
+    const data = await this.supabase
+    .from('utilisateur')
+    .select('*')
+    .eq('id', id);
+    console.log("Méthode getUtilisateurById", data);
+    return data;
+  }
+
+
+
+
+
+
+
+
+}
+
+
+
+
+// '3845e166-dd29-47b4-924a-de0a1e50d454' Denver
+// 'b3108489-62d7-45d4-8e02-0096dc12b78b' Toto
+
+
+
+
 //   async attribuerRolesAUtilisateur(idUtilisateur: string, idRolesAAttribuer: string[]) {
 //     try {
 //       // Boucle à travers la liste d'ID de rôles et créez une entrée pour chaque rôle attribué
@@ -155,17 +201,3 @@ export class SupabaseService {
 //       // Gérez l'erreur comme vous le souhaitez
 //     }
 //   }
-}
-
-
-/* async getUser() {
-    const { data, error } = await this.supabase.auth.admin.getUserById('b3108489-62d7-45d4-8e02-0096dc12b78b');
-    if (data) {
-      console.log("getUser fonction ", data);
-    }
-    if (error) {
-      console.log(error);
-    }
-  } */
-// '3845e166-dd29-47b4-924a-de0a1e50d454' Denver
-// 'b3108489-62d7-45d4-8e02-0096dc12b78b' Toto
