@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GestionComponent } from './gestion.component';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DeleteDataComponent } from '../template/dialog/delete-data/delete-data.component';
 
 describe('GestionComponent', () => {
   let component: GestionComponent;
@@ -8,7 +12,9 @@ describe('GestionComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [GestionComponent]
+      declarations: [GestionComponent,DeleteDataComponent],
+      imports:[ButtonModule,ConfirmDialogModule],
+      providers:[ConfirmationService,MessageService]
     });
     fixture = TestBed.createComponent(GestionComponent);
     component = fixture.componentInstance;
