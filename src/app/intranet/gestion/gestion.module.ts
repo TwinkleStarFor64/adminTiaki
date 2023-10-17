@@ -7,6 +7,10 @@ import { MessagerieComponent } from './messagerie/messagerie.component';
 import { AjoutUtilisateurComponent } from './ajout-utilisateur/ajout-utilisateur.component';
 import { GestionRoutingModule } from './gestion-routing.module';
 import { GestionComponent } from './gestion.component';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DeleteDataComponent } from '../template/dialog/delete-data/delete-data.component';
+import { ConfirmationService, MessageService } from 'primeng/api';
+
 
 
 
@@ -17,12 +21,15 @@ import { GestionComponent } from './gestion.component';
     AbonnementComponent,
     MediaComponent,
     AjoutUtilisateurComponent,
-    GestionComponent
-
+    GestionComponent,
+    DeleteDataComponent
+    
   ],
   imports: [
     CommonModule,
-    GestionRoutingModule
-  ]
+    GestionRoutingModule,
+    ConfirmDialogModule,
+  ],
+  providers: [ConfirmationService, MessageService],
 })
 export class GestionModule { }

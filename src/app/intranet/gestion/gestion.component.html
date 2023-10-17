@@ -3,6 +3,7 @@
   <h2>Les Utilisateurs</h2>
 </header>
 <section>
+  <p-button routerLink="/intranet/gestion/ajout-utilisateurs" styleClass="p-button-success" type="submit">Créer un utilisateur</p-button>                   
       <table>
         <thead>
           <tr>
@@ -23,8 +24,9 @@
             <td>{{ getRolesText(user) }}</td>
             <td><figure><img src="assets/images/icones/gestion-utilisateur/coeur.png" alt="favoris"></figure></td>
             <td><figure><img src="assets/images/icones/gestion-utilisateur/editer.png"alt=""></figure></td>
-            <td><figure (click)="onSelect(user)"><img src="assets/images/icones/gestion-utilisateur/corbeille.png"alt=""></figure></td>
+            <td><figure (click)="openDeleteDataModal(user)" ><img src="assets/images/icones/gestion-utilisateur/corbeille.png"alt=""></figure></td>
           </tr>
         </tbody>
       </table>
+      <app-delete-data></app-delete-data>
 </section>
