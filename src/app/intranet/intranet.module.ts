@@ -13,6 +13,7 @@ import { IngredientsComponent } from './nutrition/ingredients/ingredients.compon
 import { ComplementsComponent } from './nutrition/complements/complements.component';
 import { AsideBarComponent } from './template/aside-bar/aside-bar.component';
 import { AllergenesComponent } from './nutrition/allergenes/allergenes.component';
+import { ProfilComponent } from './profil/profil.component';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { AllergenesComponent } from './nutrition/allergenes/allergenes.component
     ComplementsComponent,
     AsideBarComponent,
     AllergenesComponent,
+    ProfilComponent,
 
    
     
