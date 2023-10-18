@@ -6,6 +6,7 @@ import {
 } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
 import { RoleData, UtilisateurData } from '../modeles/Types';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -16,12 +17,31 @@ export class SupabaseService {
   public roleData: RoleData[] = [];
   _session: AuthSession | null = null; // Session d'authentification
 
-  constructor() { this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey) }
+  user: any; // Utilisé dans la méthode signIn()
+  token!: string; // Utilisé dans la méthode signIn()
+
+  constructor(private router: Router) { this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey) }
 
   // Connexion à l'application - Tuto : https://www.youtube.com/watch?v=hPI8OegHPYc
   
   signIn(email: string, password: string) {
-    return this.supabase.auth.signInWithPassword({ email, password });
+     this.supabase.auth.signInWithPassword({ email, password })
+     .then((res) => {
+      console.log(res); 
+      this.user = res.data.user; // La réponse de la méthode avec toutes les données d'un utilisateur
+      console.log("L'id de l'utilisateur authentifié : ",this.user.id);
+      
+      if (res.data.user!.role === 'authenticated') { // Je vérifie que le rôle et 'authenticated' dans supabase - voir le résultat de console.log(res)
+        this.token = res.data.session!.access_token; // Je stock la valeur du token retourné par supabase
+      if (this.token) {
+        sessionStorage.setItem('token', this.token); // set du token de session           
+      }
+        this.router.navigate(['intranet']);
+      }       
+    })
+    .catch((err) => {
+      console.log(err);           
+    });
   }
 
   // Récupérer les utilisateurs sur la table public.utilisateur
@@ -159,8 +179,7 @@ export class SupabaseService {
     return data;
   }
 
-
-
+  
 
 
 

@@ -18,8 +18,10 @@
 <main>
     <section>
         <article *ngFor="let user of utilisateur">
+            <p>{{ user.id }}</p>
             <p>{{ user.nom }}</p>
             <p>{{ user.email }}</p>
+            <p>{{ user.role }}</p>            
         </article>
     </section>
 </main>
