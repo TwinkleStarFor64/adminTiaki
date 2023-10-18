@@ -10,8 +10,11 @@ import { GestionComponent } from './gestion.component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DeleteDataComponent } from '../template/dialog/delete-data/delete-data.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
-
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TableModule } from 'primeng/table';
+import { GestionUtilisateursPipe } from 'src/app/pipes/gestion-utilisateurs.pipe';
+import { EditUserComponent } from '../template/dialog/edit-user/edit-user.component';
+import { DialogModule } from 'primeng/dialog';
 
 
 @NgModule({
@@ -22,14 +25,21 @@ import { ConfirmationService, MessageService } from 'primeng/api';
     MediaComponent,
     AjoutUtilisateurComponent,
     GestionComponent,
-    DeleteDataComponent
-    
+    DeleteDataComponent,
+    GestionUtilisateursPipe,
+    EditUserComponent,
+  
   ],
   imports: [
     CommonModule,
     GestionRoutingModule,
     ConfirmDialogModule,
+    ReactiveFormsModule,
+    TableModule,
+    FormsModule,
+    DialogModule
   ],
+  exports: [DeleteDataComponent],
   providers: [ConfirmationService, MessageService],
 })
 export class GestionModule { }

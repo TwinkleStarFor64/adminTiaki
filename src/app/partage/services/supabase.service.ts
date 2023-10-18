@@ -59,8 +59,11 @@ export class SupabaseService {
   }
 
 
+/*
+*Supprimer utilisateur
+*/
   async deleteUser(userData: string) {
-    const { data, error } = await this.supabase.auth.admin.deleteUser(userData);
+    const { data, error } = await this.supabase.auth.admin.deleteUser(userData); 
     if (data) {
       console.log("suppression réussie");
     }
@@ -93,6 +96,8 @@ export class SupabaseService {
     if (data) console.log("Méthode fetchAttribuerRoles", data);
     if (error) console.log(error);
   }
+
+
 
   // Méthode pour récupérer les utilisateurs et leur rôles
   async getAllUsersWithRoles(): Promise<UtilisateurData[]> {
@@ -151,6 +156,7 @@ export class SupabaseService {
     }
     return utilisateursData as UtilisateurData[];
   }
+
 
 
   /* async getUserById(id: string) {
@@ -220,3 +226,10 @@ export class SupabaseService {
 //       // Gérez l'erreur comme vous le souhaitez
 //     }
 //   }
+
+/*
+*Récupérer
+*/
+}
+
+

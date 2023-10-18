@@ -16,6 +16,7 @@ import { AllergenesComponent } from './nutrition/allergenes/allergenes.component
 import { ProfilComponent } from './profil/profil.component';
 
 
+
 @NgModule({
   declarations: [
     AccueilComponent,
@@ -30,14 +31,13 @@ import { ProfilComponent } from './profil/profil.component';
     ComplementsComponent,
     AsideBarComponent,
     AllergenesComponent,
-    ProfilComponent,
-
-   
+    ProfilComponent,   
     
   ],
   imports: [
     CommonModule,
     IntranetRoutingModule, 
-  ]
+  ],
+ 
 })
 export class IntranetModule { }
