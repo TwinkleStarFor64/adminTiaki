@@ -156,7 +156,7 @@ export class GestionComponent implements OnInit {
   filterUsers(users: UtilisateurData[], nomFiltre: string, emailFiltre: string, roleFiltre: string): UtilisateurData[] {
     return users.filter((user) => {
       // Filtrez les utilisateurs en fonction des critères de recherche
-      const nomMatch = nomFiltre ? user.nom.toLowerCase().includes(nomFiltre.toLowerCase()) : true;
+      const nomMatch = nomFiltre ? user.nom.includes(nomFiltre.toLowerCase()) : true;
       const emailMatch = emailFiltre ? user.email.toLowerCase().includes(emailFiltre.toLowerCase()) : true;
       const roleMatch = roleFiltre ? this.getRolesText(user).toLowerCase().includes(roleFiltre.toLowerCase()) : true;
   

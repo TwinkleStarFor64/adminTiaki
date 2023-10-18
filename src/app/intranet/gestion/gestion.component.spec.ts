@@ -7,6 +7,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DeleteDataComponent } from '../template/dialog/delete-data/delete-data.component';
 import { DialogModule } from 'primeng/dialog';
 import { EditUserComponent } from '../template/dialog/edit-user/edit-user.component';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('GestionComponent', () => {
   let component: GestionComponent;
@@ -15,7 +16,7 @@ describe('GestionComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [GestionComponent,DeleteDataComponent,EditUserComponent],
-      imports:[ButtonModule,ConfirmDialogModule,DialogModule],
+      imports:[ButtonModule,ConfirmDialogModule,DialogModule, ReactiveFormsModule,FormsModule],
       providers:[ConfirmationService,MessageService]
     });
     fixture = TestBed.createComponent(GestionComponent);
