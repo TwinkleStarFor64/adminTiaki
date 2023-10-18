@@ -38,7 +38,9 @@ export class SupabaseService {
     return response.data.users; // Retournez les données des utilisateurs  
   }
 
-
+/*
+*Supprimer utilisateur
+*/
   async deleteUser(test: string) {
     const { data, error } = await this.supabase.auth.admin.deleteUser(test);
     if (data) {
@@ -73,6 +75,8 @@ export class SupabaseService {
     if (data) console.log("Méthode fetchAttribuerRoles", data);
     if (error) console.log(error);
   }
+
+
 
   // Méthode pour récupérer les utilisateurs et leur rôles
   async getAllUsersWithRoles(): Promise<UtilisateurData[]> {
@@ -131,41 +135,8 @@ export class SupabaseService {
     }
     return utilisateursData as UtilisateurData[];
   }
-//   async attribuerRolesAUtilisateur(idUtilisateur: string, idRolesAAttribuer: string[]) {
-//     try {
-//       // Boucle à travers la liste d'ID de rôles et créez une entrée pour chaque rôle attribué
-//       for (const idRole of idRolesAAttribuer) {
-//         // Insérez une nouvelle entrée dans la table attribuerRoles
-//         const { data, error } = await this.supabase
-//           .from('attribuerRoles')
-//           .upsert([
-//             {
-//               idUtilisateur: idUtilisateur,
-//               idRole: idRole
-//             }
-//           ]);
-        
-//         if (error) {
-//           console.error('Erreur lors de l\'attribution du rôle à l\'utilisateur :', error);
-//           // Gérez l'erreur comme vous le souhaitez
-//         }
-//       }
-//     } catch (error) {
-//       console.error('Erreur lors de l\'attribution des rôles à l\'utilisateur :', error);
-//       // Gérez l'erreur comme vous le souhaitez
-//     }
-//   }
+/*
+*Récupérer
+*/
 }
 
-
-/* async getUser() {
-    const { data, error } = await this.supabase.auth.admin.getUserById('b3108489-62d7-45d4-8e02-0096dc12b78b');
-    if (data) {
-      console.log("getUser fonction ", data);
-    }
-    if (error) {
-      console.log(error);
-    }
-  } */
-// '3845e166-dd29-47b4-924a-de0a1e50d454' Denver
-// 'b3108489-62d7-45d4-8e02-0096dc12b78b' Toto

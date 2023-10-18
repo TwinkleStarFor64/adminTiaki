@@ -15,6 +15,7 @@ import { AsideBarComponent } from './template/aside-bar/aside-bar.component';
 import { AllergenesComponent } from './nutrition/allergenes/allergenes.component';
 
 
+
 @NgModule({
   declarations: [
     AccueilComponent,
@@ -29,6 +30,7 @@ import { AllergenesComponent } from './nutrition/allergenes/allergenes.component
     ComplementsComponent,
     AsideBarComponent,
     AllergenesComponent,
+   
 
    
     
@@ -36,6 +38,7 @@ import { AllergenesComponent } from './nutrition/allergenes/allergenes.component
   imports: [
     CommonModule,
     IntranetRoutingModule, 
-  ]
+  ],
+ 
 })
 export class IntranetModule { }
