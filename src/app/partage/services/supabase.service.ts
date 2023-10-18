@@ -6,6 +6,7 @@ import {
 } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
 import { RoleData, UtilisateurData } from '../modeles/Types';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -16,12 +17,31 @@ export class SupabaseService {
   public roleData: RoleData[] = [];
   _session: AuthSession | null = null; // Session d'authentification
 
-  constructor() { this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey) }
+  user: any; // Utilisé dans la méthode signIn()
+  token!: string; // Utilisé dans la méthode signIn()
+
+  constructor(private router: Router) { this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey) }
 
   // Connexion à l'application - Tuto : https://www.youtube.com/watch?v=hPI8OegHPYc
   
   signIn(email: string, password: string) {
-    return this.supabase.auth.signInWithPassword({ email, password });
+     this.supabase.auth.signInWithPassword({ email, password })
+     .then((res) => {
+      console.log(res); 
+      this.user = res.data.user; // La réponse de la méthode avec toutes les données d'un utilisateur
+      console.log("L'id de l'utilisateur authentifié : ",this.user.id);
+      
+      if (res.data.user!.role === 'authenticated') { // Je vérifie que le rôle et 'authenticated' dans supabase - voir le résultat de console.log(res)
+        this.token = res.data.session!.access_token; // Je stock la valeur du token retourné par supabase
+      if (this.token) {
+        sessionStorage.setItem('token', this.token); // set du token de session           
+      }
+        this.router.navigate(['intranet']);
+      }       
+    })
+    .catch((err) => {
+      console.log(err);           
+    });
   }
 
   // Récupérer les utilisateurs sur la table public.utilisateur
@@ -38,11 +58,12 @@ export class SupabaseService {
     return response.data.users; // Retournez les données des utilisateurs  
   }
 
+
 /*
 *Supprimer utilisateur
 */
-  async deleteUser(test: string) {
-    const { data, error } = await this.supabase.auth.admin.deleteUser(test);
+  async deleteUser(userData: string) {
+    const { data, error } = await this.supabase.auth.admin.deleteUser(userData); 
     if (data) {
       console.log("suppression réussie");
     }
@@ -135,8 +156,80 @@ export class SupabaseService {
     }
     return utilisateursData as UtilisateurData[];
   }
+
+
+
+  /* async getUserById(id: string) {
+    const { data, error } = await this.supabase.auth.admin.getUserById(id);
+    if (data) {
+      console.log("getUserById fonction ", data);
+    }
+    if (error) {
+      console.log(error);
+    }
+  } */
+
+  async getLoggedInUser() {
+    const { data: { user } } = await this.supabase.auth.getUser()
+    console.log( "Méthode getLoggedInUser : ", user );
+    return user;    
+  }
+
+  // Récupérer les utilisateurs sur la table public.utilisateur
+  async getUtilisateurById(id: string) {
+    const data = await this.supabase
+    .from('utilisateur')
+    .select('*')
+    .eq('id', id);
+    console.log("Méthode getUtilisateurById", data);
+    return data;
+  }
+
+  
+
+
+
+
+
+}
+
+
+
+
+// '3845e166-dd29-47b4-924a-de0a1e50d454' Denver
+// 'b3108489-62d7-45d4-8e02-0096dc12b78b' Toto
+
+
+
+
+//   async attribuerRolesAUtilisateur(idUtilisateur: string, idRolesAAttribuer: string[]) {
+//     try {
+//       // Boucle à travers la liste d'ID de rôles et créez une entrée pour chaque rôle attribué
+//       for (const idRole of idRolesAAttribuer) {
+//         // Insérez une nouvelle entrée dans la table attribuerRoles
+//         const { data, error } = await this.supabase
+//           .from('attribuerRoles')
+//           .upsert([
+//             {
+//               idUtilisateur: idUtilisateur,
+//               idRole: idRole
+//             }
+//           ]);
+        
+//         if (error) {
+//           console.error('Erreur lors de l\'attribution du rôle à l\'utilisateur :', error);
+//           // Gérez l'erreur comme vous le souhaitez
+//         }
+//       }
+//     } catch (error) {
+//       console.error('Erreur lors de l\'attribution des rôles à l\'utilisateur :', error);
+//       // Gérez l'erreur comme vous le souhaitez
+//     }
+//   }
+
 /*
 *Récupérer
 */
 }
+
 

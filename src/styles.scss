@@ -20,19 +20,6 @@ $head: 60px; // Hauteur de l'entête des pages
 $foot: 150px; // Hauteur des menus du bas
 $l: 75px; // Largeur du menu de droite qui permet de calculer la largeur des éléments de la page
 
-/* .connexion {
-  text-align: center;
-  display: flex;
-  align-items: center;
-  button {
-    color: #fff;
-    background-color: #805E96;
-    font-size: 0.8rem;
-    height: 2vh;
-    
-  }
-} */
-
 p-button-label {
   font-size: 15rem;
   
@@ -291,4 +278,48 @@ article.cartel {
     border-bottom-left-radius: 15%;
   }
 
+}
+
+/* Header commun à toutes les pages de l'application */
+header {
+  flex-direction: column;
+  article:nth-child(1) {
+    display: flex;
+    align-items: center;
+    figure {
+      margin-bottom: 10px;
+    }
+    div {
+      display: flex;
+      align-items: center;
+      border-bottom: #805E96 dashed 1px;
+      height: 80%;
+      width: 65%;
+      margin-left: 120px;
+      h1{        
+        font-size: 3rem;
+        font-weight: 200;
+        margin: 0px 0px 30px 0px;
+      }
+      h1:after {
+        content: ' ......'
+      }
+      h2 {
+        font-size: 1.8rem;
+        font-weight: 600;        
+        margin: 0px 0px 15px 20px;       
+      }
+    }
+  }
+  article:nth-child(2) {
+    border-bottom: #805E96 dashed 1px;
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+    width: 12vw;
+    margin-left: 20px;
+    figure {
+      margin: 0;
+    }
+  }
 }

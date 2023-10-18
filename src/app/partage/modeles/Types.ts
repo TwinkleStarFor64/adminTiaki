@@ -14,6 +14,14 @@ export interface UtilisateurI {
     id: string;
     email: string;
     nom: string;
+    role?: string;
+}
+
+export interface UtilisateurBisI {
+    id: string;
+    email: string;
+    nom: string;
+    role: RoleData[];
 }
 
 export interface UtilisateurData {

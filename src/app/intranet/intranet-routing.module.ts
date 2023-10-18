@@ -11,6 +11,7 @@ import { MenusComponent } from './nutrition/menus/menus.component';
 import { IngredientsComponent } from './nutrition/ingredients/ingredients.component';
 import { ComplementsComponent } from './nutrition/complements/complements.component';
 import { AllergenesComponent } from './nutrition/allergenes/allergenes.component';
+import { ProfilComponent } from './profil/profil.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,7 @@ const routes: Routes = [
     component: IntranetComponent,
     children: [
       { path: '', component: AccueilComponent },
+      { path: 'profil', component: ProfilComponent },
       { path: 'kine', component: KineComponent },
       // { path: 'kine/modifier/:id, component: EditKineComponent}
       { path: 'kine/programme-kine', component: ProgrammeKineComponent },
