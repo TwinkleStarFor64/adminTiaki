@@ -4,6 +4,7 @@ import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { FormGroup } from '@angular/forms';
 import { EditUserComponent } from '../template/dialog/edit-user/edit-user.component';
+import { UsersService } from 'src/app/partage/services/users.service';
 @Component({
   selector: 'app-gestion',
   templateUrl: './gestion.component.html',
@@ -11,10 +12,9 @@ import { EditUserComponent } from '../template/dialog/edit-user/edit-user.compon
 })
 export class GestionComponent implements OnInit {
   utilisateur: UtilisateurI[] = [];
-  authUsers: UtilisateurI[] = [];
-  allUsersData: UtilisateurData[] = [];
-  selectedUtilisateur!: string;
   selectedUsers: UtilisateurData[] = [];
+  selectedUtilisateur!: string;
+  allUsersData: UtilisateurData[] = [];
   formGroup: FormGroup | undefined;
   nomFiltre: string = '';
   emailFiltre: string = '';
@@ -26,97 +26,38 @@ export class GestionComponent implements OnInit {
   @ViewChild(EditUserComponent, { static: false }) editUserComponent: EditUserComponent | undefined;
 
 
-  constructor(public confirmationService: ConfirmationService, public supa: SupabaseService, messageService: MessageService) { }
+  constructor(public confirmationService: ConfirmationService, public supa: SupabaseService, messageService: MessageService, public users: UsersService) { }
 
   async ngOnInit(): Promise<void> {
     try {
       // Utilisation de Promise.all() pour attendre que toutes les opérations se terminent.
       await Promise.all([
-        this.fetchUtilisateur(),
-        this.fetchAuthUsers(),
-        this.fetchAllUsersWithRoles(),
+        this.users.fetchUtilisateur(),
+        this.users.fetchAuthUsers(),
+        this.users.fetchAllUsersWithRoles(),
         this.supa.fetchAttribuerRoles(),
         this.supa.getAllUsersWithRoles(),
       ]);
-      this.allUsersData = this.allUsersData.map(user => ({
+
+      this.users.allUsersData = this.users.allUsersData.map(user => ({
         ...user,
         selected: false, // Initialisez la propriété 'selected' à false pour chaque utilisateur.
       }));
-      this.filteredUtilisateurs = this.allUsersData;
+      this.filteredUtilisateurs = this.users.allUsersData;
 
 
       // Une fois que toutes les opérations sont terminées, vous pouvez continuer ici.
     } catch (error) {
       console.error("Erreur lors de l'initialisation :", error);
     }
-  
   }
 
   // Utilisation de la méthode getUtilisateur pour fetch toutes les données sur la table public.utilisateur 
-  async fetchUtilisateur() {
-    const { data, error } = await this.supa.getUtilisateur();
-    if (data) {
-      this.utilisateur = data.map((item: { [x: string]: any }) => ({
-        id: item['id'],
-        email: item['email'],
-        nom: item['nom']
-      }));
-      console.log("Méthode fetchUtilisateur", this.utilisateur.map((item) => item['id']).join(', '));
-    }
-    if (error) {
-      console.log(error);
-    }
-  }
-
   // Utilisation de la méthode listUser pour fetch toutes les données sur la table auth.users  
-  async fetchAuthUsers() {
-    try {
-      const userData = await this.supa.listUser();
-      if (userData) {
-        this.authUsers = userData.map((item: { [x: string]: any }) => ({
-          id: item['id'],
-          email: item['email'],
-          nom: item['nom']
-        }));
-        console.log("Méthode fetchAuthUsers : ", this.authUsers.map((item) => item['email']).join(', '));
-      } else {
-        throw new Error("Aucune donnée utilisateur disponible.");
-      }
-    } catch (error) {
-      console.error("Erreur lors de la récupération des utilisateurs:", error);
-      throw new Error("Echec de la méthode fetchAuthUsers. Veuillez consulter les logs pour plus d'informations.");
-    }
-  }
-
-
-  async fetchAllUsersWithRoles() {
-    try {
-      const usersWithRolesData: UtilisateurData[] = await this.supa.getAllUsersWithRoles();
-      if (usersWithRolesData !== undefined) { // Vérification de nullité
-        this.allUsersData = usersWithRolesData.map((item) => ({
-          id: item.id,
-          email: item.email,
-          nom: item.nom,
-          roles: item.roles,
-          selected:false,
-        }));
-
-        // Afficher les utilisateurs avec leurs emails et rôles dans la console
-        this.allUsersData.forEach((user) => {
-          const allRoles = user.roles.map((role: RoleData) => role.role).join(', ');
-          console.log(`Nom: ${user.nom}, Email: ${user.email}, Rôles: ${allRoles}`);
-        });
-        return;
-
-      } else {
-        throw new Error('Aucune donnée utilisateur et rôles disponibles');
-      }
-    } catch (error) {
-      console.error("Erreur lors de la récupération des données rôles et utilisateurs", error);
-      throw new Error("Echec de la méthode fetchAllUsersWithRoles. Veuillez consulter les logs pour plus d'informations.");
-    }
-  }
-
+  
+/*
+* Méthode permettant d'afficher plusieurs roles 
+*/
   getRolesText(user: UtilisateurData): string {
     return user.roles.map((allRole: RoleData) => allRole.role).join(', ');
   }
@@ -135,23 +76,33 @@ export class GestionComponent implements OnInit {
       }
     });
   }
-
+/*
+* Méthode permettant de gérer la selection des users. Stock l'ID le supprime et récupère tous les utilisateurs avec leurs roles
+*/
   async onSelect(users: UtilisateurI): Promise<any> {
     this.selectedUtilisateur = users.id;
     console.log("La méthode onSelect", this.selectedUtilisateur);
 
     this.supa.deleteUser(this.selectedUtilisateur)
       .then(() => {
-        this.fetchAllUsersWithRoles();
+        this.users.fetchAllUsersWithRoles();
       })
       .catch((error) => {
         console.log(error);
       });
   }
-
+/*
+* Méthode de filtrage utliser dans les inputs
+*/
   onFilterChange() {
     this.filteredUtilisateurs = this.filterUsers(this.allUsersData, this.nomFiltre, this.emailFiltre, this.roleFiltre);
   }
+/*
+* Méthode filterUsers est utilisée pour filtrer une liste 
+ d'utilisateurs en fonction des critères de recherche fournis
+ ,tels que le nom, l'email et le rôle. Elle renverra un tableau contenant
+ les utilisateurs qui correspondent aux critères spécifiés.
+*/
 
   filterUsers(users: UtilisateurData[], nomFiltre: string, emailFiltre: string, roleFiltre: string): UtilisateurData[] {
     return users.filter((user) => {
@@ -176,7 +127,9 @@ export class GestionComponent implements OnInit {
   //     return nomMatch && emailMatch && roleMatch;
   //   });
   // }
-
+/*
+*Méthode pour trier par ordre croissant ou descroissant
+*/
   triUtilisateursParNom() {
     if (this.sortOrder === 'asc') {
       this.filteredUtilisateurs.sort((a, b) => {
@@ -198,7 +151,9 @@ export class GestionComponent implements OnInit {
       this.sortOrder = 'asc'; // Change l'ordre de tri à ascendant.
     }
   }
-  
+  /*
+  * Méthode pour maintenir la liste des utilisateurs sélectionnés à jour en réagissant aux changements d'état de sélection des utilisateurs.
+  */
   
   onUserSelectChange(user: UtilisateurData) {
     if (user.selected) {
@@ -210,6 +165,9 @@ export class GestionComponent implements OnInit {
       }
     }
   }
+/*
+*Méthode pour supprimer les utilisateurs selectionnés par les checkbox
+*/
   async deleteSelectedUsers() {
     this.confirmationService.confirm({
       message: 'Êtes-vous sûr de vouloir supprimer les utilisateurs sélectionnés ?',
@@ -225,14 +183,18 @@ export class GestionComponent implements OnInit {
     });
   }
   
-  
+/*
+*Méthode pour supprimer un user
+*/
   removeUserById(userId: any) {
     const index = this.allUsersData.findIndex(user => user.id === userId);
     if (index !== -1) {
       this.allUsersData.splice(index, 1);
     }
   }
-  
+/*
+*Méthode pour ouvrir la modal d'édition
+*/ 
   openEditUserModal(user: UtilisateurI) {
     if (this.editUserComponent) {
       this.editUserComponent.userEmail = user.email;
