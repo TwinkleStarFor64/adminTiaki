@@ -58,7 +58,8 @@ export class ProfilComponent implements OnInit {
           id: item.id,
           email: item.email,
           nom: item.nom,
-          roles: item.roles
+          roles: item.roles,
+          selected: false,
         }));
 
         // Afficher les utilisateurs avec leurs emails et rôles dans la console

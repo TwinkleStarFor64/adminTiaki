@@ -230,6 +230,6 @@ export class SupabaseService {
 /*
 *Récupérer
 */
-}
+
 
 
