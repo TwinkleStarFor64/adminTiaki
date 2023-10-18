@@ -59,8 +59,8 @@ export class SupabaseService {
   }
 
 
-  async deleteUser(test: string) {
-    const { data, error } = await this.supabase.auth.admin.deleteUser(test);
+  async deleteUser(userData: string) {
+    const { data, error } = await this.supabase.auth.admin.deleteUser(userData);
     if (data) {
       console.log("suppression réussie");
     }

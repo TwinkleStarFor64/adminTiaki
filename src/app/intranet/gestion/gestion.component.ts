@@ -101,6 +101,7 @@ export class GestionComponent implements OnInit {
       throw new Error("Echec de la méthode fetchAllUsersWithRoles. Veuillez consulter les logs pour plus d'informations.");
     }
   }
+  
   getRolesText(user: UtilisateurData): string {
     return user.roles.map((allRole: RoleData) => allRole.role).join(', ');
   }
