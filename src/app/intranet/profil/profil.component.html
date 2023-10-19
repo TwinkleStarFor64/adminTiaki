@@ -18,10 +18,16 @@
 <main>
     <section>
         <article *ngFor="let user of utilisateur">
-            <p>{{ user.id }}</p>
-            <p>{{ user.nom }}</p>
-            <p>{{ user.email }}</p>
+            <h4>Informations personelles</h4>
+            <p>Nom : {{ user.nom }}</p>
+            <p>Email : {{ user.email }}</p>
             <p>{{ user.role }}</p>            
+        </article>
+        <article>
+            <h4>Informations du compte</h4>
+            <p> Rôle(s) attribué(s) :</p> 
+            <p>{{ rolesConcatenated }}</p>
+                      
         </article>
     </section>
 </main>

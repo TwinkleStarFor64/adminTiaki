@@ -17,13 +17,6 @@ export interface UtilisateurI {
     role?: string;
 }
 
-export interface UtilisateurBisI {
-    id: string;
-    email: string;
-    nom: string;
-    role: RoleData[];
-}
-
 export interface UtilisateurData {
     id: any;
     email: string;
@@ -36,4 +29,3 @@ export interface RoleData {
   id: number;
   role: string;
 }
-

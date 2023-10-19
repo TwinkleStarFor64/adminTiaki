@@ -6,6 +6,11 @@ main {
     justify-content: center;
     section {
         background-color: #FFF1C6;
+        width: 60%;
+        justify-content: space-around;
+        article {
+            flex-direction: column;
+        }
 
     }
 }

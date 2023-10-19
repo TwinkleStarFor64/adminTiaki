@@ -1,35 +1,101 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { RoleData, UtilisateurBisI, UtilisateurData, UtilisateurI } from 'src/app/partage/modeles/Types';
+import { RoleData, UtilisateurI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
+import { UsersService } from 'src/app/partage/services/users.service';
 
 @Component({
   selector: 'app-profil',
   templateUrl: './profil.component.html',
-  styleUrls: ['./profil.component.scss']
+  styleUrls: ['./profil.component.scss'],
 })
 export class ProfilComponent implements OnInit {
-  utilisateur: UtilisateurBisI[] = [];
-  allUsersData: UtilisateurData[] = [];
+  utilisateur: UtilisateurI[] = [];
+  role: RoleData[] = [];
+
+  idRole!: number; // Utiliser dans la méthode getUserProfil()
+  rolesConcatenated: string = ''; // Utiliser dans la méthode getUserProfil() pour afficher les rôles dans le front-end
 
   profilForm!: FormGroup;
-  
 
-  constructor(public supa: SupabaseService) {}
+  constructor(public supa: SupabaseService, public users: UsersService) {}
 
-  async ngOnInit(): Promise <void> {
-    
+  async ngOnInit(): Promise<void> {
     this.supa.getLoggedInUser();
     this.getUserProfil();
-    this.fetchAllUsersWithRoles();
   }
 
-
   async getUserProfil() {
+    try {
+      const userData = await this.supa.getLoggedInUser();
+      if (!userData) {
+        throw new Error('Aucune donnée utilisateur disponible.');
+      }
+      //console.log(userData.id);
+
+      const userIdData = (await this.supa.getUtilisateurById(userData.id)).data;
+      if (userIdData) {
+        //console.log(userIdData);
+        this.utilisateur = userIdData.map((item: { [x: string]: any }) => ({
+          id: item['id'],
+          email: item['email'],
+          nom: item['nom'],
+        }));
+        //console.log(this.utilisateur.map((item) => item['nom']).join(', '));
+      }
+
+      const roleIdData = (await this.supa.getRoleId(userData.id)).data;
+      console.log("ici c'est roleId.data", roleIdData);
+
+      if (roleIdData) {
+        for (const item of roleIdData) {
+          //console.log('ID du rôle : ', item.id);
+          this.idRole = item.id;
+          console.log('this.idRole : ', this.idRole);
+
+          const userRoleData = (await this.supa.getRoleById(this.idRole)).data;
+          //console.log(userRoleData);
+
+          if (userRoleData) {
+            this.role = this.role.concat(userRoleData);
+            console.log(this.role.map((item) => item['role']).join(', '));
+            this.rolesConcatenated = this.role
+              .map((item) => item.role)
+              .join(', ');
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Une erreur s'est produite :", error);
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+/* async getUserProfilBis(email: string, password: string) {
+    this.supa.signIn(email, password).then(() => {
+      // Les actions à effectuer après la connexion réussie
+      // Vous pouvez accéder aux données dans votre service via les propriétés du service.
+      console.log('Utilisateur connecté : ', this.supa.user);
+      console.log('Token de session : ', this.supa.token);
+    });
+    throw new Error('Echec de la méthode getUserProfil');
+  } */
+
+/* async getUserProfil() {
     const userData = await this.supa.getLoggedInUser();
     if (userData) {
-      console.log(userData.id)
-      const userId = await this.supa.getUtilisateurById(userData.id)
+      console.log(userData.id);
+      const userId = await this.supa.getUtilisateurById(userData.id);
       const userIdData = userId.data;
 
       if (userIdData) {
@@ -38,49 +104,30 @@ export class ProfilComponent implements OnInit {
           id: item['id'],
           email: item['email'],
           nom: item['nom'],
-          role: item['role'],
         }));
-        console.log(this.utilisateur.map((item) => item['nom']).join(', '));        
-      } 
-                 
-    }
-    else {
-      throw new Error("Aucune donnée utilisateur disponible.");      
-    }
-  }
-
-
-  async fetchAllUsersWithRoles() {
-    try {
-      const usersWithRolesData: UtilisateurData[] = await this.supa.getAllUsersWithRoles();
-      if (usersWithRolesData !== undefined) { // Vérification de nullité
-        this.allUsersData = usersWithRolesData.map((item) => ({
-          id: item.id,
-          email: item.email,
-          nom: item.nom,
-          roles: item.roles,
-          selected: false,
-        }));
-
-        // Afficher les utilisateurs avec leurs emails et rôles dans la console
-        this.allUsersData.forEach((user) => {
-          const allRoles = user.roles.map((role: RoleData) => role.role).join(', ');
-          console.log(`Id: ${user.id}  Nom: ${user.nom}, Email: ${user.email}, Rôles: ${allRoles}`);
-        });        
-
-        this.getUserProfil();
-
-      } else {
-        throw new Error('Aucune donnée utilisateur et rôles disponibles');
+        console.log(this.utilisateur.map((item) => item['nom']).join(', '));
       }
-    } catch (error) {
-      console.error("Erreur lors de la récupération des données rôles et utilisateurs", error);
-      throw new Error("Echec de la méthode fetchAllUsersWithRoles. Veuillez consulter les logs pour plus d'informations.");
+
+      const roleId = await this.supa.getRoleId(userData.id);
+      console.log("ici c'est roleId.data", roleId.data);
+
+      if (roleId.data) {
+        roleId.data.forEach(async (item) => {
+          console.log('ID du rôle : ', item.id);
+          this.idRole = item.id;
+          console.log(this.idRole);
+          const userRole = await this.supa.getRoleById(this.idRole);
+          console.log(userRole.data);
+          if (userRole.data) {
+            this.role = userRole.data.map((item: { [x: string]: any }) => ({
+              id: item['id'],
+              role: item['role'],
+            }));
+            console.log(this.role.map((item) => item['role']).join(', '));
+          }
+        });
+      } else {
+        throw new Error('Aucune donnée utilisateur disponible.');
+      }
     }
-  }
-
-  
-
-
-}
-
+  } */
