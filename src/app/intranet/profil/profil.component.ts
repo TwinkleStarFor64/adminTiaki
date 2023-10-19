@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { RoleData, UtilisateurI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { UsersService } from 'src/app/partage/services/users.service';
@@ -18,11 +18,19 @@ export class ProfilComponent implements OnInit {
 
   profilForm!: FormGroup;
 
-  constructor(public supa: SupabaseService, public users: UsersService) {}
+  value: string | undefined;
+
+  constructor(public supa: SupabaseService, public users: UsersService, private formbuilder: FormBuilder) {}
 
   async ngOnInit(): Promise<void> {
     this.supa.getLoggedInUser();
     this.getUserProfil();
+
+    this.profilForm = this.formbuilder.group({
+      nom: [null, [Validators.required]],
+      email: [null, [Validators.required, Validators.email]],
+    });
+
   }
 
   async getUserProfil() {
@@ -41,8 +49,14 @@ export class ProfilComponent implements OnInit {
           email: item['email'],
           nom: item['nom'],
         }));
+        
         //console.log(this.utilisateur.map((item) => item['nom']).join(', '));
       }
+
+      this.profilForm = new FormGroup({
+        nom: new FormControl(this.utilisateur.map((item) => item['nom'])[0]),
+        email: new FormControl(this.utilisateur.map((item) => item['email'])[0]),
+      })
 
       const roleIdData = (await this.supa.getRoleId(userData.id)).data;
       console.log("ici c'est roleId.data", roleIdData);
@@ -69,8 +83,15 @@ export class ProfilComponent implements OnInit {
       console.error("Une erreur s'est produite :", error);
     }
   }
-}
 
+  
+  onSubmitForm() {
+    console.log(this.profilForm.value);
+    
+  }
+
+
+}
 
 
 

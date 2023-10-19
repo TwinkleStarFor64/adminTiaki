@@ -19,15 +19,34 @@
     <section>
         <article *ngFor="let user of utilisateur">
             <h4>Informations personelles</h4>
-            <p>Nom : {{ user.nom }}</p>
+            <!-- <p>Nom : {{ user.nom }}</p>
             <p>Email : {{ user.email }}</p>
-            <p>{{ user.role }}</p>            
+            <p>{{ user.role }}</p> --> 
+            <form [formGroup]="profilForm" (ngSubmit)="onSubmitForm()">
+                <!-- <input type="text" formControlName="nom"> -->
+                <input type="text" pInputText formControlName="nom"/>
+                <!-- <input type="email" formControlName="email"> -->
+                <span class="p-float-label">
+                    <input pInputText id="username" formControlName="email" />
+                    <label htmlFor="username">Email</label>
+                </span>
+                <p-button class="connexion" styleClass="p-button-help" type="submit">Se connecter</p-button>
+            </form>           
         </article>
         <article>
             <h4>Informations du compte</h4>
             <p> Rôle(s) attribué(s) :</p> 
-            <p>{{ rolesConcatenated }}</p>
-                      
+            <p>{{ rolesConcatenated }}</p>                      
         </article>
     </section>
 </main>
+
+
+<!-- <form [formGroup]="loginForm" (ngSubmit)="onSubmitForm()">
+    <input placeholder="Email" type="email" formControlName="email" value="email">
+    <input placeholder="Mot de passe" type="password" formControlName="password" value="password">
+    <div>
+        <p><a href="/">Mot de passe oublié?</a></p>
+        <p-button class="connexion" styleClass="p-button-help" type="submit">Se connecter</p-button>                   
+    </div>
+</form> -->
