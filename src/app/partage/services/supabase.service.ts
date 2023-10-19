@@ -203,7 +203,7 @@ export class SupabaseService {
   }
 
   // Récupérer les rôles sur la table roles en comparant leur id
-  async getRoleById(id: number) {
+  async getRoleById(id: string) {
     const data = await this.supabase
     .from('roles')
     .select('*')
@@ -212,7 +212,27 @@ export class SupabaseService {
     return data;
   }
 
-  
+  async updateProfil(
+    id: string,
+    newEntry: {
+      nom: string;
+      email: string;
+    }
+  ) {
+    const { error: updateError } = await this.supabase
+    .from('utilisateur')
+    .update(newEntry)
+    .eq('id', id);
+
+    if (updateError) {
+      console.log(updateError);      
+    }
+  }
+
+
+
+
+
 
 }
 /* async getUserById(id: string) {

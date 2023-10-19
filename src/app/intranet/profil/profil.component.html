@@ -19,18 +19,28 @@
     <section>
         <article *ngFor="let user of utilisateur">
             <h4>Informations personelles</h4>
-            <!-- <p>Nom : {{ user.nom }}</p>
-            <p>Email : {{ user.email }}</p>
-            <p>{{ user.role }}</p> --> 
-            <form [formGroup]="profilForm" (ngSubmit)="onSubmitForm()">
-                <!-- <input type="text" formControlName="nom"> -->
-                <input type="text" pInputText formControlName="nom"/>
-                <!-- <input type="email" formControlName="email"> -->
+            <!-- <p>Email : {{ user.email }}</p>
+            <p>Nom : {{ user.nom }}</p>
+            <p>Prenom : {{ user.prenom }}</p>
+            <p>Téléphone : {{ user.telephone }}</p> -->             
+            <form [formGroup]="profilForm" >
                 <span class="p-float-label">
-                    <input pInputText id="username" formControlName="email" />
-                    <label htmlFor="username">Email</label>
+                    <input pInputText id="nom" formControlName="nom" />
+                    <label htmlFor="nom">Nom</label>
                 </span>
-                <p-button class="connexion" styleClass="p-button-help" type="submit">Se connecter</p-button>
+                <span class="p-float-label">
+                    <input pInputText id="prenom" formControlName="prenom" />
+                    <label htmlFor="prenom">Prenom</label>
+                </span>
+                <span class="p-float-label">
+                    <input pInputText id="telephone" formControlName="telephone" />
+                    <label htmlFor="telephone">Telephone</label>
+                </span>
+                <span class="p-float-label">
+                    <input pInputText id="email" formControlName="email" />
+                    <label htmlFor="email">Email</label>
+                </span>
+                <p-button class="modifier" styleClass="p-button-help" type="submit" (onClick)="onSubmitForm()" [disabled]="profilForm.invalid">Modifier</p-button>
             </form>           
         </article>
         <article>

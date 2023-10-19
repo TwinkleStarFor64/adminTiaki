@@ -13,7 +13,7 @@ export class ProfilComponent implements OnInit {
   utilisateur: UtilisateurI[] = [];
   role: RoleData[] = [];
 
-  idRole!: number; // Utiliser dans la méthode getUserProfil()
+  idRole!: string; // Utiliser dans la méthode getUserProfil()
   rolesConcatenated: string = ''; // Utiliser dans la méthode getUserProfil() pour afficher les rôles dans le front-end
 
   profilForm!: FormGroup;
@@ -27,8 +27,10 @@ export class ProfilComponent implements OnInit {
     this.getUserProfil();
 
     this.profilForm = this.formbuilder.group({
-      nom: [null, [Validators.required]],
-      email: [null, [Validators.required, Validators.email]],
+      nom: ['', [Validators.required]],
+      prenom: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      telephone: ['', [Validators.required]],
     });
 
   }
@@ -48,23 +50,27 @@ export class ProfilComponent implements OnInit {
           id: item['id'],
           email: item['email'],
           nom: item['nom'],
+          prenom: item['prenom'],
+          telephone: item['telephone']
         }));
         
-        //console.log(this.utilisateur.map((item) => item['nom']).join(', '));
+        //console.log("Nom d'utilisateur", this.utilisateur.map((item) => item['nom']).join(', '));
       }
 
       this.profilForm = new FormGroup({
         nom: new FormControl(this.utilisateur.map((item) => item['nom'])[0]),
+        prenom: new FormControl(this.utilisateur.map((item) => item['prenom'])[0]),
         email: new FormControl(this.utilisateur.map((item) => item['email'])[0]),
+        telephone: new FormControl(this.utilisateur.map((item) => item['telephone'])[0]),
       })
 
       const roleIdData = (await this.supa.getRoleId(userData.id)).data;
-      console.log("ici c'est roleId.data", roleIdData);
+      //console.log("ici c'est roleId.data", roleIdData);
 
       if (roleIdData) {
         for (const item of roleIdData) {
-          //console.log('ID du rôle : ', item.id);
-          this.idRole = item.id;
+          console.log('ID du rôle : ', item.idRole);
+          this.idRole = item.idRole;
           console.log('this.idRole : ', this.idRole);
 
           const userRoleData = (await this.supa.getRoleById(this.idRole)).data;
@@ -85,10 +91,24 @@ export class ProfilComponent implements OnInit {
   }
 
   
-  onSubmitForm() {
+  async onSubmitForm() {
     console.log(this.profilForm.value);
-    
+    try {
+      const userData = await this.supa.getLoggedInUser();
+
+      if (!userData) {
+        throw new Error('Aucune donnée utilisateur disponible.');
+      }
+
+      console.log("le submit",userData.id);
+      const update = await this.supa.updateProfil(userData.id, this.profilForm.value)     
+      return update;
+
+    } catch (error) {
+      console.error("Une erreur s'est produite :", error);
+    }
   }
+  
 
 
 }

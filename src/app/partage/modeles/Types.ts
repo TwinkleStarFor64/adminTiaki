@@ -14,6 +14,8 @@ export interface UtilisateurI {
     id: string;
     email: string;
     nom: string;
+    prenom?:string;
+    telephone?:number;
     role?: string;
 }
 

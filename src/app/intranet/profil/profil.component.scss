@@ -10,6 +10,12 @@ main {
         justify-content: space-around;
         article {
             flex-direction: column;
+            form {
+                display: flex;
+                flex-direction: column;
+                gap: 4vh;
+                margin-top: 2vh;
+            }
         }
 
     }
