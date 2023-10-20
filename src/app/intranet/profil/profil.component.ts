@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
   selector: 'app-profil',
   templateUrl: './profil.component.html',
   styleUrls: ['./profil.component.scss'],
-  providers: [ConfirmationService, MessageService],
+  providers: [ConfirmationService, MessageService], // Pour les modals PrimeNG
 })
 export class ProfilComponent implements OnInit {
   utilisateur: UtilisateurI[] = [];
@@ -136,37 +136,28 @@ export class ProfilComponent implements OnInit {
     }
   }
 
+  // Méthode pour la modal de confirmation de modification du formulaire de profil utilisateur
   ConfirmDialog() {
-    this.confirmationService.confirm({
+    this.confirmationService.confirm({ // Le contenu de la boîte de dialogue
       message: 'Etes vous sûr de vouloir enregistrer ces modifications ?',
       header: 'Modifier les informations personnelles',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.messageService.add({
+        this.messageService.add({ // Pour la pop-up
           severity: 'info',
-          summary: 'Confirmed',
-          detail: 'You have accepted',
+          summary: 'Confirmation',
+          detail: 'Modifications enregistrées',
         });
         console.log('Accept a été appelé');
-        this.onSubmitForm()
+        this.onSubmitForm() // J'appelle la méthode d'envoie du formulaire
       },
       reject: (type: ConfirmEventType) => {
         switch (type) {
-          case ConfirmEventType.REJECT:
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Rejected',
-              detail: 'You have rejected',
-            });
+          case ConfirmEventType.REJECT:            
             console.log('Non a été cliqué, la modal sera simplement fermée.');
             window.location.reload();                        
             break;
-          case ConfirmEventType.CANCEL:
-            this.messageService.add({
-              severity: 'warn',
-              summary: 'Cancelled',
-              detail: 'You have cancelled',
-            });
+          case ConfirmEventType.CANCEL:            
             console.log("Annulation");
             window.location.reload();                        
             break;
@@ -176,33 +167,28 @@ export class ProfilComponent implements OnInit {
   }
 
   DeleteDialog() {
-    this.confirmationService.confirm({
+    this.confirmationService.confirm({ // Le contenu de la boîte de dialogue
       message: 'Etes vous sûr de vouloir supprimer votre compte ?',
       header: 'Supprimer le compte',
       icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.messageService.add({
-          severity: 'info',
-          summary: 'Confirmed',
-          detail: 'You have accepted',
-        });
-        this.deleteCompte();
+      accept: () => {        
+        this.deleteCompte(); // J'appele la méthode de suppression du compte
       },
       reject: (type: ConfirmEventType) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({
+            this.messageService.add({ // Pour la pop-up
               severity: 'error',
-              summary: 'Rejected',
-              detail: 'You have rejected',
+              summary: 'Annuler',
+              detail: 'Vous avez annuler',
             });
             console.log('Non a été cliqué, la modal sera simplement fermée.');                                    
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({
+            this.messageService.add({ // Pour la pop-up
               severity: 'warn',
-              summary: 'Cancelled',
-              detail: 'You have cancelled',
+              summary: 'Annuler',
+              detail: 'Vous avez annuler',
             });
             console.log("Annulation");                                    
             break;
@@ -213,12 +199,13 @@ export class ProfilComponent implements OnInit {
 
   async deleteCompte() {
     try {
+      // Je récupére les données de l'user connecté - surtout son id
       const userData = await this.supa.getLoggedInUser();
       
-      if (!userData) {
+      if (!userData) { // Si pas de data
         throw new Error('Aucune donnée utilisateur disponible.');
       }
-      this.supa.deleteUser(userData.id)
+      this.supa.deleteUser(userData.id) // Appelle de la méthode deleteUser avec en paramétre l'id de l'user récupérer
       .then(() => {
         sessionStorage.removeItem('token');
       this.router.navigate(['']);        

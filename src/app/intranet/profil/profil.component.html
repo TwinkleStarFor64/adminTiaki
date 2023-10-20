@@ -17,6 +17,8 @@
 </header>
 <main>
     <section>
+        <!-- Pour la pop-up MessageService -->
+        <p-toast></p-toast>
         <article *ngFor="let user of utilisateur">
             <h4>Informations personelles</h4>                        
             <form [formGroup]="profilForm" >
@@ -44,13 +46,13 @@
             <p> Rôle(s) attribué(s) :</p> 
             <p>{{ rolesConcatenated }}</p>
             <h4>Supprimer votre compte</h4>
-            <p-button styleClass="p-button-help" (click)="DeleteDialog()">Supprimer</p-button>                      
+            <p-button styleClass="p-button-help" (click)="DeleteDialog()">Supprimer</p-button>                                 
         </article>
     </section>
 </main>
 
 
-<p-confirmDialog #cd [style]="{width: '40vw'}">
+<p-confirmDialog #cd [style]="{width: '40vw'}">    
     <ng-template pTemplate="footer">
         <button type="submit" class="acceptButton" pButton icon="pi pi-check" label="Oui" (click)="cd.accept()"></button>
         <button type="button" class="rejectButton" pButton icon="pi pi-times" label="Non" (click)="cd.reject()"></button>

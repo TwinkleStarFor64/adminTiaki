@@ -18,6 +18,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast'; // Pour les pop-up de MessageService
 
 
 
@@ -36,8 +37,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     ComplementsComponent,
     AsideBarComponent,
     AllergenesComponent,
-    ProfilComponent,
-      
+    ProfilComponent,      
     
   ],
   imports: [
@@ -47,7 +47,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     FormsModule,
     ButtonModule,
     InputTextModule,
-    ConfirmDialogModule,
+    ConfirmDialogModule,    
+    ToastModule
     
   ],
  
