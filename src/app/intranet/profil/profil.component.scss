@@ -1,22 +1,59 @@
+::-webkit-scrollbar {
+    background-color: #805E96;
+    width: 10px;
+}
+::-webkit-scrollbar-thumb {
+    height: auto;
+    background-color: #270140;
+}
+
 h1,h2,h3 {
     color: #805E96;    
 }
 
 main {
-    justify-content: center;
+    justify-content: center;    
     section {
+        overflow-y: auto;
+
         background-color: #FFF1C6;
         width: 60%;
+        height: 65vh;
         justify-content: space-around;
+        
         article {
             flex-direction: column;
+            padding-top: 20px;
+            
             form {
                 display: flex;
                 flex-direction: column;
                 gap: 4vh;
                 margin-top: 2vh;
             }
+            #buttonMdp {
+                padding-bottom: 20px;
+            }
         }
-
     }
 }
+
+.acceptButton {    
+    background-color: #33BB27;
+    border-color: #33BB27;
+    transition: all .3s ease; // all récupére le css du hover ci-dessous    
+}
+.acceptButton:hover {
+    background-color: #33BB27;
+    border-color: #33BB27;
+}
+.rejectButton {
+    background-color: #F0C02E;
+    border-color: #F0C02E;
+    transition: all .3s ease; // all récupére le css du hover ci-dessous 
+}
+.rejectButton:hover {
+    background-color: #F0C02E;
+    border-color: #F0C02E;
+}
+

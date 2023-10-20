@@ -216,7 +216,8 @@ export class SupabaseService {
     id: string,
     newEntry: {
       nom: string;
-      email: string;
+      prenom: string;
+      telephone: string;
     }
   ) {
     const { error: updateError } = await this.supabase

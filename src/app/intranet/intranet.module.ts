@@ -17,6 +17,8 @@ import { ProfilComponent } from './profil/profil.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
 
 
 
@@ -44,7 +46,9 @@ import { InputTextModule } from 'primeng/inputtext';
     ReactiveFormsModule,
     FormsModule,
     ButtonModule,
-    InputTextModule 
+    InputTextModule,
+    ConfirmDialogModule,
+    
   ],
  
 })

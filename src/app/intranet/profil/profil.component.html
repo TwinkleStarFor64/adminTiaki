@@ -18,11 +18,7 @@
 <main>
     <section>
         <article *ngFor="let user of utilisateur">
-            <h4>Informations personelles</h4>
-            <!-- <p>Email : {{ user.email }}</p>
-            <p>Nom : {{ user.nom }}</p>
-            <p>Prenom : {{ user.prenom }}</p>
-            <p>Téléphone : {{ user.telephone }}</p> -->             
+            <h4>Informations personelles</h4>                        
             <form [formGroup]="profilForm" >
                 <span class="p-float-label">
                     <input pInputText id="nom" formControlName="nom" />
@@ -35,22 +31,38 @@
                 <span class="p-float-label">
                     <input pInputText id="telephone" formControlName="telephone" />
                     <label htmlFor="telephone">Telephone</label>
-                </span>
-                <span class="p-float-label">
-                    <input pInputText id="email" formControlName="email" />
-                    <label htmlFor="email">Email</label>
-                </span>
-                <p-button class="modifier" styleClass="p-button-help" type="submit" (onClick)="onSubmitForm()" [disabled]="profilForm.invalid">Modifier</p-button>
-            </form>           
+                </span>                 
+                <p-button class="modifier" styleClass="p-button-help" (click)="ConfirmDialog()" [disabled]="profilForm.invalid">Modifier</p-button>                
+            </form>
+            <h4>Identifiants de connexion</h4>                       
+            <p>Votre Email : {{ user.email }}</p>
+            <p>Changer votre mot de passe</p>
+            <p-button id="buttonMdp" styleClass="p-button-help">Modifier MDP</p-button>          
         </article>
         <article>
             <h4>Informations du compte</h4>
             <p> Rôle(s) attribué(s) :</p> 
-            <p>{{ rolesConcatenated }}</p>                      
+            <p>{{ rolesConcatenated }}</p>
+            <h4>Supprimer votre compte</h4>
+            <p-button styleClass="p-button-help" (click)="DeleteDialog()">Supprimer</p-button>                      
         </article>
     </section>
 </main>
 
+
+<p-confirmDialog #cd [style]="{width: '40vw'}">
+    <ng-template pTemplate="footer">
+        <button type="submit" class="acceptButton" pButton icon="pi pi-check" label="Oui" (click)="cd.accept()"></button>
+        <button type="button" class="rejectButton" pButton icon="pi pi-times" label="Non" (click)="cd.reject()"></button>
+    </ng-template>
+</p-confirmDialog>
+
+
+
+
+
+
+<!-- <p-button class="modifier" styleClass="p-button-help" type="submit" (onClick)="onSubmitForm()" [disabled]="profilForm.invalid">Modifier</p-button> -->
 
 <!-- <form [formGroup]="loginForm" (ngSubmit)="onSubmitForm()">
     <input placeholder="Email" type="email" formControlName="email" value="email">
