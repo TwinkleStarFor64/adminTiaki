@@ -175,6 +175,8 @@ export class SupabaseService {
     return utilisateursData as UtilisateurData[];
   }
 
+/* ----------------------------- Code pour la page profil utilisateur ---------------------------- */
+
 // Méthode pour récupérer les données d'un utilisateur identifié (sur la table auth)
   async getLoggedInUser() {
     const {
@@ -232,7 +234,12 @@ export class SupabaseService {
     }
   }
 
-
+// Méthode pour modifier son MDP - sur la table auth
+  async updatePass(newPassword: string) {
+    const data = await this.supabase.auth.updateUser({password: newPassword})
+    console.log("méthode updatePass : ", data);    
+    return data;
+  }
 
 
 

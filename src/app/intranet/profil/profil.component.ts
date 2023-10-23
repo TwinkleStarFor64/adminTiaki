@@ -29,8 +29,12 @@ export class ProfilComponent implements OnInit {
   rolesConcatenated: string = ''; // Utiliser dans la méthode getUserProfil() pour afficher les rôles dans le front-end
 
   profilForm!: FormGroup;
-
-  //value: string | undefined;
+  passwordForm!: FormGroup;
+  
+  stringRegex!: RegExp;
+  numberRegex!: RegExp;
+  passwordRegex!: RegExp;
+  
 
   constructor(
     public supa: SupabaseService,
@@ -45,12 +49,21 @@ export class ProfilComponent implements OnInit {
     this.supa.getLoggedInUser();
     this.getUserProfil();
 
+    this.stringRegex = /^[a-zA-Z ]*$/;
+    this.numberRegex = /^\d+$/;
+    this.passwordRegex = /^[A-Za-z0-9]{6,}$/;
+
     this.profilForm = this.formbuilder.group({
-      nom: ['', [Validators.required]],
-      prenom: ['', [Validators.required]],
+      nom: ['', [Validators.required, Validators.pattern(this.stringRegex)]],
+      prenom: ['', [Validators.required, Validators.pattern(this.stringRegex)]],
       email: ['', [Validators.required, Validators.email]],
-      telephone: ['', [Validators.required]],
+      telephone: ['', [Validators.required, Validators.pattern(this.numberRegex)]],
     });
+
+    this.passwordForm = this.formbuilder.group({
+      password: ['',[Validators.required, Validators.pattern(this.passwordRegex)]],      
+    });     
+    
   }
 
 // Méthode pour récupérer l'utilisateur identifié et son profil y compris ces rôles
@@ -237,8 +250,13 @@ export class ProfilComponent implements OnInit {
     }
   }
 
+ onSubmitNewPassword() {
+    console.log(this.passwordForm.value.password);
+    this.supa.updatePass(this.passwordForm.value.password);
+  } 
+ 
 
-
+ 
 
 }
 

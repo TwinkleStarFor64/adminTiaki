@@ -21,23 +21,29 @@
             <h4>Informations personelles</h4>                        
             <form [formGroup]="profilForm" >
                 <span class="p-float-label">
-                    <input pInputText id="nom" formControlName="nom" />
+                    <input pInputText id="nom" formControlName="nom" type="text" pattern="{{ stringRegex.source }}" required minlength="1"/>
                     <label htmlFor="nom">Nom</label>
                 </span>
                 <span class="p-float-label">
-                    <input pInputText id="prenom" formControlName="prenom" />
+                    <input pInputText id="prenom" formControlName="prenom" type="text" pattern="{{ stringRegex.source }}" required minlength="1"/>
                     <label htmlFor="prenom">Prenom</label>
                 </span>
                 <span class="p-float-label">
-                    <input pInputText id="telephone" formControlName="telephone" />
+                    <input pInputText id="telephone" formControlName="telephone" type="text" pattern="{{ numberRegex.source }}" required minlength="10"/>
                     <label htmlFor="telephone">Telephone</label>
                 </span>                 
                 <p-button class="modifier" styleClass="p-button-help" (click)="ConfirmDialog()" [disabled]="profilForm.invalid">Modifier</p-button>                
             </form>
             <h4>Identifiants de connexion</h4>                       
             <p>Votre Email : {{ user.email }}</p>
-            <p>Changer votre mot de passe</p>
-            <p-button id="buttonMdp" styleClass="p-button-help">Modifier MDP</p-button>          
+            <p>Changer votre mot de passe :</p>
+            <form [formGroup]="passwordForm" (ngSubmit)="onSubmitNewPassword()">
+                <span class="p-float-label">
+                    <input pInputText id="password" formControlName="password" type="password" pattern="{{ passwordRegex.source }}"/>
+                    <label htmlFor="newPassword">Six caractères minimum</label>
+                </span>                
+                <p-button id="buttonMdp" styleClass="p-button-help" type="submit" [disabled]="passwordForm.invalid">Modifier MDP</p-button>          
+            </form>
         </article>
         <article>
             <h4>Informations du compte</h4>
