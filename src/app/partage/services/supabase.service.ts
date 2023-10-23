@@ -70,7 +70,7 @@ export class SupabaseService {
   /*
    *Supprimer utilisateur
    */
-  async deleteUser(userData: string) {
+  async deleteUser(userData: string) { // userData servira à comparer à l'id utilisateur
     const { data, error } = await this.supabase.auth.admin.deleteUser(userData);
     if (data) {
       console.log('suppression réussie');
@@ -175,6 +175,7 @@ export class SupabaseService {
     return utilisateursData as UtilisateurData[];
   }
 
+// Méthode pour récupérer les données d'un utilisateur identifié (sur la table auth)
   async getLoggedInUser() {
     const {
       data: { user },
@@ -183,7 +184,7 @@ export class SupabaseService {
     return user;
   }
 
-  // Récupérer les utilisateurs sur la table public.utilisateur en comparant leur id
+// Récupérer les utilisateurs sur la table public.utilisateur en comparant leur id
   async getUtilisateurById(id: string) {
     const data = await this.supabase
       .from('utilisateur')
@@ -193,7 +194,7 @@ export class SupabaseService {
     return data;
   }
 
-  // Récupérer et comparer les rôles et utilisateurs sur la table attribuerRoles
+// Récupérer et comparer les rôles et utilisateurs sur la table attribuerRoles
   async getRoleId(id: string) {
     const data = await this.supabase
     .from('attribuerRoles')
@@ -202,7 +203,7 @@ export class SupabaseService {
     return data;    
   }
 
-  // Récupérer les rôles sur la table roles en comparant leur id
+// Récupérer les rôles sur la table roles en comparant leur id
   async getRoleById(id: string) {
     const data = await this.supabase
     .from('roles')
@@ -212,6 +213,7 @@ export class SupabaseService {
     return data;
   }
 
+// Méthode pour update son profil en tant qu'utilisateur (sur la table utilisateur)
   async updateProfil(
     id: string,
     newEntry: {

@@ -16,9 +16,7 @@
     </article>
 </header>
 <main>
-    <section>
-        <!-- Pour la pop-up MessageService -->
-        <p-toast></p-toast>
+    <section>        
         <article *ngFor="let user of utilisateur">
             <h4>Informations personelles</h4>                        
             <form [formGroup]="profilForm" >
@@ -51,7 +49,10 @@
     </section>
 </main>
 
+<!-- Pour la pop-up MessageService -->
+<p-toast></p-toast>
 
+<!-- Le contenu de la Modal PrimeNG -->
 <p-confirmDialog #cd [style]="{width: '40vw'}">    
     <ng-template pTemplate="footer">
         <button type="submit" class="acceptButton" pButton icon="pi pi-check" label="Oui" (click)="cd.accept()"></button>

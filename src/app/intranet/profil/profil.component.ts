@@ -30,7 +30,7 @@ export class ProfilComponent implements OnInit {
 
   profilForm!: FormGroup;
 
-  value: string | undefined;
+  //value: string | undefined;
 
   constructor(
     public supa: SupabaseService,
@@ -53,17 +53,20 @@ export class ProfilComponent implements OnInit {
     });
   }
 
+// Méthode pour récupérer l'utilisateur identifié et son profil y compris ces rôles
   async getUserProfil() {
     try {
-      const userData = await this.supa.getLoggedInUser();
-      if (!userData) {
+      const userData = await this.supa.getLoggedInUser(); // Récupére les données de l'user connecter - y compris son id
+      if (!userData) { // Si pas de user
         throw new Error('Aucune donnée utilisateur disponible.');
       }
-      //console.log(userData.id);
-
+      //console.log(userData.id); 
+      // Si j'ai un user je peux récupérer son id avec userData.id
+      // J'utilise cette id pour récupérer l'user sur la table utilisateurs (ci-dessous)
       const userIdData = (await this.supa.getUtilisateurById(userData.id)).data;
       if (userIdData) {
         //console.log(userIdData);
+      // Variable utilisateur de type UtilisateurI à laquelle j'attribue les data récupérées
         this.utilisateur = userIdData.map((item: { [x: string]: any }) => ({
           id: item['id'],
           email: item['email'],
@@ -74,9 +77,11 @@ export class ProfilComponent implements OnInit {
 
         //console.log("Nom d'utilisateur", this.utilisateur.map((item) => item['nom']).join(', '));
       }
-
+      // Je remplis les values du formulaire avec les data de l'user - je récupére un tableau avec un seul élément
+      // Comme je récupére un tableau je rajoute [0]
       this.profilForm = new FormGroup({
-        nom: new FormControl(this.utilisateur.map((item) => item['nom'])[0]),
+        nom: new FormControl(
+          this.utilisateur.map((item) => item['nom'])[0]),
         prenom: new FormControl(
           this.utilisateur.map((item) => item['prenom'])[0]
         ),
@@ -90,19 +95,21 @@ export class ProfilComponent implements OnInit {
 
       const roleIdData = (await this.supa.getRoleId(userData.id)).data;
       //console.log("ici c'est roleId.data", roleIdData);
-
+      //Je fetch sur la table attribuerRoles tous les rôles correspondants à l'id de cet user
       if (roleIdData) {
         for (const item of roleIdData) {
           console.log('ID du rôle : ', item.idRole);
-          this.idRole = item.idRole;
+          this.idRole = item.idRole; // J'attribue à la variable idRole les id des rôles récupérés
           console.log('this.idRole : ', this.idRole);
 
+          //Pour chacun de ces rôles je fetch sur la table roles
           const userRoleData = (await this.supa.getRoleById(this.idRole)).data;
           //console.log(userRoleData);
 
           if (userRoleData) {
-            this.role = this.role.concat(userRoleData);
+            this.role = this.role.concat(userRoleData); // Concat des tableaux userRoleData en un seul tableau de type RoleData
             console.log(this.role.map((item) => item['role']).join(', '));
+            // Map du résultat et affichage avec .join 
             this.rolesConcatenated = this.role
               .map((item) => item.role)
               .join(', ');
@@ -115,17 +122,18 @@ export class ProfilComponent implements OnInit {
     }    
   }
 
-  // Méthode pour mettre à jour le profil - utilisé dans le formulaire
+// Méthode pour mettre à jour le profil - utilisé dans le formulaire
   async onSubmitForm() {
     console.log(this.profilForm.value);
     try {
-      const userData = await this.supa.getLoggedInUser();
+      const userData = await this.supa.getLoggedInUser(); // Je récupére l'user connecté
 
       if (!userData) {
         throw new Error('Aucune donnée utilisateur disponible.');
       }
 
       console.log('le submit', userData.id);
+      // j'utilise l'id de l'user pour update son profil
       const update = await this.supa.updateProfil(
         userData.id,
         this.profilForm.value
@@ -153,11 +161,21 @@ export class ProfilComponent implements OnInit {
       },
       reject: (type: ConfirmEventType) => {
         switch (type) {
-          case ConfirmEventType.REJECT:            
+          case ConfirmEventType.REJECT:
+            this.messageService.add({ // Pour la pop-up
+              severity: 'error',
+              summary: 'Annuler',
+              detail: 'Vous avez annuler',
+            });            
             console.log('Non a été cliqué, la modal sera simplement fermée.');
             window.location.reload();                        
             break;
-          case ConfirmEventType.CANCEL:            
+          case ConfirmEventType.CANCEL:
+            this.messageService.add({ // Pour la pop-up
+              severity: 'error',
+              summary: 'Annuler',
+              detail: 'Vous avez annuler',
+            });            
             console.log("Annulation");
             window.location.reload();                        
             break;
@@ -166,6 +184,7 @@ export class ProfilComponent implements OnInit {
     });
   }
 
+  // Méthode pour la modal de suppression du compte
   DeleteDialog() {
     this.confirmationService.confirm({ // Le contenu de la boîte de dialogue
       message: 'Etes vous sûr de vouloir supprimer votre compte ?',
@@ -197,6 +216,7 @@ export class ProfilComponent implements OnInit {
     });
   }
 
+  // Méthode pour supprimer son compte
   async deleteCompte() {
     try {
       // Je récupére les données de l'user connecté - surtout son id
@@ -207,8 +227,8 @@ export class ProfilComponent implements OnInit {
       }
       this.supa.deleteUser(userData.id) // Appelle de la méthode deleteUser avec en paramétre l'id de l'user récupérer
       .then(() => {
-        sessionStorage.removeItem('token');
-      this.router.navigate(['']);        
+        sessionStorage.removeItem('token'); // Delete du token d'authentification
+      this.router.navigate(['']); // Retour à la page principale de l'appli        
       })
       //console.log('deleteCompte de cet Id', userData.id);
 
