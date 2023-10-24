@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 
 @Component({
@@ -9,25 +8,20 @@ import { SupabaseService } from 'src/app/partage/services/supabase.service';
 })
 export class RecoveryComponent implements OnInit {
 
-  passwordForm!: FormGroup;
-  passwordRegex!: RegExp;
+  emailRegex!: RegExp; 
+  email: string = '';
+  popup = false;
 
-  password: string = '';
-
-  constructor(private formbuilder: FormBuilder, public supa: SupabaseService) {}
+  constructor(public supa: SupabaseService) {}
 
   ngOnInit(): void {
-    this.passwordRegex = /^[A-Za-z0-9]{6,}$/;
-
-    this.passwordForm = this.formbuilder.group({
-      password: ['',[Validators.required, Validators.pattern(this.passwordRegex)]],      
-    });
-
+    this.emailRegex = /^\S+@\S+\.\w+$/;
   }
 
   onSubmit() {
-    console.log("l'input password : ", this.password);
-    
+    console.log("l'input email: ", this.email);
+    this.supa.resetPassword(this.email)
+    this.popup = true;
   }
 
 

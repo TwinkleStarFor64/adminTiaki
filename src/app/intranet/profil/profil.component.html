@@ -69,15 +69,9 @@
 
 
 
-
-
-<!-- <p-button class="modifier" styleClass="p-button-help" type="submit" (onClick)="onSubmitForm()" [disabled]="profilForm.invalid">Modifier</p-button> -->
-
-<!-- <form [formGroup]="loginForm" (ngSubmit)="onSubmitForm()">
-    <input placeholder="Email" type="email" formControlName="email" value="email">
-    <input placeholder="Mot de passe" type="password" formControlName="password" value="password">
-    <div>
-        <p><a href="/">Mot de passe oublié?</a></p>
-        <p-button class="connexion" styleClass="p-button-help" type="submit">Se connecter</p-button>                   
-    </div>
+<!-- <form>
+    <input name="truc" #ctlTruc="ngModel" >
+    <input type="text" name="muche" #ctlMuche="ngModel">
+    <span *ngIf="ctlTruc != ctlMuche">Les mots de passe doivent correspondre</span>
 </form> -->
+

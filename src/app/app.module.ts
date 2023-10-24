@@ -10,6 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ButtonModule } from 'primeng/button';
 import { RecoveryComponent } from './extranet/recovery/recovery.component';
 import { InputTextModule } from 'primeng/inputtext';
+import { ResetComponent } from './extranet/reset/reset.component';
 
 
 
@@ -18,6 +19,7 @@ import { InputTextModule } from 'primeng/inputtext';
     AppComponent,
     ConnexionComponent,
     RecoveryComponent,
+    ResetComponent,
     
   ],
   imports: [
