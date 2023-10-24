@@ -4,13 +4,8 @@ import { IntranetComponent } from './intranet.component';
 import { AccueilComponent } from './accueil/accueil.component';
 import { KineComponent } from './kine/kine.component';
 import { OptoComponent } from './opto/opto.component';
-import { NutritionComponent } from './nutrition/nutrition.component';
 import { ProgrammeKineComponent } from './kine/programme-kine/programme-kine.component';
 import { ProgrammeOptoComponent } from './opto/programme-opto/programme-opto.component';
-import { MenusComponent } from './nutrition/menus/menus.component';
-import { IngredientsComponent } from './nutrition/ingredients/ingredients.component';
-import { ComplementsComponent } from './nutrition/complements/complements.component';
-import { AllergenesComponent } from './nutrition/allergenes/allergenes.component';
 import { ProfilComponent } from './profil/profil.component';
 
 const routes: Routes = [
@@ -28,12 +23,11 @@ const routes: Routes = [
       { path: 'opto', component: OptoComponent },
       { path: 'opto/programme-opto', component: ProgrammeOptoComponent },
 
-      { path: 'nutrition', component: NutritionComponent },
-      { path: 'nutrition/menus', component: MenusComponent },
-      { path: 'nutrition/ingredients', component: IngredientsComponent },
-      { path: 'nutrition/complements', component: ComplementsComponent },
-      { path: 'nutrition/allergenes', component: AllergenesComponent  },
-
+      { 
+        path: 'nutrition',
+        loadChildren: () =>
+          import('./nutrition/nutrition.module').then((m) =>m.NutritionModule),
+      },
       {
         path: 'gestion',
         loadChildren: () =>
