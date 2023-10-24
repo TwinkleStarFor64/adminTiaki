@@ -16,12 +16,68 @@
     </article>
 </header>
 <main>
-    <section>
+    <section>        
         <article *ngFor="let user of utilisateur">
-            <p>{{ user.id }}</p>
-            <p>{{ user.nom }}</p>
-            <p>{{ user.email }}</p>
-            <p>{{ user.role }}</p>            
+            <h4>Informations personelles</h4>                        
+            <form [formGroup]="profilForm" >
+                <span class="p-float-label">
+                    <input pInputText id="nom" formControlName="nom" type="text" pattern="{{ stringRegex.source }}" required minlength="1"/>
+                    <label htmlFor="nom">Nom</label>
+                </span>
+                <span class="p-float-label">
+                    <input pInputText id="prenom" formControlName="prenom" type="text" pattern="{{ stringRegex.source }}" required minlength="1"/>
+                    <label htmlFor="prenom">Prenom</label>
+                </span>
+                <span class="p-float-label">
+                    <input pInputText id="telephone" formControlName="telephone" type="text" pattern="{{ numberRegex.source }}" required minlength="10"/>
+                    <label htmlFor="telephone">Telephone</label>
+                </span>                 
+                <p-button class="modifier" styleClass="p-button-help" (click)="ConfirmDialog()" [disabled]="profilForm.invalid">Modifier</p-button>                
+            </form>
+            <h4>Identifiants de connexion</h4>                       
+            <p>Votre Email : {{ user.email }}</p>
+            <p>Changer votre mot de passe :</p>
+            <form [formGroup]="passwordForm" (ngSubmit)="onSubmitNewPassword()">
+                <span class="p-float-label">
+                    <input pInputText id="password" formControlName="password" type="password" pattern="{{ passwordRegex.source }}"/>
+                    <label htmlFor="newPassword">Six caractères minimum</label>
+                </span>                
+                <p-button id="buttonMdp" styleClass="p-button-help" type="submit" [disabled]="passwordForm.invalid">Modifier MDP</p-button>          
+            </form>
+        </article>
+        <article>
+            <h4>Informations du compte</h4>
+            <p> Rôle(s) attribué(s) :</p> 
+            <p>{{ rolesConcatenated }}</p>
+            <h4>Supprimer votre compte</h4>
+            <p-button styleClass="p-button-help" (click)="DeleteDialog()">Supprimer</p-button>                                 
         </article>
     </section>
 </main>
+
+<!-- Pour la pop-up MessageService -->
+<p-toast></p-toast>
+
+<!-- Le contenu de la Modal PrimeNG -->
+<p-confirmDialog #cd [style]="{width: '40vw'}">    
+    <ng-template pTemplate="footer">
+        <button type="submit" class="acceptButton" pButton icon="pi pi-check" label="Oui" (click)="cd.accept()"></button>
+        <button type="button" class="rejectButton" pButton icon="pi pi-times" label="Non" (click)="cd.reject()"></button>
+    </ng-template>
+</p-confirmDialog>
+
+
+
+
+
+
+<!-- <p-button class="modifier" styleClass="p-button-help" type="submit" (onClick)="onSubmitForm()" [disabled]="profilForm.invalid">Modifier</p-button> -->
+
+<!-- <form [formGroup]="loginForm" (ngSubmit)="onSubmitForm()">
+    <input placeholder="Email" type="email" formControlName="email" value="email">
+    <input placeholder="Mot de passe" type="password" formControlName="password" value="password">
+    <div>
+        <p><a href="/">Mot de passe oublié?</a></p>
+        <p-button class="connexion" styleClass="p-button-help" type="submit">Se connecter</p-button>                   
+    </div>
+</form> -->
