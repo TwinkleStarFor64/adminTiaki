@@ -5,9 +5,11 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { ConnexionComponent } from './extranet/connexion/connexion.component';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ButtonModule } from 'primeng/button';
+import { RecoveryComponent } from './extranet/recovery/recovery.component';
+import { InputTextModule } from 'primeng/inputtext';
 
 
 
@@ -15,6 +17,7 @@ import { ButtonModule } from 'primeng/button';
   declarations: [
     AppComponent,
     ConnexionComponent,
+    RecoveryComponent,
     
   ],
   imports: [
@@ -23,8 +26,10 @@ import { ButtonModule } from 'primeng/button';
     RouterModule,
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     BrowserAnimationsModule,
     ButtonModule,
+    InputTextModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

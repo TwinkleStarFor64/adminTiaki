@@ -1,0 +1,16 @@
+<form>
+    <span class="p-float-label">
+        <input pInputText id="password" type="text" name="password" [(ngModel)]="password" />
+        <label htmlFor="password">Nom</label>
+    </span>
+    <p-button id="buttonMdp" styleClass="p-button-help" type="submit" (click)="onSubmit()">Modifier MDP</p-button>
+</form>
+
+
+
+
+<!-- <form>
+    <input name="truc" #ctlTruc="ngModel" >
+    <input type="text" name="muche" #ctlMuche="ngModel">
+    <span *ngIf="ctlTruc != ctlMuche">Les mots de passe doivent correspondre</span>
+</form> -->
