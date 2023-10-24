@@ -104,7 +104,22 @@ export class ProfilComponent implements OnInit {
         telephone: new FormControl(
           this.utilisateur.map((item) => item['telephone'])[0]
         ),
-      });      
+      });     
+
+      /* this.myFormGroup.setValue({
+        formControlName1: myValue1, 
+        formControlName2: myValue2
+      }); */
+
+      //this.form.get(<formControlName>).setValue(<newValue>);
+
+
+      //this.profilForm.nom.value = this.utilisateur['nom']; 
+
+      /*
+      nom: new FormControl(this.utilisateur['nom']);
+      this.profilNom.nom.value = this.utilisateur['nom']; 
+       */
 
       const roleIdData = (await this.supa.getRoleId(userData.id)).data;
       //console.log("ici c'est roleId.data", roleIdData);

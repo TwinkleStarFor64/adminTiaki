@@ -53,6 +53,21 @@ export class SupabaseService {
       });
   }
 
+  // Récupérer son mot de passe en cas de perte - Reset du Password
+  async resetPassword(email: string) {
+    const data = await this.supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'http://localhost:4200/reset'
+    })
+    return data;
+  }
+
+  // Méthode pour modifier son MDP - sur la table auth
+  async updatePass(newPassword: string) {
+    const data = await this.supabase.auth.updateUser({password: newPassword})
+    console.log("méthode updatePass : ", data);    
+    return data;
+  }
+
   // Récupérer les utilisateurs sur la table public.utilisateur
   async getUtilisateur() {
     const data = await this.supabase.from('utilisateur').select('*');
@@ -234,12 +249,7 @@ export class SupabaseService {
     }
   }
 
-// Méthode pour modifier son MDP - sur la table auth
-  async updatePass(newPassword: string) {
-    const data = await this.supabase.auth.updateUser({password: newPassword})
-    console.log("méthode updatePass : ", data);    
-    return data;
-  }
+
 
 
 
