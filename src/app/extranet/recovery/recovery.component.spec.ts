@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { RecoveryComponent } from './recovery.component';
+import { FormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
 
 describe('RecoveryComponent', () => {
   let component: RecoveryComponent;
@@ -8,7 +9,8 @@ describe('RecoveryComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [RecoveryComponent]
+      declarations: [RecoveryComponent],
+      imports: [FormsModule, ButtonModule]
     });
     fixture = TestBed.createComponent(RecoveryComponent);
     component = fixture.componentInstance;
