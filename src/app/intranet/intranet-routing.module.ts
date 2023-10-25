@@ -26,6 +26,7 @@ const routes: Routes = [
         loadChildren: () =>
           import('./nutrition/nutrition.module').then((m) => m.NutritionModule),
       },
+
       {
         path: 'gestion',
         loadChildren: () =>
@@ -40,6 +41,6 @@ const routes: Routes = [
  */
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class IntranetRoutingModule { }
+export class IntranetRoutingModule {}
