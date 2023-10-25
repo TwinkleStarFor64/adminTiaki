@@ -2,10 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { IntranetComponent } from './intranet.component';
 import { AccueilComponent } from './accueil/accueil.component';
-import { KineComponent } from './kine/kine.component';
-import { OptoComponent } from './opto/opto.component';
-import { ProgrammeKineComponent } from './kine/programme-kine/programme-kine.component';
-import { ProgrammeOptoComponent } from './opto/programme-opto/programme-opto.component';
 import { ProfilComponent } from './profil/profil.component';
 
 const routes: Routes = [
@@ -14,26 +10,27 @@ const routes: Routes = [
     component: IntranetComponent,
     children: [
       { path: '', component: AccueilComponent },
-      { path: 'profil', component: ProfilComponent },
-      { path: 'kine', component: KineComponent },
-      // { path: 'kine/modifier/:id, component: EditKineComponent}
-      { path: 'kine/programme-kine', component: ProgrammeKineComponent },
-      // { path: 'kine/programme-kine/modifier/:id, component: EditProgrammeKineComponent}
-
-      { path: 'opto', component: OptoComponent },
-      { path: 'opto/programme-opto', component: ProgrammeOptoComponent },
-
+      { path: 'profil', component: ProfilComponent },      
+      {
+        path: 'kine',
+        loadChildren: () =>
+          import('./kine/kine.module').then((m) => m.KineModule)
+      },
+      {
+        path: 'opto',
+        loadChildren: () =>
+          import('./opto/opto.module').then((m) => m.OptoModule) 
+      },
       { 
         path: 'nutrition',
         loadChildren: () =>
-          import('./nutrition/nutrition.module').then((m) =>m.NutritionModule),
+          import('./nutrition/nutrition.module').then((m) => m.NutritionModule),
       },
       {
         path: 'gestion',
         loadChildren: () =>
           import('./gestion/gestion.module').then((m) => m.GestionModule),
       },
-
       { path: '**', redirectTo: '' } // Important pour le bon focntionnement du router
     ]
   }

@@ -15,7 +15,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(routes)], //Utilisation de forChild car il y a un loadChildren dans intranet-routing.module!!
   exports: [RouterModule],
 
 })
