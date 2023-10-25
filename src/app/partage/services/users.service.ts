@@ -80,3 +80,6 @@ async fetchUtilisateur() {
     }
   }
 }
+
+
+// this.user = this.listeUser.find( u => u.id == this.id);

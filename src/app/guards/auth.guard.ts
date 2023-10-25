@@ -4,12 +4,12 @@ import { inject } from '@angular/core';
 
 export const authGuard: CanActivateFn = (route, state) => {
   const router = new Router();
-  const supa = inject(SupabaseService); // Pour récupérer la variable token définie dans la méthode signIn  
+  const supa = inject(SupabaseService); // Pour récupérer la variable token définie dans la méthode signIn - bloque le refresh de la page web  
 
-  //const token = sessionStorage.getItem('token'); Remplacer par le token de supabase.service !!
+  const token = sessionStorage.getItem('token'); //Remplacer par le token de supabase.service !!
 
-  if (supa.token) { // Le token attribué dans supabase.service    
-    return true;      
+  if (token) { // Le token attribué dans supabase.service        
+    return true; 
   } else {
     router.navigate(['']) 
     return false;

@@ -14,6 +14,12 @@ import { ComplementsComponent } from './nutrition/complements/complements.compon
 import { AsideBarComponent } from './template/aside-bar/aside-bar.component';
 import { AllergenesComponent } from './nutrition/allergenes/allergenes.component';
 import { ProfilComponent } from './profil/profil.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast'; // Pour les pop-up de MessageService
+
 
 
 
@@ -31,12 +37,19 @@ import { ProfilComponent } from './profil/profil.component';
     ComplementsComponent,
     AsideBarComponent,
     AllergenesComponent,
-    ProfilComponent,   
+    ProfilComponent,      
     
   ],
   imports: [
     CommonModule,
     IntranetRoutingModule, 
+    ReactiveFormsModule,
+    FormsModule,
+    ButtonModule,
+    InputTextModule,
+    ConfirmDialogModule,    
+    ToastModule
+    
   ],
  
 })

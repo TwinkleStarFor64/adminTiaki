@@ -29,14 +29,13 @@ export class SupabaseService {
 
   // Connexion à l'application - Tuto : https://www.youtube.com/watch?v=hPI8OegHPYc
 
-  signIn(email: string, password: string) {
-    this.supabase.auth
-      .signInWithPassword({ email, password })
+  signIn(email: string, password: string):any {
+    this.supabase.auth.signInWithPassword({ email, password })
       .then((res) => {
         console.log(res);
         this.user = res.data.user; // La réponse de la méthode avec toutes les données d'un utilisateur
         console.log("L'id de l'utilisateur authentifié : ", this.user.id);
-
+        
         if (res.data.user!.role === 'authenticated') {
           // Je vérifie que le rôle et 'authenticated' dans supabase - voir le résultat de console.log(res)
           this.token = res.data.session!.access_token; // Je stock la valeur du token retourné par supabase
@@ -45,10 +44,28 @@ export class SupabaseService {
           }
           this.router.navigate(['intranet']);
         }
+
+        return res.data.user;
+
       })
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  // Récupérer son mot de passe en cas de perte - Reset du Password
+  async resetPassword(email: string) {
+    const data = await this.supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'http://localhost:4200/reset'
+    })
+    return data;
+  }
+
+  // Méthode pour modifier son MDP - sur la table auth
+  async updatePass(newPassword: string) {
+    const data = await this.supabase.auth.updateUser({password: newPassword})
+    console.log("méthode updatePass : ", data);    
+    return data;
   }
 
   // Récupérer les utilisateurs sur la table public.utilisateur
@@ -68,7 +85,7 @@ export class SupabaseService {
   /*
    *Supprimer utilisateur
    */
-  async deleteUser(userData: string) {
+  async deleteUser(userData: string) { // userData servira à comparer à l'id utilisateur
     const { data, error } = await this.supabase.auth.admin.deleteUser(userData);
     if (data) {
       console.log('suppression réussie');
@@ -173,23 +190,70 @@ export class SupabaseService {
     return utilisateursData as UtilisateurData[];
   }
 
+/* ----------------------------- Code pour la page profil utilisateur ---------------------------- */
+
+// Méthode pour récupérer les données d'un utilisateur identifié (sur la table auth)
   async getLoggedInUser() {
     const {
       data: { user },
     } = await this.supabase.auth.getUser();
-    console.log('Méthode getLoggedInUser : ', user);
+    //console.log('Méthode getLoggedInUser : ', user);
     return user;
   }
 
-  // Récupérer les utilisateurs sur la table public.utilisateur
+// Récupérer les utilisateurs sur la table public.utilisateur en comparant leur id
   async getUtilisateurById(id: string) {
     const data = await this.supabase
       .from('utilisateur')
       .select('*')
       .eq('id', id);
-    console.log('Méthode getUtilisateurById', data);
+    //console.log('Méthode getUtilisateurById', data);
     return data;
   }
+
+// Récupérer et comparer les rôles et utilisateurs sur la table attribuerRoles
+  async getRoleId(id: string) {
+    const data = await this.supabase
+    .from('attribuerRoles')
+    .select('*')
+    .eq('idUtilisateur', id);    
+    return data;    
+  }
+
+// Récupérer les rôles sur la table roles en comparant leur id
+  async getRoleById(id: string) {
+    const data = await this.supabase
+    .from('roles')
+    .select('*')
+    .eq('id', id)
+    //console.log("méthode getRoleById : ", data);    
+    return data;
+  }
+
+// Méthode pour update son profil en tant qu'utilisateur (sur la table utilisateur)
+  async updateProfil(
+    id: string,
+    newEntry: {
+      nom: string;
+      prenom: string;
+      telephone: string;
+    }
+  ) {
+    const { error: updateError } = await this.supabase
+    .from('utilisateur')
+    .update(newEntry)
+    .eq('id', id);
+
+    if (updateError) {
+      console.log(updateError);      
+    }
+  }
+
+
+
+
+
+
 }
 /* async getUserById(id: string) {
   const { data, error } = await this.supabase.auth.admin.getUserById(id);

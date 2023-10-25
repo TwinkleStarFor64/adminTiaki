@@ -1,0 +1,14 @@
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    p:nth-child(1) {
+        margin-top: 10vh;
+    }
+    form {
+        margin-top: 3vh;
+        display: flex;
+        flex-direction: column;
+        gap: 3vh;               
+    }
+}
