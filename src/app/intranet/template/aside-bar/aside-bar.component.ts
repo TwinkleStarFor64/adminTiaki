@@ -5,9 +5,9 @@ import { AsideI } from 'src/app/partage/modeles/Types';
 @Component({
   selector: 'app-aside-bar',
   templateUrl: './aside-bar.component.html',
-  styleUrls: ['./aside-bar.component.scss']
+  styleUrls: ['./aside-bar.component.scss'],
 })
-export class AsideBarComponent  {
+export class AsideBarComponent {
   value: number = 17;
   navbarVisible: boolean = false;
 
@@ -19,7 +19,7 @@ export class AsideBarComponent  {
       url: '/intranet/profil',
     },
     {
-      nom: "",
+      nom: '',
       image: 'assets/imageAsidebar/deconnexion.svg',
       url: '/intranet/deconnexion',
     },
@@ -74,45 +74,45 @@ export class AsideBarComponent  {
       url: '/intranet/gestion',
     },
     {
-      nom: "Ajout",
+      nom: 'Ajout',
       image: 'assets/imageAsidebar/ajoutUtilisateur.svg',
       url: '/intranet/gestion/ajout-utilisateurs',
     },
     {
-      nom: "Messageries",
+      nom: 'Messageries',
       image: 'assets/imageAsidebar/gestionMail.svg',
       url: '/intranet/gestion/messagerie',
     },
     {
-      nom: "Communautés",
+      nom: 'Communautés',
       image: 'assets/imageAsidebar/gestionCommunaute.svg',
       url: '/intranet/gestion/communaute',
     },
     {
-      nom: "Abonnements",
+      nom: 'Abonnements',
       image: 'assets/imageAsidebar/gestionAbonnement.svg',
       url: '/intranet/gestion/abonnement',
     },
     {
-      nom: "Médias",
+      nom: 'Médias',
       image: 'assets/imageAsidebar/gestionMedia.svg',
-      url:'/intranet/gestion/medias'
-    }
+      url: '/intranet/gestion/medias',
+    },
   ];
   public hoveredIndex: number | null = null;
-  
+
   constructor(private router: Router) {}
-  
+
   toggleNavbar() {
     this.navbarVisible = !this.navbarVisible;
   }
 
   logout(index: number) {
-    if (index === 1) { // Pour récupérer le 2e icône sur la Navbar
-      // J'enléve le token de session - accès aux routes plus possible et retour à la page de connexion    
+    if (index === 1) {
+      // Pour récupérer le 2e icône sur la Navbar
+      // J'enléve le token de session - accès aux routes plus possible et retour à la page de connexion
       sessionStorage.removeItem('token');
       this.router.navigate(['']);
     }
-    
   }
 }

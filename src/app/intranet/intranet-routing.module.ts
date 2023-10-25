@@ -32,7 +32,7 @@ const routes: Routes = [
       { path: 'nutrition/menus', component: MenusComponent },
       { path: 'nutrition/ingredients', component: IngredientsComponent },
       { path: 'nutrition/complements', component: ComplementsComponent },
-      { path: 'nutrition/allergenes', component: AllergenesComponent  },
+      { path: 'nutrition/allergenes', component: AllergenesComponent },
 
       {
         path: 'gestion',
@@ -40,15 +40,15 @@ const routes: Routes = [
           import('./gestion/gestion.module').then((m) => m.GestionModule),
       },
 
-      { path: '**', redirectTo: '' } // Important pour le bon focntionnement du router
-    ]
-  }
+      { path: '**', redirectTo: '' }, // Important pour le bon focntionnement du router
+    ],
+  },
 ];
 /**
  * @description Utilisation de forChild caril y a un loadChildren dans app-routing.module
  */
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class IntranetRoutingModule { }
+export class IntranetRoutingModule {}

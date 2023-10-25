@@ -1,77 +1,131 @@
 <header>
-    <article>
+  <article>
     <figure>
-        <img src="assets/images/logos/logo_tiaki.png" alt="">
-    </figure> 
+      <img src="assets/images/logos/logo_tiaki.png" alt="" />
+    </figure>
     <div>
-        <h1>Tiaki</h1>
-        <h2>Mon profil utilisateur</h2>
-    </div>   
-    </article>
-    <article>
-        <figure>
-            <img src="assets/images/icones/icones-communs/iconeGestion.svg" alt="">
-        </figure>
-        <h3>Gérer mon profil</h3>
-    </article>
+      <h1>Tiaki</h1>
+      <h2>Mon profil utilisateur</h2>
+    </div>
+  </article>
+  <article>
+    <figure>
+      <img src="assets/images/icones/icones-communs/iconeGestion.svg" alt="" />
+    </figure>
+    <h3>Gérer mon profil</h3>
+  </article>
 </header>
 <main>
-    <section>        
-        <article *ngFor="let user of utilisateur">
-            <h4>Informations personelles</h4>                        
-            <form [formGroup]="profilForm" >
-                <span class="p-float-label">
-                    <input pInputText id="nom" formControlName="nom" type="text" pattern="{{ stringRegex.source }}" required minlength="1"/>
-                    <label htmlFor="nom">Nom</label>
-                </span>
-                <span class="p-float-label">
-                    <input pInputText id="prenom" formControlName="prenom" type="text" pattern="{{ stringRegex.source }}" required minlength="1"/>
-                    <label htmlFor="prenom">Prenom</label>
-                </span>
-                <span class="p-float-label">
-                    <input pInputText id="telephone" formControlName="telephone" type="text" pattern="{{ numberRegex.source }}" required minlength="10"/>
-                    <label htmlFor="telephone">Telephone</label>
-                </span>                 
-                <p-button class="modifier" styleClass="p-button-help" (click)="ConfirmDialog()" [disabled]="profilForm.invalid">Modifier</p-button>                
-            </form>
-            <h4>Identifiants de connexion</h4>                       
-            <p>Votre Email : {{ user.email }}</p>
-            <p>Changer votre mot de passe :</p>
-            <form [formGroup]="passwordForm" (ngSubmit)="onSubmitNewPassword()">
-                <span class="p-float-label">
-                    <input pInputText id="password" formControlName="password" type="password" pattern="{{ passwordRegex.source }}"/>
-                    <label htmlFor="newPassword">Six caractères minimum</label>
-                </span>                
-                <p-button id="buttonMdp" styleClass="p-button-help" type="submit" [disabled]="passwordForm.invalid">Modifier MDP</p-button>          
-            </form>
-        </article>
-        <article>
-            <h4>Informations du compte</h4>
-            <p> Rôle(s) attribué(s) :</p> 
-            <p>{{ rolesConcatenated }}</p>
-            <h4>Supprimer votre compte</h4>
-            <p-button styleClass="p-button-help" (click)="DeleteDialog()">Supprimer</p-button>                                 
-        </article>
-    </section>
+  <section>
+    <article *ngFor="let user of utilisateur">
+      <h4>Informations personelles</h4>
+      <form [formGroup]="profilForm">
+        <span class="p-float-label">
+          <input
+            pInputText
+            id="nom"
+            formControlName="nom"
+            type="text"
+            pattern="{{ stringRegex.source }}"
+            required
+            minlength="1"
+          />
+          <label htmlFor="nom">Nom</label>
+        </span>
+        <span class="p-float-label">
+          <input
+            pInputText
+            id="prenom"
+            formControlName="prenom"
+            type="text"
+            pattern="{{ stringRegex.source }}"
+            required
+            minlength="1"
+          />
+          <label htmlFor="prenom">Prenom</label>
+        </span>
+        <span class="p-float-label">
+          <input
+            pInputText
+            id="telephone"
+            formControlName="telephone"
+            type="text"
+            pattern="{{ numberRegex.source }}"
+            required
+            minlength="10"
+          />
+          <label htmlFor="telephone">Telephone</label>
+        </span>
+        <p-button
+          class="modifier"
+          styleClass="p-button-help"
+          (click)="ConfirmDialog()"
+          [disabled]="profilForm.invalid"
+          >Modifier</p-button
+        >
+      </form>
+      <h4>Identifiants de connexion</h4>
+      <p>Votre Email : {{ user.email }}</p>
+      <p>Changer votre mot de passe :</p>
+      <form [formGroup]="passwordForm" (ngSubmit)="onSubmitNewPassword()">
+        <span class="p-float-label">
+          <input
+            pInputText
+            id="password"
+            formControlName="password"
+            type="password"
+            pattern="{{ passwordRegex.source }}"
+          />
+          <label htmlFor="newPassword">Six caractères minimum</label>
+        </span>
+        <p-button
+          id="buttonMdp"
+          styleClass="p-button-help"
+          type="submit"
+          [disabled]="passwordForm.invalid"
+          >Modifier MDP</p-button
+        >
+      </form>
+    </article>
+    <article>
+      <h4>Informations du compte</h4>
+      <p>Rôle(s) attribué(s) :</p>
+      <p>{{ rolesConcatenated }}</p>
+      <h4>Supprimer votre compte</h4>
+      <p-button styleClass="p-button-help" (click)="DeleteDialog()"
+        >Supprimer</p-button
+      >
+    </article>
+  </section>
 </main>
 
 <!-- Pour la pop-up MessageService -->
 <p-toast></p-toast>
 
 <!-- Le contenu de la Modal PrimeNG -->
-<p-confirmDialog #cd [style]="{width: '40vw'}">    
-    <ng-template pTemplate="footer">
-        <button type="submit" class="acceptButton" pButton icon="pi pi-check" label="Oui" (click)="cd.accept()"></button>
-        <button type="button" class="rejectButton" pButton icon="pi pi-times" label="Non" (click)="cd.reject()"></button>
-    </ng-template>
+<p-confirmDialog #cd [style]="{ width: '40vw' }">
+  <ng-template pTemplate="footer">
+    <button
+      type="submit"
+      class="acceptButton"
+      pButton
+      icon="pi pi-check"
+      label="Oui"
+      (click)="cd.accept()"
+    ></button>
+    <button
+      type="button"
+      class="rejectButton"
+      pButton
+      icon="pi pi-times"
+      label="Non"
+      (click)="cd.reject()"
+    ></button>
+  </ng-template>
 </p-confirmDialog>
-
-
-
 
 <!-- <form>
     <input name="truc" #ctlTruc="ngModel" >
     <input type="text" name="muche" #ctlMuche="ngModel">
     <span *ngIf="ctlTruc != ctlMuche">Les mots de passe doivent correspondre</span>
 </form> -->
-

@@ -30,11 +30,10 @@ export class ProfilComponent implements OnInit {
 
   profilForm!: FormGroup;
   passwordForm!: FormGroup;
-  
+
   stringRegex!: RegExp;
   numberRegex!: RegExp;
   passwordRegex!: RegExp;
-  
 
   constructor(
     public supa: SupabaseService,
@@ -57,29 +56,35 @@ export class ProfilComponent implements OnInit {
       nom: ['', [Validators.required, Validators.pattern(this.stringRegex)]],
       prenom: ['', [Validators.required, Validators.pattern(this.stringRegex)]],
       email: ['', [Validators.required, Validators.email]],
-      telephone: ['', [Validators.required, Validators.pattern(this.numberRegex)]],
+      telephone: [
+        '',
+        [Validators.required, Validators.pattern(this.numberRegex)],
+      ],
     });
 
     this.passwordForm = this.formbuilder.group({
-      password: ['',[Validators.required, Validators.pattern(this.passwordRegex)]],      
-    });     
-    
+      password: [
+        '',
+        [Validators.required, Validators.pattern(this.passwordRegex)],
+      ],
+    });
   }
 
-// Méthode pour récupérer l'utilisateur identifié et son profil y compris ces rôles
+  // Méthode pour récupérer l'utilisateur identifié et son profil y compris ces rôles
   async getUserProfil() {
     try {
       const userData = await this.supa.getLoggedInUser(); // Récupére les données de l'user connecter - y compris son id
-      if (!userData) { // Si pas de user
+      if (!userData) {
+        // Si pas de user
         throw new Error('Aucune donnée utilisateur disponible.');
       }
-      //console.log(userData.id); 
+      //console.log(userData.id);
       // Si j'ai un user je peux récupérer son id avec userData.id
       // J'utilise cette id pour récupérer l'user sur la table utilisateurs (ci-dessous)
       const userIdData = (await this.supa.getUtilisateurById(userData.id)).data;
       if (userIdData) {
         //console.log(userIdData);
-      // Variable utilisateur de type UtilisateurI à laquelle j'attribue les data récupérées
+        // Variable utilisateur de type UtilisateurI à laquelle j'attribue les data récupérées
         this.utilisateur = userIdData.map((item: { [x: string]: any }) => ({
           id: item['id'],
           email: item['email'],
@@ -93,8 +98,7 @@ export class ProfilComponent implements OnInit {
       // Je remplis les values du formulaire avec les data de l'user - je récupére un tableau avec un seul élément
       // Comme je récupére un tableau je rajoute [0]
       this.profilForm = new FormGroup({
-        nom: new FormControl(
-          this.utilisateur.map((item) => item['nom'])[0]),
+        nom: new FormControl(this.utilisateur.map((item) => item['nom'])[0]),
         prenom: new FormControl(
           this.utilisateur.map((item) => item['prenom'])[0]
         ),
@@ -104,7 +108,7 @@ export class ProfilComponent implements OnInit {
         telephone: new FormControl(
           this.utilisateur.map((item) => item['telephone'])[0]
         ),
-      });     
+      });
 
       /* this.myFormGroup.setValue({
         formControlName1: myValue1, 
@@ -113,8 +117,7 @@ export class ProfilComponent implements OnInit {
 
       //this.form.get(<formControlName>).setValue(<newValue>);
 
-
-      //this.profilForm.nom.value = this.utilisateur['nom']; 
+      //this.profilForm.nom.value = this.utilisateur['nom'];
 
       /*
       nom: new FormControl(this.utilisateur['nom']);
@@ -137,20 +140,19 @@ export class ProfilComponent implements OnInit {
           if (userRoleData) {
             this.role = this.role.concat(userRoleData); // Concat des tableaux userRoleData en un seul tableau de type RoleData
             console.log(this.role.map((item) => item['role']).join(', '));
-            // Map du résultat et affichage avec .join 
+            // Map du résultat et affichage avec .join
             this.rolesConcatenated = this.role
               .map((item) => item.role)
               .join(', ');
           }
         }
-      }      
-
+      }
     } catch (error) {
       console.error("Une erreur s'est produite :", error);
-    }    
+    }
   }
 
-// Méthode pour mettre à jour le profil - utilisé dans le formulaire
+  // Méthode pour mettre à jour le profil - utilisé dans le formulaire
   async onSubmitForm() {
     console.log(this.profilForm.value);
     try {
@@ -174,38 +176,42 @@ export class ProfilComponent implements OnInit {
 
   // Méthode pour la modal de confirmation de modification du formulaire de profil utilisateur
   ConfirmDialog() {
-    this.confirmationService.confirm({ // Le contenu de la boîte de dialogue
+    this.confirmationService.confirm({
+      // Le contenu de la boîte de dialogue
       message: 'Etes vous sûr de vouloir enregistrer ces modifications ?',
       header: 'Modifier les informations personnelles',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.messageService.add({ // Pour la pop-up
+        this.messageService.add({
+          // Pour la pop-up
           severity: 'info',
           summary: 'Confirmation',
           detail: 'Modifications enregistrées',
         });
         console.log('Accept a été appelé');
-        this.onSubmitForm() // J'appelle la méthode d'envoie du formulaire
+        this.onSubmitForm(); // J'appelle la méthode d'envoie du formulaire
       },
       reject: (type: ConfirmEventType) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({ // Pour la pop-up
+            this.messageService.add({
+              // Pour la pop-up
               severity: 'error',
               summary: 'Annuler',
               detail: 'Vous avez annuler',
-            });            
+            });
             console.log('Non a été cliqué, la modal sera simplement fermée.');
-            window.location.reload();                        
+            window.location.reload();
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({ // Pour la pop-up
+            this.messageService.add({
+              // Pour la pop-up
               severity: 'error',
               summary: 'Annuler',
               detail: 'Vous avez annuler',
-            });            
-            console.log("Annulation");
-            window.location.reload();                        
+            });
+            console.log('Annulation');
+            window.location.reload();
             break;
         }
       },
@@ -214,30 +220,33 @@ export class ProfilComponent implements OnInit {
 
   // Méthode pour la modal de suppression du compte
   DeleteDialog() {
-    this.confirmationService.confirm({ // Le contenu de la boîte de dialogue
+    this.confirmationService.confirm({
+      // Le contenu de la boîte de dialogue
       message: 'Etes vous sûr de vouloir supprimer votre compte ?',
       header: 'Supprimer le compte',
       icon: 'pi pi-exclamation-triangle',
-      accept: () => {        
+      accept: () => {
         this.deleteCompte(); // J'appele la méthode de suppression du compte
       },
       reject: (type: ConfirmEventType) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({ // Pour la pop-up
+            this.messageService.add({
+              // Pour la pop-up
               severity: 'error',
               summary: 'Annuler',
               detail: 'Vous avez annuler',
             });
-            console.log('Non a été cliqué, la modal sera simplement fermée.');                                    
+            console.log('Non a été cliqué, la modal sera simplement fermée.');
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({ // Pour la pop-up
+            this.messageService.add({
+              // Pour la pop-up
               severity: 'warn',
               summary: 'Annuler',
               detail: 'Vous avez annuler',
             });
-            console.log("Annulation");                                    
+            console.log('Annulation');
             break;
         }
       },
@@ -249,33 +258,28 @@ export class ProfilComponent implements OnInit {
     try {
       // Je récupére les données de l'user connecté - surtout son id
       const userData = await this.supa.getLoggedInUser();
-      
-      if (!userData) { // Si pas de data
+
+      if (!userData) {
+        // Si pas de data
         throw new Error('Aucune donnée utilisateur disponible.');
       }
-      this.supa.deleteUser(userData.id) // Appelle de la méthode deleteUser avec en paramétre l'id de l'user récupérer
-      .then(() => {
-        sessionStorage.removeItem('token'); // Delete du token d'authentification
-      this.router.navigate(['']); // Retour à la page principale de l'appli        
-      })
+      this.supa
+        .deleteUser(userData.id) // Appelle de la méthode deleteUser avec en paramétre l'id de l'user récupérer
+        .then(() => {
+          sessionStorage.removeItem('token'); // Delete du token d'authentification
+          this.router.navigate(['']); // Retour à la page principale de l'appli
+        });
       //console.log('deleteCompte de cet Id', userData.id);
-
     } catch (error) {
-      console.error("Erreur méthode deleteCompte : ", error);
+      console.error('Erreur méthode deleteCompte : ', error);
     }
   }
 
- onSubmitNewPassword() {
+  onSubmitNewPassword() {
     console.log(this.passwordForm.value.password);
     this.supa.updatePass(this.passwordForm.value.password);
-  } 
- 
-
- 
-
+  }
 }
-
-
 
 /* async getUserProfilBis(email: string, password: string) {
     this.supa.signIn(email, password).then(() => {

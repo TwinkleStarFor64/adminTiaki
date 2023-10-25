@@ -1,15 +1,27 @@
 <p-confirmDialog #cd [style]="{ width: '50vw' }">
-    <ng-template pTemplate="header">
-        <h3>Supprimer l'utilisateur</h3>
-    </ng-template>
-    <ng-template pTemplate="icon">
-        <i class="pi pi-user"></i>
-    </ng-template>
-    <ng-template pTemplate="message">
-        <p>Etes vous sûr de vouloir supprimer cet utilisateur?</p>
-    </ng-template>
-    <ng-template pTemplate="footer">
-        <button type="button" pButton icon="pi pi-check" label="Oui" (click)="cd.accept()"></button>
-        <button type="button" pButton icon="pi pi-times" label="Non" (click)="cd.reject()"></button>
-    </ng-template>
+  <ng-template pTemplate="header">
+    <h3>Supprimer l'utilisateur</h3>
+  </ng-template>
+  <ng-template pTemplate="icon">
+    <i class="pi pi-user"></i>
+  </ng-template>
+  <ng-template pTemplate="message">
+    <p>Etes vous sûr de vouloir supprimer cet utilisateur?</p>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      pButton
+      icon="pi pi-check"
+      label="Oui"
+      (click)="cd.accept()"
+    ></button>
+    <button
+      type="button"
+      pButton
+      icon="pi pi-times"
+      label="Non"
+      (click)="cd.reject()"
+    ></button>
+  </ng-template>
 </p-confirmDialog>
