@@ -13,7 +13,9 @@ export class UsersService {
   selectedUsers: UtilisateurData[] = [];
 
   constructor(public supa:SupabaseService) { }
-
+/*
+* Méthode de récupération des utilisateurs
+*/
 async fetchUtilisateur() {
     const { data, error } = await this.supa.getUtilisateur();
     if (data) {
@@ -28,7 +30,9 @@ async fetchUtilisateur() {
       console.log(error);
     }
   }
-
+/*
+* Méthode de récupération des utilisateurs
+*/
   async fetchAuthUsers() {
     try {
       const userData = await this.supa.listUser();
