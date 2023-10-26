@@ -19,7 +19,9 @@ export class SupabaseService {
 
   user: any; // Utilisé dans la méthode signIn()
   token!: string; // Utilisé dans la méthode signIn()
-
+  badEmail = false; // Utilisé dans la méthode resetPasswordBis()
+  badLogin = false; // Utilisé dans la méthode signIn()
+  
   constructor(private router: Router) {
     this.supabase = createClient(
       environment.supabaseUrl,
@@ -30,27 +32,58 @@ export class SupabaseService {
   // Connexion à l'application - Tuto : https://www.youtube.com/watch?v=hPI8OegHPYc
 
   signIn(email: string, password: string): any {
-    this.supabase.auth
-      .signInWithPassword({ email, password })
+    return this.supabase.auth.signInWithPassword({ email, password })
       .then((res) => {
         console.log(res);
         this.user = res.data.user; // La réponse de la méthode avec toutes les données d'un utilisateur
-        console.log("L'id de l'utilisateur authentifié : ", this.user.id);
+        console.log("L'id de l'utilisateur authentifié : ", this.user.id);              
 
         if (res.data.user!.role === 'authenticated') {
           // Je vérifie que le rôle et 'authenticated' dans supabase - voir le résultat de console.log(res)
-          this.token = res.data.session!.access_token; // Je stock la valeur du token retourné par supabase
+          this.token = res.data.session!.access_token; // Je stock la valeur du token retourné par supabase          
+          
           if (this.token) {
             sessionStorage.setItem('token', this.token); // set du token de session
           }
-          this.router.navigate(['intranet']);
-        }
-
+          this.router.navigate(['intranet']);          
+        } 
         return res.data.user;
       })
       .catch((err) => {
         console.log(err);
-      });
+        this.badLogin = true; // Pour gérer l'affichage d'une popup dans connexion.component.html
+        console.log(this.badLogin);        
+      });      
+  }
+
+
+// Méthode pour reset le mot de passe et vérifier si l'email existe sur la table auth.users
+  async resetPasswordBis(email: string) {
+    try {
+      // Récupérez la liste des utilisateurs
+      const response = await this.supabase.auth.admin.listUsers();
+      const users = response.data.users;
+      // La méthode find itère sur les éléments du tableau users pour comparer la valeur email (email en paramétre de ma fonction et email des users)
+      const checkEmail = users.find(user => user.email === email);
+      
+      if (checkEmail) {
+        console.log("email trouvé");
+      // Si l'email existe en BDD         
+        const data = await this.supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: 'http://localhost:4200/reset',
+        });        
+        return data;
+      } else {
+      // L'utilisateur n'existe pas
+      console.log('Utilisateur non trouvé');
+      this.badEmail = true; // Pour la popup sur recovery.component.html
+      return null;
+      }
+
+    } catch (error) {
+      console.error(error);
+      return error;
+    }   
   }
 
   // Récupérer son mot de passe en cas de perte - Reset du Password
@@ -78,7 +111,7 @@ export class SupabaseService {
   // Récupérer les utilisateurs sur la table auth.users (table d'authentification de supabase)
   async listUser() {
     const response = await this.supabase.auth.admin.listUsers();
-    console.log('Méthode listUser - response.data.users', response.data.users);
+    console.log('Méthode listUser - response.data.users', response.data.users);    
     return response.data.users; // Retournez les données des utilisateurs
   }
 

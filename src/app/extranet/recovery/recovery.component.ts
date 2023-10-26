@@ -11,17 +11,21 @@ export class RecoveryComponent implements OnInit {
   emailRegex!: RegExp; 
   email: string = '';
   popup = false;
+  badEmail!: boolean; 
 
   constructor(public supa: SupabaseService) {}
 
   ngOnInit(): void {
     this.emailRegex = /^\S+@\S+\.\w+$/;
+    
   }
 
-  onSubmit() {
+  async onSubmit() {
     console.log("l'input email: ", this.email);
-    this.supa.resetPassword(this.email)
+    //this.supa.resetPassword(this.email);
+    await this.supa.resetPasswordBis(this.email);
     this.popup = true;
+    this.badEmail = this.supa.badEmail; // Pour faire apparaître la balise HTML "L'email n'existe pas sur l'application Tiaki"
   }
 
 

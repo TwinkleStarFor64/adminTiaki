@@ -19,7 +19,7 @@
         </span>        
         <div>
             <p><a href="/recovery">Mot de passe oublié?</a></p>
-            <p-button class="connexion" styleClass="p-button-help" type="submit">Se connecter</p-button>                   
+            <p-button class="connexion" styleClass="p-button-help" type="submit" [disabled]="loginForm.invalid">Se connecter</p-button>                   
         </div>
     </form>
     <div *ngIf="badLogin">
