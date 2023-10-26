@@ -16,8 +16,7 @@ export class RecoveryComponent implements OnInit {
   constructor(public supa: SupabaseService) {}
 
   ngOnInit(): void {
-    this.emailRegex = /^\S+@\S+\.\w+$/;
-    
+    this.emailRegex = /^\S+@\S+\.\w+$/;    
   }
 
   async onSubmit() {
