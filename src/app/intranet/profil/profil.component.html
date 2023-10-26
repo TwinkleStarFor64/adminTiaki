@@ -36,19 +36,25 @@
           <label htmlFor="telephone">Telephone</label>
         </span>
         <p-button class="modifier" styleClass="p-button-help" (click)="ConfirmDialog()"
-          [disabled]="profilForm.invalid">Modifier</p-button>
-      </form>
+          [disabled]="profilForm.invalid">Modifier</p-button>          
+      </form>      
+    </article>
+    <article *ngFor="let user of utilisateur">
       <h4>Identifiants de connexion</h4>
       <p>Votre Email : {{ user.email }}</p>
       <p>Changer votre mot de passe :</p>
-      <form [formGroup]="passwordForm" (ngSubmit)="onSubmitNewPassword()">
+      <form (ngSubmit)="onSubmitNewPassword()">        
         <span class="p-float-label">
-          <input pInputText id="password" formControlName="password" type="password"
-            pattern="{{ passwordRegex.source }}" />
-          <label htmlFor="newPassword">Six caractères minimum</label>
+          <input pInputText type="password" name="password" [(ngModel)]="password" [pattern]="passwordRegex" #uname="ngModel" required/>
+          <label htmlFor="password">Six caractères minimum</label>
         </span>
-        <p-button id="buttonMdp" styleClass="p-button-help" type="submit" [disabled]="passwordForm.invalid">Modifier
-          MDP</p-button>
+        <p>Confirmez votre mot de passe :</p>
+        <span class="p-float-label">
+          <input pInputText type="password" name="confirmPassword" [(ngModel)]="confirmPassword" [pattern]="passwordRegex" #uname="ngModel" required/>
+          <label htmlFor="confirmPassword">Six caractères minimum</label>
+        </span>
+        <p *ngIf="password !== confirmPassword">Les mots de passe doivent correspondre</p>
+        <p-button id="buttonMdp" styleClass="p-button-help" type="submit" [disabled]="!uname.valid">Modifier MDP</p-button>
       </form>
     </article>
     <article>
@@ -72,8 +78,31 @@
   </ng-template>
 </p-confirmDialog>
 
+
+
+
+
+
+
 <!-- <form>
     <input name="truc" #ctlTruc="ngModel" >
     <input type="text" name="muche" #ctlMuche="ngModel">
     <span *ngIf="ctlTruc != ctlMuche">Les mots de passe doivent correspondre</span>
 </form> -->
+
+
+<!--  <form (ngSubmit)="ConfirmDialog()">
+        <span class="p-float-label">
+          <input pInputText type="text" name="nom" [(ngModel)]="nom" [pattern]="stringRegex" #uname="ngModel" required/>
+          <label htmlFor="nom">Nom</label>
+        </span>
+        <span class="p-float-label">
+          <input pInputText type="text" name="prenom" [(ngModel)]="prenom" [pattern]="stringRegex" #uname="ngModel" required/>
+          <label htmlFor="prenom">Prenom</label>
+        </span>
+        <span class="p-float-label">
+          <input pInputText type="text" name="telephone" [(ngModel)]="telephone" [pattern]="numberRegex" #uname="ngModel" required minlength="10"/>
+          <label htmlFor="telephone">Telephone</label>
+        </span>
+        <p-button id="buttonMdp" styleClass="p-button-help" type="submit" [disabled]="!uname.valid">Envoyer</p-button>
+      </form> -->
