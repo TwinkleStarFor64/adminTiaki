@@ -1,3 +1,12 @@
+::-webkit-scrollbar {
+  background-color: #805E96;
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  height: auto;
+  background-color: #270140;
+}
+
 section {
   display: flex;
   flex-direction: column;

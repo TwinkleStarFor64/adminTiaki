@@ -37,7 +37,8 @@ import { DialogModule } from 'primeng/dialog';
     ReactiveFormsModule,
     TableModule,
     FormsModule,
-    DialogModule
+    DialogModule,
+    ReactiveFormsModule
   ],
   exports: [DeleteDataComponent],
   providers: [ConfirmationService, MessageService],

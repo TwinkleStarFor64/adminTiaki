@@ -1,9 +1,62 @@
 <p-dialog
   header="Détails de l'utilisateur"
   [(visible)]="visible"
-  [style]="{ width: '80vw', height: '50vh', backgroundcolor: '#fff1c6' }"
+  [style]="{
+    'width': '80vw',
+    'height': '50vh',
+    'background-color': stringRegex ? stringRegex.source : '#fff1c6'
+  }"
 >
-  <p>Adresse email: {{ userEmail }}</p>
-  <p>Nom de l'utilisateur: {{ userName }}</p>
-  <!-- Ajoutez d'autres détails de l'utilisateur ici -->
+  <form [formGroup]="editForm">
+    <span>Nom</span>
+    <span class="p-float-label">
+      <input
+        pInputText
+        id="nom"
+        formControlName="nom"
+        type="text"
+        pattern="{{ stringRegex ? stringRegex.source : '' }}"
+        required
+        minlength="1"
+      />
+    </span>
+    <span>Prénom</span>
+    <span class="p-float-label">
+      <input
+        pInputText
+        id="prenom"
+        formControlName="prenom"
+        type="text"
+        pattern="{{ stringRegex ? stringRegex.source : '' }}"
+        minlength="1"
+      />
+    </span>
+    <span>Téléphone</span>
+    <span class="p-float-label">
+      <input
+        pInputText
+        id="telephone"
+        formControlName="telephone"
+        type="text"
+        pattern="{{ numberRegex ? numberRegex.source : '' }}"
+        minlength="10"
+      />
+    </span>
+    <span>Email</span>
+    <span class="p-float-label">
+      <input
+        pInputText
+        id="email"
+        formControlName="email"
+        type="email"
+        pattern="{{ emailRegex ? emailRegex.source : '' }}"
+        required
+      />
+    </span>
+    <p-button
+      class="modifier"
+      styleClass="p-button-help"
+      (click)="ConfirmDialog()"
+    >Modifier</p-button>
+  </form>
 </p-dialog>

@@ -26,6 +26,8 @@ export class GestionComponent implements OnInit {
   filteredUtilisateurs: UtilisateurData[] = [];
   currentPage = 0;
   sortOrder: 'asc' | 'desc' = 'asc'; // Initialisez avec "asc" pour trier par ordre ascendant par défaut.
+  selectedUserForEdit: UtilisateurI | null = null;
+
 
   @ViewChild(EditUserComponent, { static: false }) editUserComponent:
     | EditUserComponent
@@ -223,13 +225,17 @@ export class GestionComponent implements OnInit {
   /*
    *Méthode pour ouvrir la modal d'édition
    */
+
   openEditUserModal(user: UtilisateurI) {
     if (this.editUserComponent) {
-      this.editUserComponent.userEmail = user.email;
-      this.editUserComponent.userName = user.nom;
-      this.editUserComponent.showDialog();
+      this.editUserComponent.email = user.email || ''; // Utilisez une chaîne vide comme valeur par défaut si email est undefined
+      this.editUserComponent.nom = user.nom || ''; // Utilisez une chaîne vide comme valeur par défaut si nom est undefined
+      this.editUserComponent.prenom = user.prenom || ''; // Utilisez une chaîne vide comme valeur par défaut si prenom est undefined
+      this.editUserComponent.telephone = user.telephone ? String(user.telephone) : ''; // Utilisez une chaîne vide comme valeur par défaut si telephone est undefined
+      this.editUserComponent.showDialog(user);
     } else {
-      console.error('editUserComponent is not defined.');
+      console.error("this.editUserComponent n'est pas défini. Assurez-vous qu'il est correctement initialisé.");
     }
   }
+   
 }

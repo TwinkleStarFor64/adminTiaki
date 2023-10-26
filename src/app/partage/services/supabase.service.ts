@@ -246,6 +246,26 @@ export class SupabaseService {
       console.log(updateError);
     }
   }
+
+  // Update des données utilisateurs sur la page de gestion
+async updateUser(userId: string, updatedUserData: any) {
+  try {
+    const { data, error } = await this.supabase
+      .from('utilisateur') // Remplacez 'utilisateurs' par le nom de votre table
+      .update(updatedUserData)
+      .eq('id', userId); // Mettez à jour l'utilisateur avec l'ID spécifié
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Une erreur s'est produite lors de la mise à jour de l'utilisateur :", error);
+    throw error;
+  }
+}
+
 }
 /* async getUserById(id: string) {
   const { data, error } = await this.supabase.auth.admin.getUserById(id);
