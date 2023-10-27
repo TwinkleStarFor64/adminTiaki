@@ -31,3 +31,9 @@ export interface RoleData {
   id: number;
   role: string;
 }
+
+export interface UserCreationResponse {
+    auth: any[] | undefined; 
+    utilisateur: any[] | undefined; 
+  }
+  

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SupabaseService } from './supabase.service';
-import { RoleData, UtilisateurData, UtilisateurI } from '../modeles/Types';
+import { RoleData, UserCreationResponse, UtilisateurData, UtilisateurI } from '../modeles/Types';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +10,6 @@ export class UsersService {
   utilisateur: UtilisateurI[] = [];
   authUsers: UtilisateurI[] = [];
   selectedUsers: UtilisateurData[] = [];
-
   constructor(public supa: SupabaseService) {}
   /*
    * Méthode de récupération des utilisateurs
@@ -96,6 +95,30 @@ export class UsersService {
       );
     }
   }
+  
+  async createUser(formData: any):  Promise<UserCreationResponse | undefined> {
+    try {
+      const response = await this.supa.createUserInTableUtilisateurAuth(formData);
+  
+      if (response) {
+        const data = response;
+        console.log('Nouveaux utilisateurs créés :', data);
+  
+        // Vous pouvez effectuer des actions supplémentaires ici si nécessaire.
+  
+        return data;
+      } else {
+        console.error('Aucune donnée renvoyée lors de la création de l\'utilisateur');
+        throw new Error('Erreur lors de la création de l\'utilisateur');
+      }
+    } catch (error) {
+      console.error('Erreur lors de la création de l\'utilisateur :', error);
+      throw error;
+    }
+  }
+  
+  
+  
 }
 
 // this.user = this.listeUser.find( u => u.id == this.id);

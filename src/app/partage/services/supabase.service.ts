@@ -5,7 +5,7 @@ import {
   SupabaseClient,
 } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
-import { RoleData, UtilisateurData } from '../modeles/Types';
+import { RoleData, UserCreationResponse, UtilisateurData } from '../modeles/Types';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -265,8 +265,45 @@ async updateUser(userId: string, updatedUserData: any) {
     throw error;
   }
 }
+// SupabaseService
 
+async createUserInTableUtilisateurAuth(formData: any): Promise<UserCreationResponse>  {
+  try {
+    // D'abord, créez l'utilisateur dans la table "auth" (par exemple, pour le mail et le mot de passe)
+    const authResponse = await this.supabase
+      .from('auth')
+      .upsert([formData]);
+
+    if (authResponse.error) {
+      console.error('Erreur lors de la création de l\'utilisateur dans la table auth :', authResponse.error);
+      throw authResponse.error;
+    }
+
+    // Ensuite, créez l'utilisateur dans la table "utilisateur" (par exemple, pour d'autres informations)
+    const utilisateurResponse = await this.supabase
+      .from('utilisateur')
+      .upsert([formData]);
+
+    if (utilisateurResponse.error) {
+      console.error('Erreur lors de la création de l\'utilisateur dans la table utilisateur :', utilisateurResponse.error);
+      throw utilisateurResponse.error;
+    }
+
+    // Vérifiez si les données sont nulles et attribuez une valeur par défaut si nécessaire
+    const authData = authResponse.data || [];
+    const utilisateurData = utilisateurResponse.data || [];
+
+    return {
+      auth: authData,
+      utilisateur: utilisateurData
+    };
+  } catch (error) {
+    console.error('Erreur lors de la création de l\'utilisateur :', error);
+    throw error;
+  }
 }
+}
+
 /* async getUserById(id: string) {
   const { data, error } = await this.supabase.auth.admin.getUserById(id);
   if (data) {
