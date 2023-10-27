@@ -228,9 +228,7 @@ export class SupabaseService {
 
   // Méthode pour récupérer les données d'un utilisateur identifié (sur la table auth)
   async getLoggedInUser() {
-    const {
-      data: { user },
-    } = await this.supabase.auth.getUser();
+    const { data: { user } } = await this.supabase.auth.getUser();
     //console.log('Méthode getLoggedInUser : ', user);
     return user;
   }

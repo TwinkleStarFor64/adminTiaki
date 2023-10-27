@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
@@ -29,11 +28,13 @@ export class ProfilComponent implements OnInit {
   rolesConcatenated: string = ''; // Utiliser dans la méthode getUserProfil() pour afficher les rôles dans le front-end
 
   profilForm!: FormGroup;
-  passwordForm!: FormGroup;
 
   stringRegex!: RegExp;
   numberRegex!: RegExp;
   passwordRegex!: RegExp;
+  
+  password: string = ''; // Pour le ngModel password
+  confirmPassword: string = ''; // Pour le ngModel confirmPassword  
 
   constructor(
     public supa: SupabaseService,
@@ -42,10 +43,10 @@ export class ProfilComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private router: Router
-  ) {}
+  ) { }
 
   async ngOnInit(): Promise<void> {
-    this.supa.getLoggedInUser();
+    //this.supa.getLoggedInUser();
     this.getUserProfil();
 
     this.stringRegex = /^[a-zA-Z ]*$/;
@@ -56,24 +57,15 @@ export class ProfilComponent implements OnInit {
       nom: ['', [Validators.required, Validators.pattern(this.stringRegex)]],
       prenom: ['', [Validators.required, Validators.pattern(this.stringRegex)]],
       email: ['', [Validators.required, Validators.email]],
-      telephone: [
-        '',
-        [Validators.required, Validators.pattern(this.numberRegex)],
-      ],
+      telephone: ['', [Validators.required, Validators.pattern(this.numberRegex)],],
     });
-
-    this.passwordForm = this.formbuilder.group({
-      password: [
-        '',
-        [Validators.required, Validators.pattern(this.passwordRegex)],
-      ],
-    });
+    
   }
 
   // Méthode pour récupérer l'utilisateur identifié et son profil y compris ces rôles
   async getUserProfil() {
     try {
-      const userData = await this.supa.getLoggedInUser(); // Récupére les données de l'user connecter - y compris son id
+      const userData = await this.supa.getLoggedInUser(); // Récupére les données de l'user connecté - y compris son id (sur la table auth)
       if (!userData) {
         // Si pas de user
         throw new Error('Aucune donnée utilisateur disponible.');
@@ -83,7 +75,7 @@ export class ProfilComponent implements OnInit {
       // J'utilise cette id pour récupérer l'user sur la table utilisateurs (ci-dessous)
       const userIdData = (await this.supa.getUtilisateurById(userData.id)).data;
       if (userIdData) {
-        //console.log(userIdData);
+        console.log("variable userIdData", userIdData);
         // Variable utilisateur de type UtilisateurI à laquelle j'attribue les data récupérées
         this.utilisateur = userIdData.map((item: { [x: string]: any }) => ({
           id: item['id'],
@@ -91,38 +83,17 @@ export class ProfilComponent implements OnInit {
           nom: item['nom'],
           prenom: item['prenom'],
           telephone: item['telephone'],
-        }));
-
+        }));        
         //console.log("Nom d'utilisateur", this.utilisateur.map((item) => item['nom']).join(', '));
       }
       // Je remplis les values du formulaire avec les data de l'user - je récupére un tableau avec un seul élément
-      // Comme je récupére un tableau je rajoute [0]
-      this.profilForm = new FormGroup({
-        nom: new FormControl(this.utilisateur.map((item) => item['nom'])[0]),
-        prenom: new FormControl(
-          this.utilisateur.map((item) => item['prenom'])[0]
-        ),
-        email: new FormControl(
-          this.utilisateur.map((item) => item['email'])[0]
-        ),
-        telephone: new FormControl(
-          this.utilisateur.map((item) => item['telephone'])[0]
-        ),
-      });
-
-      /* this.myFormGroup.setValue({
-        formControlName1: myValue1, 
-        formControlName2: myValue2
-      }); */
-
-      //this.form.get(<formControlName>).setValue(<newValue>);
-
-      //this.profilForm.nom.value = this.utilisateur['nom'];
-
-      /*
-      nom: new FormControl(this.utilisateur['nom']);
-      this.profilNom.nom.value = this.utilisateur['nom']; 
-       */
+      // Comme je récupére un tableau je rajoute [0]     
+         this.profilForm.setValue({
+          nom: this.utilisateur[0]?.nom,
+          prenom: this.utilisateur[0]?.prenom,
+          telephone: this.utilisateur[0]?.telephone,
+          email: this.utilisateur[0]?.email
+         });       
 
       const roleIdData = (await this.supa.getRoleId(userData.id)).data;
       //console.log("ici c'est roleId.data", roleIdData);
@@ -146,13 +117,13 @@ export class ProfilComponent implements OnInit {
               .join(', ');
           }
         }
-      }
+      }      
     } catch (error) {
       console.error("Une erreur s'est produite :", error);
     }
   }
 
-  // Méthode pour mettre à jour le profil - utilisé dans le formulaire
+  // Méthode pour mettre à jour le profil - utilisé dans la modal de confirmation du formulaire
   async onSubmitForm() {
     console.log(this.profilForm.value);
     try {
@@ -164,12 +135,10 @@ export class ProfilComponent implements OnInit {
 
       console.log('le submit', userData.id);
       // j'utilise l'id de l'user pour update son profil
-      const update = await this.supa.updateProfil(
-        userData.id,
-        this.profilForm.value
-      );
+      const update = await this.supa.updateProfil(userData.id,this.profilForm.value);
       return update;
-    } catch (error) {
+
+      } catch (error) {
       console.error("Une erreur s'est produite :", error);
     }
   }
@@ -201,7 +170,13 @@ export class ProfilComponent implements OnInit {
               detail: 'Vous avez annuler',
             });
             console.log('Non a été cliqué, la modal sera simplement fermée.');
-            window.location.reload();
+            // Si j'annule les modifications je reviens aux valeurs initiales du formulaires            
+            this.profilForm.setValue({
+              nom: this.utilisateur[0]?.nom,
+              prenom: this.utilisateur[0]?.prenom,
+              telephone: this.utilisateur[0]?.telephone,
+              email: this.utilisateur[0]?.email
+             });                             
             break;
           case ConfirmEventType.CANCEL:
             this.messageService.add({
@@ -211,7 +186,13 @@ export class ProfilComponent implements OnInit {
               detail: 'Vous avez annuler',
             });
             console.log('Annulation');
-            window.location.reload();
+            // Si j'annule les modifications je reviens aux valeurs initiales du formulaires 
+            this.profilForm.setValue({
+              nom: this.utilisateur[0]?.nom,
+              prenom: this.utilisateur[0]?.prenom,
+              telephone: this.utilisateur[0]?.telephone,
+              email: this.utilisateur[0]?.email
+             });            
             break;
         }
       },
@@ -275,11 +256,44 @@ export class ProfilComponent implements OnInit {
     }
   }
 
-  onSubmitNewPassword() {
-    console.log(this.passwordForm.value.password);
-    this.supa.updatePass(this.passwordForm.value.password);
+// Méthode pour modifier le mot de passe
+  onSubmitNewPassword() {    
+    //console.log(this.password);    
+    this.supa.updatePass(this.password); // La valeur de l'input [(ngModel)]="password"
   }
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* async getUserProfilBis(email: string, password: string) {
     this.supa.signIn(email, password).then(() => {
@@ -331,3 +345,37 @@ export class ProfilComponent implements OnInit {
       }
     }
   } */
+
+
+  /* this.myFormGroup.setValue({
+        formControlName1: myValue1, 
+        formControlName2: myValue2
+      }); */
+
+      //this.form.get(<formControlName>).setValue(<newValue>);
+
+      //this.profilForm.nom.value = this.utilisateur['nom'];
+
+      /*
+      nom: new FormControl(this.utilisateur['nom']);
+      this.profilNom.nom.value = this.utilisateur['nom']; 
+       */
+
+
+
+      /*  this.profilForm = new FormGroup({
+        nom: new FormControl(this.utilisateur.map((item) => item['nom'])[0]),
+        prenom: new FormControl(
+          this.utilisateur.map((item) => item['prenom'])[0]
+        ),
+        email: new FormControl(
+          this.utilisateur.map((item) => item['email'])[0]
+        ),
+        telephone: new FormControl(
+          this.utilisateur.map((item) => item['telephone'])[0]
+        ),
+      }); */
+
+       //this.nom = this.utilisateur[0]?.nom;
+       //this.prenom = this.utilisateur[0]?.prenom ?? ''; // Utilisez le "?" pour accéder à "prenom" en toute sécurité au cas ou il serait null
+       //this.telephone = this.utilisateur[0]?.telephone ?? null; // ?? signifie en cas de valeur null

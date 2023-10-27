@@ -13,7 +13,9 @@ main {
             gap: 3vh;
             align-items: flex-start;
             width: 20vw; // Pour éviter l'effet de transition quand la div ci-dessous apparait
-                                     
+            p {
+                margin: 0;
+            }                                     
         }
         div {
             display: flex;
