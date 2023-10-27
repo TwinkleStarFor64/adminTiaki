@@ -25,7 +25,7 @@ describe('ResetComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // Test de la méthode goAccueil()
+// Test de la méthode goAccueil()
   it('should navigate to the home page when goAccueil is called', () => {
   // spyOn surveille la méthode 'navigate' du service Router
     const navigateSpy = spyOn(router, 'navigate');
@@ -34,6 +34,24 @@ describe('ResetComponent', () => {
   // expect(navigateSpy).toHaveBeenCalledWith(['']) - Pour vérifier que la méthode navigate du service Router a été appelée avec l'argument [''].
   // Cela signifie que le test vérifie si goAccueil() a déclenché la navigation vers la page d'accueil de l'application, car [''] représente l'URL racine.  
     expect(navigateSpy).toHaveBeenCalledWith(['']);
+  });
+
+// Test du Regex password - simule un format valide renvoie true
+  it('should match valid passwords using the password regex', () => {
+    const validPasswords = ['Abc123', 'password123', 'aBcDeF'];
+
+    for (const password of validPasswords) {
+      expect(component.passwordRegex.test(password)).toBe(true);
+    }
+  });
+
+// Test du Regex password - simule un format invalide renvoie false
+  it('should not match invalid passwords using the password regex', () => {
+    const invalidPasswords = ['short', 'Invalid@', 'spaces in password'];
+
+    for (const password of invalidPasswords) {
+      expect(component.passwordRegex.test(password)).toBe(false);
+    }
   });
 
 });
