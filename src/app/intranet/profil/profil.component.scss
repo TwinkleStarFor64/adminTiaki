@@ -12,24 +12,27 @@ h1,h2,h3 {
 }
 
 main {
-    justify-content: center;    
+    justify-content: center;      
     section {
-        overflow-y: auto;
-
-        background-color: #FFF1C6;
+        //background-color: #FFF1C6;
+        //height: 65vh;
+        //overflow-y: auto; 
         width: 60%;
-        height: 65vh;
-        justify-content: space-around;
-        
+        justify-content: space-around;        
         article {
             flex-direction: column;
-            padding-top: 20px;
-            
+            padding-top: 20px;            
             form {
                 display: flex;
                 flex-direction: column;
                 gap: 4vh;
                 margin-top: 2vh;
+            }
+            form:nth-child(4) {
+                gap:1vh;
+                button {
+                    margin-top: 3vh;
+                }
             }
             #buttonMdp {
                 padding-bottom: 20px;

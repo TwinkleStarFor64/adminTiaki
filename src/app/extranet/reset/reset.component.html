@@ -1,12 +1,18 @@
 <main>
     <section>
-        <form>
+        <form (ngSubmit)="onSubmit()">
             <p>Renseignez votre nouveau mot de passe</p>
             <span class="p-float-label">
-                <input pInputText type="password" name="password" [(ngModel)]="password" [pattern]="passwordRegex" #uname="ngModel" required/>
-                <label htmlFor="password">6 caractères minimum</label>
+                <input pInputText type="password" name="password" [(ngModel)]="password" [pattern]="passwordRegex" #pass="ngModel" required/>
+                <label htmlFor="password">Six caractères minimum</label>
             </span>
-            <p-button styleClass="p-button-help" type="submit" (click)="onSubmit()" [disabled]="!uname.valid">Envoyer</p-button>
+            <p>Confirmez votre mot de passe</p>
+            <span class="p-float-label">
+                <input pInputText type="password" name="confirmPassword" [(ngModel)]="confirmPassword" [pattern]="passwordRegex" #confirmPass="ngModel" required/>
+                <label htmlFor="confirmPassword">Six caractères minimum</label>
+            </span>
+            <p *ngIf="password !== confirmPassword">Les mots de passe doivent correspondre</p>
+            <p-button styleClass="p-button-help" type="submit" [disabled]="!pass.valid || !confirmPass.valid || (password !== confirmPassword)">Envoyer</p-button>
         </form>
         <div *ngIf="popup">
             <p>Votre nouveau mot de passe est enregistré</p>

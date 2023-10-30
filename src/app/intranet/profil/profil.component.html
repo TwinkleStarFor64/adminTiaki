@@ -21,70 +21,40 @@
       <h4>Informations personelles</h4>
       <form [formGroup]="profilForm">
         <span class="p-float-label">
-          <input
-            pInputText
-            id="nom"
-            formControlName="nom"
-            type="text"
-            pattern="{{ stringRegex.source }}"
-            required
-            minlength="1"
-          />
+          <input pInputText id="nom" formControlName="nom" type="text" pattern="{{ stringRegex.source }}" required
+            minlength="1" />
           <label htmlFor="nom">Nom</label>
         </span>
         <span class="p-float-label">
-          <input
-            pInputText
-            id="prenom"
-            formControlName="prenom"
-            type="text"
-            pattern="{{ stringRegex.source }}"
-            required
-            minlength="1"
-          />
+          <input pInputText id="prenom" formControlName="prenom" type="text" pattern="{{ stringRegex.source }}" required
+            minlength="1" />
           <label htmlFor="prenom">Prenom</label>
         </span>
         <span class="p-float-label">
-          <input
-            pInputText
-            id="telephone"
-            formControlName="telephone"
-            type="text"
-            pattern="{{ numberRegex.source }}"
-            required
-            minlength="10"
-          />
+          <input pInputText id="telephone" formControlName="telephone" type="text" pattern="{{ numberRegex.source }}"
+            required minlength="10" />
           <label htmlFor="telephone">Telephone</label>
         </span>
-        <p-button
-          class="modifier"
-          styleClass="p-button-help"
-          (click)="ConfirmDialog()"
-          [disabled]="profilForm.invalid"
-          >Modifier</p-button
-        >
-      </form>
+        <p-button class="modifier" styleClass="p-button-help" (click)="ConfirmDialog()"
+          [disabled]="profilForm.invalid">Modifier</p-button>          
+      </form>      
+    </article>
+    <article *ngFor="let user of utilisateur">
       <h4>Identifiants de connexion</h4>
       <p>Votre Email : {{ user.email }}</p>
       <p>Changer votre mot de passe :</p>
-      <form [formGroup]="passwordForm" (ngSubmit)="onSubmitNewPassword()">
+      <form (ngSubmit)="onSubmitNewPassword()">        
         <span class="p-float-label">
-          <input
-            pInputText
-            id="password"
-            formControlName="password"
-            type="password"
-            pattern="{{ passwordRegex.source }}"
-          />
-          <label htmlFor="newPassword">Six caractères minimum</label>
+          <input pInputText type="password" name="password" [(ngModel)]="password" [pattern]="passwordRegex" #pass="ngModel" required/>
+          <label htmlFor="password">Six caractères minimum</label>
         </span>
-        <p-button
-          id="buttonMdp"
-          styleClass="p-button-help"
-          type="submit"
-          [disabled]="passwordForm.invalid"
-          >Modifier MDP</p-button
-        >
+        <p>Confirmez votre mot de passe :</p>
+        <span class="p-float-label">
+          <input pInputText type="password" name="confirmPassword" [(ngModel)]="confirmPassword" [pattern]="passwordRegex" #confirmPass="ngModel" required/>
+          <label htmlFor="confirmPassword">Six caractères minimum</label>
+        </span>
+        <p *ngIf="password !== confirmPassword">Les mots de passe doivent correspondre</p>
+        <p-button id="buttonMdp" styleClass="p-button-help" type="submit" [disabled]="!pass.valid || !confirmPass.valid || (password !== confirmPassword)">Modifier MDP</p-button>
       </form>
     </article>
     <article>
@@ -92,9 +62,7 @@
       <p>Rôle(s) attribué(s) :</p>
       <p>{{ rolesConcatenated }}</p>
       <h4>Supprimer votre compte</h4>
-      <p-button styleClass="p-button-help" (click)="DeleteDialog()"
-        >Supprimer</p-button
-      >
+      <p-button styleClass="p-button-help" (click)="DeleteDialog()">Supprimer</p-button>
     </article>
   </section>
 </main>
@@ -105,27 +73,36 @@
 <!-- Le contenu de la Modal PrimeNG -->
 <p-confirmDialog #cd [style]="{ width: '40vw' }">
   <ng-template pTemplate="footer">
-    <button
-      type="submit"
-      class="acceptButton"
-      pButton
-      icon="pi pi-check"
-      label="Oui"
-      (click)="cd.accept()"
-    ></button>
-    <button
-      type="button"
-      class="rejectButton"
-      pButton
-      icon="pi pi-times"
-      label="Non"
-      (click)="cd.reject()"
-    ></button>
+    <button type="submit" class="acceptButton" pButton icon="pi pi-check" label="Oui" (click)="cd.accept()"></button>
+    <button type="button" class="rejectButton" pButton icon="pi pi-times" label="Non" (click)="cd.reject()"></button>
   </ng-template>
 </p-confirmDialog>
+
+
+
+
+
+
 
 <!-- <form>
     <input name="truc" #ctlTruc="ngModel" >
     <input type="text" name="muche" #ctlMuche="ngModel">
     <span *ngIf="ctlTruc != ctlMuche">Les mots de passe doivent correspondre</span>
 </form> -->
+
+
+<!--  <form (ngSubmit)="ConfirmDialog()">
+        <span class="p-float-label">
+          <input pInputText type="text" name="nom" [(ngModel)]="nom" [pattern]="stringRegex" #uname="ngModel" required/>
+          <label htmlFor="nom">Nom</label>
+        </span>
+        <span class="p-float-label">
+          <input pInputText type="text" name="prenom" [(ngModel)]="prenom" [pattern]="stringRegex" #uname="ngModel" required/>
+          <label htmlFor="prenom">Prenom</label>
+        </span>
+        <span class="p-float-label">
+          <input pInputText type="text" name="telephone" [(ngModel)]="telephone" [pattern]="numberRegex" #uname="ngModel" required minlength="10"/>
+          <label htmlFor="telephone">Telephone</label>
+        </span>
+        <p-button id="buttonMdp" styleClass="p-button-help" type="submit" [disabled]="!uname.valid">Envoyer</p-button>
+      </form> -->

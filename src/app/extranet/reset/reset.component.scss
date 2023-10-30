@@ -11,14 +11,18 @@ main {
             display: flex;
             flex-direction: column;
             gap: 3vh;
-            align-items: flex-start;                          
+            align-items: flex-start;
+            width: 20vw; // Pour éviter l'effet de transition quand la div ci-dessous apparait
+            p {
+                margin: 0;
+            }                                     
         }
         div {
             display: flex;
             flex-direction: column;
             margin-top: 2vh;
             gap: 1vh;
-            align-items: flex-start;            
+            align-items: flex-start;                       
             p {
                 margin: 1vh 0 0 0;
             }

@@ -10,6 +10,7 @@ import { SupabaseService } from 'src/app/partage/services/supabase.service';
 export class ResetComponent implements OnInit {
   passwordRegex!: RegExp;
   password: string = '';
+  confirmPassword: string = ''; // Pour le ngModel confirmPassword 
   popup = false;
 
   constructor(private supa: SupabaseService, private router: Router) {}

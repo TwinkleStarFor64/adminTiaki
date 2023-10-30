@@ -7,10 +7,9 @@ import { SupabaseService } from 'src/app/partage/services/supabase.service';
   templateUrl: './connexion.component.html',
   styleUrls: ['./connexion.component.scss']
 })
-export class ConnexionComponent implements OnInit {
- 
-  badLogin = false;
-
+export class ConnexionComponent implements OnInit { 
+  
+  badLogin!: boolean;
   loginForm!: FormGroup;
 
   constructor(private formbuilder: FormBuilder, public supa: SupabaseService) {}
@@ -19,19 +18,15 @@ export class ConnexionComponent implements OnInit {
     this.loginForm = this.formbuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
-    });
-    
+    });    
   }
 
-  onSubmitForm() {
+ async onSubmitForm() {
 // J'utilise la méthode signIn de supabase.service.ts afin de comparer la value Email et Password du formulaire à l'email et MDP enregistré sur supabase
-    this.supa.signIn(this.loginForm.value.email, this.loginForm.value.password);
-    console.log(this.loginForm.value.password); // DANGER !!!! je vois le mdp ??!!
-    
-    this.badLogin = true; // Pour faire apparaître la balise HTML "identifiants incorrects"   
+  await this.supa.signIn(this.loginForm.value.email, this.loginForm.value.password);          
+  console.log("DANGER !!",this.loginForm.value.password); // DANGER !!!! je vois le mdp ??!! viens du HTTP au lieu du HTTPS ??!!    
+  this.badLogin = this.supa.badLogin; // Pour faire apparaître la balise HTML "identifiants incorrects"       
   }
-
-
 
 }
 
@@ -46,20 +41,3 @@ export class ConnexionComponent implements OnInit {
 
 
 
-/* onSubmitForm(): any {
-    const email = this.loginForm.value.email;
-    const password = this.loginForm.value.password;
-
-    console.log('Email:', email);
-    console.log('Password:', password);
-    console.log(this.loginForm.value);
-
-    if (email === 'alf@wanadoo.fr' && password === 'toto') {
-      localStorage.setItem('token', 'myFakeToken');
-      sessionStorage.setItem('token', 'myFaketoken');    
-      this.router.navigate(['intranet']);
-    } else {
-      console.log('Identifiants incorrects !'); 
-      this.badLogin = true;     
-    }
-  } */

@@ -8,7 +8,8 @@
         <p-button id="buttonMdp" styleClass="p-button-help" type="submit" [disabled]="!uname.valid">Envoyer</p-button>
         <p *ngIf="uname.errors?.['pattern']">Format d'Email invalide</p>
     </form>
-    <p *ngIf="popup">Consultez votre boite mail</p>
+    <p *ngIf="popup && !badEmail">Consultez votre boite mail</p>
+    <p *ngIf="badEmail">L'email n'existe pas sur l'application Tiaki</p>
 </main>
 
 
