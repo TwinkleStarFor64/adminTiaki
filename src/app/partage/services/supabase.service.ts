@@ -104,14 +104,14 @@ export class SupabaseService {
   // Récupérer les utilisateurs sur la table public.utilisateur
   async getUtilisateur() {
     const data = await this.supabase.from('utilisateur').select('*');
-    console.log('Méthode getUtilisateur', data);
+    // console.log('Méthode getUtilisateur', data);
     return data;
   }
 
   // Récupérer les utilisateurs sur la table auth.users (table d'authentification de supabase)
   async listUser() {
     const response = await this.supabase.auth.admin.listUsers();
-    console.log('Méthode listUser - response.data.users', response.data.users);    
+    // console.log('Méthode listUser - response.data.users', response.data.users);    
     return response.data.users; // Retournez les données des utilisateurs
   }
 
@@ -152,7 +152,8 @@ export class SupabaseService {
     const { data, error } = await this.supabase
       .from('attribuerRoles')
       .select('idRole');
-    if (data) console.log('Méthode fetchAttribuerRoles', data);
+    if (data)
+    //  console.log('Méthode fetchAttribuerRoles', data);
     if (error) console.log(error);
   }
 
@@ -219,7 +220,7 @@ export class SupabaseService {
       const roles = utilisateur.roles
         .map((nomRole: RoleData) => nomRole.role)
         .join(', ');
-      console.log(`Rôles de ${utilisateur.nom}: ${roles}`);
+      // console.log(`Rôles de ${utilisateur.nom}: ${roles}`);
     }
     return utilisateursData as UtilisateurData[];
   }

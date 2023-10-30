@@ -24,7 +24,7 @@ export interface UtilisateurData {
     email: string;
     nom: string;
     roles: RoleData[];
-    selected: boolean; 
+    selected?: boolean; 
 }
 
 export interface RoleData {

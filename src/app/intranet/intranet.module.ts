@@ -12,7 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ToastModule } from 'primeng/toast'; // Pour les pop-up de MessageService
+import { ToastModule } from 'primeng/toast';
 
 
 @NgModule({
@@ -23,7 +23,8 @@ import { ToastModule } from 'primeng/toast'; // Pour les pop-up de MessageServic
     NutritionComponent,
     IntranetComponent,    
     AsideBarComponent,
-    ProfilComponent,   
+    ProfilComponent,
+  
     
   ],
   imports: [

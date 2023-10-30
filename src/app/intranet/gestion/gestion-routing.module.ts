@@ -7,6 +7,7 @@ import { CommunauteComponent } from './communaute/communaute.component';
 import { AbonnementComponent } from './abonnement/abonnement.component';
 import { MediaComponent } from './media/media.component';
 
+
 const routes: Routes = [
   { path: '', component: GestionComponent },
   { path: 'ajout-utilisateurs', component: AjoutUtilisateurComponent },

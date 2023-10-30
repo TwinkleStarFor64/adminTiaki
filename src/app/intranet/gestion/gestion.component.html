@@ -1,13 +1,26 @@
-<header class="ariane">
-  <h1><a routerLink="/intranet">Tiaki</a></h1>
-  <h2>Les Utilisateurs</h2>
+<header>
+  <article>
+    <figure>
+      <img src="assets/images/logos/logo_tiaki.png" alt="" />
+    </figure>
+    <div>
+      <h1>Tiaki</h1>
+      <h2>Mon profil utilisateur</h2>
+    </div>
+  </article>
+  <article>
+    <figure>
+      <img src="assets/images/icones/gestion-utilisateur/yellowIcon.png" alt="" />
+    </figure>
+    <h3>Gestion des utilisateurs</h3>
+  </article>
 </header>
 <section>
     <p-button routerLink="/intranet/gestion/ajout-utilisateurs" styleClass="p-button-success" type="submit">Créer un utilisateur</p-button>
     <article class="search">   
       <input type="text" [(ngModel)]="nomFiltre" (input)="onFilterChange()" placeholder="Nom" pInputText >
       <input type="text" [(ngModel)]="emailFiltre" (input)="onFilterChange()" placeholder="Email" pInputText >
-      <input type="text" [(ngModel)]="roleFiltre" (input)="onFilterChange()" placeholder="Rôles" pInputText >
+      <input type="text" [(ngModel)]="roleFiltre"(input)="onFilterChange()" placeholder="Rôles" pInputText >
     </article>
     <article class="table-users">
       <table>
@@ -17,7 +30,7 @@
             <th class="tri" colspan="1" (click)="triUtilisateursParNom()">Nom utilisateur</th>
             <th colspan="1">Adresse mail</th>
             <th colspan="1">Rôles</th>
-            <th>Favoris</th>
+            <th>Données Médicales</th>
             <th>Editer</th>
             <th>Supprimer</th>
           </tr>
@@ -29,7 +42,7 @@
             <td>{{ user.email }}</td>
             <td>{{ getRolesText(user) }}</td>
             <td>
-              <figure><img src="assets/images/icones/gestion-utilisateur/coeur.png" alt="favoris"></figure>
+              <figure (click)="openMedModal(user)" ><img src="assets/images/icones/gestion-utilisateur/coeur.png" alt="favoris"></figure>
             </td>
             <td>
               <figure (click)="openEditUserModal(user)" >
@@ -46,4 +59,5 @@
     <p-button *ngIf="selectedUsers.length > 0" (click)="deleteSelectedUsers()" label="Supprimer les utilisateurs sélectionnés"></p-button>
   <app-delete-data></app-delete-data>
   <app-edit-user></app-edit-user>
+  <app-donnees-medicales></app-donnees-medicales>
 </section>

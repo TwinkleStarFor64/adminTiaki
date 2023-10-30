@@ -22,10 +22,6 @@ export class UsersService {
         email: item['email'],
         nom: item['nom'],
       }));
-      console.log(
-        'Méthode fetchUtilisateur',
-        this.utilisateur.map((item) => item['id']).join(', ')
-      );
     }
     if (error) {
       console.log(error);
@@ -43,10 +39,6 @@ export class UsersService {
           email: item['email'],
           nom: item['nom'],
         }));
-        console.log(
-          'Méthode fetchAuthUsers : ',
-          this.authUsers.map((item) => item['email']).join(', ')
-        );
       } else {
         throw new Error('Aucune donnée utilisateur disponible.');
       }
@@ -77,9 +69,6 @@ export class UsersService {
           const allRoles = user.roles
             .map((role: RoleData) => role.role)
             .join(', ');
-          console.log(
-            `Nom: ${user.nom}, Email: ${user.email}, Rôles: ${allRoles}`
-          );
         });
         return;
       } else {
