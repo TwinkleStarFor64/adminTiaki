@@ -15,8 +15,8 @@
     <h3>Gérer mon profil</h3>
   </article>
 </header>
-<main>
-  <section>
+<section>
+  <div>
     <article *ngFor="let user of utilisateur">
       <h4>Informations personelles</h4>
       <form [formGroup]="profilForm">
@@ -64,8 +64,8 @@
       <h4>Supprimer votre compte</h4>
       <p-button styleClass="p-button-help" (click)="DeleteDialog()">Supprimer</p-button>
     </article>
-  </section>
-</main>
+  </div>
+</section>
 
 <!-- Pour la pop-up MessageService -->
 <p-toast></p-toast>
