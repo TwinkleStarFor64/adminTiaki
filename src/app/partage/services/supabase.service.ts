@@ -18,19 +18,19 @@ export class SupabaseService {
   _session: AuthSession | null = null; // Session d'authentification
 
   user: any; // Utilisé dans la méthode signIn()
-  token!: string; // Utilisé dans la méthode signIn()
-  badEmail = false; // Utilisé dans la méthode resetPasswordBis()
-  badLogin = false; // Utilisé dans la méthode signIn()
+  token!: string; // Utilisé dans la méthode signIn() pour stocker le token de l'utilisateur
+  authId!: string; // Utilisé dans la méthode signIn() pour stocker l'id de l'utilisateur
+  badEmail = false; // Utilisé dans la méthode resetPasswordBis() - utiliser pour une popup
+  badLogin = false; // Utilisé dans la méthode signIn() - utiliser pour une popup  
   
   constructor(private router: Router) {
     this.supabase = createClient(
       environment.supabaseUrl,
       environment.supabaseKey
     );
-  }
+  }  
 
   // Connexion à l'application - Tuto : https://www.youtube.com/watch?v=hPI8OegHPYc
-
   signIn(email: string, password: string): any {
     return this.supabase.auth.signInWithPassword({ email, password })
       .then((res) => {
@@ -45,6 +45,14 @@ export class SupabaseService {
           if (this.token) {
             sessionStorage.setItem('token', this.token); // set du token de session
           }
+
+          this.authId = res.data.user!.id // j'attribue à la variable l'id de l'utilisateur (après son authentification)
+          //console.log(this.authUserId);
+          if (this.authId) {
+            // Je stock dans la session la valeur de l'id utilisateur
+            sessionStorage.setItem('authUserId', this.authId)
+          }          
+          
           this.router.navigate(['intranet']);          
         } 
         return res.data.user;
@@ -55,7 +63,6 @@ export class SupabaseService {
         console.log(this.badLogin);        
       });      
   }
-
 
 // Méthode pour reset le mot de passe et vérifier si l'email existe sur la table auth.users
   async resetPasswordBis(email: string) {
@@ -277,6 +284,37 @@ export class SupabaseService {
       console.log(updateError);
     }
   }
+
+  async getAllData(): Promise<any[]> {
+    try {
+      const { data, error } = await this.supabase
+        .from('attribuerRoles')
+        .select('roles(role),utilisateur(*)');
+  
+      if (data) {
+        console.log(data);
+        return data;
+      }
+  
+      if (error) {
+        console.log(error);
+        throw new Error('Une erreur s\'est produite lors de la récupération des données.');
+      }
+  
+      // Si data n'est pas défini, retournez un tableau vide par défaut
+      return [];
+    } catch (error) {
+      console.error('Une erreur s\'est produite :', error);
+      throw error;
+    }
+  }
+  
+  
+
+
+
+
+
 }
 /* async getUserById(id: string) {
   const { data, error } = await this.supabase.auth.admin.getUserById(id);
