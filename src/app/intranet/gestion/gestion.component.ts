@@ -44,7 +44,6 @@ export class GestionComponent implements OnInit {
       editComponent.email = user.email || '';
       editComponent.nom = user.nom || '';
       editComponent.prenom = user.prenom || '';
-      editComponent.telephone = user.telephone ? String(user.telephone) : '';
       editComponent.showDialog(user);
     } else {
       console.error("Le composant d'édition n'est pas défini.");
@@ -130,17 +129,18 @@ export class GestionComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         console.log('Accept a été appelé');
-        this.onSelect(user);
+        this.deleteUserById(user);
       },
       reject: () => {
         console.log('Non a été cliqué, la modal sera simplement fermée.');
       },
     });
   }
+
 //supprimer un utilisateur en fonction de son ID.
-  async onSelect(users: UtilisateurI): Promise<any> {
+  async deleteUserById(users: UtilisateurI): Promise<any> {
     this.selectedUtilisateur = users.id;
-    console.log('La méthode onSelect', this.selectedUtilisateur);
+    console.log('La méthodedeleteUserById', this.selectedUtilisateur);
 
     this.supa
       .deleteUser(this.selectedUtilisateur)
@@ -196,7 +196,7 @@ export class GestionComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       accept: async () => {
         for (const user of this.selectedUsers) {
-          await this.onSelect(user);
+          await this.deleteUserById(user);
           this.removeUserById(user.id);
         }
         this.selectedUsers = [];
@@ -217,9 +217,8 @@ export class GestionComponent implements OnInit {
       this.editUserComponent.email = user.email || '';
       this.editUserComponent.nom = user.nom || '';
       this.editUserComponent.prenom = user.prenom || '';
-      this.editUserComponent.telephone = user.telephone
-        ? String(user.telephone)
-        : '';
+
+
       this.editUserComponent.showDialog(user);
     } else {
       console.error(
@@ -236,7 +235,8 @@ export class GestionComponent implements OnInit {
       this.roleFiltre,
       
       );
-      console.log('this.allUsersData', this.allUsersData);
+      console.log('this.allUsersData', this.users.allUsersData);
+      console.log('this.nomFiltre', this.nomFiltre);
   }
   
   filterUsers(
@@ -246,25 +246,24 @@ export class GestionComponent implements OnInit {
     roleFiltre: string,
 
   ): UtilisateurData[] {
-    console.log('Nom Filtre:', nomFiltre);
-    console.log('Email Filtre:', emailFiltre);
-    console.log('Role Filtre:', roleFiltre);
-  
     return users.filter((user) => {
       const nomMatch = nomFiltre
-        ? user.nom.toLowerCase().includes(nomFiltre.toLowerCase())
+        ? user.nom?.toLowerCase().includes(nomFiltre.toLowerCase())
         : true;
       const emailMatch = emailFiltre
-        ? user.email.toLowerCase().includes(emailFiltre.toLowerCase())
+        ? user.email?.toLowerCase().includes(emailFiltre.toLowerCase())
         : true;
       const roleMatch = roleFiltre
-        ? this.getRolesText(user)
-            .toLowerCase()
-            .includes(roleFiltre.toLowerCase())
+        ? this.getRolesText(user)?.toLowerCase().includes(roleFiltre.toLowerCase())
         : true;
-        console.log('Filtered Utilisateurs:', nomMatch && emailMatch && roleMatch);
-      return nomMatch && emailMatch && roleMatch ;
+    
+      return nomMatch && emailMatch && roleMatch;
     });
   }
-  
+  clearFilters() {
+    this.nomFiltre = '';
+    this.emailFiltre = '';
+    this.roleFiltre = '';
+    this.onFilterChange(); // Appeler la méthode de filtrage pour mettre à jour la liste filtrée
+  }
 }

@@ -21,6 +21,7 @@
       <input type="text" [(ngModel)]="nomFiltre" (input)="onFilterChange()" placeholder="Nom" pInputText >
       <input type="text" [(ngModel)]="emailFiltre" (input)="onFilterChange()" placeholder="Email" pInputText >
       <input type="text" [(ngModel)]="roleFiltre"(input)="onFilterChange()" placeholder="Rôles" pInputText >
+      <p-button (click)="clearFilters()" label="Effacer"></p-button>
     </article>
     <article class="table-users">
       <table>

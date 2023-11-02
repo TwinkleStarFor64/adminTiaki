@@ -37,8 +37,8 @@ import { DonneesMedicalesComponent } from '../template/dialog/donnees-medicales/
     ConfirmDialogModule,
     ReactiveFormsModule,
     TableModule,
-    FormsModule,
     DialogModule,
+    FormsModule,
     ReactiveFormsModule
   ],
   exports: [DeleteDataComponent],

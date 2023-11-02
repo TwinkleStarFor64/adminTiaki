@@ -135,8 +135,14 @@ export class ProfilComponent implements OnInit {
 
       console.log('le submit', userData.id);
       // j'utilise l'id de l'user pour update son profil
-      const update = await this.supa.updateProfil(userData.id,this.profilForm.value);
-      return update;
+      await this.supa.updateProfil(userData.id,this.profilForm.value);
+      this.utilisateur[0] = {
+        id: this.profilForm.get('id')?.value,
+        nom: this.profilForm.get('nom')?.value,
+        prenom: this.profilForm.get('prenom')?.value,
+        telephone: this.profilForm.get('telephone')?.value,
+        email: this.profilForm.get('email')?.value
+      };  
 
       } catch (error) {
       console.error("Une erreur s'est produite :", error);

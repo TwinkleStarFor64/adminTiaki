@@ -15,8 +15,8 @@ export interface UtilisateurI {
     email: string;
     nom: string;
     prenom?:string;
-    telephone?:number;
-    role?: string;
+    telephone?:string;
+
 }
 
 export interface UtilisateurData {

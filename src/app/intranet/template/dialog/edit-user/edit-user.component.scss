@@ -8,8 +8,7 @@ p-dialog {
       display: flex;
       flex-direction: column;
       align-items: center;
-    }
-
+   
     /* Style pour les champs d'entrée */
     .p-float-label {
       width: 50%;
@@ -27,6 +26,10 @@ p-dialog {
         }
       }
   
+     div {
+      height: 10vh;
+      width: 100%;
+     } 
       label {
         display: block;
         font-size: 1rem;
@@ -34,6 +37,7 @@ p-dialog {
         margin-bottom: 0.5rem;
       }
     }
+ }
   
     /* Style pour le bouton Modifier */
     .modifier {
