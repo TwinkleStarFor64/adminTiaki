@@ -21,77 +21,77 @@ export class SupabaseService {
   token!: string; // Utilisé dans la méthode signIn() pour stocker le token de l'utilisateur
   authId!: string; // Utilisé dans la méthode signIn() pour stocker l'id de l'utilisateur
   badEmail = false; // Utilisé dans la méthode resetPasswordBis() - utiliser pour une popup
-  badLogin = false; // Utilisé dans la méthode signIn() - utiliser pour une popup  
-  
+  badLogin = false; // Utilisé dans la méthode signIn() - utiliser pour une popup
   constructor(private router: Router) {
     this.supabase = createClient(
       environment.supabaseUrl,
       environment.supabaseKey
     );
-  }  
+  }
 
   // Connexion à l'application - Tuto : https://www.youtube.com/watch?v=hPI8OegHPYc
   signIn(email: string, password: string): any {
-    this.supabase.auth.signInWithPassword({ email, password })
+    this.supabase.auth
+      .signInWithPassword({ email, password })
       .then((res) => {
-        console.log("Méthode signIn - ce que contient la réponse : ",res);
+        console.log('Méthode signIn - ce que contient la réponse : ', res);
         this.user = res.data.user; // La réponse de la méthode avec toutes les données d'un utilisateur
-        console.log("L'id de l'utilisateur authentifié : ", this.user.id);              
+        console.log("L'id de l'utilisateur authentifié : ", this.user.id);
 
         if (res.data.user!.role === 'authenticated') {
           // Je vérifie que le rôle et 'authenticated' dans supabase - voir le résultat de console.log(res)
-          this.token = res.data.session!.access_token; // Je stock la valeur du token retourné par supabase          
-          
+          this.token = res.data.session!.access_token; // Je stock la valeur du token retourné par supabase
+
           /* if (this.token) {
             sessionStorage.setItem('token', this.token); // set du token de session
           } */
 
-          this.authId = res.data.user!.id // j'attribue à la variable authId l'id de l'utilisateur (après son authentification)
+          this.authId = res.data.user!.id; // j'attribue à la variable authId l'id de l'utilisateur (après son authentification)
           //console.log(this.authUserId);
           /* if (this.authId) {
             // Je stock dans la session la valeur de l'id utilisateur
             sessionStorage.setItem('authUserId', this.authId)
-          }          
+          }
+
            */
-          this.getAllData();
-          this.router.navigate(['intranet']);          
-        } 
+          //this.getAllData();
+          this.router.navigate(['intranet']);
+        }
         //return res.data.user;
       })
       .catch((err) => {
         console.log(err);
         this.badLogin = true; // Pour gérer l'affichage d'une popup dans connexion.component.html
-        console.log(this.badLogin);        
-      });      
+        console.log(this.badLogin);
+      });
   }
 
-// Méthode pour reset le mot de passe et vérifier si l'email existe sur la table auth.users
+  // Méthode pour reset le mot de passe et vérifier si l'email existe sur la table auth.users
   async resetPasswordBis(email: string) {
     try {
       // Récupérez la liste des utilisateurs
       const response = await this.supabase.auth.admin.listUsers();
       const users = response.data.users;
       // La méthode find itère sur les éléments du tableau users pour comparer la valeur email (email en paramétre de ma fonction et email des users)
-      const checkEmail = users.find(user => user.email === email);
-      
+      const checkEmail = users.find((user) => user.email === email);
+
       if (checkEmail) {
-        console.log("email trouvé");
-      // Si l'email existe en BDD         
+        console.log('email trouvé');
+        // Si l'email existe en BDD
         const data = await this.supabase.auth.resetPasswordForEmail(email, {
           redirectTo: 'http://localhost:4200/reset',
-        });        
+        });
         return data;
       } else {
-      // L'utilisateur n'existe pas
-      console.log('Utilisateur non trouvé');
-      this.badEmail = true; // Pour la popup sur recovery.component.html
-      return null;
+        // L'utilisateur n'existe pas
+        console.log('Utilisateur non trouvé');
+        this.badEmail = true; // Pour la popup sur recovery.component.html
+        return null;
       }
-
     } catch (error) {
       console.error(error);
       return error;
-    }   
+    }
   }
 
   // Récupérer son mot de passe en cas de perte - Reset du Password
@@ -119,7 +119,7 @@ export class SupabaseService {
   // Récupérer les utilisateurs sur la table auth.users (table d'authentification de supabase)
   async listUser() {
     const response = await this.supabase.auth.admin.listUsers();
-    console.log('Méthode listUser - response.data.users', response.data.users);    
+    console.log('Méthode listUser - response.data.users', response.data.users);
     return response.data.users; // Retournez les données des utilisateurs
   }
 
@@ -236,7 +236,9 @@ export class SupabaseService {
 
   // Méthode pour récupérer les données d'un utilisateur identifié (sur la table auth)
   async getLoggedInUser() {
-    const { data: { user } } = await this.supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await this.supabase.auth.getUser();
     console.log('Méthode getLoggedInUser : ', user);
     return user;
   }
@@ -286,47 +288,29 @@ export class SupabaseService {
     }
   }
 
-// Vérifier que supabase vérifie un token d'authentification - DANGER Sécurité !!
-  async getAllData(): Promise<any[]> {
+  // Vérifier que supabase vérifie un token d'authentification - DANGER Sécurité !!
+  async getProfil(): Promise<any[]> {
     try {
-    // Sur la table attribuerRoles je select les tables roles et utilisateur grâce à leur id qui sont en ForeignKeys 
-    // Pour roles je récupére juste la donnée (role) - sur utilisateur je récupére toutes les données (*)
+      // Sur la table attribuerRoles je select les tables roles et utilisateur grâce à leur id qui sont en ForeignKeys
+      // Pour roles je récupére juste la donnée (role) - sur utilisateur je récupére toutes les données (*)
       const { data, error } = await this.supabase
         .from('attribuerRoles')
         .select('roles(role),utilisateur(*)')
         .eq('idUtilisateur', this.authId);
-  
-      if (data) {
-        console.log("Méthode getAllData : ", data);
-        return data;
-      }
-  
+
       if (error) {
         console.log(error);
-        throw new Error('Une erreur s\'est produite lors de la récupération des données.');
+        throw new Error(
+          "Une erreur s'est produite lors de la récupération des données."
+        );
       }
-  
+      if (data) return data;
+
       // Si data n'est pas défini, retournez un tableau vide par défaut
       return [];
     } catch (error) {
-      console.error('Une erreur s\'est produite :', error);
+      console.error("Une erreur s'est produite :", error);
       throw error;
     }
   }
-  
-  
-
-
-
-
-
 }
-/* async getUserById(id: string) {
-  const { data, error } = await this.supabase.auth.admin.getUserById(id);
-  if (data) {
-    console.log("getUserById fonction ", data);
-  }
-  if (error) {
-    console.log(error);
-  }
-} */

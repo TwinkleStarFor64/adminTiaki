@@ -13,7 +13,7 @@ export class IntranetComponent implements OnInit{
   constructor(public users: UsersService) {}
 
   ngOnInit(): void {
-    this.users.fetchAuthUserData(); // J'appelle la méthode du service users.service.ts
+    this.users.fetchProfil(); // J'appelle la méthode du service users.service.ts
     this.userData = this.users.userData; // Je remplie la variable userData locale avec la variable userData de users.service.ts 
   }
 }

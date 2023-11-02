@@ -8,21 +8,15 @@ import { UsersService } from 'src/app/partage/services/users.service';
   styleUrls: ['./nutrition.component.scss']
 })
 export class NutritionComponent implements OnInit{
-
-
-userData: any [] = []; // Remplie dans le ngOnInit
-//authUserId: string | null; // Pour les méthode fetchAuthUserData() et this.fetchAllUsersData();
-
-constructor(public supa: SupabaseService, public users: UsersService) {
-  //this.authUserId = sessionStorage.getItem('authUserId');
+  
+constructor() {
+  
 }
 
 ngOnInit(): void {
-  //this.fetchAuthUserData();
-  //this.fetchAllUsersData();
+  
 
-  this.users.fetchAuthUserData(); // J'appelle la méthode du service users.service.ts
-  this.userData = this.users.userData; // Je remplie la variable userData locale avec la variable userData de users.service.ts  
+  
 }
 
 

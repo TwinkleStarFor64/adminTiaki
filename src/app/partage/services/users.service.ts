@@ -5,22 +5,20 @@ import { RoleData, UtilisateurData, UtilisateurI } from '../modeles/Types';
 @Injectable({
   providedIn: 'root',
 })
-export class UsersService implements OnInit{
+export class UsersService implements OnInit {
   allUsersData: UtilisateurData[] = [];
   utilisateur: UtilisateurI[] = [];
   authUsers: UtilisateurI[] = [];
-  selectedUsers: UtilisateurData[] = [];  
+  selectedUsers: UtilisateurData[] = [];
   user!: UtilisateurI;
 
-  userData: any [] = []; // Un tableau d'objets
-// Je remplie la variable locale authUserId dans le constructor avec la valeur de authUserId stocker en session
-// Le stockage en session de authUserId se fais dans la méthode signIn de supabase.service.ts
-  authUserId: string | null; 
+  userData: any[] = []; // Un tableau d'objets
   rolesArray: string[] = [];
+  rolesSet = new Set();
 
-  constructor(public supa: SupabaseService) { 
-    this.authUserId = sessionStorage.getItem('authUserId');
-  }
+  profil!: UtilisateurI;
+
+  constructor(public supa: SupabaseService) {}
 
   ngOnInit(): void {
     this.rolesArray = [];
@@ -108,70 +106,30 @@ export class UsersService implements OnInit{
     }
   }
 
-  async fetchAuthUserData() {
+  async fetchProfil() {
     try {
-    // La méthode getAllData() récupére toutes les données utilisateurs et tout leurs rôles
-      const groupData = await this.supa.getAllData();
-      console.log("groupData : ", groupData);
-    // groupData contient toutes les données de la table attribuerRoles et toutes les données des tables qui lui sont associés avec leur ForeignKeys
-      for (const objet of groupData) {
-      // objet contient les données de la table utilisateur et de la table roles
-        const utilisateurId = objet.utilisateur.id; // Récupérez l'ID de l'utilisateur sur la table utilisateur
-        const utilisateurNom = objet.utilisateur.nom;
-        const utilisateurPrenom = objet.utilisateur.prenom;
-        const role = objet.roles.role; // Récupérez les rôles sur la table rôle      
-  
-        this.user = {
-          id:objet.utilisateur.id,
-          nom:objet.utilisateur.nom,
-          email:objet.utilisateur.email,
-          roles:objet.roles.role
-          }       
-
-          const existingUser = this.userData.find(user => user.utilisateurNom === utilisateurNom);
-          if (existingUser) {
-            existingUser.roles.push(role);
-          } else {
-            this.userData.push({
-              utilisateurNom: utilisateurNom,
-              utilisateurPrenom: utilisateurPrenom,
-              roles: [role],
-            });
-          }
-          this.rolesArray.push(role);
-          console.log("ici c'est rolesArray : ", this.rolesArray.toString()); 
-
-        // Vérifiez si l'ID de l'utilisateur correspond à authUserId (Pour vérifier qu'il est bien authentifié)
-        /* if (utilisateurId === this.authUserId) {
-        // Vérifiez si l'utilisateur existe déjà dans userData - La méthode .find() parcourt le tableau this.userData
-        // Si un utilisateur avec le même nom est trouvé, il est stocké dans la variable existingUser
-          const existingUser = this.userData.find(user => user.utilisateurNom === utilisateurNom);
-        // Si existingUser existe, j'ajoute le nouveau rôle (role) à la liste des rôles de cet utilisateur avec existingUser.roles.push(role).  
-           if (existingUser) {
-            existingUser.roles.push(role);
-        // Si existingUser n'existe pas, je crée un nouvel objet utilisateur avec les propriétés voulues
-        // Ensuite j'ajoute ce nouvel utilisateur au tableau this.userData avec this.userData.push
-          } else { 
-            this.userData.push({
-              utilisateurNom: utilisateurNom,
-              utilisateurPrenom: utilisateurPrenom,
-              roles: [role],
-            });
-          } 
-          this.rolesArray.push(role);
-          console.log("ici c'est rolesArray : ", this.rolesArray.toString());          
-        } */
-      }  
-      console.log("this.user : ", this.user);
-      console.log("this.userData", this.userData);      
-      
+      // La méthode getAllData() récupére toutes les données utilisateurs et tout leurs rôles
+      const data = await this.supa.getProfil();
+      console.log("Data du profil", data);
+      if (Array.isArray(data)) {
+        this.profil = data[0]['utilisateur'];
+        this.profil.roles = [];
+        data.forEach((d) => {
+          if (!this.profil.roles!.includes(d.roles.role))
+            this.profil.roles = this.profil.roles!.concat(d.roles.role);
+        });
+      } else {
+        this.profil = {
+          id: data['id'],
+          nom: data['nom'],
+          prenom: data['prenom'],
+          email: data['email'],
+          roles: data['role'],
+        };
+      }
+      console.log("Profil", this.profil);
     } catch (error) {
       console.error("Une erreur s'est produite :", error);
     }
   }
-  
-
-
 }
-
-// this.user = this.listeUser.find( u => u.id == this.id);
