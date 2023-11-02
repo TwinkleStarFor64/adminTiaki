@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { IntranetComponent } from './intranet.component';
 import { AccueilComponent } from './accueil/accueil.component';
 import { ProfilComponent } from './profil/profil.component';
+import { adminGuard } from '../guards/admin.guard';
 
 const routes: Routes = [
   {
@@ -13,6 +14,7 @@ const routes: Routes = [
       { path: 'profil', component: ProfilComponent },      
       {
         path: 'kine',
+        canActivate: [adminGuard],
         loadChildren: () =>
           import('./kine/kine.module').then((m) => m.KineModule)
       },

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
+import { UsersService } from 'src/app/partage/services/users.service';
 
 @Component({
   selector: 'app-nutrition',
@@ -8,24 +9,24 @@ import { SupabaseService } from 'src/app/partage/services/supabase.service';
 })
 export class NutritionComponent implements OnInit{
 
-userData: any [] = [];
-id!: string;
-authUserId: string | null;
 
-constructor(public supa: SupabaseService) {
-  this.authUserId = sessionStorage.getItem('authUserId');
+userData: any [] = []; // Remplie dans le ngOnInit
+//authUserId: string | null; // Pour les méthode fetchAuthUserData() et this.fetchAllUsersData();
+
+constructor(public supa: SupabaseService, public users: UsersService) {
+  //this.authUserId = sessionStorage.getItem('authUserId');
 }
 
 ngOnInit(): void {
-  //this.supa.getAllData();
-  this.fetchAuthUserData();
+  //this.fetchAuthUserData();
   //this.fetchAllUsersData();
-  console.log("authUserID : ",this.authUserId);
-   
+
+  this.users.fetchAuthUserData(); // J'appelle la méthode du service users.service.ts
+  this.userData = this.users.userData; // Je remplie la variable userData locale avec la variable userData de users.service.ts  
 }
 
 
-async fetchAuthUserData() {
+/* async fetchAuthUserData() {
   try {
     const groupData = await this.supa.getAllData();
     console.log("groupData : ", groupData);
@@ -38,7 +39,7 @@ async fetchAuthUserData() {
 
       // Vérifiez si l'ID de l'utilisateur correspond à authUserId
       if (utilisateurId === this.authUserId) {
-        // Vérifiez si l'utilisateur existe déjà dans dataTest
+        // Vérifiez si l'utilisateur existe déjà dans userData
         const existingUser = this.userData.find(user => user.utilisateurNom === utilisateurNom);
 
         if (existingUser) {
@@ -57,11 +58,11 @@ async fetchAuthUserData() {
   } catch (error) {
     console.error("Une erreur s'est produite :", error);
   }
-}
+} */
 
 
 
-async fetchAllUsersData() {
+/* async fetchAllUsersData() {
   try {
     const groupData = await this.supa.getAllData();
     console.log("groupData : ",groupData);
@@ -75,7 +76,7 @@ async fetchAllUsersData() {
       const utilisateurPrenom = objet.utilisateur.prenom;
       const role = objet.roles.role;
 
-      // Vérifiez si l'utilisateur existe déjà dans dataTest
+      // Vérifiez si l'utilisateur existe déjà dans userData
       const existingUser = this.userData.find(user => user.utilisateurNom === utilisateurNom);
       
       if (existingUser) {
@@ -94,7 +95,7 @@ async fetchAllUsersData() {
   } catch (error) {
     console.error("Une erreur s'est produite :", error);
   }
-}
+} */
 
 
 }

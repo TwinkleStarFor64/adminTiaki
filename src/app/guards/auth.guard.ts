@@ -8,7 +8,8 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   const token = sessionStorage.getItem('token'); // Remplacer par le token de supabase.service !!
 
-  if (token) { // Le token attribué dans supabase.service        
+  // if token ou if supa ??
+  if (supa.token) { // Le token attribué dans supabase.service        
     return true; 
   } else {
     router.navigate(['']) 

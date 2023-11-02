@@ -16,7 +16,7 @@ export interface UtilisateurI {
     nom: string;
     prenom?:string;
     telephone?:number;
-    role?: string;
+    roles?: Array<string>;
 }
 
 export interface UtilisateurData {

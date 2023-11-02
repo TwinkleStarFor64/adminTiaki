@@ -32,9 +32,9 @@ export class SupabaseService {
 
   // Connexion à l'application - Tuto : https://www.youtube.com/watch?v=hPI8OegHPYc
   signIn(email: string, password: string): any {
-    return this.supabase.auth.signInWithPassword({ email, password })
+    this.supabase.auth.signInWithPassword({ email, password })
       .then((res) => {
-        console.log(res);
+        console.log("Méthode signIn - ce que contient la réponse : ",res);
         this.user = res.data.user; // La réponse de la méthode avec toutes les données d'un utilisateur
         console.log("L'id de l'utilisateur authentifié : ", this.user.id);              
 
@@ -42,20 +42,21 @@ export class SupabaseService {
           // Je vérifie que le rôle et 'authenticated' dans supabase - voir le résultat de console.log(res)
           this.token = res.data.session!.access_token; // Je stock la valeur du token retourné par supabase          
           
-          if (this.token) {
+          /* if (this.token) {
             sessionStorage.setItem('token', this.token); // set du token de session
-          }
+          } */
 
-          this.authId = res.data.user!.id // j'attribue à la variable l'id de l'utilisateur (après son authentification)
+          this.authId = res.data.user!.id // j'attribue à la variable authId l'id de l'utilisateur (après son authentification)
           //console.log(this.authUserId);
-          if (this.authId) {
+          /* if (this.authId) {
             // Je stock dans la session la valeur de l'id utilisateur
             sessionStorage.setItem('authUserId', this.authId)
           }          
-          
+           */
+          this.getAllData();
           this.router.navigate(['intranet']);          
         } 
-        return res.data.user;
+        //return res.data.user;
       })
       .catch((err) => {
         console.log(err);
@@ -259,7 +260,7 @@ export class SupabaseService {
     return data;
   }
 
-  // Récupérer les rôles sur la table roles en comparant leur id
+  // Récupérer les rôles sur la table roles en comparant leur id - obsoléte !!
   async getRoleById(id: string) {
     const data = await this.supabase.from('roles').select('*').eq('id', id);
     //console.log("méthode getRoleById : ", data);
@@ -285,14 +286,18 @@ export class SupabaseService {
     }
   }
 
+// Vérifier que supabase vérifie un token d'authentification - DANGER Sécurité !!
   async getAllData(): Promise<any[]> {
     try {
+    // Sur la table attribuerRoles je select les tables roles et utilisateur grâce à leur id qui sont en ForeignKeys 
+    // Pour roles je récupére juste la donnée (role) - sur utilisateur je récupére toutes les données (*)
       const { data, error } = await this.supabase
         .from('attribuerRoles')
-        .select('roles(role),utilisateur(*)');
+        .select('roles(role),utilisateur(*)')
+        .eq('idUtilisateur', this.authId);
   
       if (data) {
-        console.log(data);
+        console.log("Méthode getAllData : ", data);
         return data;
       }
   
