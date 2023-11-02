@@ -17,31 +17,30 @@
 </header>
 <section>
   <div>
-    <article *ngFor="let user of utilisateur">
+    <article>
       <h4>Informations personelles</h4>
-      <form [formGroup]="profilForm">
+      <form #profilForm="ngForm">
         <span class="p-float-label">
-          <input pInputText id="nom" formControlName="nom" type="text" pattern="{{ stringRegex.source }}" required
+          <input pInputText [(ngModel)]="users.profil.nom" name="nom" type="text" required
             minlength="1" />
           <label htmlFor="nom">Nom</label>
         </span>
         <span class="p-float-label">
-          <input pInputText id="prenom" formControlName="prenom" type="text" pattern="{{ stringRegex.source }}" required
+          <input pInputText [(ngModel)]="users.profil.prenom" name="prenom" type="text" required
             minlength="1" />
           <label htmlFor="prenom">Prenom</label>
         </span>
         <span class="p-float-label">
-          <input pInputText id="telephone" formControlName="telephone" type="text" pattern="{{ numberRegex.source }}"
-            required minlength="10" />
+          <input pInputText [(ngModel)]="users.profil.telephone" name="telephone" type="text" required minlength="10" />
           <label htmlFor="telephone">Telephone</label>
         </span>
         <p-button class="modifier" styleClass="p-button-help" (click)="ConfirmDialog()"
-          [disabled]="profilForm.invalid">Modifier</p-button>          
-      </form>      
+          [disabled]="profilForm.invalid!">Modifier</p-button>
+      </form>
     </article>
-    <article *ngFor="let user of utilisateur">
+    <article>
       <h4>Identifiants de connexion</h4>
-      <p>Votre Email : {{ user.email }}</p>
+      <p>Votre Email : {{ users.profil.email }}</p>
       <p>Changer votre mot de passe :</p>
       <form (ngSubmit)="onSubmitNewPassword()">        
         <span class="p-float-label">
@@ -60,6 +59,7 @@
     <article>
       <h4>Informations du compte</h4>
       <p>Rôle(s) attribué(s) :</p>
+      <p>{{ users.profil.roles }}</p>
       <p>{{ rolesConcatenated }}</p>
       <h4>Supprimer votre compte</h4>
       <p-button styleClass="p-button-help" (click)="DeleteDialog()">Supprimer</p-button>

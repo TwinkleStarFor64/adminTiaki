@@ -46,104 +46,19 @@ export class ProfilComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    //this.supa.getLoggedInUser();
-    this.getUserProfil();
-
     this.stringRegex = /^[a-zA-Z ]*$/;
     this.numberRegex = /^\d+$/;
-    this.passwordRegex = /^[A-Za-z0-9]{6,}$/;
-
-    this.profilForm = this.formbuilder.group({
-      nom: ['', [Validators.required, Validators.pattern(this.stringRegex)]],
-      prenom: ['', [Validators.required, Validators.pattern(this.stringRegex)]],
-      email: ['', [Validators.required, Validators.email]],
-      telephone: ['', [Validators.required, Validators.pattern(this.numberRegex)],],
-    });
-    
+    this.passwordRegex = /^[A-Za-z0-9]{6,}$/;    
   }
-
-  // Méthode pour récupérer l'utilisateur identifié et son profil y compris ces rôles
-  async getUserProfil() {
-    try {
-      const userData = await this.supa.getLoggedInUser(); // Récupére les données de l'user connecté - y compris son id (sur la table auth)
-      if (!userData) {
-        // Si pas de user
-        throw new Error('Aucune donnée utilisateur disponible.');
-      }
-      //console.log(userData.id);
-      // Si j'ai un user je peux récupérer son id avec userData.id
-      // J'utilise cette id pour récupérer l'user sur la table utilisateurs (ci-dessous)
-      const userIdData = (await this.supa.getUtilisateurById(userData.id)).data;
-      if (userIdData) {
-        console.log("variable userIdData", userIdData);
-        // Variable utilisateur de type UtilisateurI à laquelle j'attribue les data récupérées
-        this.utilisateur = userIdData.map((item: { [x: string]: any }) => ({
-          id: item['id'],
-          email: item['email'],
-          nom: item['nom'],
-          prenom: item['prenom'],
-          telephone: item['telephone'],
-        }));        
-        //console.log("Nom d'utilisateur", this.utilisateur.map((item) => item['nom']).join(', '));
-      }
-      // Je remplis les values du formulaire avec les data de l'user - je récupére un tableau avec un seul élément
-      // Comme je récupére un tableau je rajoute [0]     
-         this.profilForm.setValue({
-          nom: this.utilisateur[0]?.nom,
-          prenom: this.utilisateur[0]?.prenom,
-          telephone: this.utilisateur[0]?.telephone,
-          email: this.utilisateur[0]?.email
-         });       
-
-      const roleIdData = (await this.supa.getRoleId(userData.id)).data;
-      //console.log("ici c'est roleId.data", roleIdData);
-      //Je fetch sur la table attribuerRoles tous les rôles correspondants à l'id de cet user
-      if (roleIdData) {
-        for (const item of roleIdData) {
-          console.log('ID du rôle : ', item.idRole);
-          this.idRole = item.idRole; // J'attribue à la variable idRole les id des rôles récupérés
-          console.log('this.idRole : ', this.idRole);
-
-          //Pour chacun de ces rôles je fetch sur la table roles
-          const userRoleData = (await this.supa.getRoleById(this.idRole)).data;
-          //console.log(userRoleData);
-
-          if (userRoleData) {
-            this.role = this.role.concat(userRoleData); // Concat des tableaux userRoleData en un seul tableau de type RoleData
-            console.log(this.role.map((item) => item['role']).join(', '));
-            // Map du résultat et affichage avec .join
-            this.rolesConcatenated = this.role
-              .map((item) => item.role)
-              .join(', ');
-          }
-        }
-      }      
-    } catch (error) {
-      console.error("Une erreur s'est produite :", error);
-    }
-  }
-
+  
   // Méthode pour mettre à jour le profil - utilisé dans la modal de confirmation du formulaire
   async onSubmitForm() {
     console.log(this.profilForm.value);
     try {
-      const userData = await this.supa.getLoggedInUser(); // Je récupére l'user connecté
-
-      if (!userData) {
-        throw new Error('Aucune donnée utilisateur disponible.');
-      }
-
-      console.log('le submit', userData.id);
+      
       // j'utilise l'id de l'user pour update son profil
-      await this.supa.updateProfil(userData.id,this.profilForm.value);
-      this.utilisateur[0] = {
-        id: this.profilForm.get('id')?.value,
-        nom: this.profilForm.get('nom')?.value,
-        prenom: this.profilForm.get('prenom')?.value,
-        telephone: this.profilForm.get('telephone')?.value,
-        email: this.profilForm.get('email')?.value
-      };  
-
+      await this.supa.updateProfil(this.users.profil.id,{nom:this.users.profil.nom, prenom:this.users.profil.prenom!, telephone:this.users.profil.telephone!});
+    
       } catch (error) {
       console.error("Une erreur s'est produite :", error);
     }
