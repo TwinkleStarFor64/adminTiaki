@@ -196,8 +196,13 @@ export class GestionComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       accept: async () => {
         for (const user of this.selectedUsers) {
+<<<<<<< HEAD
           await this.deleteUserById(user);
           this.removeUserById(user.id);
+=======
+          //await this.onSelect(user);
+          this.removeUserById(user.id); // Retirez l'utilisateur supprimé de la liste
+>>>>>>> 40b8645b071fd9009a03446b4b62df5709329a70
         }
         this.selectedUsers = [];
       },
