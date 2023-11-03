@@ -43,15 +43,15 @@ export class AjoutUtilisateurComponent {
     
   }
   
-  async onCreateUserFormSubmit() {
-    try {
-        const newUser = await this.userService.createUser(this.userFormData);
-        console.log('Nouvel utilisateur créé :', newUser);
+  // async onCreateUserFormSubmit() {
+  //   try {
+  //       const newUser = await this.userService.createUser(this.userFormData);
+  //       console.log('Nouvel utilisateur créé :', newUser);
 
-        // Affichez un message de réussite ou effectuez d'autres actions nécessaires.
-    } catch (error) {
-        console.error('Erreur lors de la création de l\'utilisateur :', error);
-        // Affichez un message d'erreur ou gérez l'erreur comme nécessaire.
-    }
-  }
+  //       // Affichez un message de réussite ou effectuez d'autres actions nécessaires.
+  //   } catch (error) {
+  //       console.error('Erreur lors de la création de l\'utilisateur :', error);
+  //       // Affichez un message d'erreur ou gérez l'erreur comme nécessaire.
+  //   }
+  // }
 }

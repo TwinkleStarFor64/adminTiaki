@@ -23,7 +23,10 @@
       <input pInputText id="email" formControlName="email" type="email"
         pattern="{{ emailRegex ? emailRegex.source : '' }}" required />
     </span>
-    <p-button class="modifier" styleClass="p-button-help" (click)="openModifyConfirmDialog()" >Modifier</p-button>
+    <div>
+      <button pButton type="button" label="Annuler" (click)="cancelModification()"></button>
+      <button pButton class="modifier" styleClass="p-button-help" (click)="openModifyConfirmDialog()" >Modifier</button>
+    </div>
   </form>
 </p-dialog>
 <p-dialog #confirmDialog header="Confirmation de modification" [(visible)]="confirmDialogVisible">

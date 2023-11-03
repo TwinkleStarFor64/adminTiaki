@@ -119,11 +119,7 @@ export class SupabaseService {
   // Récupérer les utilisateurs sur la table auth.users (table d'authentification de supabase)
   async listUser() {
     const response = await this.supabase.auth.admin.listUsers();
-<<<<<<< HEAD
-    // console.log('Méthode listUser - response.data.users', response.data.users);    
-=======
     console.log('Méthode listUser - response.data.users', response.data.users);
->>>>>>> 40b8645b071fd9009a03446b4b62df5709329a70
     return response.data.users; // Retournez les données des utilisateurs
   }
 
@@ -181,7 +177,6 @@ export class SupabaseService {
         utilisateursError
       );
     }
-
     // Récupérez les rôles associés à chaque utilisateur depuis la table attribuerRoles.
     for (const utilisateur of utilisateursData as UtilisateurData[]) {
       // Utilisez le type correct - interface UtilisateurData
@@ -293,7 +288,6 @@ export class SupabaseService {
     }
   }
 
-<<<<<<< HEAD
   // Update des données utilisateurs sur la page de gestion
 async updateUser(userId: string, updatedUserData: any) {
   try {
@@ -349,6 +343,30 @@ async createUserInTableUtilisateurAuth(formData: any): Promise<UserCreationRespo
     throw error;
   }
 }
+async getProfil(): Promise<any[]> {
+  try {
+    // Sur la table attribuerRoles je select les tables roles et utilisateur grâce à leur id qui sont en ForeignKeys
+    // Pour roles je récupére juste la donnée (role) - sur utilisateur je récupére toutes les données (*)
+    const { data, error } = await this.supabase
+      .from('attribuerRoles')
+      .select('roles(role),utilisateur(*)')
+      .eq('idUtilisateur', this.authId);
+
+    if (error) {
+      console.log(error);
+      throw new Error(
+        "Une erreur s'est produite lors de la récupération des données."
+      );
+    }
+    if (data) return data;
+
+    // Si data n'est pas défini, retournez un tableau vide par défaut
+    return [];
+  } catch (error) {
+    console.error("Une erreur s'est produite :", error);
+    throw error;
+  }
+}
 }
 
 /* async getUserById(id: string) {
@@ -360,31 +378,5 @@ async createUserInTableUtilisateurAuth(formData: any): Promise<UserCreationRespo
     console.log(error);
   }
 } */
-=======
   // Vérifier que supabase vérifie un token d'authentification - DANGER Sécurité !!
-  async getProfil(): Promise<any[]> {
-    try {
-      // Sur la table attribuerRoles je select les tables roles et utilisateur grâce à leur id qui sont en ForeignKeys
-      // Pour roles je récupére juste la donnée (role) - sur utilisateur je récupére toutes les données (*)
-      const { data, error } = await this.supabase
-        .from('attribuerRoles')
-        .select('roles(role),utilisateur(*)')
-        .eq('idUtilisateur', this.authId);
 
-      if (error) {
-        console.log(error);
-        throw new Error(
-          "Une erreur s'est produite lors de la récupération des données."
-        );
-      }
-      if (data) return data;
-
-      // Si data n'est pas défini, retournez un tableau vide par défaut
-      return [];
-    } catch (error) {
-      console.error("Une erreur s'est produite :", error);
-      throw error;
-    }
-  }
-}
->>>>>>> 40b8645b071fd9009a03446b4b62df5709329a70

@@ -28,6 +28,14 @@ section {
     input {
       margin-left: 50px;
     }
+    .clear{
+      background-color: rgb(209, 147, 31);
+      border: rgb(209, 147, 31);
+    }
+    .ajout{
+      background-color: #33BB27 ;
+      border-color: #33BB27;
+    }
   }
 
   .table-users {
@@ -69,9 +77,14 @@ section {
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
           }
         }
       }
     }
+  }
+  .erased{
+    background-color: #D9042B;
+    border-color: #D9042B;
   }
 }

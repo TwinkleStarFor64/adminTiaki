@@ -1,35 +1,31 @@
 /* Style pour le formulaire dans le p-dialog */
 p-dialog {
-    .p-dialog-content {
-      padding: 1rem;
-    }
-  
-    form {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-   
+  .p-dialog-content {
+    padding: 1rem;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
     /* Style pour les champs d'entrée */
     .p-float-label {
       width: 50%;
       margin-bottom: 3rem;
-  
+
       input {
         width: 100%;
         padding: 0.5rem;
         border: 1px solid #ccc;
         border-radius: 4px;
         transition: border-color 0.2s;
-  
+
         &:focus {
-          border-color: #007bff; 
+          border-color: #007bff;
         }
       }
-  
-     div {
-      height: 10vh;
-      width: 100%;
-     } 
+
       label {
         display: block;
         font-size: 1rem;
@@ -37,27 +33,31 @@ p-dialog {
         margin-bottom: 0.5rem;
       }
     }
- }
-  
+  }
+
+  div {
+    display: flex;
+    gap: 4vw;
+
     /* Style pour le bouton Modifier */
     .modifier {
 
-  
+
       &.p-button-help {
-        color: #fff; 
+        color: #fff;
         border: none;
         border-radius: 4px;
         transition: background-color 0.2s;
-  
+
         &:hover {
-          background-color: #0056b3; 
+          background-color: #0056b3;
         }
-  
+
         &:disabled {
-          background-color: #ccc; 
+          background-color: #ccc;
           cursor: not-allowed;
         }
       }
     }
   }
-  
+}

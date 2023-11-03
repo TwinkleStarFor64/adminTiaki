@@ -16,7 +16,8 @@
     </article>
 </header>
 <section>
-    <form (submit)="onCreateUserFormSubmit()">
+    <!-- (submit)="onCreateUserFormSubmit()" -->
+    <form >
         <h4>Identité</h4>
         <span class="p-float-label">
             <input pInputText [(ngModel)]="userFormData.nom" name="nom" type="text" required minlength="1" />
