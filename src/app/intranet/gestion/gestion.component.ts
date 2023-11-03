@@ -195,11 +195,7 @@ export class GestionComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       accept: async () => {
         for (const user of this.selectedUsers) {
-<<<<<<< HEAD
-          await this.deleteUserById(user.id);
-=======
           //await this.onSelect(user);
->>>>>>> 86ad3c9e49a7d67499d7368ba14c82b5e217d3b1
           this.removeUserById(user.id); // Retirez l'utilisateur supprimé de la liste
         }
         this.selectedUsers = [];
@@ -216,9 +212,9 @@ export class GestionComponent implements OnInit {
 
   //Ouverture de la modal edition
   openEditUserModal(user: UtilisateurI, i:number) {
-    this.editUserComponent!.showDialog(user);
+    // this.editUserComponent!.showDialog(user);
     // if (this.editUserComponent) {
-    //   this.editUserComponent.email = user.email || '';
+    //   this.editUserComponent. = user.email || '';
     //   this.editUserComponent.nom = user.nom || '';
     //   this.editUserComponent.prenom = user.prenom || '';
     //   this.editUserComponent.showDialog(user);

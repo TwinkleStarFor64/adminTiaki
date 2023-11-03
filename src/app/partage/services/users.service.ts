@@ -11,23 +11,12 @@ export class UsersService implements OnInit {
   listeUtilisateurs:Array<UtilisateurI> = [];
   authUsers: UtilisateurI[] = [];
   selectedUsers: UtilisateurData[] = [];
-<<<<<<< HEAD
-  rolesArray=[];
-  profil!:UtilisateurI;
-  userData!:any;
-  constructor(public supa: SupabaseService) {}
-
-  ngOnInit(): void {
-    this.rolesArray = [];
-  
-=======
   profil!:UtilisateurI;
 
   constructor(public supa: SupabaseService) {}
 
   ngOnInit(): void {
  
->>>>>>> 86ad3c9e49a7d67499d7368ba14c82b5e217d3b1
   }
 
   async fetchListeUtilisateurs() {

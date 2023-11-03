@@ -41,24 +41,15 @@
             <td><input type="checkbox" [(ngModel)]="user.selected" (change)="onUserSelectChange(user)"></td>
             <td>{{ user.nom }}</td>
             <td>{{ user.email }}</td>
-            <!-- <td>{{ getRolesText(user) }}</td> -->
             <td><span *ngIf="user.roles">{{ user.roles!.toString() }}</span></td>
             <td>
-<<<<<<< HEAD
-              <figure ><img src="assets/images/icones/gestion-utilisateur/coeur.png" alt="favoris"></figure>
-            </td>
-            <td>
-              <figure (click)="openEditUserModal(user.id)" >
-                <img src="assets/images/icones/gestion-utilisateur/editer.png" alt=""></figure>
-=======
               <figure><img src="assets/images/icones/gestion-utilisateur/coeur.png" alt="favoris"></figure>
             </td>
             <td>
               <figure (click)="openEditUserModal(user, i)" ><img src="assets/images/icones/gestion-utilisateur/editer.png" alt=""></figure>
->>>>>>> 86ad3c9e49a7d67499d7368ba14c82b5e217d3b1
             </td>
             <td>
-              <figure (click)="openDeleteDataModal(user.id)"><img
+              <figure (click)="openDeleteDataModal(user)"><img
                   src="assets/images/icones/gestion-utilisateur/corbeille.png" alt=""></figure>
             </td>
           </tr>
@@ -66,7 +57,9 @@
       </table>
     </article>
     <button class="erased" pButton *ngIf="selectedUsers.length > 0" (click)="deleteSelectedUsers()" label="Supprimer les utilisateurs sélectionnés"></button>
+    <section ngIf*="">
+    </section>
   <app-delete-data></app-delete-data>
-  <app-edit-user></app-edit-user>
+  <!-- <app-edit-user></app-edit-user> -->
   <app-donnees-medicales></app-donnees-medicales>
 </section>

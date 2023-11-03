@@ -87,7 +87,7 @@ export class EditUserComponent implements OnInit {
       });
   }
 
-
+// 
   openConfirmDialog() {
     this.confirmationService.confirm({
       message: 'Êtes-vous sûr de vouloir modifier cet utilisateur ?',

@@ -110,7 +110,7 @@ export class SupabaseService {
   }
 
   // Récupérer les utilisateurs sur la table public.utilisateur
-  async getUtilisateur() {
+  async getListeUtilisateurs() {
     const data = await this.supabase.from('utilisateur').select('*');
     // console.log('Méthode getUtilisateur', data);
     return data;
