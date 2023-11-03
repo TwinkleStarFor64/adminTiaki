@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   UtilisateurI,
-  UtilisateurData,
   RoleData,
 } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
@@ -20,14 +19,13 @@ import { GestionUtilisateursPipe } from 'src/app/pipes/gestion-utilisateurs.pipe
 })
 export class GestionComponent implements OnInit {
   utilisateur: UtilisateurI[] = [];
-  selectedUsers: UtilisateurData[] = [];
+  selectedUsers: UtilisateurI[] = [];
   selectedUtilisateur!: string;
-  allUsersData: UtilisateurData[] = [];
   formGroup: FormGroup | undefined;
   nomFiltre: string = '';
   emailFiltre: string = '';
   roleFiltre: string = '';
-  filteredUtilisateurs: UtilisateurData[] = [];
+  filteredUtilisateurs: UtilisateurI[] = [];
   currentPage = 0;
   sortOrder: 'asc' | 'desc' = 'asc';
   selectedUserForEdit: UtilisateurI | null = null;
@@ -39,15 +37,15 @@ export class GestionComponent implements OnInit {
   donneesMedicalComponent: DonneesMedicalesComponent | undefined;
 
   //Modal édition de l'utilisateur
-  openEditModal(user: UtilisateurI, editComponent: EditUserComponent): void {
-    if (editComponent) {
-      editComponent.email = user.email || '';
-      editComponent.nom = user.nom || '';
-      editComponent.prenom = user.prenom || '';
-      editComponent.showDialog(user);
-    } else {
-      console.error("Le composant d'édition n'est pas défini.");
-    }
+  openEditModal(user: UtilisateurI, index:number): void {
+    // if (editComponent) {
+    //   editComponent.email = user.email || '';
+    //   editComponent.nom = user.nom || '';
+    //   editComponent.prenom = user.prenom || '';
+    //   editComponent.showDialog(user);
+    // } else {
+    //   console.error("Le composant d'édition n'est pas défini.");
+    // }
   }
 
   async openMedModal(user: UtilisateurI) {
@@ -79,22 +77,23 @@ export class GestionComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
+    this.users.fetchListeUtilisateurs(); // Récupérer la liste des utilisateurs
     try {
       await Promise.all([
-        this.users.fetchUtilisateur(),
         this.users.fetchAuthUsers(),
         this.users.fetchAllUsersWithRoles(),
         this.supa.fetchAttribuerRoles(),
         this.supa.getAllUsersWithRoles(),
+        // this.supa.getProfil()
       ]);
 
       this.users.allUsersData = this.users.allUsersData.map((user) => ({
         ...user,
         selected: false,
       }));
-      console.log("aaaahh:", this.users.allUsersData);
+      console.log("aaaahh:", this.users.listeUtilisateurs);
       
-      this.filteredUtilisateurs = this.users.allUsersData;
+      this.filteredUtilisateurs = this.users.listeUtilisateurs;
     } catch (error) {
       console.error("Erreur lors de l'initialisation :", error);
     }
@@ -118,8 +117,8 @@ export class GestionComponent implements OnInit {
     }
   }
 
-  getRolesText(user: UtilisateurData): string {
-    return user.roles.map((allRole: RoleData) => allRole.role).join(', ');
+  getRolesText(user: UtilisateurI): string {
+    return user.roles!.map((allRole: any) => allRole.role).join(', ');
   }
 
   openDeleteDataModal(user: UtilisateurI) {
@@ -176,7 +175,7 @@ export class GestionComponent implements OnInit {
   }
 
   //Methode de selectione des utilisateur avec la checkbox
-  onUserSelectChange(user: UtilisateurData) {
+  onUserSelectChange(user: UtilisateurI) {
     if (user.selected) {
       this.selectedUsers.push(user);
     } else {
@@ -196,61 +195,54 @@ export class GestionComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       accept: async () => {
         for (const user of this.selectedUsers) {
-<<<<<<< HEAD
-          await this.deleteUserById(user);
-          this.removeUserById(user.id);
-=======
           //await this.onSelect(user);
           this.removeUserById(user.id); // Retirez l'utilisateur supprimé de la liste
->>>>>>> 40b8645b071fd9009a03446b4b62df5709329a70
         }
         this.selectedUsers = [];
       },
     });
   }
-
+  /** Supprimer un utilisateur de la liste dans le service des utilisateurs */
   removeUserById(userId: any) {
-    const index = this.allUsersData.findIndex((user) => user.id === userId);
+    const index = this.users.listeUtilisateurs.findIndex((user) => user.id === userId);
     if (index !== -1) {
-      this.allUsersData.splice(index, 1);
+      this.users.listeUtilisateurs.splice(index, 1);
     }
   }
 
   //Ouverture de la modal edition
-  openEditUserModal(user: UtilisateurI) {
-    if (this.editUserComponent) {
-      this.editUserComponent.email = user.email || '';
-      this.editUserComponent.nom = user.nom || '';
-      this.editUserComponent.prenom = user.prenom || '';
-
-
-      this.editUserComponent.showDialog(user);
-    } else {
-      console.error(
-        "this.editUserComponent n'est pas défini. Assurez-vous qu'il est correctement initialisé."
-      );
-    }
+  openEditUserModal(user: UtilisateurI, i:number) {
+    this.editUserComponent!.showDialog(user);
+    // if (this.editUserComponent) {
+    //   this.editUserComponent.email = user.email || '';
+    //   this.editUserComponent.nom = user.nom || '';
+    //   this.editUserComponent.prenom = user.prenom || '';
+    //   this.editUserComponent.showDialog(user);
+    // } else {
+    //   console.error(
+    //     "this.editUserComponent n'est pas défini. Assurez-vous qu'il est correctement initialisé."
+    //   );
+    // }
   }
   //Methodes pour filtrer par les inputs
   onFilterChange() {
     this.filteredUtilisateurs = this.filterUsers(
-      this.users.allUsersData,
+      this.users.listeUtilisateurs,
       this.nomFiltre,
       this.emailFiltre,
-      this.roleFiltre,
-      
+      this.roleFiltre,  
       );
       console.log('this.allUsersData', this.users.allUsersData);
       console.log('this.nomFiltre', this.nomFiltre);
   }
   
   filterUsers(
-    users: UtilisateurData[],
+    users: UtilisateurI[],
     nomFiltre: string,
     emailFiltre: string,
     roleFiltre: string,
 
-  ): UtilisateurData[] {
+  ): UtilisateurI[] {
     return users.filter((user) => {
       const nomMatch = nomFiltre
         ? user.nom?.toLowerCase().includes(nomFiltre.toLowerCase())

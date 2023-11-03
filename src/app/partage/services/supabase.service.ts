@@ -110,25 +110,25 @@ export class SupabaseService {
   }
 
   // Récupérer les utilisateurs sur la table public.utilisateur
-  async getUtilisateur() {
+  async getUtilisateur(id:string | number) {
+    const data = await this.supabase.from('utilisateur').select('*').eq('id', id);
+    // console.log('Méthode getUtilisateur', data);
+    return data;
+  }
+  async getListeUtilisateurs() {
     const data = await this.supabase.from('utilisateur').select('*');
     // console.log('Méthode getUtilisateur', data);
     return data;
   }
-
   // Récupérer les utilisateurs sur la table auth.users (table d'authentification de supabase)
   async listUser() {
     const response = await this.supabase.auth.admin.listUsers();
-<<<<<<< HEAD
-    // console.log('Méthode listUser - response.data.users', response.data.users);    
-=======
     console.log('Méthode listUser - response.data.users', response.data.users);
->>>>>>> 40b8645b071fd9009a03446b4b62df5709329a70
     return response.data.users; // Retournez les données des utilisateurs
   }
 
   /*
-   *Supprimer utilisateur
+     *Supprimer utilisateur
    */
   async deleteUser(userData: string) {
     // userData servira à comparer à l'id utilisateur
@@ -293,74 +293,6 @@ export class SupabaseService {
     }
   }
 
-<<<<<<< HEAD
-  // Update des données utilisateurs sur la page de gestion
-async updateUser(userId: string, updatedUserData: any) {
-  try {
-    const { data, error } = await this.supabase
-      .from('utilisateur') // Remplacez 'utilisateurs' par le nom de votre table
-      .update(updatedUserData)
-      .eq('id', userId); // Mettez à jour l'utilisateur avec l'ID spécifié
-
-    if (error) {
-      throw error;
-    }
-
-    return data;
-  } catch (error) {
-    console.error("Une erreur s'est produite lors de la mise à jour de l'utilisateur :", error);
-    throw error;
-  }
-}
-// SupabaseService
-
-async createUserInTableUtilisateurAuth(formData: any): Promise<UserCreationResponse>  {
-  try {
-    // D'abord, créez l'utilisateur dans la table "auth" (par exemple, pour le mail et le mot de passe)
-    const authResponse = await this.supabase
-      .from('auth')
-      .upsert([formData]);
-
-    if (authResponse.error) {
-      console.error('Erreur lors de la création de l\'utilisateur dans la table auth :', authResponse.error);
-      throw authResponse.error;
-    }
-
-    // Ensuite, créez l'utilisateur dans la table "utilisateur" (par exemple, pour d'autres informations)
-    const utilisateurResponse = await this.supabase
-      .from('utilisateur')
-      .upsert([formData]);
-
-    if (utilisateurResponse.error) {
-      console.error('Erreur lors de la création de l\'utilisateur dans la table utilisateur :', utilisateurResponse.error);
-      throw utilisateurResponse.error;
-    }
-
-    // Vérifiez si les données sont nulles et attribuez une valeur par défaut si nécessaire
-    const authData = authResponse.data || [];
-    const utilisateurData = utilisateurResponse.data || [];
-
-    return {
-      auth: authData,
-      utilisateur: utilisateurData
-    };
-  } catch (error) {
-    console.error('Erreur lors de la création de l\'utilisateur :', error);
-    throw error;
-  }
-}
-}
-
-/* async getUserById(id: string) {
-  const { data, error } = await this.supabase.auth.admin.getUserById(id);
-  if (data) {
-    console.log("getUserById fonction ", data);
-  }
-  if (error) {
-    console.log(error);
-  }
-} */
-=======
   // Vérifier que supabase vérifie un token d'authentification - DANGER Sécurité !!
   async getProfil(): Promise<any[]> {
     try {
@@ -387,4 +319,3 @@ async createUserInTableUtilisateurAuth(formData: any): Promise<UserCreationRespo
     }
   }
 }
->>>>>>> 40b8645b071fd9009a03446b4b62df5709329a70
