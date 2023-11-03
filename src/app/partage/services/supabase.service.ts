@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  AuthSession,
-  createClient,
-  SupabaseClient,
-} from '@supabase/supabase-js';
+import { AuthSession, createClient, SupabaseClient,} from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
 import { RoleData, UtilisateurData } from '../modeles/Types';
 import { Router } from '@angular/router';
@@ -18,10 +14,11 @@ export class SupabaseService {
   _session: AuthSession | null = null; // Session d'authentification
 
   user: any; // Utilisé dans la méthode signIn()
-  token!: string; // Utilisé dans la méthode signIn()
-  badEmail = false; // Utilisé dans la méthode resetPasswordBis()
-  badLogin = false; // Utilisé dans la méthode signIn()
-  
+  token!: string; // Utilisé dans la méthode signIn() pour stocker le token de l'utilisateur
+  authId!: string; // Utilisé dans la méthode signIn() pour stocker l'id de l'utilisateur
+  badEmail = false; // Utilisé dans la méthode resetPasswordBis() - utiliser pour une popup
+  badLogin = false; // Utilisé dans la méthode signIn() - utiliser pour une popup - Pas utilisé pour le moment ( optionel)
+
   constructor(private router: Router) {
     this.supabase = createClient(
       environment.supabaseUrl,
@@ -30,60 +27,57 @@ export class SupabaseService {
   }
 
   // Connexion à l'application - Tuto : https://www.youtube.com/watch?v=hPI8OegHPYc
-
   signIn(email: string, password: string): any {
-    return this.supabase.auth.signInWithPassword({ email, password })
+    this.supabase.auth
+      .signInWithPassword({ email, password })
       .then((res) => {
-        console.log(res);
+        console.log('Méthode signIn - ce que contient la réponse : ', res);
         this.user = res.data.user; // La réponse de la méthode avec toutes les données d'un utilisateur
-        console.log("L'id de l'utilisateur authentifié : ", this.user.id);              
+        console.log("L'id de l'utilisateur authentifié : ", this.user.id);
 
         if (res.data.user!.role === 'authenticated') {
           // Je vérifie que le rôle et 'authenticated' dans supabase - voir le résultat de console.log(res)
-          this.token = res.data.session!.access_token; // Je stock la valeur du token retourné par supabase          
-          
-          if (this.token) {
-            sessionStorage.setItem('token', this.token); // set du token de session
-          }
-          this.router.navigate(['intranet']);          
-        } 
-        return res.data.user;
+          this.token = res.data.session!.access_token; // Je stock la valeur du token retourné par supabase
+
+          this.authId = res.data.user!.id; // j'attribue à la variable authId l'id de l'utilisateur (après son authentification)
+          //console.log(this.authUserId);          
+          //this.getAllData();
+          this.router.navigate(['intranet']);
+        }        
       })
       .catch((err) => {
         console.log(err);
         this.badLogin = true; // Pour gérer l'affichage d'une popup dans connexion.component.html
-        console.log(this.badLogin);        
-      });      
+        console.log(this.badLogin);
+      });
   }
 
-
-// Méthode pour reset le mot de passe et vérifier si l'email existe sur la table auth.users
-  async resetPasswordBis(email: string) {
+  // Méthode pour reset le mot de passe et vérifier si l'email existe sur la table auth.users - Pas utilisé pour le moment ( optionel)
+  async resetPasswordAndCheckEmail(email: string) {
     try {
       // Récupérez la liste des utilisateurs
       const response = await this.supabase.auth.admin.listUsers();
       const users = response.data.users;
       // La méthode find itère sur les éléments du tableau users pour comparer la valeur email (email en paramétre de ma fonction et email des users)
-      const checkEmail = users.find(user => user.email === email);
-      
+      const checkEmail = users.find((user) => user.email === email);
+
       if (checkEmail) {
-        console.log("email trouvé");
-      // Si l'email existe en BDD         
+        console.log('email trouvé');
+        // Si l'email existe en BDD
         const data = await this.supabase.auth.resetPasswordForEmail(email, {
           redirectTo: 'http://localhost:4200/reset',
-        });        
+        });
         return data;
       } else {
-      // L'utilisateur n'existe pas
-      console.log('Utilisateur non trouvé');
-      this.badEmail = true; // Pour la popup sur recovery.component.html
-      return null;
+        // L'utilisateur n'existe pas
+        console.log('Utilisateur non trouvé');
+        this.badEmail = true; // Pour la popup sur recovery.component.html
+        return null;
       }
-
     } catch (error) {
       console.error(error);
       return error;
-    }   
+    }
   }
 
   // Récupérer son mot de passe en cas de perte - Reset du Password
@@ -111,7 +105,7 @@ export class SupabaseService {
   // Récupérer les utilisateurs sur la table auth.users (table d'authentification de supabase)
   async listUser() {
     const response = await this.supabase.auth.admin.listUsers();
-    console.log('Méthode listUser - response.data.users', response.data.users);    
+    console.log('Méthode listUser - response.data.users', response.data.users);
     return response.data.users; // Retournez les données des utilisateurs
   }
 
@@ -228,36 +222,10 @@ export class SupabaseService {
 
   // Méthode pour récupérer les données d'un utilisateur identifié (sur la table auth)
   async getLoggedInUser() {
-    const { data: { user } } = await this.supabase.auth.getUser();
-    //console.log('Méthode getLoggedInUser : ', user);
+    const { data: {user} } = await this.supabase.auth.getUser();
+    console.log('Méthode getLoggedInUser : ', user);
     return user;
-  }
-
-  // Récupérer les utilisateurs sur la table public.utilisateur en comparant leur id
-  async getUtilisateurById(id: string) {
-    const data = await this.supabase
-      .from('utilisateur')
-      .select('*')
-      .eq('id', id);
-    //console.log('Méthode getUtilisateurById', data);
-    return data;
-  }
-
-  // Récupérer et comparer les rôles et utilisateurs sur la table attribuerRoles
-  async getRoleId(id: string) {
-    const data = await this.supabase
-      .from('attribuerRoles')
-      .select('*')
-      .eq('idUtilisateur', id);
-    return data;
-  }
-
-  // Récupérer les rôles sur la table roles en comparant leur id
-  async getRoleById(id: string) {
-    const data = await this.supabase.from('roles').select('*').eq('id', id);
-    //console.log("méthode getRoleById : ", data);
-    return data;
-  }
+  }  
 
   // Méthode pour update son profil en tant qu'utilisateur (sur la table utilisateur)
   async updateProfil(
@@ -277,13 +245,33 @@ export class SupabaseService {
       console.log(updateError);
     }
   }
+
+/* --------------------------- Code utilisé dans le service users.service.ts -------------------------- */
+
+  // Vérifier que supabase vérifie un token d'authentification - DANGER Sécurité !!
+  async getProfil(): Promise<any[]> {
+    try {
+      // Sur la table attribuerRoles je select les tables roles et utilisateur grâce à leur id qui sont en ForeignKeys
+      // Pour roles je récupére juste la donnée (role) - sur utilisateur je récupére toutes les données (*)
+      // Avec .eq je compare l'id à celui obtenu dans authId initialisé dans la méthode signIn
+      const { data, error } = await this.supabase
+        .from('attribuerRoles')
+        .select('roles(role),utilisateur(*)')
+        .eq('idUtilisateur', this.authId);
+
+      if (error) {
+        console.log(error);
+        throw new Error(
+          "Une erreur s'est produite lors de la récupération des données."
+        );
+      }
+      if (data) return data;
+
+      // Si data n'est pas défini, retourner un tableau vide par défaut
+      return [];
+    } catch (error) {
+      console.error("Une erreur s'est produite :", error);
+      throw error;
+    }
+  }
 }
-/* async getUserById(id: string) {
-  const { data, error } = await this.supabase.auth.admin.getUserById(id);
-  if (data) {
-    console.log("getUserById fonction ", data);
-  }
-  if (error) {
-    console.log(error);
-  }
-} */

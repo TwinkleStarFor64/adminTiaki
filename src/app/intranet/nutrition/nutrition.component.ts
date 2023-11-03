@@ -1,10 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { SupabaseService } from 'src/app/partage/services/supabase.service';
 
 @Component({
   selector: 'app-nutrition',
   templateUrl: './nutrition.component.html',
   styleUrls: ['./nutrition.component.scss']
 })
-export class NutritionComponent {
+export class NutritionComponent implements OnInit{
+  
+constructor() {
+  
+}
+
+ngOnInit(): void {
+  
+
+  
+}
+
+
+
+
+
+
+
+
 
 }

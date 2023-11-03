@@ -11,12 +11,13 @@ h1,h2,h3 {
     color: #805E96;    
 }
 
-main {
-    justify-content: center;      
-    section {
+section {
+    justify-content: center;         
+    div {
         //background-color: #FFF1C6;
         //height: 65vh;
-        //overflow-y: auto; 
+        //overflow-y: auto;
+        display: flex; 
         width: 60%;
         justify-content: space-around;        
         article {

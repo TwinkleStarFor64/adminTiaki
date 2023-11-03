@@ -1,20 +1,27 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { RoleData, UtilisateurData, UtilisateurI } from '../modeles/Types';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UsersService {
+export class UsersService implements OnInit {
   allUsersData: UtilisateurData[] = [];
   utilisateur: UtilisateurI[] = [];
   authUsers: UtilisateurI[] = [];
   selectedUsers: UtilisateurData[] = [];
+  user!: UtilisateurI;
+
+  
+
+  profil!: UtilisateurI;
 
   constructor(public supa: SupabaseService) {}
-  /*
-   * Méthode de récupération des utilisateurs
-   */
+
+  ngOnInit(): void {
+    
+  }
+
   async fetchUtilisateur() {
     const { data, error } = await this.supa.getUtilisateur();
     if (data) {
@@ -96,6 +103,31 @@ export class UsersService {
       );
     }
   }
-}
 
-// this.user = this.listeUser.find( u => u.id == this.id);
+  async fetchProfil() {
+    try {
+      // La méthode getProfil() récupére toutes les données utilisateurs et tout les rôles de l'utilisateur authentifié
+      const data = await this.supa.getProfil();
+      console.log("Data du profil", data);
+      if (Array.isArray(data)) {
+        this.profil = data[0]['utilisateur'];
+        this.profil.roles = [];
+        data.forEach((d) => {
+          if (!this.profil.roles!.includes(d.roles.role))
+            this.profil.roles = this.profil.roles!.concat(d.roles.role);
+        });
+      } else {
+        this.profil = {
+          id: data['id'],
+          nom: data['nom'],
+          prenom: data['prenom'],
+          email: data['email'],
+          roles: data['role'],
+        };
+      }
+      console.log("Profil", this.profil);
+    } catch (error) {
+      console.error("Une erreur s'est produite :", error);
+    }
+  }
+}
