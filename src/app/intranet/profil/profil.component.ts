@@ -38,10 +38,10 @@ export class ProfilComponent implements OnInit {
   
   // Méthode pour mettre à jour le profil - utilisé dans la modal de confirmation du formulaire
   async onSubmitForm() {    
-    try {      
-      // j'utilise l'id de l'user pour update son profil
-      await this.supa.updateProfil(this.users.profil.id,{nom:this.users.profil.nom, prenom:this.users.profil.prenom!, telephone:this.users.profil.telephone!});
-    
+    try {       
+        // j'utilise l'id de l'user pour update son profil
+        await this.supa.updateProfil(this.users.profil.id,{nom:this.users.profil.nom, prenom:this.users.profil.prenom!, telephone:this.users.profil.telephone!});
+            
       } catch (error) {
       console.error("Une erreur s'est produite :", error);
     }
