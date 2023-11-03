@@ -59,8 +59,7 @@
     <article>
       <h4>Informations du compte</h4>
       <p>Rôle(s) attribué(s) :</p>
-      <p>{{ users.profil.roles }}</p>
-      <p>{{ rolesConcatenated }}</p>
+      <p>{{ users.profil.roles }}</p>      
       <h4>Supprimer votre compte</h4>
       <p-button styleClass="p-button-help" (click)="DeleteDialog()">Supprimer</p-button>
     </article>
@@ -77,32 +76,3 @@
     <button type="button" class="rejectButton" pButton icon="pi pi-times" label="Non" (click)="cd.reject()"></button>
   </ng-template>
 </p-confirmDialog>
-
-
-
-
-
-
-
-<!-- <form>
-    <input name="truc" #ctlTruc="ngModel" >
-    <input type="text" name="muche" #ctlMuche="ngModel">
-    <span *ngIf="ctlTruc != ctlMuche">Les mots de passe doivent correspondre</span>
-</form> -->
-
-
-<!--  <form (ngSubmit)="ConfirmDialog()">
-        <span class="p-float-label">
-          <input pInputText type="text" name="nom" [(ngModel)]="nom" [pattern]="stringRegex" #uname="ngModel" required/>
-          <label htmlFor="nom">Nom</label>
-        </span>
-        <span class="p-float-label">
-          <input pInputText type="text" name="prenom" [(ngModel)]="prenom" [pattern]="stringRegex" #uname="ngModel" required/>
-          <label htmlFor="prenom">Prenom</label>
-        </span>
-        <span class="p-float-label">
-          <input pInputText type="text" name="telephone" [(ngModel)]="telephone" [pattern]="numberRegex" #uname="ngModel" required minlength="10"/>
-          <label htmlFor="telephone">Telephone</label>
-        </span>
-        <p-button id="buttonMdp" styleClass="p-button-help" type="submit" [disabled]="!uname.valid">Envoyer</p-button>
-      </form> -->

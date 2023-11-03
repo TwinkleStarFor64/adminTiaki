@@ -12,16 +12,14 @@ export class UsersService implements OnInit {
   selectedUsers: UtilisateurData[] = [];
   user!: UtilisateurI;
 
-  userData: any[] = []; // Un tableau d'objets
-  rolesArray: string[] = [];
-  rolesSet = new Set();
+  
 
   profil!: UtilisateurI;
 
   constructor(public supa: SupabaseService) {}
 
   ngOnInit(): void {
-    this.rolesArray = [];
+    
   }
 
   async fetchUtilisateur() {
@@ -108,7 +106,7 @@ export class UsersService implements OnInit {
 
   async fetchProfil() {
     try {
-      // La méthode getAllData() récupére toutes les données utilisateurs et tout leurs rôles
+      // La méthode getProfil() récupére toutes les données utilisateurs et tout les rôles de l'utilisateur authentifié
       const data = await this.supa.getProfil();
       console.log("Data du profil", data);
       if (Array.isArray(data)) {

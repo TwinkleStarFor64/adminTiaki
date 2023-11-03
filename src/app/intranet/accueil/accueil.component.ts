@@ -34,6 +34,6 @@ export class AccueilComponent implements OnInit {
   constructor(private router: Router, public supa: SupabaseService) {}
 
   async ngOnInit(): Promise<void> {
-    //this.supa.getUtilisateur();
+    
   }
 }

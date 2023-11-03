@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  AuthSession,
-  createClient,
-  SupabaseClient,
-} from '@supabase/supabase-js';
+import { AuthSession, createClient, SupabaseClient,} from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
 import { RoleData, UtilisateurData } from '../modeles/Types';
 import { Router } from '@angular/router';
@@ -21,7 +17,8 @@ export class SupabaseService {
   token!: string; // Utilisé dans la méthode signIn() pour stocker le token de l'utilisateur
   authId!: string; // Utilisé dans la méthode signIn() pour stocker l'id de l'utilisateur
   badEmail = false; // Utilisé dans la méthode resetPasswordBis() - utiliser pour une popup
-  badLogin = false; // Utilisé dans la méthode signIn() - utiliser pour une popup
+  badLogin = false; // Utilisé dans la méthode signIn() - utiliser pour une popup - Pas utilisé pour le moment ( optionel)
+
   constructor(private router: Router) {
     this.supabase = createClient(
       environment.supabaseUrl,
@@ -42,22 +39,11 @@ export class SupabaseService {
           // Je vérifie que le rôle et 'authenticated' dans supabase - voir le résultat de console.log(res)
           this.token = res.data.session!.access_token; // Je stock la valeur du token retourné par supabase
 
-          /* if (this.token) {
-            sessionStorage.setItem('token', this.token); // set du token de session
-          } */
-
           this.authId = res.data.user!.id; // j'attribue à la variable authId l'id de l'utilisateur (après son authentification)
-          //console.log(this.authUserId);
-          /* if (this.authId) {
-            // Je stock dans la session la valeur de l'id utilisateur
-            sessionStorage.setItem('authUserId', this.authId)
-          }
-
-           */
+          //console.log(this.authUserId);          
           //this.getAllData();
           this.router.navigate(['intranet']);
-        }
-        //return res.data.user;
+        }        
       })
       .catch((err) => {
         console.log(err);
@@ -66,8 +52,8 @@ export class SupabaseService {
       });
   }
 
-  // Méthode pour reset le mot de passe et vérifier si l'email existe sur la table auth.users
-  async resetPasswordBis(email: string) {
+  // Méthode pour reset le mot de passe et vérifier si l'email existe sur la table auth.users - Pas utilisé pour le moment ( optionel)
+  async resetPasswordAndCheckEmail(email: string) {
     try {
       // Récupérez la liste des utilisateurs
       const response = await this.supabase.auth.admin.listUsers();
@@ -236,38 +222,10 @@ export class SupabaseService {
 
   // Méthode pour récupérer les données d'un utilisateur identifié (sur la table auth)
   async getLoggedInUser() {
-    const {
-      data: { user },
-    } = await this.supabase.auth.getUser();
+    const { data: {user} } = await this.supabase.auth.getUser();
     console.log('Méthode getLoggedInUser : ', user);
     return user;
-  }
-
-  // Récupérer les utilisateurs sur la table public.utilisateur en comparant leur id
-  async getUtilisateurById(id: string) {
-    const data = await this.supabase
-      .from('utilisateur')
-      .select('*')
-      .eq('id', id);
-    //console.log('Méthode getUtilisateurById', data);
-    return data;
-  }
-
-  // Récupérer et comparer les rôles et utilisateurs sur la table attribuerRoles
-  async getRoleId(id: string) {
-    const data = await this.supabase
-      .from('attribuerRoles')
-      .select('*')
-      .eq('idUtilisateur', id);
-    return data;
-  }
-
-  // Récupérer les rôles sur la table roles en comparant leur id - obsoléte !!
-  async getRoleById(id: string) {
-    const data = await this.supabase.from('roles').select('*').eq('id', id);
-    //console.log("méthode getRoleById : ", data);
-    return data;
-  }
+  }  
 
   // Méthode pour update son profil en tant qu'utilisateur (sur la table utilisateur)
   async updateProfil(
@@ -288,11 +246,14 @@ export class SupabaseService {
     }
   }
 
+/* --------------------------- Code utilisé dans le service users.service.ts -------------------------- */
+
   // Vérifier que supabase vérifie un token d'authentification - DANGER Sécurité !!
   async getProfil(): Promise<any[]> {
     try {
       // Sur la table attribuerRoles je select les tables roles et utilisateur grâce à leur id qui sont en ForeignKeys
       // Pour roles je récupére juste la donnée (role) - sur utilisateur je récupére toutes les données (*)
+      // Avec .eq je compare l'id à celui obtenu dans authId initialisé dans la méthode signIn
       const { data, error } = await this.supabase
         .from('attribuerRoles')
         .select('roles(role),utilisateur(*)')
@@ -306,7 +267,7 @@ export class SupabaseService {
       }
       if (data) return data;
 
-      // Si data n'est pas défini, retournez un tableau vide par défaut
+      // Si data n'est pas défini, retourner un tableau vide par défaut
       return [];
     } catch (error) {
       console.error("Une erreur s'est produite :", error);
