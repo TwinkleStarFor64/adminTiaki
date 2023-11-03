@@ -7,9 +7,11 @@ import { RoleData, UserCreationResponse, UtilisateurData, UtilisateurI } from '.
 })
 export class UsersService implements OnInit {
   allUsersData: UtilisateurData[] = [];
-  utilisateur: UtilisateurI[] = [];
+  // utilisateur: UtilisateurI[] = []; // 
+  listeUtilisateurs:Array<UtilisateurI> = [];
   authUsers: UtilisateurI[] = [];
   selectedUsers: UtilisateurData[] = [];
+<<<<<<< HEAD
   rolesArray=[];
   profil!:UtilisateurI;
   userData!:any;
@@ -18,12 +20,20 @@ export class UsersService implements OnInit {
   ngOnInit(): void {
     this.rolesArray = [];
   
+=======
+  profil!:UtilisateurI;
+
+  constructor(public supa: SupabaseService) {}
+
+  ngOnInit(): void {
+ 
+>>>>>>> 86ad3c9e49a7d67499d7368ba14c82b5e217d3b1
   }
 
-  async fetchUtilisateur() {
-    const { data, error } = await this.supa.getUtilisateur();
+  async fetchListeUtilisateurs() {
+    const { data, error } = await this.supa.getListeUtilisateurs();
     if (data) {
-      this.utilisateur = data.map((item: { [x: string]: any }) => ({
+      this.listeUtilisateurs = data.map((item: { [x: string]: any }) => ({
         id: item['id'],
         email: item['email'],
         nom: item['nom'],
@@ -97,6 +107,7 @@ export class UsersService implements OnInit {
       const data = await this.supa.getProfil();
       console.log("Data du profil", data);
       if (Array.isArray(data)) {
+        console.log("Profil data", data);
         this.profil = data[0]['utilisateur'];
         this.profil.roles = [];
         data.forEach((d) => {
@@ -117,4 +128,26 @@ export class UsersService implements OnInit {
       console.error("Une erreur s'est produite :", error);
     }
   }
+  // async createUser(formData: any): Promise<UserCreationResponse | undefined> {
+
+  //   try {
+  //     const response = await this.supa.(formData);
+  
+  //     if (response) {
+  //       const data = response;
+  //       console.log('Nouveaux utilisateurs créés :', data);
+  
+  //       // Vous pouvez effectuer des actions supplémentaires ici si nécessaire.
+  
+  //       return data;
+  //     } else {
+  //       console.error('Aucune donnée renvoyée lors de la création de l\'utilisateur');
+  //       throw new Error('Erreur lors de la création de l\'utilisateur');
+  //     }
+  //   } catch (error) {
+  //     console.error('Erreur lors de la création de l\'utilisateur :', error);
+  //     throw error;
+  //   }
+  // }
+  
 }

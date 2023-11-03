@@ -17,6 +17,7 @@ export interface UtilisateurI {
     prenom?:string;
     telephone?:string;
     roles?: Array<string>;
+    selected?: boolean;
 }
 
 export interface UtilisateurData {

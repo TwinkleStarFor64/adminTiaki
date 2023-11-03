@@ -9,7 +9,7 @@ export const adminGuard: CanActivateFn = (route, state) => {
   //const isAdmin = usersService.rolesArray.includes('Administrateur');
   const isAdmin = usersService.profil.roles!.includes('Administrateur');
 
-  if (isAdmin ) {
+  if (isAdmin) {
     console.log("j'ai le bon rôle", usersService.profil.roles);      
     return true;
   } else {

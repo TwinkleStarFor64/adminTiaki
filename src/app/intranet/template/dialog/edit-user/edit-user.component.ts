@@ -11,10 +11,12 @@ import { UsersService } from 'src/app/partage/services/users.service';
   styleUrls: ['./edit-user.component.scss'],
 })
 export class EditUserComponent implements OnInit {
-  @Input() email!: string;
-  @Input() nom!: string;
-  @Input() role!: string;
-  @Input() prenom!: string;
+  // @Input() email!: string;
+  // @Input() nom!: string;
+  // @Input() role!: string;
+  // @Input() prenom!: string;
+  @Input() user!:UtilisateurI;
+  @Input() index!:number;
   @ViewChild('confirmDialog') confirmDialog: any;
 
   confirmDialogVisible = false;
@@ -37,23 +39,23 @@ export class EditUserComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    this.users.fetchUtilisateur(),
-      this.stringRegex = /^[a-zA-Z ]*$/;
-    this.passwordRegex = /^[A-Za-z0-9]{6,}$/;
-    this.numberRegex = /^[0-9]*$/;
-    this.emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    this.editForm = this.formbuilder.group({
-      nom: ['', [Validators.required, Validators.pattern(this.stringRegex)]],
-      prenom: ['', [Validators.required, Validators.pattern(this.stringRegex)]],
-      email: ['', [Validators.required, Validators.pattern(this.emailRegex)]],
-    });
-    if (this.email && this.nom && this.prenom && this.role) {
-      this.editForm.patchValue({
-        nom: this.nom,
-        prenom: this.prenom,
-        email: this.email,
-      });
-    }
+    // this.users.fetchListeUtilisateurs(),
+    // this.stringRegex = /^[a-zA-Z ]*$/;
+    // this.passwordRegex = /^[A-Za-z0-9]{6,}$/;
+    // this.numberRegex = /^[0-9]*$/;
+    // this.emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // this.editForm = this.formbuilder.group({
+    //   nom: ['', [Validators.required, Validators.pattern(this.stringRegex)]],
+    //   prenom: ['', [Validators.required, Validators.pattern(this.stringRegex)]],
+    //   email: ['', [Validators.required, Validators.pattern(this.emailRegex)]],
+    // });
+    // if (this.email && this.nom && this.prenom && this.role) {
+    //   this.editForm.patchValue({
+    //     nom: this.nom,
+    //     prenom: this.prenom,
+    //     email: this.email,
+    //   });
+    // }
   }
 
   showDialog(user: UtilisateurI) {
@@ -73,7 +75,7 @@ export class EditUserComponent implements OnInit {
     console.log('La méthode onSelect', this.utilisateur);
 
     this.supa
-      .updateUser(
+      .updateProfil(
         this.utilisateur,
         this.editForm.value
       )
