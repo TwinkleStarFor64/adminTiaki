@@ -46,7 +46,7 @@
               <figure><img src="assets/images/icones/gestion-utilisateur/coeur.png" alt="favoris"></figure>
             </td>
             <td>
-              <figure (click)="openEditUserModal(user, i)" ><img src="assets/images/icones/gestion-utilisateur/editer.png" alt=""></figure>
+              <figure (click)="editUser(user)" ><img src="assets/images/icones/gestion-utilisateur/editer.png" alt=""></figure>
             </td>
             <td>
               <figure (click)="openDeleteDataModal(user)"><img
@@ -55,10 +55,22 @@
           </tr>
         </tbody>
       </table>
+      <section *ngIf="selectedUserForEdit">
+        <div>
+          <label for="nom">Nom:</label>
+          <input type="text" id="nom" [ngModel]="selectedUserForEdit ? selectedUserForEdit.nom : ''" (ngModelChange)="selectedUserForEdit && (selectedUserForEdit.nom = $event)" />
+        </div>
+        <div>
+          <label for="email">Email:</label>
+          <input type="text" id="email" [ngModel]="selectedUserForEdit ? selectedUserForEdit.email : ''" (ngModelChange)="selectedUserForEdit && (selectedUserForEdit.email = $event)" />
+        </div>
+        <div *ngFor="let role of (selectedUserForEdit ? selectedUserForEdit.roles : [])">
+          <input type="checkbox" [ngModel]="selectedUserForEdit && selectedUserForEdit.selectedRoles && selectedUserForEdit.selectedRoles[role]" (ngModelChange)="selectedUserForEdit && selectedUserForEdit.selectedRoles && (selectedUserForEdit.selectedRoles[role] = $event)" /> {{ role }}
+        </div>
+        <button (click)="updateUser()">Enregistrer</button>
+      </section>
     </article>
     <button class="erased" pButton *ngIf="selectedUsers.length > 0" (click)="deleteSelectedUsers()" label="Supprimer les utilisateurs sélectionnés"></button>
-    <section >
-    </section>
   <app-delete-data></app-delete-data>
   <!-- <app-edit-user></app-edit-user> -->
   <app-donnees-medicales></app-donnees-medicales>

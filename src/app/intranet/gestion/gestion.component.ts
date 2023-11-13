@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   UtilisateurI,
-  RoleData,
 } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { ConfirmationService } from 'primeng/api';
@@ -29,7 +28,7 @@ export class GestionComponent implements OnInit {
   currentPage = 0;
   sortOrder: 'asc' | 'desc' = 'asc';
   selectedUserForEdit: UtilisateurI | null = null;
-
+  showUserEditSection: boolean = false;
   @ViewChild(EditUserComponent, { static: false }) editUserComponent:
     | EditUserComponent
     | undefined;
@@ -210,19 +209,24 @@ export class GestionComponent implements OnInit {
     }
   }
 
-  //Ouverture de la modal edition
-  openEditUserModal(user: UtilisateurI, i:number) {
-    // this.editUserComponent!.showDialog(user);
-    // if (this.editUserComponent) {
-    //   this.editUserComponent. = user.email || '';
-    //   this.editUserComponent.nom = user.nom || '';
-    //   this.editUserComponent.prenom = user.prenom || '';
-    //   this.editUserComponent.showDialog(user);
-    // } else {
-    //   console.error(
-    //     "this.editUserComponent n'est pas défini. Assurez-vous qu'il est correctement initialisé."
-    //   );
-    // }
+  // Une méthode pour éditer un utilisateur
+  editUser(user: UtilisateurI) {
+    this.selectedUserForEdit = user;
+    this.selectedUserForEdit.selectedRoles = {};
+    this.showUserEditSection = true;
+    if (this.selectedUserForEdit.roles) {
+        for (const role of this.selectedUserForEdit.roles) {
+            this.selectedUserForEdit.selectedRoles[role] = false;
+        }
+    }
+    // Ouvrir votre modal d'édition avec les données peuplées.
+}
+
+  // Méthode pour mettre à jour un utilisateur
+  updateUser() {
+    if (this.selectedUserForEdit) {
+      console.log('Utilisateur mis à jour :', this.selectedUserForEdit);
+    }
   }
   //Methodes pour filtrer par les inputs
   onFilterChange() {

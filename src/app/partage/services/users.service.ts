@@ -1,16 +1,16 @@
 import { Injectable, OnInit } from '@angular/core';
 import { SupabaseService } from './supabase.service';
-import { RoleData, UserCreationResponse, UtilisateurData, UtilisateurI } from '../modeles/Types';
+import {  UtilisateurI } from '../modeles/Types';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UsersService implements OnInit {
-  allUsersData: UtilisateurData[] = [];
+  allUsersData: UtilisateurI[] = [];
   // utilisateur: UtilisateurI[] = []; // 
   listeUtilisateurs:Array<UtilisateurI> = [];
   authUsers: UtilisateurI[] = [];
-  selectedUsers: UtilisateurData[] = [];
+  selectedUsers: UtilisateurI[] = [];
   user!: UtilisateurI;
 
   
@@ -61,23 +61,20 @@ export class UsersService implements OnInit {
 
   async fetchAllUsersWithRoles() {
     try {
-      const usersWithRolesData: UtilisateurData[] =
-        await this.supa.getAllUsersWithRoles();
+      const usersWithRolesData: UtilisateurI[] = await this.supa.getAllUsersWithRoles();
       if (usersWithRolesData !== undefined) {
-        // Vérification de nullité
         this.allUsersData = usersWithRolesData.map((item) => ({
           id: item.id,
           email: item.email,
           nom: item.nom,
-          roles: item.roles,
+          roles: item.roles ? item.roles.map((role: any) => role.role) : [], 
           selected: false,
         }));
-
-        // Afficher les utilisateurs avec leurs emails et rôles dans la console
+  
         this.allUsersData.forEach((user) => {
-          const allRoles = user.roles
-            .map((role: RoleData) => role.role)
-            .join(', ');
+          if (user.roles) {
+            const allRoles = user.roles.join(', '); 
+          }
         });
         return;
       } else {
@@ -93,6 +90,8 @@ export class UsersService implements OnInit {
       );
     }
   }
+  
+  
 
   async fetchProfil() {
     try {

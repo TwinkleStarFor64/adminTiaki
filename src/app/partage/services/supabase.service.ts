@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthSession, createClient, SupabaseClient,} from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
-import { RoleData, UserCreationResponse, UtilisateurData } from '../modeles/Types';
+import { UserCreationResponse, UtilisateurI } from '../modeles/Types';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -9,8 +9,6 @@ import { Router } from '@angular/router';
 })
 export class SupabaseService {
   private supabase: SupabaseClient; // Instance du client Supabase
-  public utilisateurData: UtilisateurData[] = [];
-  public roleData: RoleData[] = [];
   _session: AuthSession | null = null; // Session d'authentification
 
   user: any; // Utilisé dans la méthode signIn()
@@ -152,7 +150,7 @@ export class SupabaseService {
   }
 
   // Méthode pour récupérer les utilisateurs et leur rôles
-  async getAllUsersWithRoles(): Promise<UtilisateurData[]> {
+  async getAllUsersWithRoles(): Promise<UtilisateurI[]> {
     // Récupérez uniquement l'email et le nom des utilisateurs depuis la table utilisateur.
     const { data: utilisateursData, error: utilisateursError } =
       await this.supabase.from('utilisateur').select('id,  email, nom'); // Incluez le champ "id" pour l'utilisateur.
@@ -164,7 +162,7 @@ export class SupabaseService {
       );
     }
     // Récupérez les rôles associés à chaque utilisateur depuis la table attribuerRoles.
-    for (const utilisateur of utilisateursData as UtilisateurData[]) {
+    for (const utilisateur of utilisateursData as UtilisateurI[]) {
       // Utilisez le type correct - interface UtilisateurData
       const idUtilisateur = utilisateur.id; // Contient l'id des utilisateurs de la table utilisateur
       //console.log("idUtilisateur", idUtilisateur);
@@ -202,20 +200,53 @@ export class SupabaseService {
       }
 
       // Ajoutez les détails des rôles à l'objet utilisateur.
-      utilisateur.roles = rolesDetailsData as RoleData[]; // Utilisez le type correct - interface RoleData
+      utilisateur.roles = rolesDetailsData ; // Utilisez le type correct - interface RoleData
       //console.log("utilisateurs.roles ici : ", utilisateur.roles);
     }
     // Les utilisateurs avec email, nom et rôles sont maintenant dans utilisateursData.
     //console.log('Utilisateurs avec email, nom et rôles :', utilisateursData);
     // Pour afficher les rôles, vous pouvez utiliser une boucle ou une fonction map.
-    for (const utilisateur of utilisateursData as UtilisateurData[]) {
-      // Utilisez le type correct - interface RoleData
-      const roles = utilisateur.roles
-        .map((nomRole: RoleData) => nomRole.role)
-        .join(', ');
-      // console.log(`Rôles de ${utilisateur.nom}: ${roles}`);
-    }
-    return utilisateursData as UtilisateurData[];
+    for (const utilisateur of utilisateursData as UtilisateurI[]) {
+      const idRoles: string[] = [];
+      
+      const { data: rolesData, error: rolesError } = await this.supabase
+          .from('attribuerRoles')
+          .select('idRole')
+          .eq('idUtilisateur', utilisateur.id);
+  
+      if (rolesError) {
+          console.error(
+              "Erreur lors de la récupération des rôles de l'utilisateur :",
+              rolesError
+          );
+          continue;
+      }
+  
+      if (rolesData) {
+          rolesData.forEach((entry: any) => {
+              idRoles.push(entry.idRole);
+          });
+  
+          const { data: rolesDetailsData, error: rolesDetailsError } =
+              await this.supabase.from('roles').select('*').in('id', idRoles);
+  
+          if (rolesDetailsError) {
+              console.error(
+                  'Erreur lors de la récupération des détails des rôles :',
+                  rolesDetailsError
+              );
+              continue;
+          }
+  
+          if (rolesDetailsData) {
+              const roles: string[] = rolesDetailsData.map((role: any) => role.role);
+              utilisateur.roles = roles;
+              console.log(`Rôles de ${utilisateur.nom}: ${roles.join(', ')}`);
+          }
+      }
+  }
+  
+  return utilisateursData as UtilisateurI[];
   }
 
   /* ----------------------------- Code pour la page profil utilisateur ---------------------------- */

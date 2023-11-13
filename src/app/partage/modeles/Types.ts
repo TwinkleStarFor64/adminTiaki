@@ -14,23 +14,24 @@ export interface UtilisateurI {
     id: string;
     email: string;
     nom: string;
-    prenom?:string;
-    telephone?:string;
+    prenom?: string;
+    telephone?: string;
     roles?: Array<string>;
+    selectedRoles?: { [key: string]: boolean };
     selected?: boolean;
-}
-
-export interface UtilisateurData {
-    id: any;
-    email: string;
-    nom: string;
-    roles: RoleData[];
-    selected?: boolean; 
-}
+  }
+  
+// export interface UtilisateurData {
+//     id: any;
+//     email: string;
+//     nom: string;
+//     roles: RoleData[];
+//     selected?: boolean; 
+// }
 
 export interface RoleData {
-  id: number;
-  role: string;
+  name: string;
+  selected: boolean;
 }
 
 export interface UserCreationResponse {
