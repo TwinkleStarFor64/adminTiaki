@@ -13,6 +13,8 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast'; // Pour les pop-up de MessageService
+import { HttpClientModule } from '@angular/common/http';
+import { DonneesService } from '../partage/services/donnees.service';
 
 
 @NgModule({
@@ -34,9 +36,13 @@ import { ToastModule } from 'primeng/toast'; // Pour les pop-up de MessageServic
     ButtonModule,
     InputTextModule,
     ConfirmDialogModule,    
-    ToastModule
-    
+    ToastModule,
+    HttpClientModule,
+     
   ],
+  providers: [
+    DonneesService,
+  ]
  
 })
 export class IntranetModule { }
