@@ -1,17 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { RoleData, UtilisateurI } from 'src/app/partage/modeles/Types';
+import { UtilisateurI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { UsersService } from 'src/app/partage/services/users.service';
-import {
-  ConfirmationService,
-  ConfirmEventType,
-  MessageService,
-} from 'primeng/api';
+import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 
 @Component({
@@ -21,13 +12,8 @@ import { Router } from '@angular/router';
   providers: [ConfirmationService, MessageService], // Pour les modals PrimeNG
 })
 export class ProfilComponent implements OnInit {
-  utilisateur: UtilisateurI[] = [];
-  role: RoleData[] = [];
 
-  idRole!: string; // Utiliser dans la méthode getUserProfil()
-  rolesConcatenated: string = ''; // Utiliser dans la méthode getUserProfil() pour afficher les rôles dans le front-end
-
-  profilForm!: FormGroup;
+  utilisateur: UtilisateurI[] = [];  
 
   stringRegex!: RegExp;
   numberRegex!: RegExp;
@@ -38,8 +24,7 @@ export class ProfilComponent implements OnInit {
 
   constructor(
     public supa: SupabaseService,
-    public users: UsersService,
-    private formbuilder: FormBuilder,
+    public users: UsersService,    
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private router: Router
@@ -52,13 +37,11 @@ export class ProfilComponent implements OnInit {
   }
   
   // Méthode pour mettre à jour le profil - utilisé dans la modal de confirmation du formulaire
-  async onSubmitForm() {
-    console.log(this.profilForm.value);
-    try {
-      
-      // j'utilise l'id de l'user pour update son profil
-      await this.supa.updateProfil(this.users.profil.id,{nom:this.users.profil.nom, prenom:this.users.profil.prenom!, telephone:this.users.profil.telephone!});
-    
+  async onSubmitForm() {    
+    try {       
+        // j'utilise l'id de l'user pour update son profil
+        await this.supa.updateProfil(this.users.profil.id,{nom:this.users.profil.nom, prenom:this.users.profil.prenom!, telephone:this.users.profil.telephone!});
+            
       } catch (error) {
       console.error("Une erreur s'est produite :", error);
     }
@@ -91,13 +74,7 @@ export class ProfilComponent implements OnInit {
               detail: 'Vous avez annuler',
             });
             console.log('Non a été cliqué, la modal sera simplement fermée.');
-            // Si j'annule les modifications je reviens aux valeurs initiales du formulaires            
-            this.profilForm.setValue({
-              nom: this.utilisateur[0]?.nom,
-              prenom: this.utilisateur[0]?.prenom,
-              telephone: this.utilisateur[0]?.telephone,
-              email: this.utilisateur[0]?.email
-             });                             
+            // Si j'annule les modifications je reviens aux valeurs initiales du formulaires                                        
             break;
           case ConfirmEventType.CANCEL:
             this.messageService.add({
@@ -107,13 +84,7 @@ export class ProfilComponent implements OnInit {
               detail: 'Vous avez annuler',
             });
             console.log('Annulation');
-            // Si j'annule les modifications je reviens aux valeurs initiales du formulaires 
-            this.profilForm.setValue({
-              nom: this.utilisateur[0]?.nom,
-              prenom: this.utilisateur[0]?.prenom,
-              telephone: this.utilisateur[0]?.telephone,
-              email: this.utilisateur[0]?.email
-             });            
+            // Si j'annule les modifications je reviens aux valeurs initiales du formulaires                       
             break;
         }
       },
