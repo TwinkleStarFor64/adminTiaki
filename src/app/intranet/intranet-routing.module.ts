@@ -4,6 +4,9 @@ import { IntranetComponent } from './intranet.component';
 import { AccueilComponent } from './accueil/accueil.component';
 import { ProfilComponent } from './profil/profil.component';
 import { adminGuard } from '../guards/admin.guard';
+import { redacteurOptoGuard } from '../guards/redacteur-opto.guard';
+import { redacteurKineGuard } from '../guards/redacteur-kine.guard';
+import { redacteurNutrtionGuard } from '../guards/redacteur-nutrtion.guard';
 
 const routes: Routes = [
   {
@@ -14,23 +17,25 @@ const routes: Routes = [
       { path: 'profil', component: ProfilComponent },      
       {
         path: 'kine',
-        canActivate: [adminGuard],
+        canActivate: [redacteurKineGuard],
         loadChildren: () =>
           import('./kine/kine.module').then((m) => m.KineModule)
       },
       {
         path: 'opto',
+        canActivate: [redacteurOptoGuard],        
         loadChildren: () =>
           import('./opto/opto.module').then((m) => m.OptoModule) 
       },
       { 
         path: 'nutrition',
+        canActivate: [redacteurNutrtionGuard],
         loadChildren: () =>
           import('./nutrition/nutrition.module').then((m) => m.NutritionModule),
       },
-
       {
         path: 'gestion',
+        canActivate: [adminGuard],
         loadChildren: () =>
           import('./gestion/gestion.module').then((m) => m.GestionModule),
       },
