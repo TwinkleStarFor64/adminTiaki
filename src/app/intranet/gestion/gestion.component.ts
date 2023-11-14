@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import {
   UtilisateurI,
 } from 'src/app/partage/modeles/Types';
@@ -19,6 +19,7 @@ import { GestionUtilisateursPipe } from 'src/app/pipes/gestion-utilisateurs.pipe
 export class GestionComponent implements OnInit {
   utilisateur: UtilisateurI[] = [];
   selectedUsers: UtilisateurI[] = [];
+  tableauUtilisateurs: UtilisateurI[] = [];
   selectedUtilisateur!: string;
   formGroup: FormGroup | undefined;
   nomFiltre: string = '';
@@ -29,74 +30,51 @@ export class GestionComponent implements OnInit {
   sortOrder: 'asc' | 'desc' = 'asc';
   selectedUserForEdit: UtilisateurI | null = null;
   showUserEditSection: boolean = false;
+
+
   @ViewChild(EditUserComponent, { static: false }) editUserComponent:
     | EditUserComponent
     | undefined;
   @ViewChild(DonneesMedicalesComponent, { static: false })
   donneesMedicalComponent: DonneesMedicalesComponent | undefined;
 
-  //Modal édition de l'utilisateur
-  openEditModal(user: UtilisateurI, index:number): void {
-    // if (editComponent) {
-    //   editComponent.email = user.email || '';
-    //   editComponent.nom = user.nom || '';
-    //   editComponent.prenom = user.prenom || '';
-    //   editComponent.showDialog(user);
-    // } else {
-    //   console.error("Le composant d'édition n'est pas défini.");
-    // }
-  }
 
-  async openMedModal(user: UtilisateurI) {
-    if (user && user.email) {
-      if (this.donneesMedicalComponent) {
-        this.donneesMedicalComponent.email = user.email;
-        this.donneesMedicalComponent.nom = user.nom || '';
-        this.donneesMedicalComponent.prenom = user.prenom || '';
-        this.donneesMedicalComponent.telephone = user.telephone
-          ? String(user.telephone)
-          : '';
-        this.donneesMedicalComponent.showDialog(user);
-      } else {
-        console.error(
-          "this.donneesMedicalComponent n'est pas défini. Assurez-vous qu'il est correctement initialisé."
-        );
-      }
-    } else {
-      console.error(
-        "L'objet utilisateur (user) est indéfini ou n'a pas de propriété 'email'."
-      );
-    }
-  }
 
   constructor(
     public confirmationService: ConfirmationService,
     public supa: SupabaseService,
-    public users: UsersService
-  ) {}
+    public users: UsersService,
+    private cdRef: ChangeDetectorRef,
 
-  async ngOnInit(): Promise<void> {
-    this.users.fetchListeUtilisateurs(); // Récupérer la liste des utilisateurs
-    try {
-      await Promise.all([
-        this.users.fetchAuthUsers(),
-        this.users.fetchAllUsersWithRoles(),
-        this.supa.fetchAttribuerRoles(),
-        this.supa.getAllUsersWithRoles(),
-        // this.supa.getProfil()
-      ]);
+  ) { }
 
-      this.users.allUsersData = this.users.allUsersData.map((user) => ({
-        ...user,
-        selected: false,
-      }));
-      console.log("aaaahh:", this.users.listeUtilisateurs);
-      
-      this.filteredUtilisateurs = this.users.listeUtilisateurs;
-    } catch (error) {
-      console.error("Erreur lors de l'initialisation :", error);
+
+
+
+    async ngOnInit(): Promise<void> {
+      try {
+        await this.users.fetchListeUtilisateurs(); // Récupérer la liste des utilisateurs
+        await Promise.all([
+          // ... Autres appels de méthodes pour récupérer les données
+          this.users.fetchAuthUsers(),
+          this.users.fetchAllUsersWithRoles(),
+          this.supa.fetchAttribuerRoles(),
+          this.supa.getAllUsersWithRoles(),
+          console.log("getAllUsersWithRoles",this.supa.getAllUsersWithRoles()),
+          console.log("fetchAllUsersWithRoles",this.users.fetchAllUsersWithRoles()),
+          console.log("fetchAttribuerRoles",this.supa.fetchAttribuerRoles()),
+          
+          
+        ]);
+  
+
+        this.tableauUtilisateurs = this.users.allUsersData;
+  
+      } catch (error) {
+        console.error("Erreur lors de l'initialisation :", error);
+      }
+      this.updateFilteredUsers();
     }
-  }
 
   ngAfterViewInit(user: UtilisateurI): void {
     if (user && user.email) {
@@ -116,8 +94,16 @@ export class GestionComponent implements OnInit {
     }
   }
 
-  getRolesText(user: UtilisateurI): string {
-    return user.roles!.map((allRole: any) => allRole.role).join(', ');
+
+
+
+  updateFilteredUsers() {
+    this.filteredUtilisateurs = this.filterUsers(
+      this.users.allUsersData,
+      this.nomFiltre.toLowerCase(),
+      this.emailFiltre.toLowerCase(),
+      this.roleFiltre.toLowerCase()
+    );
   }
 
   openDeleteDataModal(user: UtilisateurI) {
@@ -135,7 +121,7 @@ export class GestionComponent implements OnInit {
     });
   }
 
-//supprimer un utilisateur en fonction de son ID.
+  //supprimer un utilisateur en fonction de son ID.
   async deleteUserById(users: UtilisateurI): Promise<any> {
     this.selectedUtilisateur = users.id;
     console.log('La méthodedeleteUserById', this.selectedUtilisateur);
@@ -194,7 +180,6 @@ export class GestionComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       accept: async () => {
         for (const user of this.selectedUsers) {
-          //await this.onSelect(user);
           this.removeUserById(user.id); // Retirez l'utilisateur supprimé de la liste
         }
         this.selectedUsers = [];
@@ -215,12 +200,12 @@ export class GestionComponent implements OnInit {
     this.selectedUserForEdit.selectedRoles = {};
     this.showUserEditSection = true;
     if (this.selectedUserForEdit.roles) {
-        for (const role of this.selectedUserForEdit.roles) {
-            this.selectedUserForEdit.selectedRoles[role] = false;
-        }
+      for (const role of this.selectedUserForEdit.roles) {
+        this.selectedUserForEdit.selectedRoles[role] = false;
+      }
     }
     // Ouvrir votre modal d'édition avec les données peuplées.
-}
+  }
 
   // Méthode pour mettre à jour un utilisateur
   updateUser() {
@@ -230,37 +215,36 @@ export class GestionComponent implements OnInit {
   }
   //Methodes pour filtrer par les inputs
   onFilterChange() {
+    const nomFiltreLower = this.nomFiltre.toLowerCase();
+    const emailFiltreLower = this.emailFiltre.toLowerCase();
+    const roleFiltreLower = this.roleFiltre.toLowerCase();
+
     this.filteredUtilisateurs = this.filterUsers(
       this.users.listeUtilisateurs,
-      this.nomFiltre,
-      this.emailFiltre,
-      this.roleFiltre,  
-      );
-      console.log('this.allUsersData', this.users.allUsersData);
-      console.log('this.nomFiltre', this.nomFiltre);
+      nomFiltreLower,
+      emailFiltreLower,
+      roleFiltreLower
+    );
+    this.updateFilteredUsers();
+    console.log('Après filtre - filteredUtilisateurs:', this.filteredUtilisateurs);
   }
-  
+
+
   filterUsers(
     users: UtilisateurI[],
     nomFiltre: string,
     emailFiltre: string,
-    roleFiltre: string,
-
+    roleFiltre: string
   ): UtilisateurI[] {
     return users.filter((user) => {
-      const nomMatch = nomFiltre
-        ? user.nom?.toLowerCase().includes(nomFiltre.toLowerCase())
-        : true;
-      const emailMatch = emailFiltre
-        ? user.email?.toLowerCase().includes(emailFiltre.toLowerCase())
-        : true;
-      const roleMatch = roleFiltre
-        ? this.getRolesText(user)?.toLowerCase().includes(roleFiltre.toLowerCase())
-        : true;
-    
+      const nomMatch = !nomFiltre || user.nom?.toLowerCase().includes(nomFiltre);
+      const emailMatch = !emailFiltre || user.email?.toLowerCase().includes(emailFiltre);
+      const roleMatch = !roleFiltre || user.roles?.includes(roleFiltre);
       return nomMatch && emailMatch && roleMatch;
     });
   }
+
+
   clearFilters() {
     this.nomFiltre = '';
     this.emailFiltre = '';

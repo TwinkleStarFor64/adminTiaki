@@ -12,16 +12,14 @@ export class UsersService implements OnInit {
   authUsers: UtilisateurI[] = [];
   selectedUsers: UtilisateurI[] = [];
   user!: UtilisateurI;
-
+  filteredUtilisateurs: UtilisateurI[] = [];
   
 
   profil!: UtilisateurI;
 
   constructor(public supa: SupabaseService) {}
 
-  ngOnInit(): void {
-    
-  }
+  ngOnInit(): void {}
 
   async fetchListeUtilisateurs() {
     const { data, error } = await this.supa.getListeUtilisateurs();
@@ -31,6 +29,7 @@ export class UsersService implements OnInit {
         email: item['email'],
         nom: item['nom'],
       }));
+      this.filteredUtilisateurs = this.listeUtilisateurs; 
     }
     if (error) {
       console.log(error);
@@ -61,23 +60,36 @@ export class UsersService implements OnInit {
 
   async fetchAllUsersWithRoles() {
     try {
-      const usersWithRolesData: UtilisateurI[] = await this.supa.getAllUsersWithRoles();
-      if (usersWithRolesData !== undefined) {
-        this.allUsersData = usersWithRolesData.map((item) => ({
-          id: item.id,
-          email: item.email,
-          nom: item.nom,
-          roles: item.roles ? item.roles.map((role: any) => role.role) : [], 
-          selected: false,
-        }));
+      // Remplacez cette ligne par votre logique pour récupérer tous les utilisateurs avec leurs rôles
+      const data: any = await this.supa.getAllUsersWithRoles();
+      console.log("data de getAllUsersWithRoles", data);
   
-        this.allUsersData.forEach((user) => {
-          if (user.roles) {
-            const allRoles = user.roles.join(', '); 
-          }
+      if (Array.isArray(data)) {
+        // Logique pour traiter les données si elles sont un tableau
+        this.allUsersData = data.map((item: any) => {
+          console.log('Roles dans item :', item.roles); // Ajoutez le journal ici
+  
+          // Utilisez Object.keys pour obtenir les clés du tableau item.roles
+          const rolesKeys = Object.keys(item.roles);
+  
+          // Utilisez les clés pour accéder aux valeurs et les placer dans un tableau
+          const rolesArray = rolesKeys.map((key) => item.roles[key]);
+  
+          return {
+            id: item.id,
+            email: item.email,
+            nom: item.nom,
+            roles: rolesArray,
+            selected: false,
+          };
         });
+  
+        // Logique pour traiter les données
+        console.log('Données récupérées avec succès dans fetchAllUsersWithRoles :', this.allUsersData);
+  
         return;
       } else {
+        // Logique pour traiter les données si elles ne sont pas un tableau
         throw new Error('Aucune donnée utilisateur et rôles disponibles');
       }
     } catch (error) {
@@ -90,6 +102,9 @@ export class UsersService implements OnInit {
       );
     }
   }
+  
+  
+ 
   
   
 

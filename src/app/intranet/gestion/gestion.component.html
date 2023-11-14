@@ -17,9 +17,9 @@
 </header>
 <section>
   <article class="search">   
-    <input type="text" [(ngModel)]="nomFiltre" (input)="onFilterChange()" placeholder="Nom" pInputText >
-    <input type="text" [(ngModel)]="emailFiltre" (input)="onFilterChange()" placeholder="Email" pInputText >
-    <input type="text" [(ngModel)]="roleFiltre"(input)="onFilterChange()" placeholder="Rôles" pInputText >
+    <input type="text" [(ngModel)]="nomFiltre"(input)="onFilterChange()"  placeholder="Nom" pInputText >
+    <input type="text" [(ngModel)]="emailFiltre" (input)="onFilterChange()"  placeholder="Email" pInputText >
+    <input type="text" [(ngModel)]="roleFiltre" (input)="onFilterChange()" placeholder="Rôles" pInputText >
     <button pButton class="clear" (click)="clearFilters()" label="Effacer"></button>
     <button class="ajout" pButton routerLink="/intranet/gestion/ajout-utilisateurs" styleClass="p-button-success" type="submit"><img src="assets/images/icones/gestion-utilisateur/plus.svg" alt="plus">Créer un utilisateur</button>
     </article>
@@ -36,21 +36,24 @@
             <th>Supprimer</th>
           </tr>
         </thead>
-        <tbody *ngFor="let user of users.listeUtilisateurs; let i=index">
-          <tr>
+        <tbody>
+          <tr *ngFor="let user of filteredUtilisateurs">
             <td><input type="checkbox" [(ngModel)]="user.selected" (change)="onUserSelectChange(user)"></td>
             <td>{{ user.nom }}</td>
             <td>{{ user.email }}</td>
-            <td><span *ngIf="user.roles">{{ user.roles!.toString() }}</span></td>
+            <td>
+              <ng-container *ngFor="let role of user.roles; let last = last">
+                {{ role }}<span *ngIf="!last">, </span>
+              </ng-container>
+            </td>
             <td>
               <figure><img src="assets/images/icones/gestion-utilisateur/coeur.png" alt="favoris"></figure>
             </td>
             <td>
-              <figure (click)="editUser(user)" ><img src="assets/images/icones/gestion-utilisateur/editer.png" alt=""></figure>
+              <figure (click)="editUser(user)"><img src="assets/images/icones/gestion-utilisateur/editer.png" alt=""></figure>
             </td>
             <td>
-              <figure (click)="openDeleteDataModal(user)"><img
-                  src="assets/images/icones/gestion-utilisateur/corbeille.png" alt=""></figure>
+              <figure (click)="openDeleteDataModal(user)"><img src="assets/images/icones/gestion-utilisateur/corbeille.png" alt=""></figure>
             </td>
           </tr>
         </tbody>

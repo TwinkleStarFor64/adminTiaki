@@ -151,29 +151,24 @@ export class SupabaseService {
 
   // Méthode pour récupérer les utilisateurs et leur rôles
   async getAllUsersWithRoles(): Promise<UtilisateurI[]> {
-    // Récupérez uniquement l'email et le nom des utilisateurs depuis la table utilisateur.
     const { data: utilisateursData, error: utilisateursError } =
-      await this.supabase.from('utilisateur').select('id,  email, nom'); // Incluez le champ "id" pour l'utilisateur.
-
+      await this.supabase.from('utilisateur').select('id, email, nom');
+  
     if (utilisateursError) {
       console.error(
         'Erreur lors de la récupération des utilisateurs :',
         utilisateursError
       );
     }
-    // Récupérez les rôles associés à chaque utilisateur depuis la table attribuerRoles.
+  
     for (const utilisateur of utilisateursData as UtilisateurI[]) {
-      // Utilisez le type correct - interface UtilisateurData
-      const idUtilisateur = utilisateur.id; // Contient l'id des utilisateurs de la table utilisateur
-      //console.log("idUtilisateur", idUtilisateur);
-
+      const idUtilisateur = utilisateur.id;
+  
       const { data: rolesData, error: rolesError } = await this.supabase
         .from('attribuerRoles')
         .select('idRole')
-        .eq('idUtilisateur', idUtilisateur); // Comparaison de l'id de la table avec l'id de la variable
-      // rolesData contient la ForeignKey idRole de la table attribuerRoles
-      //console.log("rolesData", rolesData);
-
+        .eq('idUtilisateur', idUtilisateur);
+  
       if (rolesError) {
         console.error(
           "Erreur lors de la récupération des rôles de l'utilisateur :",
@@ -181,16 +176,12 @@ export class SupabaseService {
         );
         continue;
       }
-
-      // Récupérez les détails des rôles depuis la table des rôles.
+  
       const idRoles = rolesData.map((entry) => entry.idRole);
-      // map sur rolesData afin de récupérer toutes les ForeignKeys
-      //console.log("idRoles", idRoles);
+  
       const { data: rolesDetailsData, error: rolesDetailsError } =
-        await this.supabase.from('roles').select('*').in('id', idRoles); // Comparaison de la ForeignKey avec les id de la table roles
-      // rolesDetailsData contient les résultats de la comparaison au dessus
-      //console.log(rolesDetailsData);
-
+        await this.supabase.from('roles').select('*').in('id', idRoles);
+  
       if (rolesDetailsError) {
         console.error(
           'Erreur lors de la récupération des détails des rôles :',
@@ -198,56 +189,14 @@ export class SupabaseService {
         );
         continue;
       }
-
-      // Ajoutez les détails des rôles à l'objet utilisateur.
-      utilisateur.roles = rolesDetailsData ; // Utilisez le type correct - interface RoleData
-      //console.log("utilisateurs.roles ici : ", utilisateur.roles);
+  
+      utilisateur.roles = rolesDetailsData.map((role) => role.role);
     }
-    // Les utilisateurs avec email, nom et rôles sont maintenant dans utilisateursData.
-    //console.log('Utilisateurs avec email, nom et rôles :', utilisateursData);
-    // Pour afficher les rôles, vous pouvez utiliser une boucle ou une fonction map.
-    for (const utilisateur of utilisateursData as UtilisateurI[]) {
-      const idRoles: string[] = [];
-      
-      const { data: rolesData, error: rolesError } = await this.supabase
-          .from('attribuerRoles')
-          .select('idRole')
-          .eq('idUtilisateur', utilisateur.id);
-  
-      if (rolesError) {
-          console.error(
-              "Erreur lors de la récupération des rôles de l'utilisateur :",
-              rolesError
-          );
-          continue;
-      }
-  
-      if (rolesData) {
-          rolesData.forEach((entry: any) => {
-              idRoles.push(entry.idRole);
-          });
-  
-          const { data: rolesDetailsData, error: rolesDetailsError } =
-              await this.supabase.from('roles').select('*').in('id', idRoles);
-  
-          if (rolesDetailsError) {
-              console.error(
-                  'Erreur lors de la récupération des détails des rôles :',
-                  rolesDetailsError
-              );
-              continue;
-          }
-  
-          if (rolesDetailsData) {
-              const roles: string[] = rolesDetailsData.map((role: any) => role.role);
-              utilisateur.roles = roles;
-              console.log(`Rôles de ${utilisateur.nom}: ${roles.join(', ')}`);
-          }
-      }
+    console.log('Données récupérées avec succès :', utilisateursData);
+
+    return utilisateursData as UtilisateurI[];
   }
   
-  return utilisateursData as UtilisateurI[];
-  }
 
   /* ----------------------------- Code pour la page profil utilisateur ---------------------------- */
 
