@@ -8,13 +8,13 @@ import { SupabaseService } from 'src/app/partage/services/supabase.service';
 })
 export class NutritionComponent implements OnInit{
   
-constructor() {
+constructor(public supa: SupabaseService) {
   
 }
 
-ngOnInit(): void {
+ngOnInit(): void {  
+  this.supa.getAttribuerPlats();
   
-
   
 }
 

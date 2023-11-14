@@ -19,6 +19,8 @@ export class SupabaseService {
   badEmail = false; // Utilisé dans la méthode resetPasswordBis() - utiliser pour une popup
   badLogin = false; // Utilisé dans la méthode signIn() - utiliser pour une popup - Pas utilisé pour le moment ( optionel)
 
+  tokenDev!: string;
+
   constructor(private router: Router) {
     this.supabase = createClient(
       environment.supabaseUrl,
@@ -38,6 +40,10 @@ export class SupabaseService {
         if (res.data.user!.role === 'authenticated') {
           // Je vérifie que le rôle et 'authenticated' dans supabase - voir le résultat de console.log(res)
           this.token = res.data.session!.access_token; // Je stock la valeur du token retourné par supabase
+
+          if (this.token) {
+            sessionStorage.setItem('token', this.tokenDev);
+          }
 
           this.authId = res.data.user!.id; // j'attribue à la variable authId l'id de l'utilisateur (après son authentification)
           //console.log(this.authUserId);          
@@ -274,4 +280,23 @@ export class SupabaseService {
       throw error;
     }
   }
+
+  /* --------------------------------------- Code pour l'interface nutrition ---------------------------------------------- */
+  async getAttribuerPlats(): Promise<any[]> {
+    const { data: platData, error: platError } = await this.supabase
+      .from('attribuerPlats')
+      .select('plats(*),ciqualAnses(*)');
+
+      if (platError) {
+        console.log("Erreur de la méthode getAttribuerPlats : ", platError);        
+      }
+
+      if (platData) {
+        console.log("Ici platData : ", platData);
+        return platData;
+      } else {
+        return [];
+      }      
+  }
+
 }
