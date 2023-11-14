@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { NutritionComponent } from './nutrition.component';
+import { ButtonModule } from 'primeng/button';
 
 describe('NutritionComponent', () => {
   let component: NutritionComponent;
@@ -8,7 +8,8 @@ describe('NutritionComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [NutritionComponent]
+      declarations: [NutritionComponent],
+      imports: [ButtonModule],
     });
     fixture = TestBed.createComponent(NutritionComponent);
     component = fixture.componentInstance;
