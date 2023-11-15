@@ -1,20 +1,19 @@
 import { Injectable, OnInit } from '@angular/core';
 import { SupabaseService } from './supabase.service';
-import {  UtilisateurI } from '../modeles/Types';
+import { UtilisateurI } from '../modeles/Types';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UsersService implements OnInit {
   allUsersData: UtilisateurI[] = [];
-  // utilisateur: UtilisateurI[] = []; // 
-  listeUtilisateurs:Array<UtilisateurI> = [];
+  allRolesData: any;
+  // utilisateur: UtilisateurI[] = []; //
+  listeUtilisateurs: Array<UtilisateurI> = [];
   authUsers: UtilisateurI[] = [];
   selectedUsers: UtilisateurI[] = [];
   user!: UtilisateurI;
   filteredUtilisateurs: UtilisateurI[] = [];
-  
-
   profil!: UtilisateurI;
 
   constructor(public supa: SupabaseService) {}
@@ -29,7 +28,7 @@ export class UsersService implements OnInit {
         email: item['email'],
         nom: item['nom'],
       }));
-      this.filteredUtilisateurs = this.listeUtilisateurs; 
+      this.filteredUtilisateurs = this.listeUtilisateurs;
     }
     if (error) {
       console.log(error);
@@ -58,23 +57,42 @@ export class UsersService implements OnInit {
     }
   }
 
+  async fetchRoles() {
+    try {
+      const allRoles: any[] = await this.supa.getRoles();
+  
+      if (Array.isArray(allRoles)) {
+        allRoles.forEach((item: any) => {
+          const rolesValues = Object.values(item);
+  
+          console.log('Values:', rolesValues);
+          return rolesValues;
+        });
+      } else {
+        throw new Error("Aucune donnée n'a été récupérée pour les rôles.");
+      }
+    } catch (error) {
+      console.error('Erreur lors de la récupération des rôles :', error);
+      throw new Error(
+        "Impossible de récupérer les rôles. Veuillez consulter les logs pour plus d'informations."
+      );
+    }
+  }
+  
   async fetchAllUsersWithRoles() {
     try {
       // Remplacez cette ligne par votre logique pour récupérer tous les utilisateurs avec leurs rôles
       const data: any = await this.supa.getAllUsersWithRoles();
-      console.log("data de getAllUsersWithRoles", data);
-  
+      // console.log("data de getAllUsersWithRoles", data);
+
       if (Array.isArray(data)) {
         // Logique pour traiter les données si elles sont un tableau
         this.allUsersData = data.map((item: any) => {
-          console.log('Roles dans item :', item.roles); // Ajoutez le journal ici
-  
-          // Utilisez Object.keys pour obtenir les clés du tableau item.roles
+          // Object.keys pour obtenir les clés du tableau item.roles
           const rolesKeys = Object.keys(item.roles);
-  
           // Utilisez les clés pour accéder aux valeurs et les placer dans un tableau
           const rolesArray = rolesKeys.map((key) => item.roles[key]);
-  
+
           return {
             id: item.id,
             email: item.email,
@@ -83,10 +101,10 @@ export class UsersService implements OnInit {
             selected: false,
           };
         });
-  
+
         // Logique pour traiter les données
-        console.log('Données récupérées avec succès dans fetchAllUsersWithRoles :', this.allUsersData);
-  
+        // console.log('Données récupérées avec succès dans fetchAllUsersWithRoles :', this.allUsersData);
+
         return;
       } else {
         // Logique pour traiter les données si elles ne sont pas un tableau
@@ -102,19 +120,14 @@ export class UsersService implements OnInit {
       );
     }
   }
-  
-  
- 
-  
-  
 
   async fetchProfil() {
     try {
       // La méthode getProfil() récupére toutes les données utilisateurs et tout les rôles de l'utilisateur authentifié
       const data = await this.supa.getProfil();
-      console.log("Data du profil", data);
+      // console.log("Data du profil", data);
       if (Array.isArray(data)) {
-        console.log("Profil data", data);
+        // console.log("Profil data", data);
         this.profil = data[0]['utilisateur'];
         this.profil.roles = [];
         data.forEach((d) => {
@@ -130,7 +143,7 @@ export class UsersService implements OnInit {
           roles: data['role'],
         };
       }
-      console.log("Profil", this.profil);
+      // console.log("Profil", this.profil);
     } catch (error) {
       console.error("Une erreur s'est produite :", error);
     }
@@ -139,13 +152,13 @@ export class UsersService implements OnInit {
 
   //   try {
   //     const response = await this.supa.(formData);
-  
+
   //     if (response) {
   //       const data = response;
   //       console.log('Nouveaux utilisateurs créés :', data);
-  
+
   //       // Vous pouvez effectuer des actions supplémentaires ici si nécessaire.
-  
+
   //       return data;
   //     } else {
   //       console.error('Aucune donnée renvoyée lors de la création de l\'utilisateur');
@@ -156,5 +169,4 @@ export class UsersService implements OnInit {
   //     throw error;
   //   }
   // }
-  
 }

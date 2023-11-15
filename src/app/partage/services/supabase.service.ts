@@ -29,17 +29,11 @@ export class SupabaseService {
     this.supabase.auth
       .signInWithPassword({ email, password })
       .then((res) => {
-        console.log('Méthode signIn - ce que contient la réponse : ', res);
         this.user = res.data.user; // La réponse de la méthode avec toutes les données d'un utilisateur
-        console.log("L'id de l'utilisateur authentifié : ", this.user.id);
-
         if (res.data.user!.role === 'authenticated') {
           // Je vérifie que le rôle et 'authenticated' dans supabase - voir le résultat de console.log(res)
           this.token = res.data.session!.access_token; // Je stock la valeur du token retourné par supabase
-
           this.authId = res.data.user!.id; // j'attribue à la variable authId l'id de l'utilisateur (après son authentification)
-          //console.log(this.authUserId);          
-          //this.getAllData();
           this.router.navigate(['intranet']);
         }        
       })
@@ -103,7 +97,7 @@ export class SupabaseService {
   // Récupérer les utilisateurs sur la table auth.users (table d'authentification de supabase)
   async listUser() {
     const response = await this.supabase.auth.admin.listUsers();
-    console.log('Méthode listUser - response.data.users', response.data.users);
+    // console.log('Méthode listUser - response.data.users', response.data.users);
     return response.data.users; // Retournez les données des utilisateurs
   }
 
@@ -124,7 +118,7 @@ export class SupabaseService {
   // Récupérer les rôles utilisateurs (Admin, rédacteur, etc..) sur la table roles
   async getRoles() {
     try {
-      const { data } = await this.supabase.from('roles').select('*');
+      const { data } = await this.supabase.from('roles').select('role');
       if (data) {
         console.log('Méthode getRoles - Données récupérées :', data);
         return data;
@@ -189,10 +183,9 @@ export class SupabaseService {
         );
         continue;
       }
-  
       utilisateur.roles = rolesDetailsData.map((role) => role.role);
     }
-    console.log('Données récupérées avec succès :', utilisateursData);
+    // console.log('Données récupérées avec succès :', utilisateursData);
 
     return utilisateursData as UtilisateurI[];
   }
@@ -203,7 +196,7 @@ export class SupabaseService {
   // Méthode pour récupérer les données d'un utilisateur identifié (sur la table auth)
   async getLoggedInUser() {
     const { data: {user} } = await this.supabase.auth.getUser();
-    console.log('Méthode getLoggedInUser : ', user);
+    // console.log('Méthode getLoggedInUser : ', user);
     return user;
   }  
 
@@ -229,6 +222,7 @@ export class SupabaseService {
 /* --------------------------- Code utilisé dans le service users.service.ts -------------------------- */
 
 /* --------------------------- Code utilisé dans le service users.service.ts -------------------------- */
+
 
   // Update des données utilisateurs sur la page de gestion
 async updateUser(userId: string, updatedUserData: any) {

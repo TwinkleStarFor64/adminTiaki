@@ -1,7 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import {
-  UtilisateurI,
-} from 'src/app/partage/modeles/Types';
+import { UtilisateurI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { ConfirmationService } from 'primeng/api';
 import { FormGroup } from '@angular/forms';
@@ -30,7 +28,9 @@ export class GestionComponent implements OnInit {
   sortOrder: 'asc' | 'desc' = 'asc';
   selectedUserForEdit: UtilisateurI | null = null;
   showUserEditSection: boolean = false;
-
+  uniqueRoles: string[] = [];
+  allRoles: string[] = [];
+  displayEditModal: boolean = false;
 
   @ViewChild(EditUserComponent, { static: false }) editUserComponent:
     | EditUserComponent
@@ -38,43 +38,41 @@ export class GestionComponent implements OnInit {
   @ViewChild(DonneesMedicalesComponent, { static: false })
   donneesMedicalComponent: DonneesMedicalesComponent | undefined;
 
-
-
   constructor(
     public confirmationService: ConfirmationService,
     public supa: SupabaseService,
     public users: UsersService,
-    private cdRef: ChangeDetectorRef,
+    private cdRef: ChangeDetectorRef
+  ) {}
 
-  ) { }
+  async ngOnInit(): Promise<void> {
+    try {
+      await this.users.fetchListeUtilisateurs(); // Récupérer la liste des utilisateurs
+      await Promise.all([
+        // ... Autres appels de méthodes pour récupérer les données
+        this.users.fetchAuthUsers(),
+        this.users.fetchAllUsersWithRoles(),
+        this.supa.fetchAttribuerRoles(),
+        this.supa.getAllUsersWithRoles(),
+        this.users.fetchRoles(),
+        console.log("fetchRoles",this.users.fetchRoles()),
+        
+        this.uniqueRoles = this.getUniqueRolesFromUsers(),
+        
+        // console.log('getAllUsersWithRoles', this.supa.getAllUsersWithRoles()),
+        // console.log(
+        //   'fetchAllUsersWithRoles',
+        //   this.users.fetchAllUsersWithRoles()
+        // ),
+        // console.log('fetchAttribuerRoles', this.supa.fetchAttribuerRoles()),
+      ]);
 
-
-
-
-    async ngOnInit(): Promise<void> {
-      try {
-        await this.users.fetchListeUtilisateurs(); // Récupérer la liste des utilisateurs
-        await Promise.all([
-          // ... Autres appels de méthodes pour récupérer les données
-          this.users.fetchAuthUsers(),
-          this.users.fetchAllUsersWithRoles(),
-          this.supa.fetchAttribuerRoles(),
-          this.supa.getAllUsersWithRoles(),
-          console.log("getAllUsersWithRoles",this.supa.getAllUsersWithRoles()),
-          console.log("fetchAllUsersWithRoles",this.users.fetchAllUsersWithRoles()),
-          console.log("fetchAttribuerRoles",this.supa.fetchAttribuerRoles()),
-          
-          
-        ]);
-  
-
-        this.tableauUtilisateurs = this.users.allUsersData;
-  
-      } catch (error) {
-        console.error("Erreur lors de l'initialisation :", error);
-      }
-      this.updateFilteredUsers();
+      this.tableauUtilisateurs = this.users.allUsersData;
+    } catch (error) {
+      console.error("Erreur lors de l'initialisation :", error);
     }
+    this.updateFilteredUsers();
+  }
 
   ngAfterViewInit(user: UtilisateurI): void {
     if (user && user.email) {
@@ -94,8 +92,21 @@ export class GestionComponent implements OnInit {
     }
   }
 
+  getUniqueRolesFromUsers(): string[] {
+    const allRoles: string[] = [];
 
+    this.users.listeUtilisateurs.forEach((user) => {
+      if (user.roles) {
+        user.roles.forEach((role) => {
+          if (!allRoles.includes(role)) {
+            allRoles.push(role);
+          }
+        });
+      }
+    });
 
+    return allRoles;
+  }
 
   updateFilteredUsers() {
     this.filteredUtilisateurs = this.filterUsers(
@@ -188,7 +199,9 @@ export class GestionComponent implements OnInit {
   }
   /** Supprimer un utilisateur de la liste dans le service des utilisateurs */
   removeUserById(userId: any) {
-    const index = this.users.listeUtilisateurs.findIndex((user) => user.id === userId);
+    const index = this.users.listeUtilisateurs.findIndex(
+      (user) => user.id === userId
+    );
     if (index !== -1) {
       this.users.listeUtilisateurs.splice(index, 1);
     }
@@ -226,9 +239,33 @@ export class GestionComponent implements OnInit {
       roleFiltreLower
     );
     this.updateFilteredUsers();
-    console.log('Après filtre - filteredUtilisateurs:', this.filteredUtilisateurs);
+    console.log(
+      'Après filtre - filteredUtilisateurs:',
+      this.filteredUtilisateurs
+    );
   }
 
+  updateUserRole(role: string, isChecked: boolean) {
+    if (this.selectedUserForEdit && this.selectedUserForEdit.roles) {
+      if (isChecked && !this.selectedUserForEdit.roles.includes(role)) {
+        this.selectedUserForEdit.roles.push(role);
+      } else if (!isChecked && this.selectedUserForEdit.roles.includes(role)) {
+        const index = this.selectedUserForEdit.roles.indexOf(role);
+        this.selectedUserForEdit.roles.splice(index, 1);
+      }
+    }
+  }
+
+  openEditModal(user: UtilisateurI) {
+    console.log('Ouverture de la modal pour :', user);
+    this.editUser(user); // Appelle la méthode existante pour pré-remplir les données
+    this.displayEditModal = true; // Ouvre la modal
+  }
+  
+
+  closeEditModal() {
+    this.displayEditModal = false;
+  }
 
   filterUsers(
     users: UtilisateurI[],
@@ -237,13 +274,16 @@ export class GestionComponent implements OnInit {
     roleFiltre: string
   ): UtilisateurI[] {
     return users.filter((user) => {
-      const nomMatch = !nomFiltre || user.nom?.toLowerCase().includes(nomFiltre);
-      const emailMatch = !emailFiltre || user.email?.toLowerCase().includes(emailFiltre);
-      const roleMatch = !roleFiltre || user.roles?.includes(roleFiltre);
+      const nomMatch =
+        !nomFiltre || user.nom?.toLowerCase().includes(nomFiltre);
+      const emailMatch =
+        !emailFiltre || user.email?.toLowerCase().includes(emailFiltre);
+      const roleMatch =
+        !roleFiltre ||
+        user.roles?.some((role) => role.toLowerCase().includes(roleFiltre));
       return nomMatch && emailMatch && roleMatch;
     });
   }
-
 
   clearFilters() {
     this.nomFiltre = '';

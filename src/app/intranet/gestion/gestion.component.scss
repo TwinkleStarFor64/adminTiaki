@@ -7,7 +7,7 @@
   background-color: #f0c02e;
 }
 
-header{
+header {
   color: #f0c02e;
 }
 
@@ -24,17 +24,19 @@ section {
     background-color: #fff1c6;
     width: 80%;
     height: 10vh;
-
+    margin-top: 20px;
     input {
       margin-left: 50px;
+      height: 3vh;
+      border-radius: 5px;
     }
-    .clear{
+    .clear {
       background-color: rgb(209, 147, 31);
       border: rgb(209, 147, 31);
     }
-    .ajout{
-      background-color: #33BB27 ;
-      border-color: #33BB27;
+    .ajout {
+      background-color: #33bb27;
+      border-color: #33bb27;
     }
   }
 
@@ -83,8 +85,36 @@ section {
       }
     }
   }
-  .erased{
-    background-color: #D9042B;
-    border-color: #D9042B;
+  .modal {
+    display: none; /* Assurez-vous que la modal est cachée par défaut */
+    position: fixed;
+    height: 50%;
+    width: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+
+    &.show {
+      display: block; /* Ajoutez la classe "show" pour afficher la modal */
+    }
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    margin: auto;
+
+    input {
+      margin-left: 50px;
+      height: 3vh;
+      border-radius: 5px;
+    }
+  }
+
+  .erased {
+    background-color: #d9042b;
+    border-color: #d9042b;
   }
 }

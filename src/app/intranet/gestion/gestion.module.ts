@@ -16,6 +16,7 @@ import { GestionUtilisateursPipe } from 'src/app/pipes/gestion-utilisateurs.pipe
 import { EditUserComponent } from '../template/dialog/edit-user/edit-user.component';
 import { DialogModule } from 'primeng/dialog';
 import { DonneesMedicalesComponent } from '../template/dialog/donnees-medicales/donnees-medicales.component';
+import { DropdownModule } from 'primeng/dropdown';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { DonneesMedicalesComponent } from '../template/dialog/donnees-medicales/
     TableModule,
     DialogModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DropdownModule,
   ],
   exports: [DeleteDataComponent],
   providers: [ConfirmationService, MessageService],
