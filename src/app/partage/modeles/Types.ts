@@ -36,4 +36,9 @@ export interface RoleData {
 export interface PlatI {
     id: number;
     nom: string;
+    description: string;
+    alim_code: number;
+    statut: string;
+    reaction?: string;
+    idIngredients?: Array<string>;
 }

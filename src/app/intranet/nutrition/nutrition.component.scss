@@ -4,4 +4,42 @@ h1,h2,h3{
 a{
     color: #D9042B;
 }
-
+section {
+    #articleLeft{ // La section sur la droite avec la liste des plats    
+        flex-direction: column;
+        width: 20%;
+        span{ // Iĉone <h3>Gestion des plats</h3>
+            border-bottom: #805E96 dashed 1px;
+            display: flex;
+            align-items: center;
+            gap: 1vw;
+            width: 12vw;
+            margin-left: 20px;
+            figure {
+              margin: 0;
+            } 
+        }
+        p-button{
+            margin: 15px 0px 0px 20px;
+            color: black;
+            font-weight: 700;
+        }
+        input{
+            margin: 15px 0px 0px 20px;
+            width: 70%;
+        }
+        div{ // La liste des plats
+            margin-left: 20px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            p{
+                border: #C4C4C4 solid 2px;
+                border-radius: 5%;
+                padding: 10px;
+                width: 90%;
+            }        
+        }        
+    }
+}

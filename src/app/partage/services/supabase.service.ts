@@ -282,6 +282,25 @@ export class SupabaseService {
   }
 
   /* --------------------------------------- Code pour l'interface nutrition ---------------------------------------------- */
+
+  async getPlats() {
+    const { data, error } = await this.supabase
+      .from('plats')
+      .select('*')
+    if (error) {
+      console.log("Erreur de la méthode getPlats : ",error);      
+    }
+    if (data) {
+      console.log("Data de la méthode getPlats : ", data);
+      return data      
+    } else {
+     return console.log("Pas de plats en BDD");      
+    }   
+  }
+
+
+
+  //Méthode de test et optimisation
   async getAttribuerPlats(): Promise<any[]> {
     const { data: platData, error: platError } = await this.supabase
       .from('attribuerPlats')
@@ -299,18 +318,17 @@ export class SupabaseService {
     }
   }
 
+// Méthode collaboration Gérald
   async getAttribuerPlatsBis() {
     const { data, error } = await this.supabase
       .from('plats')
       .select(`
         id, nom,
         ingredients:attribuerPlats (ingredient:ciqualAnses(*))
-    `)    
-
+    `) 
     if (error) {
       console.log(error);
     }
-
     if (data) {
       data.forEach(p => {
         if (p['ingredients'] && p['ingredients'].length > 0) {
@@ -324,7 +342,6 @@ export class SupabaseService {
       });
       console.log(data);
       return data;
-
     } else {
       return []
     }
