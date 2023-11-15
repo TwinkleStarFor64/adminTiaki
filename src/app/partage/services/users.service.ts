@@ -106,7 +106,7 @@ export class UsersService implements OnInit {
     try {
       // La méthode getProfil() récupére toutes les données utilisateurs et tout les rôles de l'utilisateur authentifié
       const data = await this.supa.getProfil();
-      console.log("Data du profil", data); // Data est un tableau contenant plusieurs objets rôles et plusieurs objets utilisateur
+      //console.log("Data du profil", data); // Data est un tableau contenant plusieurs objets rôles et plusieurs objets utilisateur
       if (Array.isArray(data)) { // Vérifie si la variable data est un tableau en utilisant Array.isArray(data)
         this.profil = data[0]['utilisateur']; // Extrait le premier élément du tableau (data[0]) et récupère la propriété utilisateur
         this.profil.roles = []; // Un tableau vide est attribué à la propriété roles de l'objet profil. Cette étape est nécessaire pour s'assurer que le tableau des rôles est vide avant d'y ajouter des éléments.
@@ -123,7 +123,7 @@ export class UsersService implements OnInit {
           roles: data['role'],
         };
       }
-      console.log("Profil", this.profil);
+      //console.log("Profil", this.profil);
     } catch (error) {
       console.error("Une erreur s'est produite :", error);
     }

@@ -31,3 +31,9 @@ export interface RoleData {
   id: number;
   role: string;
 }
+
+/* ---------------- Interface pour la nutrition ------------------- */
+export interface PlatI {
+    id: number;
+    nom: string;
+}

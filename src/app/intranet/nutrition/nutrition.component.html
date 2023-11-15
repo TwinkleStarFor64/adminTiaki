@@ -17,5 +17,8 @@
   </header>
   <section>
     <p-button  styleClass="p-button-success">Ajouter un plat</p-button>
-    
+    <div *ngFor="let element of nutrition.listePlats">
+      <p>{{ element.platNom }}</p>
+      <p>{{ element.ciqualNom }}</p>
+    </div>
   </section>

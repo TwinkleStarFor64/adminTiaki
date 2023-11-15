@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
+import { NutritionService } from './nutrition.service';
 
 @Component({
   selector: 'app-nutrition',
@@ -8,13 +9,14 @@ import { SupabaseService } from 'src/app/partage/services/supabase.service';
 })
 export class NutritionComponent implements OnInit{
   
-constructor(public supa: SupabaseService) {
+constructor(public supa: SupabaseService, public nutrition:NutritionService) {
   
 }
 
 ngOnInit(): void {  
-  this.supa.getAttribuerPlats();
-  
+  //this.nutrition.fetchPlats();
+  this.nutrition.fetchData();
+  this.supa.getAttribuerPlatsBis();
   
 }
 
