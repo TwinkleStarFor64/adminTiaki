@@ -3,9 +3,7 @@ import { UtilisateurI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { ConfirmationService } from 'primeng/api';
 import { FormGroup } from '@angular/forms';
-import { EditUserComponent } from '../template/dialog/edit-user/edit-user.component';
 import { UsersService } from 'src/app/partage/services/users.service';
-import { DonneesMedicalesComponent } from '../template/dialog/donnees-medicales/donnees-medicales.component';
 import { GestionUtilisateursPipe } from 'src/app/pipes/gestion-utilisateurs.pipe';
 
 @Component({
@@ -29,44 +27,30 @@ export class GestionComponent implements OnInit {
   selectedUserForEdit: UtilisateurI | null = null;
   showUserEditSection: boolean = false;
   uniqueRoles: string[] = [];
-  allRoles: string[] = [];
   displayEditModal: boolean = false;
+  allRoles: any;
 
-  @ViewChild(EditUserComponent, { static: false }) editUserComponent:
-    | EditUserComponent
-    | undefined;
-  @ViewChild(DonneesMedicalesComponent, { static: false })
-  donneesMedicalComponent: DonneesMedicalesComponent | undefined;
 
   constructor(
     public confirmationService: ConfirmationService,
     public supa: SupabaseService,
     public users: UsersService,
     private cdRef: ChangeDetectorRef
-  ) {}
+  ) { }
 
   async ngOnInit(): Promise<void> {
     try {
       await this.users.fetchListeUtilisateurs(); // Récupérer la liste des utilisateurs
       await Promise.all([
-        // ... Autres appels de méthodes pour récupérer les données
         this.users.fetchAuthUsers(),
         this.users.fetchAllUsersWithRoles(),
         this.supa.fetchAttribuerRoles(),
         this.supa.getAllUsersWithRoles(),
         this.users.fetchRoles(),
-        console.log("fetchRoles",this.users.fetchRoles()),
-        
         this.uniqueRoles = this.getUniqueRolesFromUsers(),
         
-        // console.log('getAllUsersWithRoles', this.supa.getAllUsersWithRoles()),
-        // console.log(
-        //   'fetchAllUsersWithRoles',
-        //   this.users.fetchAllUsersWithRoles()
-        // ),
-        // console.log('fetchAttribuerRoles', this.supa.fetchAttribuerRoles()),
       ]);
-
+      this.allRoles = await this.users.fetchRoles();
       this.tableauUtilisateurs = this.users.allUsersData;
     } catch (error) {
       console.error("Erreur lors de l'initialisation :", error);
@@ -74,23 +58,7 @@ export class GestionComponent implements OnInit {
     this.updateFilteredUsers();
   }
 
-  ngAfterViewInit(user: UtilisateurI): void {
-    if (user && user.email) {
-      if (this.donneesMedicalComponent) {
-        this.donneesMedicalComponent.email = user.email;
-        this.donneesMedicalComponent.nom = user.nom || '';
-        this.donneesMedicalComponent.prenom = user.prenom || '';
-        this.donneesMedicalComponent.telephone = user.telephone
-          ? String(user.telephone)
-          : '';
-        this.donneesMedicalComponent.showDialog(user);
-      } else {
-        console.error(
-          "this.donneesMedicalComponent n'est pas défini. Assurez-vous qu'il est correctement initialisé."
-        );
-      }
-    }
-  }
+
 
   getUniqueRolesFromUsers(): string[] {
     const allRoles: string[] = [];
@@ -207,25 +175,48 @@ export class GestionComponent implements OnInit {
     }
   }
 
-  // Une méthode pour éditer un utilisateur
+  
   editUser(user: UtilisateurI) {
-    this.selectedUserForEdit = user;
-    this.selectedUserForEdit.selectedRoles = {};
-    this.showUserEditSection = true;
-    if (this.selectedUserForEdit.roles) {
+    this.selectedUserForEdit = {
+      id: user.id,
+      email: user.email,
+      nom: user.nom,
+      roles: user.roles ? [...user.roles] : [], // Copie des rôles pour éviter la modification directe du tableau original
+      selectedRoles: {}, // Initialisez les rôles sélectionnés (peut être vide si vous ne voulez pas pré-cocher les cases)
+    };
+  
+    if (this.selectedUserForEdit && this.selectedUserForEdit.roles && this.selectedUserForEdit.selectedRoles) {
       for (const role of this.selectedUserForEdit.roles) {
-        this.selectedUserForEdit.selectedRoles[role] = false;
+        if (this.selectedUserForEdit.selectedRoles) {
+          this.selectedUserForEdit.selectedRoles[role] = true;
+        }
       }
     }
-    // Ouvrir votre modal d'édition avec les données peuplées.
   }
-
-  // Méthode pour mettre à jour un utilisateur
+  
+  
+  
+  
   updateUser() {
     if (this.selectedUserForEdit) {
-      console.log('Utilisateur mis à jour :', this.selectedUserForEdit);
+      const selectedRoles = this.selectedUserForEdit.selectedRoles;
+      console.log('Roles sélectionnés avant la mise à jour :', selectedRoles);
+  
+      if (selectedRoles && Object.keys(selectedRoles).length > 0) {
+        // Filtrer les rôles sélectionnés
+        this.selectedUserForEdit.roles = Object.keys(selectedRoles)
+          .filter(role => selectedRoles[role]);
+  
+        console.log('Utilisateur mis à jour :', this.selectedUserForEdit);
+      } else {
+        console.error('Les rôles sélectionnés ne sont pas définis ou sont vides.');
+      }
     }
   }
+  
+  
+  
+  
   //Methodes pour filtrer par les inputs
   onFilterChange() {
     const nomFiltreLower = this.nomFiltre.toLowerCase();
@@ -245,8 +236,8 @@ export class GestionComponent implements OnInit {
     );
   }
 
-  updateUserRole(role: string, isChecked: boolean) {
-    if (this.selectedUserForEdit && this.selectedUserForEdit.roles) {
+  updateUserRole(role: string, isChecked: boolean): void {
+    if (this.selectedUserForEdit?.roles) {
       if (isChecked && !this.selectedUserForEdit.roles.includes(role)) {
         this.selectedUserForEdit.roles.push(role);
       } else if (!isChecked && this.selectedUserForEdit.roles.includes(role)) {
@@ -255,14 +246,50 @@ export class GestionComponent implements OnInit {
       }
     }
   }
+  
 
   openEditModal(user: UtilisateurI) {
     console.log('Ouverture de la modal pour :', user);
-    this.editUser(user); // Appelle la méthode existante pour pré-remplir les données
+    this.users.fetchRoles();
+    this.editUser(user); // Appelle la méthode pour pré-remplir les données
     this.displayEditModal = true; // Ouvre la modal
+  
+    // Initialiser les rôles sélectionnés
+    this.selectedUserForEdit = {
+      id: user.id,
+      email: user.email,
+      nom: user.nom,
+      roles: user.roles ? [...user.roles] : [],
+      selectedRoles: {},
+    };
+  
+    if (this.selectedUserForEdit.roles) {
+      this.selectedUserForEdit.selectedRoles = this.selectedUserForEdit.selectedRoles || {};
+  
+      this.allRoles.forEach((role: string) => {
+        if (this.selectedUserForEdit?.roles) {
+          this.selectedUserForEdit.selectedRoles![role] = this.selectedUserForEdit.roles.includes(role);
+        }
+      });
+    }
+  }
+  
+  
+  getRoleCheckedState(role: string): boolean {
+    return !!this.selectedUserForEdit?.selectedRoles?.[role];
   }
   
 
+  handleUserRoleChange(role: string, event: any): void {
+    const isChecked = event.target.checked;
+  
+    if (this.selectedUserForEdit) {
+      this.updateUserRole(role, isChecked);
+    }
+  }
+  
+  
+  
   closeEditModal() {
     this.displayEditModal = false;
   }

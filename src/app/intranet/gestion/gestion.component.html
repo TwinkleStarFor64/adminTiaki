@@ -10,57 +10,20 @@
   </article>
   <article>
     <figure>
-      <img
-        src="assets/images/icones/gestion-utilisateur/yellowIcon.png"
-        alt=""
-      />
+      <img src="assets/images/icones/gestion-utilisateur/yellowIcon.png" alt="" />
     </figure>
     <h3>Gestion des utilisateurs</h3>
   </article>
 </header>
 <section>
   <article class="search">
-    <input
-      pInputText
-      type="text"
-      [(ngModel)]="nomFiltre"
-      (input)="onFilterChange()"
-      placeholder="Nom"
-      pInputText
-    />
-    <input
-      pInputText
-      type="text"
-      [(ngModel)]="emailFiltre"
-      (input)="onFilterChange()"
-      placeholder="Email"
-      pInputText
-    />
-    <input
-      pInputText
-      type="text"
-      [(ngModel)]="roleFiltre"
-      (input)="onFilterChange()"
-      placeholder="Rôles"
-      pInputText
-    />
-    <button
-      pButton
-      class="clear"
-      (click)="clearFilters()"
-      label="Effacer"
-    ></button>
-    <button
-      class="ajout"
-      pButton
-      routerLink="/intranet/gestion/ajout-utilisateurs"
-      styleClass="p-button-success"
-      type="submit"
-    >
-      <img
-        src="assets/images/icones/gestion-utilisateur/plus.svg"
-        alt="plus"
-      />Créer un utilisateur
+    <input pInputText type="text" [(ngModel)]="nomFiltre" (input)="onFilterChange()" placeholder="Nom" pInputText />
+    <input pInputText type="text" [(ngModel)]="emailFiltre" (input)="onFilterChange()" placeholder="Email" pInputText />
+    <input pInputText type="text" [(ngModel)]="roleFiltre" (input)="onFilterChange()" placeholder="Rôles" pInputText />
+    <button pButton class="clear" (click)="clearFilters()" label="Effacer"></button>
+    <button class="ajout" pButton routerLink="/intranet/gestion/ajout-utilisateurs" styleClass="p-button-success"
+      type="submit">
+      <img src="assets/images/icones/gestion-utilisateur/plus.svg" alt="plus" />Créer un utilisateur
     </button>
   </article>
   <article class="table-users">
@@ -81,11 +44,7 @@
       <tbody>
         <tr *ngFor="let user of filteredUtilisateurs">
           <td>
-            <input
-              type="checkbox"
-              [(ngModel)]="user.selected"
-              (change)="onUserSelectChange(user)"
-            />
+            <input type="checkbox" [(ngModel)]="user.selected" (change)="onUserSelectChange(user)" />
           </td>
           <td>{{ user.nom }}</td>
           <td>{{ user.email }}</td>
@@ -96,101 +55,53 @@
           </td>
           <td>
             <figure>
-              <img
-                src="assets/images/icones/gestion-utilisateur/coeur.png"
-                alt="favoris"
-              />
+              <img src="assets/images/icones/gestion-utilisateur/coeur.png" alt="favoris" />
             </figure>
           </td>
           <td>
             <figure (click)="openEditModal(user)">
-              <img
-                src="assets/images/icones/gestion-utilisateur/editer.png"
-                alt="edit"
-              />
+              <img src="assets/images/icones/gestion-utilisateur/editer.png" alt="edit" />
             </figure>
           </td>
           <td>
             <figure (click)="openDeleteDataModal(user)">
-              <img
-                src="assets/images/icones/gestion-utilisateur/corbeille.png"
-                alt="delete"
-              />
+              <img src="assets/images/icones/gestion-utilisateur/corbeille.png" alt="delete" />
             </figure>
           </td>
         </tr>
       </tbody>
     </table>
-    <!-- <section *ngIf="selectedUserForEdit">
-        <div>
-          <label for="nom">Nom:</label>
-          <input pInputText type="text" id="nom" [ngModel]="selectedUserForEdit ? selectedUserForEdit.nom : ''" (ngModelChange)="selectedUserForEdit && (selectedUserForEdit.nom = $event)" />
-        </div>
-        <div>
-          <label for="email">Email:</label>
-          <input type="text" id="email" [ngModel]="selectedUserForEdit ? selectedUserForEdit.email : ''" (ngModelChange)="selectedUserForEdit && (selectedUserForEdit.email = $event)" />
-        </div>
-        <div *ngFor="let role of (selectedUserForEdit ? selectedUserForEdit.roles : [])">
-          <input pInputText type="checkbox" [ngModel]="selectedUserForEdit && selectedUserForEdit.selectedRoles && selectedUserForEdit.selectedRoles[role]" (ngModelChange)="selectedUserForEdit && selectedUserForEdit.selectedRoles && (selectedUserForEdit.selectedRoles[role] = $event)" /> {{ role }}
-        </div>
-        <button (click)="updateUser()">Enregistrer</button>
-      </section> -->
-      <div class="modal" [ngClass]="{'show': displayEditModal}">
-        <div class="modal-content">
+    <div class="modal" [ngClass]="{'show': displayEditModal}">
+      <div class="modal-content">
         <span class="close" (click)="closeEditModal()">&times;</span>
         <section *ngIf="selectedUserForEdit">
           <div>
             <label for="nom">Nom:</label>
-            <input
-              pInputText
-              type="text"
-              id="nom"
-              [ngModel]="selectedUserForEdit ? selectedUserForEdit.nom : ''"
+            <input pInputText type="text" id="nom" [ngModel]="selectedUserForEdit ? selectedUserForEdit.nom : ''"
               (ngModelChange)="
                 selectedUserForEdit && (selectedUserForEdit.nom = $event)
-              "
-            />
+              " />
           </div>
           <div>
             <label for="email">Email:</label>
-            <input
-              type="text"
-              id="email"
-              [ngModel]="selectedUserForEdit ? selectedUserForEdit.email : ''"
+            <input type="text" id="email" [ngModel]="selectedUserForEdit ? selectedUserForEdit.email : ''"
               (ngModelChange)="
                 selectedUserForEdit && (selectedUserForEdit.email = $event)
-              "
-            />
+              " />
           </div>
           <label for="roles">Roles:</label>
-
           <div *ngFor="let role of allRoles">
-            <input
-              type="checkbox"
-              [ngModel]="
-                selectedUserForEdit &&
-                selectedUserForEdit.roles &&
-                selectedUserForEdit.roles.includes(role)
-              "
-              (ngModelChange)="updateUserRole(role, $event)"
-            />
+            <input *ngIf="selectedUserForEdit" type="checkbox" [checked]="getRoleCheckedState(role)" (change)="handleUserRoleChange(role, $event)" />
+
             {{ role }}
           </div>
           <button styleClass="p-button-" pButton (click)="closeEditModal()">Annuler</button>
           <button styleClass="p-button-success" pButton (click)="updateUser()">Enregistrer</button>
         </section>
-
       </div>
     </div>
   </article>
-  <button
-    class="erased"
-    pButton
-    *ngIf="selectedUsers.length > 0"
-    (click)="deleteSelectedUsers()"
-    label="Supprimer les utilisateurs sélectionnés"
-  ></button>
+  <button class="erased" pButton *ngIf="selectedUsers.length > 0" (click)="deleteSelectedUsers()"
+    label="Supprimer les utilisateurs sélectionnés"></button>
   <app-delete-data></app-delete-data>
-  <!-- <app-edit-user></app-edit-user> -->
-  <app-donnees-medicales></app-donnees-medicales>
 </section>

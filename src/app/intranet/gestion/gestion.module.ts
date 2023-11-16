@@ -13,9 +13,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { GestionUtilisateursPipe } from 'src/app/pipes/gestion-utilisateurs.pipe';
-import { EditUserComponent } from '../template/dialog/edit-user/edit-user.component';
 import { DialogModule } from 'primeng/dialog';
-import { DonneesMedicalesComponent } from '../template/dialog/donnees-medicales/donnees-medicales.component';
 import { DropdownModule } from 'primeng/dropdown';
 
 
@@ -29,8 +27,7 @@ import { DropdownModule } from 'primeng/dropdown';
     GestionComponent,
     DeleteDataComponent,
     GestionUtilisateursPipe,
-    EditUserComponent,
-    DonneesMedicalesComponent
+
   ],
   imports: [
     CommonModule,

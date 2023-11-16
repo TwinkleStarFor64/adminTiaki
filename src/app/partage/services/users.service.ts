@@ -15,7 +15,7 @@ export class UsersService implements OnInit {
   user!: UtilisateurI;
   filteredUtilisateurs: UtilisateurI[] = [];
   profil!: UtilisateurI;
-
+  allRoles: any[] = [];
   constructor(public supa: SupabaseService) {}
 
   ngOnInit(): void {}
@@ -62,12 +62,12 @@ export class UsersService implements OnInit {
       const allRoles: any[] = await this.supa.getRoles();
   
       if (Array.isArray(allRoles)) {
-        allRoles.forEach((item: any) => {
-          const rolesValues = Object.values(item);
-  
-          console.log('Values:', rolesValues);
-          return rolesValues;
+        const rolesArray = allRoles.map((item: any) => {
+          return Object.values(item);
         });
+  
+        console.log('Values:', rolesArray);
+        return rolesArray;
       } else {
         throw new Error("Aucune donnée n'a été récupérée pour les rôles.");
       }
@@ -79,12 +79,11 @@ export class UsersService implements OnInit {
     }
   }
   
+  
   async fetchAllUsersWithRoles() {
     try {
       // Remplacez cette ligne par votre logique pour récupérer tous les utilisateurs avec leurs rôles
       const data: any = await this.supa.getAllUsersWithRoles();
-      // console.log("data de getAllUsersWithRoles", data);
-
       if (Array.isArray(data)) {
         // Logique pour traiter les données si elles sont un tableau
         this.allUsersData = data.map((item: any) => {
@@ -101,9 +100,6 @@ export class UsersService implements OnInit {
             selected: false,
           };
         });
-
-        // Logique pour traiter les données
-        // console.log('Données récupérées avec succès dans fetchAllUsersWithRoles :', this.allUsersData);
 
         return;
       } else {
