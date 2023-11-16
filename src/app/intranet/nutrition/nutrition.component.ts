@@ -10,6 +10,7 @@ import { PlatI } from 'src/app/partage/modeles/Types';
 })
 export class NutritionComponent implements OnInit{
   selectedPlats?: PlatI;
+  filtre: string = ''; //Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans ngModel
   
 constructor(public supa: SupabaseService, public nutrition:NutritionService) { }
 

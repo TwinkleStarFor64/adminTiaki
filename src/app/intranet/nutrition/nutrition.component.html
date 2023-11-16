@@ -18,29 +18,31 @@
         <h3>Gestion des plats</h3>
       </span>
       <p-button  styleClass="p-button-success">Ajouter un plat</p-button>
-      <input type="search" value="Recherche">
-      <div *ngFor="let plat of nutrition.plats">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input type="text" pInputText [(ngModel)]="filtre" />
+      </span>
+      <ng-container *ngIf="nutrition.plats | plats:filtre as filteredPlats">
+      <div *ngFor="let plat of filteredPlats">
         <p (click)="onSelectPlat(plat)">{{ plat.nom }}</p>
         <figure><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>      
       </div>
+    </ng-container>
     </article>
     <article>    
-      <div *ngIf="selectedPlats">
-          <p>{{ selectedPlats.nom }}</p>
-          <p>{{ selectedPlats.description }}</p>
+      <div *ngIf="selectedPlats">       
           <form #platForm="ngForm"> 
             <span class="p-float-label">
-              <input pInputText [(ngModel)]="selectedPlats.nom" name="nom" type="text" required
-                minlength="1" />
+              <input pInputText [(ngModel)]="selectedPlats.nom" name="nom" type="text" required minlength="1" />
               <label htmlFor="nom">Nom</label>
             </span> 
             <span class="p-float-label">
-              <textarea id="float-input" rows="5" cols="30" pInputTextarea [(ngModel)]="selectedPlats.description">{{ selectedPlats.description }}</textarea>
-              <label for="float-input">Summary</label>
-          </span>          
+              <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="selectedPlats.description" name="description"></textarea>
+              <label for="float-input">Description</label>
+            </span>
+                       
             
           </form>    
-      </div>
-      
+      </div>      
     </article>    
   </section>

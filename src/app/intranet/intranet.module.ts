@@ -11,10 +11,13 @@ import { ProfilComponent } from './profil/profil.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast'; // Pour les pop-up de MessageService
 import { HttpClientModule } from '@angular/common/http';
 import { DonneesService } from '../partage/services/donnees.service';
+import { PlatsPipe } from '../pipes/plats.pipe';
+
 
 
 @NgModule({
@@ -25,7 +28,8 @@ import { DonneesService } from '../partage/services/donnees.service';
     NutritionComponent,
     IntranetComponent,    
     AsideBarComponent,
-    ProfilComponent,   
+    ProfilComponent, 
+    PlatsPipe 
     
   ],
   imports: [
@@ -35,6 +39,7 @@ import { DonneesService } from '../partage/services/donnees.service';
     FormsModule,
     ButtonModule,
     InputTextModule,
+    InputTextareaModule,
     ConfirmDialogModule,    
     ToastModule,
     HttpClientModule,

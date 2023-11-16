@@ -13,13 +13,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ResetComponent } from './extranet/reset/reset.component';
 
 
-
 @NgModule({
   declarations: [
     AppComponent,
     ConnexionComponent,
     RecoveryComponent,
     ResetComponent,
+   
     
   ],
   imports: [

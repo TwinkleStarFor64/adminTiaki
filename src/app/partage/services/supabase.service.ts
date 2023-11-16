@@ -33,17 +33,14 @@ export class SupabaseService {
     this.supabase.auth
       .signInWithPassword({ email, password })
       .then((res) => {
-        //console.log('Méthode signIn - ce que contient la réponse : ', res);
+        console.log('Méthode signIn - ce que contient la réponse : ', res);
         this.user = res.data.user; // La réponse de la méthode avec toutes les données d'un utilisateur
         //console.log("L'id de l'utilisateur authentifié : ", this.user.id);
 
         if (res.data.user!.role === 'authenticated') {
           // Je vérifie que le rôle et 'authenticated' dans supabase - voir le résultat de console.log(res)
           this.token = res.data.session!.access_token; // Je stock la valeur du token retourné par supabase
-
-          if (this.token) {
-            sessionStorage.setItem('token', this.tokenDev);
-          }
+          //console.log(this.token);          
 
           this.authId = res.data.user!.id; // j'attribue à la variable authId l'id de l'utilisateur (après son authentification)
           //console.log(this.authUserId);          
