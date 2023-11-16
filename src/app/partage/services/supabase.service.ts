@@ -9,9 +9,9 @@ import { Router } from '@angular/router';
 })
 export class SupabaseService {
   private supabase: SupabaseClient; // Instance du client Supabase
+  _session: AuthSession | null = null; // Session d'authentification
   public utilisateurData: UtilisateurData[] = [];
   public roleData: RoleData[] = [];
-  _session: AuthSession | null = null; // Session d'authentification
 
   user: any; // Utilisé dans la méthode signIn()
   token!: string; // Utilisé dans la méthode signIn() pour stocker le token de l'utilisateur
@@ -279,23 +279,6 @@ export class SupabaseService {
   }
 
   /* --------------------------------------- Code pour l'interface nutrition ---------------------------------------------- */
-
-  async getPlats() {
-    const { data, error } = await this.supabase
-      .from('plats')
-      .select('*')
-    if (error) {
-      console.log("Erreur de la méthode getPlats : ",error);      
-    }
-    if (data) {
-      console.log("Data de la méthode getPlats : ", data);
-      return data      
-    } else {
-     return console.log("Pas de plats en BDD");      
-    }   
-  }
-
-
 
   //Méthode de test et optimisation
   async getAttribuerPlats(): Promise<any[]> {

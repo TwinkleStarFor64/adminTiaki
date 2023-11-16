@@ -22,12 +22,14 @@
         <i class="pi pi-search"></i>
         <input type="text" pInputText [(ngModel)]="filtre" />
       </span>
-      <ng-container *ngIf="nutrition.plats | plats:filtre as filteredPlats">
-      <div *ngFor="let plat of filteredPlats">
-        <p (click)="onSelectPlat(plat)">{{ plat.nom }}</p>
-        <figure><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>      
-      </div>
-    </ng-container>
+      <span>
+        <ng-container *ngIf="nutrition.plats | plats:filtre as filteredPlats">
+        <div *ngFor="let plat of filteredPlats">
+          <p (click)="onSelectPlat(plat)">{{ plat.nom }}</p>          
+          <figure (click)="DeleteDialog(plat.id)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>      
+        </div>
+      </ng-container>
+      </span>
     </article>
     <article>    
       <div *ngIf="selectedPlats">       
@@ -46,3 +48,16 @@
       </div>      
     </article>    
   </section>
+
+
+
+  <!-- Pour la pop-up MessageService -->
+<p-toast></p-toast>
+
+<!-- Le contenu de la Modal PrimeNG -->
+<p-confirmDialog #cd [style]="{ width: '40vw' }">
+  <ng-template pTemplate="footer">
+    <button type="submit" class="acceptButton" pButton icon="pi pi-check" label="Oui" (click)="cd.accept()"></button>
+    <button type="button" class="rejectButton" pButton icon="pi pi-times" label="Non" (click)="cd.reject()"></button>
+  </ng-template>
+</p-confirmDialog>
