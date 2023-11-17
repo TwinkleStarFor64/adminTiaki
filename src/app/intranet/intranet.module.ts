@@ -17,6 +17,9 @@ import { ToastModule } from 'primeng/toast'; // Pour les pop-up de MessageServic
 import { HttpClientModule } from '@angular/common/http';
 import { DonneesService } from '../partage/services/donnees.service';
 import { PlatsPipe } from '../pipes/plats.pipe';
+import { NgxPaginationModule } from 'ngx-pagination';
+
+
 
 
 
@@ -42,7 +45,8 @@ import { PlatsPipe } from '../pipes/plats.pipe';
     InputTextareaModule,
     ConfirmDialogModule,    
     ToastModule,
-    HttpClientModule,
+    HttpClientModule,    
+    NgxPaginationModule
      
   ],
   providers: [

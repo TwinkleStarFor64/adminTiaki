@@ -6,21 +6,23 @@ h1,h2,h3{
 a{
     color: $card-nutri;
 }
-
+main{
+    overflow-y: auto!important;
+    overflow-x: hidden;  
+}
 ::-webkit-scrollbar {
     background-color: #e7adb7;
     width: 10px;
-  }
-  
-  ::-webkit-scrollbar-thumb {
+}  
+::-webkit-scrollbar-thumb {
     height: 200px;
     background-color: $card-nutri;
-  }
+}
 
 section {
     article:nth-child(1){ // La section sur la droite avec la liste des plats    
         flex-direction: column;
-        width: 20%;
+        width: 20vw;
         span:nth-child(1){ // Iĉone et <h3>Gestion des plats</h3>
             border-bottom: #805E96 dashed 1px;
             display: flex;
@@ -37,12 +39,12 @@ section {
             font-weight: 700;
             color: black;
         }
-        span:nth-child(3){
+        span:nth-child(3){ // L'input de recherche - PrimeNG
             margin: 15px 0px 10px 20px;           
         }
-        span:nth-child(4) {
+        span:nth-child(4){ // Contient la boucle *ngFor avec la liste de tout les plats
             overflow-y: auto;
-            height: 70%;
+            height: 58vh;
             div{ // La liste des plats
                 margin-left: 20px;
                 display: flex;
@@ -56,21 +58,35 @@ section {
                     width: 90%;
                     cursor: pointer;
                 }
-                figure{
+                figure{ // l'icône de corbeille
                     cursor:pointer;
                 }        
-            }        
-
+            }
+        }
+        span:nth-child(5){ // contient la pagination ngx-paginator
+            display: flex;
+            flex-direction: row;            
+            justify-content: center;
+        }
+        span:nth-child(5)::ng-deep .ngx-pagination{ // le composant ngx-paginator           
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;            
+            padding: 0;            
+        }
+        span:nth-child(5)::ng-deep .ngx-pagination .current{ // le bouton de la page courante
+            background-color: $card-nutri;
         }
     }
-    article:nth-child(2){
+    article:nth-child(2){ // Article central contient le formulaire
         background-color: aqua;
         flex-direction: column;
         width: 50%;
         align-items: center;
+        border-right: $card-nutri 2px dashed;
         div{
             form{
-                background-color: yellow;
                 display: flex;
                 flex-direction: column;
                 margin-top: 25px;

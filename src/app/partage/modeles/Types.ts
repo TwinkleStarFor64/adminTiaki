@@ -38,7 +38,7 @@ export interface PlatI {
     nom: string;
     description: string;
     alim_code: number;
-    statut: string;
+    statut?: string;
     reaction?: string;
     idIngredients?: Array<string>;
 }

@@ -10,9 +10,13 @@ import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/a
   styleUrls: ['./nutrition.component.scss'],
   providers: [ConfirmationService, MessageService], // Pour les modals PrimeNG
 })
+
+
 export class NutritionComponent implements OnInit{
-  selectedPlats?: PlatI;
+  selectedPlats?: PlatI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
   filtre: string = ''; //Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans ngModel  
+  platArray: PlatI[] = [];  
+  page: number = 1; // Utilisé dans le paginator HTML pour définir la page de départ - paginate: { itemsPerPage: 1, currentPage: page }
   
 constructor(public supa: SupabaseService, public nutrition:NutritionService, private confirmationService: ConfirmationService, private messageService: MessageService,) { }
 
@@ -23,8 +27,8 @@ async ngOnInit(): Promise<void> {
   
 }
 
-onSelectPlat(plat: PlatI) {  
-    this.selectedPlats = plat;
+onSelectPlat(plat: PlatI) { // Utilisé sur le nom du plat en HTML 
+    this.selectedPlats = plat; // J'attribue à selectedPlats la value du plat ou j'ai cliqué
     console.log("J'ai cliqué sur : " + this.selectedPlats.nom);  
 }
 
