@@ -26,7 +26,8 @@
         <ng-container *ngIf="nutrition.plats | plats:filtre as filteredPlats">
         <!-- Utilisation de ngx-pagination - Doc : https://github.com/michaelbromley/ngx-pagination/blob/master/README.md#demo -->  
         <div *ngFor="let plat of filteredPlats | paginate: { itemsPerPage: 10, currentPage: page }">
-          <p (click)="onSelectPlat(plat)">{{ plat.nom }}</p>          
+          <p (click)="onSelectPlat(plat, plat.idIngredients)">{{ plat.nom }}</p>
+          <p>{{plat.idIngredients}}</p>          
           <figure (click)="DeleteDialog(plat.id)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>      
         </div>
       </ng-container>
@@ -47,9 +48,12 @@
               <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="selectedPlats.description" name="description"></textarea>
               <label for="float-input">Description</label>
             </span>
-                       
-            
-          </form>    
+          </form>
+          <span>            
+            <div *ngFor="let toto of nutrition.ciqual">
+              <p>{{ toto["alim_nom_fr"] }}</p>
+            </div>
+          </span>    
       </div>      
     </article>    
   </section>

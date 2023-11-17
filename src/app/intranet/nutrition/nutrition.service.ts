@@ -1,5 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
-import { PlatI } from 'src/app/partage/modeles/Types';
+import { CiqualI, PlatI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { AuthSession, createClient, SupabaseClient, } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
@@ -12,12 +12,16 @@ export class NutritionService implements OnInit {
   _session: AuthSession | null = null; // Session d'authentification Supabase
 
   plats: PlatI[] = [];
+  ciqual: CiqualI[] = [];
+  ciqualId!: Array<number>;
+
   listePlats: any[] = [];
 
   constructor(public supa: SupabaseService) {this.supabase = createClient(environment.supabaseUrl,environment.supabaseKey)}
 
   async ngOnInit(): Promise<void> {
     this.fetchPlats();
+    this.fetchCiqual(this.ciqualId);
   }
 // ---------------------Méthode pour fetch les plats et gérer leur affichage en HTML---------------------------
   async fetchPlats(): Promise<any> {
@@ -31,7 +35,7 @@ export class NutritionService implements OnInit {
           nom: item['nom'],
           description: item['description'],
           alim_code: item['alim_code'], 
-          statut: item['statut']       
+          idIngredients: item['idIngredients']      
         }));
         console.log(this.plats.map((item) => item['nom']));
         return this.plats;
@@ -52,7 +56,7 @@ export class NutritionService implements OnInit {
       console.log("Data de la méthode getPlats : ", data);
       return data      
     } else {
-     return console.log("Pas de plats en BDD");      
+     return [];      
     }   
   }
 // -------------------------Méthode pour supprimer un plat-------------------------------------
@@ -65,7 +69,42 @@ export class NutritionService implements OnInit {
       console.log("Erreur de suppression de plat", deleteError);      
     }
   }
-
+// ---------------------Méthode pour fetch les ingrédients sur la table ciqualAnses et gérer leur affichage en HTML---------------------------
+async fetchCiqual(id: Array<number>): Promise<any> {
+  try {
+    const ciqualData = await this.getCiqual(id); // Appelle la méthode getCiqual ci-dessous
+    if (ciqualData && Array.isArray(ciqualData) && ciqualData.length > 0) {
+      this.ciqual = ciqualData.map((item: { [x: string]: any }) => ({        
+        alim_nom_fr: item['alim_nom_fr'],              
+      }));
+      console.log(this.ciqual.map((item) => item['alim_nom_fr']));
+      return this.ciqual;      
+    } else {
+      this.ciqual = [];
+      console.log("Pas de ciqual !", this.ciqual);
+      return this.ciqual;
+      
+    }
+  } catch (error) {
+    console.error("Une erreur s'est produite sur la méthode fetchCiqual :", error)
+  }   
+}
+// -----------------------Méthode pour récupérer la table Ciqual-------------------------------
+  async getCiqual(id: Array<number>) {
+    const { data: ciqualData, error: ciqualError } = await this.supabase
+      .from('ciqualAnses')
+      .select('*')
+      .in('alim_code', id)
+    if (ciqualError) {
+      console.log("Erreur de la méthode getCiqual : ", ciqualError);      
+    }
+    if (ciqualData) {
+      console.log("Data de la méthode getCiqual : ", ciqualData);
+      return ciqualData      
+    } else {
+      return [];      
+    }
+  }
 
 
 

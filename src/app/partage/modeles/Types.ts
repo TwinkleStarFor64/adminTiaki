@@ -40,5 +40,9 @@ export interface PlatI {
     alim_code: number;
     statut?: string;
     reaction?: string;
-    idIngredients?: Array<string>;
+    idIngredients?: Array<number>;
+}
+
+export interface CiqualI {
+    alim_nom_fr: string;
 }

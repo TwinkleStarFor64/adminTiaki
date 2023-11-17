@@ -25,11 +25,17 @@ async ngOnInit(): Promise<void> {
   //this.supa.getAttribuerPlatsBis();
   this.nutrition.fetchPlats();
   
+  
 }
 
-onSelectPlat(plat: PlatI) { // Utilisé sur le nom du plat en HTML 
+
+
+onSelectPlat(plat: PlatI, id: Array<number>) { // Utilisé sur le nom du plat en HTML 
     this.selectedPlats = plat; // J'attribue à selectedPlats la value du plat ou j'ai cliqué
-    console.log("J'ai cliqué sur : " + this.selectedPlats.nom);  
+    console.log("J'ai cliqué sur : " + this.selectedPlats.idIngredients);
+    this.selectedPlats.idIngredients = id; 
+    this.nutrition.fetchCiqual(id); 
+    this.nutrition.ciqualId = id;
 }
 
 // Méthode pour la modal de suppression d'un plat'
