@@ -45,4 +45,18 @@ export interface PlatI {
 
 export interface CiqualI {
     alim_nom_fr: string;
+    proteine: number;
+    glucides: number;
+    lipides: number;
+    sucres: number;
+    vitamineC: number;
+    vitamineB1: number;
+    vitamineB2: number;
+    vitamineB3: number;
+    vitamineB5: number;
+    magnesium: number;
+    potassium: number;
+    cuivre: number;
+    manganese: number;
+    [key: string]: number | string; // Signature d'index
 }

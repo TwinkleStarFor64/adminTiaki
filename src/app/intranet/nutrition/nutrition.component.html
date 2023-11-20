@@ -23,6 +23,7 @@
         <input type="text" pInputText [(ngModel)]="filtre" />
       </span>
       <span>
+        <!-- Utilisation du pipe plats pour rechercher des plats par leur noms -->
         <ng-container *ngIf="nutrition.plats | plats:filtre as filteredPlats">
         <!-- Utilisation de ngx-pagination - Doc : https://github.com/michaelbromley/ngx-pagination/blob/master/README.md#demo -->  
         <div *ngFor="let plat of filteredPlats | paginate: { itemsPerPage: 10, currentPage: page }">
@@ -49,10 +50,22 @@
               <label for="float-input">Description</label>
             </span>
           </form>
-          <span>            
-            <div *ngFor="let toto of nutrition.ciqual">
-              <p>{{ toto["alim_nom_fr"] }}</p>
+          <span>   
+            <h4>Ingrédients</h4>         
+            <div *ngFor="let ingredients of nutrition.ciqual">
+              <p>{{ ingredients["alim_nom_fr"] }}</p>
             </div>
+            <h4>Nutriments</h4>
+            <div *ngFor="let ingredients of nutrition.ciqual">
+              <p>Protéines : {{ ingredients.proteine }}</p>
+              <p>Glucides : {{ ingredients.glucides }}</p>
+              <p>Lipides : {{ ingredients.lipides }}</p>
+              <p>Sucre : {{ ingredients.sucres }}</p>
+            </div>
+            <p>Total des Protéines : {{ nutrition.totals['proteine'] }}</p>
+            <p>Total des Glucides : {{ nutrition.totals['glucides'] }}</p>
+            <p>Total des Lipides : {{ nutrition.totals['lipides'] | number: '1.2-2' }}</p>
+            <p>Total des Sucres : {{ nutrition.totals['sucres'] }}
           </span>    
       </div>      
     </article>    

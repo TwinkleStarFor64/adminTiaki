@@ -33,8 +33,7 @@ onSelectPlat(plat: PlatI, id: Array<number>) {
     this.selectedPlats.idIngredients = id; 
     console.log("J'ai cliqué sur : " + this.selectedPlats.idIngredients);
   // Je passe en paramétre de la méthode fetchCiqual le tableau d'id obtenu au dessus
-    this.nutrition.fetchCiqual(id); 
-    //this.nutrition.ciqualId = id;
+    this.nutrition.fetchCiqual(id);     
 }
 
 // Méthode pour la modal de suppression d'un plat'

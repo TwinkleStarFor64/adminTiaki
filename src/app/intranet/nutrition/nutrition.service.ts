@@ -13,16 +13,19 @@ export class NutritionService implements OnInit {
 
   plats: PlatI[] = [];
   ciqual: CiqualI[] = [];
-  //ciqualId!: Array<number>;
+
+  totals: { [key: string]: number } = {}; // Objet pour stocker tous les totaux - Les crochets {} sont utilisés pour définir un objet
+  // totals est un objet qui peut avoir des clés(key) de type string (par exemple, 'proteine', 'glucides', 'lipides', etc.)
+  // et des valeurs associées de type number
 
   listePlats: any[] = [];
 
   constructor(public supa: SupabaseService) {this.supabase = createClient(environment.supabaseUrl,environment.supabaseKey)}
 
   async ngOnInit(): Promise<void> {
-    this.fetchPlats();
-    //this.fetchCiqual(this.ciqualId);
+    //this.fetchPlats();    
   }
+
 // ---------------------Méthode pour fetch les plats et gérer leur affichage en HTML---------------------------
   async fetchPlats(): Promise<any> {
     try {
@@ -44,6 +47,7 @@ export class NutritionService implements OnInit {
       console.error("Une erreur s'est produite sur la méthode fetchPlats :", error)
     }   
   }
+
 // ----------------------Méthode pour récupérer tout les plats sur la table Plats de supabase-------------------
   async getPlats() {
     const { data, error } = await this.supabase
@@ -59,6 +63,7 @@ export class NutritionService implements OnInit {
      return [];      
     }   
   }
+
 // -------------------------Méthode pour supprimer un plat-------------------------------------
   async deletePlatSupabase(id: number) { // id récupérer sur la méthode deletePlat de nutrition.component
     const { error: deleteError } = await this.supabase
@@ -69,6 +74,27 @@ export class NutritionService implements OnInit {
       console.log("Erreur de suppression de plat", deleteError);      
     }
   }
+
+// -----------------------Méthode pour récupérer la table Ciqual-------------------------------
+async getCiqual(id: Array<number>) {
+  if (!id) { // Si pas d'id en paramétres return tableau vide - évite un message d'erreur si je clique sur un plat ne contenant pas idIngredients
+    return [];
+  }
+  const { data: ciqualData, error: ciqualError } = await this.supabase
+    .from('ciqualAnses')
+    .select('*')
+    .in('alim_code', id) //.in filtre les résultats de la table ciqualAnses où la colonne alim_code correspond à l'une des valeurs dans le tableau id
+  if (ciqualError) {
+    console.log("Erreur de la méthode getCiqual : ", ciqualError);      
+  }
+  if (ciqualData) {
+    console.log("Data de la méthode getCiqual : ", ciqualData);
+    return ciqualData      
+  } else {
+    return [];      
+  }
+}
+
 // ---------------------Méthode pour fetch les ingrédients sur la table ciqualAnses et gérer leur affichage en HTML---------------------------
 async fetchCiqual(id: Array<number>): Promise<any> { // l'id est fourni durant l'appelle à cette méthode sur nutrition.component
   try {
@@ -76,11 +102,27 @@ async fetchCiqual(id: Array<number>): Promise<any> { // l'id est fourni durant l
     console.log("ciqualData : ", ciqualData);
   // Si ciqualData n'est pas null ou undefined &&  un tableau && longueur du tableau supérieur à 0
     if (ciqualData && Array.isArray(ciqualData) && ciqualData.length > 0) {
-      this.ciqual = ciqualData.map((item: { [x: string]: any }) => ({        
-        alim_nom_fr: item['alim_nom_fr'],              
-      }));
+      this.ciqual = ciqualData.map((item: { [x: string]: any }) => ({       
+        alim_nom_fr: item['alim_nom_fr'], 
+  // Ci-dessous avec parseFloat je convertis une string en number (données de type texte en BDD)
+  // Avec .replace(',', '.')) || 0 - Je remplace le . par une , - Si j'ai autre chose qu'un number en BDD la valeur par défaut est 0
+        proteine: parseFloat(item['Protéines, N x 6.25 (g/100 g)'].replace(',', '.')) || 0,
+        glucides: parseFloat(item['Glucides (g/100 g)'].replace(',', '.')) || 0,
+        lipides: parseFloat(item['Lipides (g/100 g)'].replace(',', '.')) || 0,
+        sucres: parseFloat(item['Sucres (g/100 g)'].replace(',', '.')) || 0,
+        vitamineC: parseFloat(item['Vitamine C (mg/100 g)'].replace(',', '.')) || 0,
+        vitamineB1: parseFloat(item['Vitamine B1 ou Thiamine (mg/100 g)'].replace(',', '.')) || 0,
+        vitamineB2: parseFloat(item['Vitamine B2 ou Riboflavine (mg/100 g)'].replace(',', '.')) || 0,
+        vitamineB3: parseFloat(item['Vitamine B3 ou PP ou Niacine (mg/100 g)'].replace(',', '.')) || 0,
+        vitamineB5: parseFloat(item['Vitamine B5 ou Acide pantothénique (mg/100 g)'].replace(',', '.')) || 0,
+        magnesium: parseFloat(item['Magnésium (mg/100 g)'].replace(',', '.')) || 0,
+        potassium: parseFloat(item['Potassium (mg/100 g)'].replace(',', '.')) || 0,
+        cuivre: parseFloat(item['Cuivre (mg/100 g)'].replace(',', '.')) || 0,
+        manganese: parseFloat(item['Manganèse (mg/100 g)'].replace(',', '.')) || 0,             
+      }));      
+      this.calculateTotals(); // Après le map je fais appelle à cette méthode pour additioner les valeurs des items      
       console.log(this.ciqual.map((item) => item['alim_nom_fr']));
-      return this.ciqual;      
+      return this.ciqual; // ciqual à pour valeur le map et le résultat additioné de calculateTotals();      
     } else {
       console.log("Pas de ciqual !");
       return [];      
@@ -89,25 +131,16 @@ async fetchCiqual(id: Array<number>): Promise<any> { // l'id est fourni durant l
     console.error("Une erreur s'est produite sur la méthode fetchCiqual :", error)
   }   
 }
-// -----------------------Méthode pour récupérer la table Ciqual-------------------------------
-  async getCiqual(id: Array<number>) {
-    if (!id) { // Si pas d'id en paramétres return tableau vide - évite un message d'erreur si je clique sur un plat ne contenant pas idIngredients
-      return [];
-    }
-    const { data: ciqualData, error: ciqualError } = await this.supabase
-      .from('ciqualAnses')
-      .select('*')
-      .in('alim_code', id) //.in filtre les résultats de la table ciqualAnses où la colonne alim_code correspond à l'une des valeurs dans le tableau id
-    if (ciqualError) {
-      console.log("Erreur de la méthode getCiqual : ", ciqualError);      
-    }
-    if (ciqualData) {
-      console.log("Data de la méthode getCiqual : ", ciqualData);
-      return ciqualData      
-    } else {
-      return [];      
-    }
+//-------------------------------- Méthode pour calculer les totaux ------------------------------------------
+calculateTotals() {
+  const numericProperties = ['proteine', 'glucides', 'lipides', 'sucres', 'vitamineC', 'vitamineB1', 'vitamineB2', 'vitamineB3', 'vitamineB5', 'magnesium', 'potassium', 'cuivre', 'manganese'];
+  for (const property of numericProperties) {
+    this.totals[property] = this.ciqual.reduce((sum, item) => sum + (Number(item[property]) || 0), 0);
   }
+  console.log("Totaux :", this.totals);
+}
+
+  
 
 
 
@@ -125,48 +158,14 @@ async fetchCiqual(id: Array<number>): Promise<any> { // l'id est fourni durant l
 
 
 
-  /* async fetchAllUsersWithRoles() {
-    try {
-      const data: any = await this.supa.getAllUsersWithRoles();
-      console.log("data de getAllUsersWithRoles", data);
-  
-      if (Array.isArray(data)) {
-        // Logique pour traiter les données si elles sont un tableau
-        this.allUsersData = data.map((item: any) => {
-          console.log('Roles dans item :', item.roles); // Ajoutez le journal ici
-  
-          // Utilisez Object.keys pour obtenir les clés du tableau item.roles
-          const rolesKeys = Object.keys(item.roles);
-          // Utilisez les clés pour accéder aux valeurs et les placer dans un tableau
-          const rolesArray = rolesKeys.map((key) => item.roles[key]);
-  
-          return {
-            id: item.id,
-            email: item.email,
-            nom: item.nom,
-            roles: rolesArray,
-            selected: false,
-          };
-        });
-  
-        // Logique pour traiter les données
-        console.log('Données récupérées avec succès dans fetchAllUsersWithRoles :', this.allUsersData);
-  
-        return;
-      } else {
-        // Logique pour traiter les données si elles ne sont pas un tableau
-        throw new Error('Aucune donnée utilisateur et rôles disponibles');
-      }
-    } catch (error) {
-      console.error(
-        'Erreur lors de la récupération des données rôles et utilisateurs',
-        error
-      );
-      throw new Error(
-        "Echec de la méthode fetchAllUsersWithRoles. Veuillez consulter les logs pour plus d'informations."
-      );
-    }
-  } */
+      // Calcul de la somme des protéines
+/* const totalProteine = this.ciqual.reduce((sum, item) => {
+  const proteineValue = parseFloat(item.proteine.replace(',', '.')) || 0;
+  console.log("proteineValue:", proteineValue);
+  return sum + proteineValue;
+}, 0);
+
+console.log("Total des protéines :", totalProteine); */
 
 
   
