@@ -13,7 +13,7 @@ export class NutritionService implements OnInit {
 
   plats: PlatI[] = [];
   ciqual: CiqualI[] = [];
-  ciqualId!: Array<number>;
+  //ciqualId!: Array<number>;
 
   listePlats: any[] = [];
 
@@ -21,7 +21,7 @@ export class NutritionService implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.fetchPlats();
-    this.fetchCiqual(this.ciqualId);
+    //this.fetchCiqual(this.ciqualId);
   }
 // ---------------------Méthode pour fetch les plats et gérer leur affichage en HTML---------------------------
   async fetchPlats(): Promise<any> {
@@ -70,9 +70,11 @@ export class NutritionService implements OnInit {
     }
   }
 // ---------------------Méthode pour fetch les ingrédients sur la table ciqualAnses et gérer leur affichage en HTML---------------------------
-async fetchCiqual(id: Array<number>): Promise<any> {
+async fetchCiqual(id: Array<number>): Promise<any> { // l'id est fourni durant l'appelle à cette méthode sur nutrition.component
   try {
     const ciqualData = await this.getCiqual(id); // Appelle la méthode getCiqual ci-dessous
+    console.log("ciqualData : ", ciqualData);
+  // Si ciqualData n'est pas null ou undefined &&  un tableau && longueur du tableau supérieur à 0
     if (ciqualData && Array.isArray(ciqualData) && ciqualData.length > 0) {
       this.ciqual = ciqualData.map((item: { [x: string]: any }) => ({        
         alim_nom_fr: item['alim_nom_fr'],              
@@ -80,10 +82,8 @@ async fetchCiqual(id: Array<number>): Promise<any> {
       console.log(this.ciqual.map((item) => item['alim_nom_fr']));
       return this.ciqual;      
     } else {
-      this.ciqual = [];
-      console.log("Pas de ciqual !", this.ciqual);
-      return this.ciqual;
-      
+      console.log("Pas de ciqual !");
+      return [];      
     }
   } catch (error) {
     console.error("Une erreur s'est produite sur la méthode fetchCiqual :", error)
@@ -91,10 +91,13 @@ async fetchCiqual(id: Array<number>): Promise<any> {
 }
 // -----------------------Méthode pour récupérer la table Ciqual-------------------------------
   async getCiqual(id: Array<number>) {
+    if (!id) { // Si pas d'id en paramétres return tableau vide - évite un message d'erreur si je clique sur un plat ne contenant pas idIngredients
+      return [];
+    }
     const { data: ciqualData, error: ciqualError } = await this.supabase
       .from('ciqualAnses')
       .select('*')
-      .in('alim_code', id)
+      .in('alim_code', id) //.in filtre les résultats de la table ciqualAnses où la colonne alim_code correspond à l'une des valeurs dans le tableau id
     if (ciqualError) {
       console.log("Erreur de la méthode getCiqual : ", ciqualError);      
     }

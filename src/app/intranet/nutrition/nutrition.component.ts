@@ -20,22 +20,21 @@ export class NutritionComponent implements OnInit{
   
 constructor(public supa: SupabaseService, public nutrition:NutritionService, private confirmationService: ConfirmationService, private messageService: MessageService,) { }
 
-async ngOnInit(): Promise<void> {  
-  //this.nutrition.fetchData();
-  //this.supa.getAttribuerPlatsBis();
-  this.nutrition.fetchPlats();
-  
+async ngOnInit(): Promise<void> {    
+  this.nutrition.fetchPlats();  
   
 }
 
-
-
-onSelectPlat(plat: PlatI, id: Array<number>) { // Utilisé sur le nom du plat en HTML 
-    this.selectedPlats = plat; // J'attribue à selectedPlats la value du plat ou j'ai cliqué
-    console.log("J'ai cliqué sur : " + this.selectedPlats.idIngredients);
+// Méthode qui attribue des valeurs aux variables correspondant à l'objet sur lequel je clique - Utilisé sur le nom du plat en HTML 
+onSelectPlat(plat: PlatI, id: Array<number>) {
+  // J'attribue à selectedPlats la value du plat ou j'ai cliqué - Utile pour le ngIf selectedPlats
+    this.selectedPlats = plat; 
+  // J'attribue au paramétre id de la méthode le tableau d'alim_code contenu dans idIngredients  
     this.selectedPlats.idIngredients = id; 
+    console.log("J'ai cliqué sur : " + this.selectedPlats.idIngredients);
+  // Je passe en paramétre de la méthode fetchCiqual le tableau d'id obtenu au dessus
     this.nutrition.fetchCiqual(id); 
-    this.nutrition.ciqualId = id;
+    //this.nutrition.ciqualId = id;
 }
 
 // Méthode pour la modal de suppression d'un plat'
