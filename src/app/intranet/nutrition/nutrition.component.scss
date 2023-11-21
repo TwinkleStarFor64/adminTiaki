@@ -86,15 +86,36 @@ section {
     article:nth-child(2){ // Article central contient le formulaire
         flex-direction: column;
         width: 60vw;
-        align-items: center;        
+        align-items: flex-start;        
         overflow-y: auto;
         height: calc(100vh - $header);
-        div{
+        padding-bottom: 10px;
+        div:nth-child(1){
+            padding-left: 100px;
             form{
                 display: flex;
                 flex-direction: column;
-                margin-top: 25px;
+                margin-top: 25px;                
                 gap: 35px;
+            }
+            #blocIngredients{ // Le span avec la liste d'ingrédients et leurs nutriments
+                
+                h4{ // Les balises Ingrédients & Nutriments
+                    border-bottom: black dashed 1px;
+                    font-weight: 600;
+                    padding-bottom: 5px;
+                }
+                #nutriments{ // La div avec la liste des nutriments
+                    display: flex;
+                    flex-direction: row;
+                    gap: 1vw;
+                }
+                #divButton{
+                    width: 50vw;
+                    display: flex;
+                    justify-content: flex-end;
+                    gap: 1vw;
+                }
             }
         }
     }

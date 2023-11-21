@@ -164,14 +164,7 @@ calculateTotals() {
 
 
 
-      // Calcul de la somme des protéines
-/* const totalProteine = this.ciqual.reduce((sum, item) => {
-  const proteineValue = parseFloat(item.proteine.replace(',', '.')) || 0;
-  console.log("proteineValue:", proteineValue);
-  return sum + proteineValue;
-}, 0);
 
-console.log("Total des protéines :", totalProteine); */
 
 
   

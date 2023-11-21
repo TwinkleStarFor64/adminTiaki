@@ -50,22 +50,37 @@
               <label for="float-input">Description</label>
             </span>
           </form>
-          <span>   
+          <span id="blocIngredients">   
             <h4>Ingrédients</h4>         
             <div *ngFor="let ingredients of nutrition.ciqual">
               <p>{{ ingredients["alim_nom_fr"] }}</p>
             </div>
-            <h4>Nutriments</h4>
-            <!-- <div *ngFor="let ingredients of nutrition.ciqual">
-              <p>Protéines : {{ ingredients.proteine }}</p>
-              <p>Glucides : {{ ingredients.glucides }}</p>
-              <p>Lipides : {{ ingredients.lipides }}</p>
-              <p>Sucre : {{ ingredients.sucres }}</p>
-            </div> -->
-            <p>Protéines : {{ nutrition.totals['proteine'] | number: '1.2-2' }} Gr</p>
-            <p>Glucides : {{ nutrition.totals['glucides'] | number: '1.2-2' }} Gr</p>
-            <p>Lipides : {{ nutrition.totals['lipides'] | number: '1.2-2' }} Gr</p>
-            <p>Sucres : {{ nutrition.totals['sucres'] | number: '1.2-2' }} Gr </p>
+            <h4>Nutriments</h4> 
+            <div id="nutriments">
+              <span>
+                <p>Protéines : {{ nutrition.totals['proteine'] | number: '1.2-2' }} Gr</p>
+                <p>Glucides : {{ nutrition.totals['glucides'] | number: '1.2-2' }} Gr</p>
+                <p>Lipides : {{ nutrition.totals['lipides'] | number: '1.2-2' }} Gr</p>
+                <p>Sucres : {{ nutrition.totals['sucres'] | number: '1.2-2' }} Gr </p>
+              </span>
+              <span>
+                <p>Vitamine C : {{ nutrition.totals['vitamineC'] | number: '1.2-2' }} Mg </p>
+                <p>Vitamine B1 : {{ nutrition.totals['vitamineB1'] | number: '1.2-2' }} Mg </p>
+                <p>Vitamine B2 : {{ nutrition.totals['vitamineB2'] | number: '1.2-2' }} Mg </p>
+                <p>Vitamine B3 : {{ nutrition.totals['vitamineB3'] | number: '1.2-2' }} Mg </p>
+                <p>Vitamine B5 : {{ nutrition.totals['vitamineB5'] | number: '1.2-2' }} Mg </p>
+              </span>
+              <span>
+                <p>Magnesium : {{ nutrition.totals['magnesium'] | number: '1.2-2' }} Mg </p>
+                <p>Potassium : {{ nutrition.totals['potassium'] | number: '1.2-2' }} Mg </p>
+                <p>Cuivre : {{ nutrition.totals['cuivre'] | number: '1.2-2' }} Mg </p>
+                <p>Manganese : {{ nutrition.totals['manganese'] | number: '1.2-2' }} Mg </p>
+              </span>
+            </div>
+            <div id="divButton">
+              <p-button  styleClass="p-button-warning">Annuler</p-button>
+              <p-button  styleClass="p-button-success">Valider</p-button>
+            </div> 
           </span>    
       </div>      
     </article> 
