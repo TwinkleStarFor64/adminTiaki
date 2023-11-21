@@ -20,6 +20,7 @@ $sombre: black;
 $head: 60px; // Hauteur de l'entête des pages
 $foot: 150px; // Hauteur des menus du bas
 $l: 75px; // Largeur du menu de droite qui permet de calculer la largeur des éléments de la page
+$header: 160px; // Hauteur du header sur les interfaces
 
 p-button-label {
   font-size: 15rem;  
@@ -282,9 +283,11 @@ article.cartel {
 
 /* Header commun à toutes les pages de l'application */
 header {
-  flex-direction: column;
+  flex-direction: row;
+  height: $header;
   article:nth-child(1) {
     display: flex;
+    flex-direction: row;
     align-items: center;
     figure {
       margin-bottom: 10px; // Le gros logo Tiaki
@@ -293,8 +296,8 @@ header {
       display: flex;
       align-items: center;
       border-bottom: #805E96 dashed 1px;
-      height: 80%;
-      width: 65%;
+      //height: 80%;
+      width: 65vw;
       margin-left: 120px;
       h1{        
         font-size: 3rem;

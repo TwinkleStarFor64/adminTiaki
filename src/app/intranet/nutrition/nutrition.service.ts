@@ -120,7 +120,7 @@ async fetchCiqual(id: Array<number>): Promise<any> { // l'id est fourni durant l
         cuivre: parseFloat(item['Cuivre (mg/100 g)'].replace(',', '.')) || 0,
         manganese: parseFloat(item['Manganèse (mg/100 g)'].replace(',', '.')) || 0,             
       }));      
-      this.calculateTotals(); // Après le map je fais appelle à cette méthode pour additioner les valeurs des items      
+      this.calculateTotals(); // Après le map je fais appelle à cette méthode pour additioner les valeurs des items définis au dessus     
       console.log(this.ciqual.map((item) => item['alim_nom_fr']));
       return this.ciqual; // ciqual à pour valeur le map et le résultat additioné de calculateTotals();      
     } else {
@@ -133,9 +133,15 @@ async fetchCiqual(id: Array<number>): Promise<any> { // l'id est fourni durant l
 }
 //-------------------------------- Méthode pour calculer les totaux ------------------------------------------
 calculateTotals() {
+// Ci-dessous je récupére dans numericProperties le nom des items après le map de fetchCiqual  
   const numericProperties = ['proteine', 'glucides', 'lipides', 'sucres', 'vitamineC', 'vitamineB1', 'vitamineB2', 'vitamineB3', 'vitamineB5', 'magnesium', 'potassium', 'cuivre', 'manganese'];
   for (const property of numericProperties) {
+  // J'utilise la variable totals qui défini un objet avec clé et valeur  
     this.totals[property] = this.ciqual.reduce((sum, item) => sum + (Number(item[property]) || 0), 0);
+    // item représente un des items (par ex: proteine) - sum et l'addition de cet item à chaque itération 
+    // L'addition est faite ici : sum + (Number(item[property]) || 0) - Number(...) convertit cette valeur en nombre. 
+    // Si la conversion échoue (si la valeur est null ou undefined), cela renvoie NaN (Not a Number) - Dans ce cas || 0 renvoie 0
+    // 0 à la fin de reduce : C'est la valeur initiale de sum. À la première itération, sum sera égal à 0
   }
   console.log("Totaux :", this.totals);
 }

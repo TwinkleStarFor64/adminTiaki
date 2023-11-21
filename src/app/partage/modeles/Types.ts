@@ -58,5 +58,5 @@ export interface CiqualI {
     potassium: number;
     cuivre: number;
     manganese: number;
-    [key: string]: number | string; // Signature d'index
+    [key: string]: number | string; // Pour la méthode calculateTotals() qui crée un objet de type clé et valeur
 }

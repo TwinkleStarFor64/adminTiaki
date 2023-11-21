@@ -26,9 +26,9 @@
         <!-- Utilisation du pipe plats pour rechercher des plats par leur noms -->
         <ng-container *ngIf="nutrition.plats | plats:filtre as filteredPlats">
         <!-- Utilisation de ngx-pagination - Doc : https://github.com/michaelbromley/ngx-pagination/blob/master/README.md#demo -->  
-        <div *ngFor="let plat of filteredPlats | paginate: { itemsPerPage: 10, currentPage: page }">
+        <div *ngFor="let plat of filteredPlats | paginate: { itemsPerPage: 15, currentPage: page }">
           <p (click)="onSelectPlat(plat, plat.idIngredients)">{{ plat.nom }}</p>
-          <p>{{plat.idIngredients}}</p>          
+          <!-- <p>{{plat.idIngredients}}</p>  -->         
           <figure (click)="DeleteDialog(plat.id)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>      
         </div>
       </ng-container>
@@ -56,19 +56,22 @@
               <p>{{ ingredients["alim_nom_fr"] }}</p>
             </div>
             <h4>Nutriments</h4>
-            <div *ngFor="let ingredients of nutrition.ciqual">
+            <!-- <div *ngFor="let ingredients of nutrition.ciqual">
               <p>Protéines : {{ ingredients.proteine }}</p>
               <p>Glucides : {{ ingredients.glucides }}</p>
               <p>Lipides : {{ ingredients.lipides }}</p>
               <p>Sucre : {{ ingredients.sucres }}</p>
-            </div>
-            <p>Total des Protéines : {{ nutrition.totals['proteine'] }}</p>
-            <p>Total des Glucides : {{ nutrition.totals['glucides'] }}</p>
-            <p>Total des Lipides : {{ nutrition.totals['lipides'] | number: '1.2-2' }}</p>
-            <p>Total des Sucres : {{ nutrition.totals['sucres'] }}
+            </div> -->
+            <p>Protéines : {{ nutrition.totals['proteine'] | number: '1.2-2' }} Gr</p>
+            <p>Glucides : {{ nutrition.totals['glucides'] | number: '1.2-2' }} Gr</p>
+            <p>Lipides : {{ nutrition.totals['lipides'] | number: '1.2-2' }} Gr</p>
+            <p>Sucres : {{ nutrition.totals['sucres'] | number: '1.2-2' }} Gr </p>
           </span>    
       </div>      
-    </article>    
+    </article> 
+    <article>
+
+    </article>   
   </section>
 
 

@@ -1,4 +1,5 @@
 $card-nutri: #D9042B;
+$header: 160px; // Hauteur du header sur les interfaces
 
 h1,h2,h3{
     color: $card-nutri;
@@ -20,9 +21,11 @@ main{
 }
 
 section {
-    article:nth-child(1){ // La section sur la droite avec la liste des plats    
+    height: calc(100vh - $header);
+    article:nth-child(1){ // L'article sur la droite avec la liste des plats    
         flex-direction: column;
         width: 20vw;
+        height: calc(100vh - $header);
         span:nth-child(1){ // Iĉone et <h3>Gestion des plats</h3>
             border-bottom: #805E96 dashed 1px;
             display: flex;
@@ -40,11 +43,11 @@ section {
             color: black;
         }
         span:nth-child(3){ // L'input de recherche - PrimeNG
-            margin: 15px 0px 10px 20px;           
+            margin: 15px 0px 10px 20px;
         }
         span:nth-child(4){ // Contient la boucle *ngFor avec la liste de tout les plats
             overflow-y: auto;
-            height: 58vh;
+            height: 65vh;
             div{ // La liste des plats
                 margin-left: 20px;
                 display: flex;
@@ -67,6 +70,7 @@ section {
             display: flex;
             flex-direction: row;            
             justify-content: center;
+            align-items: flex-end;
         }
         span:nth-child(5)::ng-deep .ngx-pagination{ // le composant ngx-paginator           
             display: flex;
@@ -80,11 +84,11 @@ section {
         }
     }
     article:nth-child(2){ // Article central contient le formulaire
-        background-color: aqua;
         flex-direction: column;
-        width: 50%;
-        align-items: center;
-        border-right: $card-nutri 2px dashed;
+        width: 60vw;
+        align-items: center;        
+        overflow-y: auto;
+        height: calc(100vh - $header);
         div{
             form{
                 display: flex;
@@ -93,6 +97,11 @@ section {
                 gap: 35px;
             }
         }
+    }
+    article:nth-child(3){
+        background-color: #33BB27;
+        width: 20vw;
+        border-left: $card-nutri 2px dashed;
     }
 }
 
