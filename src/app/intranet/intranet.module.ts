@@ -18,6 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { DonneesService } from '../partage/services/donnees.service';
 import { PlatsPipe } from '../pipes/plats.pipe';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { IngredientsPipe } from '../pipes/ingredients.pipe';
 
 
 
@@ -32,7 +33,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     IntranetComponent,    
     AsideBarComponent,
     ProfilComponent, 
-    PlatsPipe 
+    PlatsPipe,
+    IngredientsPipe 
     
   ],
   imports: [

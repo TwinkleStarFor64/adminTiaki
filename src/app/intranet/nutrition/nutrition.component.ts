@@ -14,15 +14,26 @@ import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/a
 
 export class NutritionComponent implements OnInit{
   selectedPlats?: PlatI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
-  filtre: string = ''; //Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans ngModel  
+  filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats
+  filtreIngredients: string = ''; // Utiliser dans le ngModel affichant la liste des ingrédients - Filtre de recherche
   platArray: PlatI[] = [];  
-  page: number = 1; // Utilisé dans le paginator HTML pour définir la page de départ - paginate: { itemsPerPage: 1, currentPage: page }
+  pagePlats: number = 1; // Utilisé dans le paginator HTML de la liste des plats pour définir la page de départ - paginate: { itemsPerPage: 1, currentPage: pagePlats }
+  pageIngredients: number = 1; // Comme ci-dessus mais pour la liste d'ingrédients
   
 constructor(public supa: SupabaseService, public nutrition:NutritionService, private confirmationService: ConfirmationService, private messageService: MessageService,) { }
 
 async ngOnInit(): Promise<void> {    
-  this.nutrition.fetchPlats();  
+  this.nutrition.fetchPlats();
+  this.nutrition.fetchAllCiqual(); 
   
+}
+
+// Méthode utiliser dans l'input de recherche d'ingrédients afin de le réinitialiser 
+// Si l'input et vide ou pas vide la premiére page (pageIngredients) est défini à 1 afin de retrouver l'affichage initial
+onFilterChange() {
+  if (this.filtre === '' || this.filtre != '') {
+    this.pageIngredients = 1;
+  }
 }
 
 // Méthode qui attribue des valeurs aux variables correspondant à l'objet sur lequel je clique - Utilisé sur le nom du plat en HTML 
@@ -87,7 +98,14 @@ async deletePlat(id: number) { // Id correspond à plat.id au niveau du HTML ré
     })
 }
 
+async onSubmitForm() {    
+  try {      
+      await this.nutrition.updatePlat(this.selectedPlats!.id,{description:this.selectedPlats!.description});
 
+    } catch (error) {
+    console.error("Une erreur s'est produite :", error);
+  }
+}
 
 
 

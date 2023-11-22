@@ -58,5 +58,5 @@ export interface CiqualI {
     potassium: number;
     cuivre: number;
     manganese: number;
-    [key: string]: number | string; // Pour la méthode calculateTotals() qui crée un objet de type clé et valeur
+    [key: string]: number | string; // Pour la méthode calculateTotals() qui crée un objet de type clé et valeur - Variable totals dans nutrition.service
 }

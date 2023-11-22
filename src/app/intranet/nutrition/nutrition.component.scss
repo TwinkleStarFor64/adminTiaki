@@ -85,13 +85,13 @@ section {
     }
     article:nth-child(2){ // Article central contient le formulaire
         flex-direction: column;
-        width: 60vw;
+        width: 55vw;
         align-items: flex-start;        
         overflow-y: auto;
         height: calc(100vh - $header);
         padding-bottom: 10px;
         div:nth-child(1){
-            padding-left: 100px;
+            padding-left: 40px;
             form{
                 display: flex;
                 flex-direction: column;
@@ -119,10 +119,31 @@ section {
             }
         }
     }
-    article:nth-child(3){
-        background-color: #33BB27;
-        width: 20vw;
+    article:nth-child(3){ // Article sur la droite avec la liste d'ingrédients
+        display: flex;
+        flex-direction: column;       
+        width: 25vw;
         border-left: $card-nutri 2px dashed;
+        padding-left: 10px;
+        h4{ // La balise Ajout d'ingrédients           
+            font-weight: 600;            
+        }
+        div{ // Div contenant le span avec le ngFor
+            overflow-y: auto;
+        }
+        #paginationIngredients{ // Balise span avec la pagination
+            padding-top: 5px;           
+        }
+        #paginationIngredients::ng-deep .ngx-pagination{ // le composant ngx-paginator           
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;            
+            padding: 0;            
+        }
+        #paginationIngredients::ng-deep .ngx-pagination .current{ // le bouton de la page courante
+            background-color: $card-nutri;
+        }
     }
 }
 

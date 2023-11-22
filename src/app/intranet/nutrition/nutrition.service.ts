@@ -13,6 +13,7 @@ export class NutritionService implements OnInit {
 
   plats: PlatI[] = [];
   ciqual: CiqualI[] = [];
+  allCiqual: CiqualI[] = [];
 
   totals: { [key: string]: number } = {}; // Objet pour stocker tous les totaux - Les crochets {} sont utilisés pour définir un objet
   // totals est un objet qui peut avoir des clés(key) de type string (par exemple, 'proteine', 'glucides', 'lipides', etc.)
@@ -75,7 +76,39 @@ export class NutritionService implements OnInit {
     }
   }
 
-// -----------------------Méthode pour récupérer la table Ciqual-------------------------------
+//------------------------ Méthode pour récupérer TOUTE la table ciqual ------------------------------------------
+async getAllCiqual() {
+  const { data: ciqualData, error: ciqualError } = await this.supabase
+    .from('ciqualAnses')
+    .select('*');
+  if (ciqualError) {
+    console.log("Erreur de la méthode getAllCiqual : ", ciqualError);      
+  }
+  if (ciqualData) {
+    //console.log("Résultat de la méthode getAllCiqual : ",ciqualData);
+    return ciqualData;    
+  } else {
+    return [];
+  }  
+}
+
+async fetchAllCiqual() {
+  try {
+    const allCiqualData = await this.getAllCiqual();
+    if (allCiqualData) {
+      //console.log("allCiqualData : ", allCiqualData);
+      this.allCiqual = allCiqualData.map(({ alim_nom_fr, ...rest }) => ({
+        alim_nom_fr,
+        ...rest,
+      }));
+      //console.log(this.allCiqual.map((item) => item.alim_nom_fr));   
+    }
+  } catch (error) {
+    console.log("Erreur sur la méthode fetchAllCiqual : ", error);    
+  }
+}
+
+// -----------------------Méthode pour récupérer sur la table Ciqual les ingrédients avec l'alim_code correspondant au tableau d'id-------------------------------
 async getCiqual(id: Array<number>) {
   if (!id) { // Si pas d'id en paramétres return tableau vide - évite un message d'erreur si je clique sur un plat ne contenant pas idIngredients
     return [];
@@ -131,6 +164,7 @@ async fetchCiqual(id: Array<number>): Promise<any> { // l'id est fourni durant l
     console.error("Une erreur s'est produite sur la méthode fetchCiqual :", error)
   }   
 }
+
 //-------------------------------- Méthode pour calculer les totaux ------------------------------------------
 calculateTotals() {
 // Ci-dessous je récupére dans numericProperties le nom des items après le map de fetchCiqual  
@@ -146,8 +180,21 @@ calculateTotals() {
   console.log("Totaux :", this.totals);
 }
 
-  
+//------------------------------- Méthode pour modifier un plat -------------------------------------  
+async updatePlat(
+  id: number,
+  newEntry: {
+  description: string;  
+}) {
+  const { error: platError } = await this.supabase
+    .from('plats')
+    .update(newEntry)
+    .eq('id', id);
 
+  if (platError) {
+    console.log(platError);    
+  }
+}
 
 
   async fetchData() {
