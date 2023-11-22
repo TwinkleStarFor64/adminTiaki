@@ -6,13 +6,11 @@ import { AppComponent } from './app.component';
 import { ConnexionComponent } from './extranet/connexion/connexion.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ButtonModule } from 'primeng/button';
 import { RecoveryComponent } from './extranet/recovery/recovery.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { ResetComponent } from './extranet/reset/reset.component';
-
-
+import { CheckAccesPipe } from './pipes/gestion-utilisateurs.pipe';
 
 @NgModule({
   declarations: [
@@ -20,7 +18,10 @@ import { ResetComponent } from './extranet/reset/reset.component';
     ConnexionComponent,
     RecoveryComponent,
     ResetComponent,
-    
+    CheckAccesPipe
+  ],
+  exports:[
+    CheckAccesPipe
   ],
   imports: [
     BrowserModule,
@@ -29,7 +30,6 @@ import { ResetComponent } from './extranet/reset/reset.component';
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    BrowserAnimationsModule,
     ButtonModule,
     InputTextModule,
   ],

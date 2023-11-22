@@ -74,6 +74,7 @@
     <div class="modal" [ngClass]="{'show': displayEditModal}">
       <div class="modal-content">
         <span class="close" (click)="closeEditModal()">&times;</span>
+        <!-- Modale -->
         <section *ngIf="selectedUserForEdit">
           <div>
             <label for="nom">Nom:</label>
@@ -91,8 +92,8 @@
           </div>
           <label for="roles">Roles:</label>
           <div *ngFor="let role of allRoles">
-            <input *ngIf="selectedUserForEdit" type="checkbox" [checked]="getRoleCheckedState(role)" (change)="handleUserRoleChange(role, $event)" />
-
+            <!-- <input *ngIf="selectedUserForEdit" type="checkbox" [checked]="getRoleCheckedState(role)" (change)="handleUserRoleChange(role, $event)" /> -->
+            <input *ngIf="selectedUserForEdit" type="checkbox" [checked]="role | acces:selectedUserForEdit.roles" (change)="handleUserRoleChange(role, $event)" />
             {{ role }}
           </div>
           <button styleClass="p-button-" pButton (click)="closeEditModal()">Annuler</button>

@@ -12,7 +12,7 @@ import { DeleteDataComponent } from '../template/dialog/delete-data/delete-data.
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
-import { GestionUtilisateursPipe } from 'src/app/pipes/gestion-utilisateurs.pipe';
+import { CheckAccesPipe, GestionUtilisateursPipe } from 'src/app/pipes/gestion-utilisateurs.pipe';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 
@@ -27,7 +27,7 @@ import { DropdownModule } from 'primeng/dropdown';
     GestionComponent,
     DeleteDataComponent,
     GestionUtilisateursPipe,
-
+    CheckAccesPipe
   ],
   imports: [
     CommonModule,

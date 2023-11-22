@@ -46,6 +46,8 @@ export class UsersService implements OnInit {
           email: item['email'],
           nom: item['nom'],
         }));
+
+        console.log(this.authUsers);
       } else {
         throw new Error('Aucune donnée utilisateur disponible.');
       }
@@ -56,18 +58,18 @@ export class UsersService implements OnInit {
       );
     }
   }
-
+  /** Récupérer la liste des types de roles dans la base de données */
   async fetchRoles() {
     try {
       const allRoles: any[] = await this.supa.getRoles();
-  
+
       if (Array.isArray(allRoles)) {
         const rolesArray = allRoles.map((item: any) => {
           return Object.values(item);
         });
-  
-        console.log('Values:', rolesArray);
-        return rolesArray;
+
+        console.log('Values:', rolesArray.flat());
+        return rolesArray.flat();
       } else {
         throw new Error("Aucune donnée n'a été récupérée pour les rôles.");
       }
@@ -78,45 +80,17 @@ export class UsersService implements OnInit {
       );
     }
   }
-  
-  
+  /** Récupération de la liste des utilisateurs éditables */
   async fetchAllUsersWithRoles() {
-    try {
       // Remplacez cette ligne par votre logique pour récupérer tous les utilisateurs avec leurs rôles
-      const data: any = await this.supa.getAllUsersWithRoles();
-      if (Array.isArray(data)) {
-        // Logique pour traiter les données si elles sont un tableau
-        this.allUsersData = data.map((item: any) => {
-          // Object.keys pour obtenir les clés du tableau item.roles
-          const rolesKeys = Object.keys(item.roles);
-          // Utilisez les clés pour accéder aux valeurs et les placer dans un tableau
-          const rolesArray = rolesKeys.map((key) => item.roles[key]);
-
-          return {
-            id: item.id,
-            email: item.email,
-            nom: item.nom,
-            roles: rolesArray,
-            selected: false,
-          };
-        });
-
-        return;
-      } else {
-        // Logique pour traiter les données si elles ne sont pas un tableau
-        throw new Error('Aucune donnée utilisateur et rôles disponibles');
-      }
-    } catch (error) {
-      console.error(
-        'Erreur lors de la récupération des données rôles et utilisateurs',
-        error
-      );
-      throw new Error(
-        "Echec de la méthode fetchAllUsersWithRoles. Veuillez consulter les logs pour plus d'informations."
-      );
-    }
+      const data: any = await this.supa.getAllUsersWithRoles()
+      .then(data => {
+        if (Array.isArray(data)) {
+          this.allUsersData = data;
+      }})
+      .catch(er => console.log("Erreur dans le chargement des utilisateurs éditables"));
   }
-
+  /** Récupérer le profil dans la base */
   async fetchProfil() {
     try {
       // La méthode getProfil() récupére toutes les données utilisateurs et tout les rôles de l'utilisateur authentifié

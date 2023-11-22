@@ -15,3 +15,15 @@ export class GestionUtilisateursPipe implements PipeTransform {
     });
   }
 }
+/** Vérifier les droits des utilisateurs pour donner des accès */
+@Pipe({
+  name: 'acces',
+})
+export class CheckAccesPipe implements PipeTransform {
+  transform(role: string, userRoles: Array<string>, check?:string): boolean {
+    if (!role || !userRoles || userRoles.length == 0) {
+      return false; // Retourne le tableau non filtré si le filtre est vide ou a moins de 3 caractères.
+    }
+    return userRoles.includes(role);
+  }
+}
