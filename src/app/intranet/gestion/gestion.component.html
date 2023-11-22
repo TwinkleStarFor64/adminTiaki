@@ -93,11 +93,17 @@
           <label for="roles">Roles:</label>
           <div *ngFor="let role of allRoles">
             <!-- <input *ngIf="selectedUserForEdit" type="checkbox" [checked]="getRoleCheckedState(role)" (change)="handleUserRoleChange(role, $event)" /> -->
-            <input *ngIf="selectedUserForEdit" type="checkbox" [checked]="role | acces:selectedUserForEdit.roles!" (change)="handleUserRoleChange(role, $event)" />
+            <input 
+            *ngIf="selectedUserForEdit" 
+            type="checkbox" 
+            [checked]="role | acces:selectedUserForEdit.roles!" 
+            (change)="onCheckboxChange(selectedUserForEdit, $event)"
+            [value]="role"
+          />
             {{ role }}
           </div>
           <button styleClass="p-button-" pButton (click)="closeEditModal()">Annuler</button>
-          <button styleClass="p-button-success" pButton (click)="updateUser()">Enregistrer</button>
+          <button styleClass="p-button-success" pButton (click)="updateUser()" (click)="closeEditModal()">Enregistrer</button>
         </section>
       </div>
     </div>

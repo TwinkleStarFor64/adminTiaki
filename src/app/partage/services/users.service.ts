@@ -27,6 +27,7 @@ export class UsersService implements OnInit {
         id: item['id'],
         email: item['email'],
         nom: item['nom'],
+        roles:[""]
       }));
       this.filteredUtilisateurs = this.listeUtilisateurs;
     }
@@ -45,6 +46,7 @@ export class UsersService implements OnInit {
           id: item['id'],
           email: item['email'],
           nom: item['nom'],
+          roles:[""]
         }));
 
         console.log(this.authUsers);
@@ -83,13 +85,15 @@ export class UsersService implements OnInit {
   /** Récupération de la liste des utilisateurs éditables */
   async fetchAllUsersWithRoles() {
       // Remplacez cette ligne par votre logique pour récupérer tous les utilisateurs avec leurs rôles
-      const data: any = await this.supa.getAllUsersWithRoles()
+      await this.supa.getAllUsersWithRoles()
       .then(data => {
         if (Array.isArray(data)) {
           this.allUsersData = data;
       }})
       .catch(er => console.log("Erreur dans le chargement des utilisateurs éditables"));
   }
+
+  
   /** Récupérer le profil dans la base */
   async fetchProfil() {
     try {

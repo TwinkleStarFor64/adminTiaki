@@ -16,7 +16,7 @@ export interface UtilisateurI {
     nom: string;
     prenom?: string;
     telephone?: string;
-    roles?: Array<string>;
+    roles: Array<string>;
     selectedRoles?: { [key: string]: boolean };
     selected?: boolean;
   }

@@ -191,6 +191,52 @@ export class SupabaseService {
   }
   
 
+  async updateRole(user: UtilisateurI, selected: boolean) {
+    // Récupérer les rôles actuels de l'utilisateur
+    const { data: currentRoles, error: fetchError } = await this.supabase
+      .from('attribuerRoles')
+      .select('idRole')
+      .match({ id: user.id });
+  
+    if (fetchError) {
+      console.error('Erreur lors de la récupération des rôles de l\'utilisateur :', fetchError);
+      return null;
+    }
+  
+    const currentRoleIds = currentRoles.map(role => role.idRole);
+  
+    // Trouver les rôles à supprimer et les rôles à ajouter
+    const rolesToDelete = currentRoleIds.filter(roleId => !user.roles.includes(roleId));
+    const rolesToAdd = user.roles.filter(roleId => !currentRoleIds.includes(roleId));
+  
+    // Supprimer les rôles qui ne sont plus nécessaires
+    for (const roleId of rolesToDelete) {
+      const { error: deleteError } = await this.supabase
+        .from('attribuerRoles')
+        .delete()
+        .match({ id: user.id, idRole: roleId });
+  
+      if (deleteError) {
+        console.error('Erreur lors de la suppression du rôle de l\'utilisateur :', deleteError);
+        return null;
+      }
+    }
+  
+    // Ajouter les nouveaux rôles
+    for (const roleId of rolesToAdd) {
+      const { error: insertError } = await this.supabase
+        .from('attribuerRoles')
+        .insert({ id: user.id, idRole: roleId });
+  
+      if (insertError) {
+        console.error('Erreur lors de l\'ajout du rôle à l\'utilisateur :', insertError);
+        return null;
+      }
+    }
+  
+    return user.roles;
+  }
+
   /* ----------------------------- Code pour la page profil utilisateur ---------------------------- */
 
   // Méthode pour récupérer les données d'un utilisateur identifié (sur la table auth)
