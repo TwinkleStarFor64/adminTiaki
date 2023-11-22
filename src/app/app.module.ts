@@ -10,18 +10,15 @@ import { ButtonModule } from 'primeng/button';
 import { RecoveryComponent } from './extranet/recovery/recovery.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { ResetComponent } from './extranet/reset/reset.component';
-import { CheckAccesPipe } from './pipes/gestion-utilisateurs.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     ConnexionComponent,
     RecoveryComponent,
-    ResetComponent,
-    CheckAccesPipe
+    ResetComponent
   ],
   exports:[
-    CheckAccesPipe
   ],
   imports: [
     BrowserModule,
