@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { UtilisateurI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { ConfirmationService } from 'primeng/api';
@@ -29,12 +29,13 @@ export class GestionComponent implements OnInit {
   uniqueRoles: string[] = [];
   displayEditModal: boolean = false;
   allRoles: any;
+  selectedRoles: string[] = [];
+  private initialRoles: string[] = [];
 
   constructor(
     public confirmationService: ConfirmationService,
     public supa: SupabaseService,
     public users: UsersService,
-    private cdRef: ChangeDetectorRef
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -92,9 +93,6 @@ export class GestionComponent implements OnInit {
 
   openDeleteDataModal(user: UtilisateurI) {
     this.confirmationService.confirm({
-      message: 'Are you sure you want to proceed?',
-      header: 'Confirmation',
-      icon: 'pi pi-exclamation-triangle',
       accept: () => {
         console.log('Accept a été appelé');
         this.deleteUserById(user);
@@ -119,6 +117,7 @@ export class GestionComponent implements OnInit {
         console.log(error);
       });
   }
+
 
   //Methode de tri alphabétique
   triUtilisateursParNom() {
@@ -185,21 +184,10 @@ export class GestionComponent implements OnInit {
       id: user.id,
       email: user.email,
       nom: user.nom,
-      roles: user.roles ? [...user.roles] : [], // Copie des rôles pour éviter la modification directe du tableau original
-      selectedRoles: {}, // Initialisez les rôles sélectionnés (peut être vide si vous ne voulez pas pré-cocher les cases)
+      roles: user.roles ? [...user.roles] : [],
     };
-
-    if (
-      this.selectedUserForEdit &&
-      this.selectedUserForEdit.roles &&
-      this.selectedUserForEdit.selectedRoles
-    ) {
-      for (const role of this.selectedUserForEdit.roles) {
-        if (this.selectedUserForEdit.selectedRoles) {
-          this.selectedUserForEdit.selectedRoles[role] = true;
-        }
-      }
-    }
+    // Conservez une copie de l'état initial des rôles
+    this.initialRoles = [...this.selectedUserForEdit.roles];
   }
 
 /**
@@ -211,45 +199,35 @@ export class GestionComponent implements OnInit {
  * Si les rôles sélectionnés ne sont pas définis ou sont vides, un message d'erreur est affiché.
  */
 
-  async updateUser() {
-    if (this.selectedUserForEdit) {
-      const selectedRoles = this.selectedUserForEdit.selectedRoles;
-      console.log('Roles sélectionnés avant la mise à jour :', selectedRoles);
+async updateUser() {
+  // Vérifiez si un utilisateur est sélectionné pour l'édition
+  if (this.selectedUserForEdit) {
+    const selectedRoles = this.selectedUserForEdit.selectedRoles;
+    console.log('Roles sélectionnés avant la mise à jour :', selectedRoles);
 
-      if (selectedRoles && Object.keys(selectedRoles).length > 0) {
-        // Filtrer les rôles sélectionnés
-        this.selectedUserForEdit.roles = Object.keys(selectedRoles).filter(
-          (role) => selectedRoles[role]
-        );
+    // Vérifiez si des rôles sont sélectionnés
+    if (selectedRoles && Object.keys(selectedRoles).length > 0) {
+      // Filtrer les rôles sélectionnés
+      this.selectedUserForEdit.roles = Object.keys(selectedRoles).filter(role => selectedRoles[role]);
 
-        console.log('Utilisateur mis à jour :', this.selectedUserForEdit);
+      console.log('Utilisateur mis à jour :', this.selectedUserForEdit);
 
-        // Mettre à jour la base de données
-        try {
-          const selected = this.selectedUserForEdit.selected;
-          const data = await this.supa.updateRole(
-            this.selectedUserForEdit,
-            selected !== undefined ? selected : false
-          );
-          if (data) {
-            console.log(
-              'Utilisateur mis à jour avec succès dans la base de données:',
-              data
-            );
-          }
-        } catch (error) {
-          console.error(
-            "Erreur lors de la mise à jour de l'utilisateur dans la base de données:",
-            error
-          );
+      // Mettre à jour la base de données
+      try {
+        const selected = this.selectedUserForEdit.selected;
+        const data = await this.supa.updateRole(this.selectedUserForEdit, selected !== undefined ? selected : false);
+        if (data) {
+          console.log('Utilisateur mis à jour avec succès dans la base de données:', data);
         }
-      } else {
-        console.error(
-          'Les rôles sélectionnés ne sont pas définis ou sont vides.'
-        );
+      } catch (error) {
+        console.error("Erreur lors de la mise à jour de l'utilisateur dans la base de données:", error);
       }
+    } else {
+      console.error('Les rôles sélectionnés ne sont pas définis ou sont vides.');
     }
   }
+}
+
   // Dans gestion.component.ts
   async onCheckboxChange(user: UtilisateurI, event: Event) {
     const isChecked = (event.target as HTMLInputElement).checked;
@@ -267,6 +245,25 @@ export class GestionComponent implements OnInit {
         this.filteredUtilisateurs[index].roles = this.filteredUtilisateurs[index].roles || [];
         this.filteredUtilisateurs[index].roles = this.filteredUtilisateurs[index].roles.filter(r => r !== role);
       }
+    }
+  }
+
+  onSave() {
+    if (this.selectedUserForEdit) {
+      const selectedRoles = this.selectedUserForEdit.selectedRoles
+        ? Object.keys(this.selectedUserForEdit.selectedRoles).filter(role => this.selectedUserForEdit && this.selectedUserForEdit.selectedRoles && this.selectedUserForEdit.selectedRoles[role])
+        : [];
+  
+      this.supa.saveRoles(this.selectedUserForEdit.id, selectedRoles)
+        .then(() => {
+          this.closeEditModal();
+          this.users.fetchAllUsersWithRoles();
+        })
+        .catch(error => {
+          console.error('Erreur lors de la sauvegarde des rôles :', error);
+        });
+    } else {
+      console.error('Aucun utilisateur sélectionné pour l\'édition');
     }
   }
   //Methodes pour filtrer par les inputs
@@ -307,28 +304,17 @@ export class GestionComponent implements OnInit {
     this.users.fetchRoles();
     this.editUser(user); // Appelle la méthode pour pré-remplir les données
     this.displayEditModal = true; // Ouvre la modal
-
+  
     // Initialiser les rôles sélectionnés
     this.selectedUserForEdit = {
       id: user.id,
       email: user.email,
       nom: user.nom,
       roles: user.roles ? [...user.roles] : [],
-      selectedRoles: {},
     };
-
-    if (this.selectedUserForEdit.roles) {
-      this.selectedUserForEdit.selectedRoles =
-        this.selectedUserForEdit.selectedRoles || {};
-
-      this.allRoles.forEach((role: string) => {
-        if (this.selectedUserForEdit?.roles) {
-          this.selectedUserForEdit.selectedRoles![role] =
-            this.selectedUserForEdit.roles.includes(role);
-        }
-      });
-    }
   }
+
+
 
   /** Vérifier les droits */
   getRoleCheckedState(role: string): boolean {
@@ -345,6 +331,12 @@ export class GestionComponent implements OnInit {
 
   closeEditModal() {
     this.displayEditModal = false;
+  }
+
+  onCancel() {
+    if (this.selectedUserForEdit) {
+      this.selectedUserForEdit.roles = [...this.initialRoles];
+    }
   }
 
   filterUsers(

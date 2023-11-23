@@ -138,9 +138,50 @@ export class SupabaseService {
     const { data, error } = await this.supabase
       .from('attribuerRoles')
       .select('idRole');
-    if (data)
-    //  console.log('Méthode fetchAttribuerRoles', data);
-    if (error) console.log(error);
+    if (data) {
+      return data;
+    }
+    if (error) {
+      console.error('Erreur lors de la récupération des rôles attribués :', error);
+      throw new Error(
+        "Impossible de récupérer les rôles attribués. Veuillez consulter les logs pour plus d'informations."
+      );
+    }
+    return null;
+  }
+
+  async saveRoles(userId: string, roleNames: string[]) {
+    if (roleNames && roleNames.length > 0) {
+      // Obtenir l'ID de chaque rôle à partir de son nom
+      const { data: rolesData, error: rolesError } = await this.supabase
+        .from('roles')
+        .select('id, role')
+        .in('role', roleNames);
+  
+      if (rolesError) {
+        console.error('Erreur lors de la récupération des IDs des rôles :', rolesError);
+        throw rolesError;
+      }
+  
+      const roles: { [key: string]: number } = rolesData.reduce((obj, role) => ({ ...obj, [role.role]: role.id }), {});
+  
+      // Supprimer tous les rôles existants pour l'utilisateur
+      await this.supabase
+        .from('attribuerRoles')
+        .delete()
+        .match({ idUtilisateur: userId });
+  
+      // Insérez les nouveaux rôles pour l'utilisateur
+      await this.supabase
+        .from('attribuerRoles')
+        .insert(
+          roleNames.map(roleName => ({ idUtilisateur: userId, idRole: roles[roleName] }))
+        );
+    } else {
+      console.error(
+        'Les rôles sélectionnés ne sont pas définis ou sont vides.'
+      );
+    }
   }
 
   // Méthode pour récupérer les utilisateurs et leur rôles
@@ -288,7 +329,29 @@ async updateUser(userId: string, updatedUserData: any) {
     throw error;
   }
 }
-// SupabaseService
+
+async updateUserRoles(userId: string, roles: string[]) {
+  try {
+    // Supprimez tous les rôles existants pour l'utilisateur
+    await this.supabase
+      .from('attribuerRoles')
+      .delete()
+      .eq('idUtilisateur', userId);
+
+    // Insérez les nouveaux rôles pour l'utilisateur
+    await this.supabase
+    .from('attribuerRoles')
+    .insert(
+      roles.map(role => ({ idUtilisateur: userId, idRole: role }))
+    );
+    return { error: null };
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour des rôles de l\'utilisateur :', error);
+    return { error };
+  }
+}
+
+
 
 async createUserInTableUtilisateurAuth(formData: any): Promise<UserCreationResponse>  {
   try {

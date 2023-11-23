@@ -99,9 +99,7 @@ export class UsersService implements OnInit {
     try {
       // La méthode getProfil() récupére toutes les données utilisateurs et tout les rôles de l'utilisateur authentifié
       const data = await this.supa.getProfil();
-      // console.log("Data du profil", data);
       if (Array.isArray(data)) {
-        // console.log("Profil data", data);
         this.profil = data[0]['utilisateur'];
         this.profil.roles = [];
         data.forEach((d) => {
