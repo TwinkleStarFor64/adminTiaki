@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UtilisateurI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { ConfirmationService } from 'primeng/api';
@@ -36,7 +36,7 @@ export class GestionComponent implements OnInit {
     public confirmationService: ConfirmationService,
     public supa: SupabaseService,
     public users: UsersService,
-  ) {}
+  ) { }
 
   async ngOnInit(): Promise<void> {
     try {
@@ -142,7 +142,7 @@ export class GestionComponent implements OnInit {
     }
   }
 
-  //Methode de selectione des utilisateur avec la checkbox
+  //Methode de selection des utilisateur avec la checkbox
   onUserSelectChange(user: UtilisateurI) {
     if (user.selected) {
       this.selectedUsers.push(user);
@@ -179,43 +179,68 @@ export class GestionComponent implements OnInit {
     }
   }
 
-  editUser(user: UtilisateurI) {
+  selectUserForEdit(user: UtilisateurI) {
+    this.selectedUserForEdit = user;
+    console.log('Utilisateur sélectionné pour l\'édition :', this.selectedUserForEdit);
+  }
+
+
+  openEditModal(user: UtilisateurI) {
+    console.log('Ouverture de la modal pour :', user);
+    this.users.fetchRoles();
+
+    // Check if a user has been selected for editing
+    if (!user) {
+      console.error('Aucun utilisateur sélectionné pour l\'édition');
+      return;
+    }
+
+    // Check if the user is valid
+    if (!user?.id || !user?.email || !user?.nom) {
+      console.error('Utilisateur invalide:', user);
+      return;
+    }
+
     this.selectedUserForEdit = {
       id: user.id,
       email: user.email,
       nom: user.nom,
       roles: user.roles ? [...user.roles] : [],
     };
-    // Conservez une copie de l'état initial des rôles
+
+    // Keep a copy of the initial state of the roles
     this.initialRoles = [...this.selectedUserForEdit.roles];
+
+    this.displayEditModal = true; // Ouvre la modal
   }
 
-/**
- * Met à jour l'utilisateur sélectionné avec les rôles sélectionnés.
- * Si les rôles sélectionnés sont définis et non vides, les rôles de l'utilisateur sont mis à jour.
- * Ensuite, une requête de mise à jour est effectuée vers la base de données.
- * Si la mise à jour réussit, un message de succès est affiché.
- * Sinon, un message d'erreur est affiché.
- * Si les rôles sélectionnés ne sont pas définis ou sont vides, un message d'erreur est affiché.
- */
 
-async updateUser() {
-  // Vérifiez si un utilisateur est sélectionné pour l'édition
-  if (this.selectedUserForEdit) {
-    const selectedRoles = this.selectedUserForEdit.selectedRoles;
+  /**
+   * Met à jour l'utilisateur sélectionné avec les rôles sélectionnés.
+   * Si les rôles sélectionnés sont définis et non vides, les rôles de l'utilisateur sont mis à jour.
+   * Ensuite, une requête de mise à jour est effectuée vers la base de données.
+   * Si la mise à jour réussit, un message de succès est affiché.
+   * Sinon, un message d'erreur est affiché.
+   * Si les rôles sélectionnés ne sont pas définis ou sont vides, un message d'erreur est affiché.
+   */
+
+  async updateUser() {
+    // Vérifiez si un utilisateur est sélectionné pour l'édition
+    if (!this.selectedUserForEdit) {
+      console.error('Aucun utilisateur sélectionné pour l\'édition');
+      return;
+    }
+
+    const selectedRoles = this.selectedUserForEdit.roles;
     console.log('Roles sélectionnés avant la mise à jour :', selectedRoles);
 
     // Vérifiez si des rôles sont sélectionnés
-    if (selectedRoles && Object.keys(selectedRoles).length > 0) {
-      // Filtrer les rôles sélectionnés
-      this.selectedUserForEdit.roles = Object.keys(selectedRoles).filter(role => selectedRoles[role]);
-
+    if (selectedRoles && selectedRoles.length > 0) {
       console.log('Utilisateur mis à jour :', this.selectedUserForEdit);
 
       // Mettre à jour la base de données
       try {
-        const selected = this.selectedUserForEdit.selected;
-        const data = await this.supa.updateRole(this.selectedUserForEdit, selected !== undefined ? selected : false);
+        const data = await this.supa.updateRole(this.selectedUserForEdit, selectedRoles);
         if (data) {
           console.log('Utilisateur mis à jour avec succès dans la base de données:', data);
         }
@@ -226,42 +251,48 @@ async updateUser() {
       console.error('Les rôles sélectionnés ne sont pas définis ou sont vides.');
     }
   }
-}
 
-  // Dans gestion.component.ts
-  async onCheckboxChange(user: UtilisateurI, event: Event) {
+  onCheckboxChange(event: Event) {
     const isChecked = (event.target as HTMLInputElement).checked;
     const role = (event.target as HTMLInputElement).value;
   
-    // Mettre à jour le tableau
-    const index = this.filteredUtilisateurs.findIndex(u => u.id === user.id);
-    if (index !== -1) {
+    // Vérifiez si selectedUserForEdit et selectedUserForEdit.roles sont définis
+    if (this.selectedUserForEdit?.roles) {
       if (isChecked) {
-        // Ajouter le rôle à l'utilisateur si la checkbox est cochée
-        this.filteredUtilisateurs[index].roles = this.filteredUtilisateurs[index].roles || [];
-        this.filteredUtilisateurs[index].roles.push(role);
+        this.selectedUserForEdit.roles.push(role);
       } else {
-        // Supprimer le rôle de l'utilisateur si la checkbox est décochée
-        this.filteredUtilisateurs[index].roles = this.filteredUtilisateurs[index].roles || [];
-        this.filteredUtilisateurs[index].roles = this.filteredUtilisateurs[index].roles.filter(r => r !== role);
+        const index = this.selectedUserForEdit.roles.indexOf(role);
+        if (index > -1) {
+          this.selectedUserForEdit.roles.splice(index, 1);
+        }
       }
+    } else {
+      console.error('selectedUserForEdit ou selectedUserForEdit.roles est indéfini');
     }
   }
-
+  async handleClick() {
+    await this.updateUser();
+    this.onSave();
+  }
+  // Sauvegarder les rôles sélectionnés pour l'utilisateur sélectionné
   onSave() {
-    if (this.selectedUserForEdit) {
-      const selectedRoles = this.selectedUserForEdit.selectedRoles
-        ? Object.keys(this.selectedUserForEdit.selectedRoles).filter(role => this.selectedUserForEdit && this.selectedUserForEdit.selectedRoles && this.selectedUserForEdit.selectedRoles[role])
-        : [];
-  
-      this.supa.saveRoles(this.selectedUserForEdit.id, selectedRoles)
-        .then(() => {
-          this.closeEditModal();
-          this.users.fetchAllUsersWithRoles();
-        })
-        .catch(error => {
-          console.error('Erreur lors de la sauvegarde des rôles :', error);
-        });
+    if (this.selectedUserForEdit && this.selectedUserForEdit.selectedRoles) {
+      const selectedRoles = Object.keys(this.selectedUserForEdit.selectedRoles).filter(role => this.selectedUserForEdit?.selectedRoles && this.selectedUserForEdit.selectedRoles[role]);
+      console.log('Roles sélectionnés :', selectedRoles);
+      console.log('Utilisateur sélectionné :', this.selectedUserForEdit);
+
+      if (selectedRoles.length > 0) {
+        this.supa.saveRoles(this.selectedUserForEdit.id, selectedRoles)
+          .then(() => {
+            this.closeEditModal();
+            this.users.fetchAllUsersWithRoles();
+          })
+          .catch(error => {
+            console.error('Erreur lors de la sauvegarde des rôles :', error);
+          });
+      } else {
+        console.error('Aucun rôle sélectionné pour l\'utilisateur');
+      }
     } else {
       console.error('Aucun utilisateur sélectionné pour l\'édition');
     }
@@ -295,26 +326,6 @@ async updateUser() {
       }
     }
   }
-
-  /** Ouvrir la modale pour éditer un utilisateur
-   * @param user {UtilisateurI} L'utilisateur à éditer
-   */
-  openEditModal(user: UtilisateurI) {
-    console.log('Ouverture de la modal pour :', user);
-    this.users.fetchRoles();
-    this.editUser(user); // Appelle la méthode pour pré-remplir les données
-    this.displayEditModal = true; // Ouvre la modal
-  
-    // Initialiser les rôles sélectionnés
-    this.selectedUserForEdit = {
-      id: user.id,
-      email: user.email,
-      nom: user.nom,
-      roles: user.roles ? [...user.roles] : [],
-    };
-  }
-
-
 
   /** Vérifier les droits */
   getRoleCheckedState(role: string): boolean {

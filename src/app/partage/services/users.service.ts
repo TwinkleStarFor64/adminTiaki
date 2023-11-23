@@ -70,7 +70,7 @@ export class UsersService implements OnInit {
           return Object.values(item);
         });
 
-        console.log('Values:', rolesArray.flat());
+        // console.log('Values:', rolesArray.flat());
         return rolesArray.flat();
       } else {
         throw new Error("Aucune donnée n'a été récupérée pour les rôles.");

@@ -42,7 +42,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let user of filteredUtilisateurs">
+        <tr *ngFor="let user of filteredUtilisateurs" >
           <td>
             <input type="checkbox" [(ngModel)]="user.selected" (change)="onUserSelectChange(user)" />
           </td>
@@ -96,13 +96,13 @@
             *ngIf="selectedUserForEdit" 
             type="checkbox" 
             [checked]="role | acces:selectedUserForEdit.roles!" 
-            (change)="onCheckboxChange(selectedUserForEdit, $event)"
+            (change)="onCheckboxChange($event)"
             [value]="role"
           />
             {{ role }}
           </div>
           <button styleClass="p-button-" pButton (click)="onCancel()" (click)="closeEditModal()" >Annuler</button>
-          <button styleClass="p-button-success" pButton (click)="onSave()" (click)="updateUser()">Enregistrer</button>
+          <button styleClass="p-button-success" pButton (click)="handleClick()">Enregistrer</button>
         </section>
       </div>
     </div>

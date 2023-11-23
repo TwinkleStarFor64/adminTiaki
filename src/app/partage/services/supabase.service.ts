@@ -232,7 +232,7 @@ export class SupabaseService {
   }
   
 
-  async updateRole(user: UtilisateurI, selected: boolean) {
+  async updateRole(user: UtilisateurI, roles: string[]) {
     // Récupérer les rôles actuels de l'utilisateur
     const { data: currentRoles, error: fetchError } = await this.supabase
       .from('attribuerRoles')
