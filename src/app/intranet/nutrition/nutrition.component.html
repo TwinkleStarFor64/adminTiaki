@@ -49,19 +49,24 @@
               <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="selectedPlats.description" name="description"></textarea>
               <label for="float-input">Description</label>
             </span>
+            <h4>Ingrédients</h4> 
             <div *ngFor="let id of selectedPlats.idIngredients; let i=index">
-              <p>{{ id | getIngredient:'alim_nom_fr' }} <button (click)="supprIngredient(i)">Supprimer</button></p>
+              <!-- <p>{{ id | getIngredient:'alim_nom_fr' }} <button (click)="supprIngredient(i)">Supprimer</button></p> -->
+              <p>{{ id | getIngredient:'alim_nom_fr' }}<figure (click)="supprIngredient(i)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure></p>
             </div>
-            <p-button styleClass="p-button-success" (onClick)="onSubmitForm()">Valider</p-button>
+            <div id="divButton">
+              <p-button styleClass="p-button-warning">Annuler</p-button>
+              <p-button styleClass="p-button-success" (onClick)="onSubmitForm()">Valider</p-button>
+            </div>
           </form>
           <span id="blocIngredients">   
             <h4>Ingrédients</h4>         
             <!-- <div *ngFor="let ingredients of nutrition.ciqual">
               <p>{{ ingredients["alim_nom_fr"] }}</p>
             </div> -->
-            <div *ngFor="let id of selectedPlats.idIngredients; let i=index">
+            <!-- <div *ngFor="let id of selectedPlats.idIngredients; let i=index">
               <p>{{ id | getIngredient:'alim_nom_fr' }} <button (click)="supprIngredient(i)">Supprimer</button></p>
-            </div>
+            </div> -->
             <h4>Nutriments</h4> 
             <div id="nutriments">
               <span>
