@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AuthSession, createClient, SupabaseClient,} from '@supabase/supabase-js';
+import { AuthSession, createClient, SupabaseClient, } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
 import { UserCreationResponse, UtilisateurI } from '../modeles/Types';
 import { Router } from '@angular/router';
@@ -35,7 +35,7 @@ export class SupabaseService {
           this.token = res.data.session!.access_token; // Je stock la valeur du token retourné par supabase
           this.authId = res.data.user!.id; // j'attribue à la variable authId l'id de l'utilisateur (après son authentification)
           this.router.navigate(['intranet']);
-        }        
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -89,15 +89,15 @@ export class SupabaseService {
 
   // Récupérer les utilisateurs sur la table public.utilisateur
   async getListeUtilisateurs() {
-    const data = await this.supabase.from('utilisateur').select('*');
-    // console.log('Méthode getUtilisateur', data);
-    return data;
+    return await this.supabase
+    .from('utilisateur')
+    .select("*, roles:attribuerRoles!inner(roles(role))")
+    // .select("*, roles:attribuerRoles!inner(id, roles!inner(role))")
   }
 
   // Récupérer les utilisateurs sur la table auth.users (table d'authentification de supabase)
   async listUser() {
     const response = await this.supabase.auth.admin.listUsers();
-    // console.log('Méthode listUser - response.data.users', response.data.users);
     return response.data.users; // Retournez les données des utilisateurs
   }
 
@@ -117,20 +117,7 @@ export class SupabaseService {
 
   // Récupérer les rôles utilisateurs (Admin, rédacteur, etc..) sur la table roles
   async getRoles() {
-    try {
-      const { data } = await this.supabase.from('roles').select('role');
-      if (data) {
-        console.log('Méthode getRoles - Données récupérées :', data);
-        return data;
-      } else {
-        throw new Error("Aucune donnée n'a été récupérée pour les rôles.");
-      }
-    } catch (error) {
-      console.error('Erreur lors de la récupération des rôles :', error);
-      throw new Error(
-        "Impossible de récupérer les rôles. Veuillez consulter les logs pour plus d'informations."
-      );
-    }
+    return await this.supabase.from('roles').select('role');
   }
 
   // Table attribuerRoles contient en tant que Foreign Key l'id de la table roles(int) et l'id de la table utilisateur(uuid)
@@ -157,20 +144,20 @@ export class SupabaseService {
         .from('roles')
         .select('id, role')
         .in('role', roleNames);
-  
+
       if (rolesError) {
         console.error('Erreur lors de la récupération des IDs des rôles :', rolesError);
         throw rolesError;
       }
-  
+
       const roles: { [key: string]: number } = rolesData.reduce((obj, role) => ({ ...obj, [role.role]: role.id }), {});
-  
+
       // Supprimer tous les rôles existants pour l'utilisateur
       await this.supabase
         .from('attribuerRoles')
         .delete()
         .match({ idUtilisateur: userId });
-  
+
       // Insérez les nouveaux rôles pour l'utilisateur
       await this.supabase
         .from('attribuerRoles')
@@ -183,98 +170,49 @@ export class SupabaseService {
       );
     }
   }
-
-  // Méthode pour récupérer les utilisateurs et leur rôles
-  async getAllUsersWithRoles(): Promise<UtilisateurI[]> {
-    const { data: utilisateursData, error: utilisateursError } =
-      await this.supabase.from('utilisateur').select('id, email, nom');
-  
-    if (utilisateursError) {
-      console.error(
-        'Erreur lors de la récupération des utilisateurs :',
-        utilisateursError
-      );
-    }
-  
-    for (const utilisateur of utilisateursData as UtilisateurI[]) {
-      const idUtilisateur = utilisateur.id;
-  
-      const { data: rolesData, error: rolesError } = await this.supabase
-        .from('attribuerRoles')
-        .select('idRole')
-        .eq('idUtilisateur', idUtilisateur);
-  
-      if (rolesError) {
-        console.error(
-          "Erreur lors de la récupération des rôles de l'utilisateur :",
-          rolesError
-        );
-        continue;
-      }
-  
-      const idRoles = rolesData.map((entry) => entry.idRole);
-  
-      const { data: rolesDetailsData, error: rolesDetailsError } =
-        await this.supabase.from('roles').select('*').in('id', idRoles);
-  
-      if (rolesDetailsError) {
-        console.error(
-          'Erreur lors de la récupération des détails des rôles :',
-          rolesDetailsError
-        );
-        continue;
-      }
-      utilisateur.roles = rolesDetailsData.map((role) => role.role);
-    }
-    // console.log('Données récupérées avec succès :', utilisateursData);
-
-    return utilisateursData as UtilisateurI[];
-  }
-  
-
+  /** Mettre à jour un role */
   async updateRole(user: UtilisateurI, roles: string[]) {
     // Récupérer les rôles actuels de l'utilisateur
     const { data: currentRoles, error: fetchError } = await this.supabase
       .from('attribuerRoles')
       .select('idRole')
       .match({ id: user.id });
-  
+
     if (fetchError) {
       console.error('Erreur lors de la récupération des rôles de l\'utilisateur :', fetchError);
       return null;
     }
-  
     const currentRoleIds = currentRoles.map(role => role.idRole);
-  
+
     // Trouver les rôles à supprimer et les rôles à ajouter
     const rolesToDelete = currentRoleIds.filter(roleId => !user.roles.includes(roleId));
     const rolesToAdd = user.roles.filter(roleId => !currentRoleIds.includes(roleId));
-  
+
     // Supprimer les rôles qui ne sont plus nécessaires
     for (const roleId of rolesToDelete) {
       const { error: deleteError } = await this.supabase
         .from('attribuerRoles')
         .delete()
         .match({ id: user.id, idRole: roleId });
-  
+
       if (deleteError) {
         console.error('Erreur lors de la suppression du rôle de l\'utilisateur :', deleteError);
         return null;
       }
     }
-  
+
     // Ajouter les nouveaux rôles
     for (const roleId of rolesToAdd) {
       const { error: insertError } = await this.supabase
         .from('attribuerRoles')
         .insert({ id: user.id, idRole: roleId });
-  
+
       if (insertError) {
         console.error('Erreur lors de l\'ajout du rôle à l\'utilisateur :', insertError);
         return null;
       }
     }
-  
+
     return user.roles;
   }
 
@@ -282,10 +220,10 @@ export class SupabaseService {
 
   // Méthode pour récupérer les données d'un utilisateur identifié (sur la table auth)
   async getLoggedInUser() {
-    const { data: {user} } = await this.supabase.auth.getUser();
+    const { data: { user } } = await this.supabase.auth.getUser();
     // console.log('Méthode getLoggedInUser : ', user);
     return user;
-  }  
+  }
 
   // Méthode pour update son profil en tant qu'utilisateur (sur la table utilisateur)
   async updateProfil(
@@ -306,105 +244,105 @@ export class SupabaseService {
     }
   }
 
-/* --------------------------- Code utilisé dans le service users.service.ts -------------------------- */
+  /* --------------------------- Code utilisé dans le service users.service.ts -------------------------- */
 
-/* --------------------------- Code utilisé dans le service users.service.ts -------------------------- */
+  /* --------------------------- Code utilisé dans le service users.service.ts -------------------------- */
 
 
   // Update des données utilisateurs sur la page de gestion
-async updateUser(userId: string, updatedUserData: any) {
-  try {
-    const { data, error } = await this.supabase
-      .from('utilisateur') // Remplacez 'utilisateurs' par le nom de votre table
-      .update(updatedUserData)
-      .eq('id', userId); // Mettez à jour l'utilisateur avec l'ID spécifié
+  async updateUser(userId: string, updatedUserData: any) {
+    try {
+      const { data, error } = await this.supabase
+        .from('utilisateur') // Remplacez 'utilisateurs' par le nom de votre table
+        .update(updatedUserData)
+        .eq('id', userId); // Mettez à jour l'utilisateur avec l'ID spécifié
 
-    if (error) {
+      if (error) {
+        throw error;
+      }
+
+      return data;
+    } catch (error) {
+      console.error("Une erreur s'est produite lors de la mise à jour de l'utilisateur :", error);
       throw error;
     }
-
-    return data;
-  } catch (error) {
-    console.error("Une erreur s'est produite lors de la mise à jour de l'utilisateur :", error);
-    throw error;
   }
-}
 
-async updateUserRoles(userId: string, roles: string[]) {
-  try {
-    // Supprimez tous les rôles existants pour l'utilisateur
-    await this.supabase
-      .from('attribuerRoles')
-      .delete()
-      .eq('idUtilisateur', userId);
+  async updateUserRoles(userId: string, roles: string[]) {
+    try {
+      // Supprimez tous les rôles existants pour l'utilisateur
+      await this.supabase
+        .from('attribuerRoles')
+        .delete()
+        .eq('idUtilisateur', userId);
 
-    // Insérez les nouveaux rôles pour l'utilisateur
-    await this.supabase
-    .from('attribuerRoles')
-    .insert(
-      roles.map(role => ({ idUtilisateur: userId, idRole: role }))
-    );
-    return { error: null };
-  } catch (error) {
-    console.error('Erreur lors de la mise à jour des rôles de l\'utilisateur :', error);
-    return { error };
-  }
-}
-
-
-
-async createUserInTableUtilisateurAuth(formData: any): Promise<UserCreationResponse>  {
-  try {
-    // D'abord, créez l'utilisateur dans la table "auth" (par exemple, pour le mail et le mot de passe)
-    const authResponse = await this.supabase
-      .from('auth')
-      .upsert([formData]);
-
-    if (authResponse.error) {
-      console.error('Erreur lors de la création de l\'utilisateur dans la table auth :', authResponse.error);
-      throw authResponse.error;
+      // Insérez les nouveaux rôles pour l'utilisateur
+      await this.supabase
+        .from('attribuerRoles')
+        .insert(
+          roles.map(role => ({ idUtilisateur: userId, idRole: role }))
+        );
+      return { error: null };
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour des rôles de l\'utilisateur :', error);
+      return { error };
     }
-
-    // Ensuite, créez l'utilisateur dans la table "utilisateur" (par exemple, pour d'autres informations)
-    const utilisateurResponse = await this.supabase
-      .from('utilisateur')
-      .upsert([formData]);
-
-    if (utilisateurResponse.error) {
-      console.error('Erreur lors de la création de l\'utilisateur dans la table utilisateur :', utilisateurResponse.error);
-      throw utilisateurResponse.error;
-    }
-
-    // Vérifiez si les données sont nulles et attribuez une valeur par défaut si nécessaire
-    const authData = authResponse.data || [];
-    const utilisateurData = utilisateurResponse.data || [];
-
-    return {
-      auth: authData,
-      utilisateur: utilisateurData
-    };
-  } catch (error) {
-    console.error('Erreur lors de la création de l\'utilisateur :', error);
-    throw error;
   }
-}
-async getProfil(): Promise<any[]> {
-  try {
-    // Sur la table attribuerRoles je select les tables roles et utilisateur grâce à leur id qui sont en ForeignKeys
-    // Pour roles je récupére juste la donnée (role) - sur utilisateur je récupére toutes les données (*)
+
+
+
+  async createUserInTableUtilisateurAuth(formData: any): Promise<UserCreationResponse> {
+    try {
+      // D'abord, créez l'utilisateur dans la table "auth" (par exemple, pour le mail et le mot de passe)
+      const authResponse = await this.supabase
+        .from('auth')
+        .upsert([formData]);
+
+      if (authResponse.error) {
+        console.error('Erreur lors de la création de l\'utilisateur dans la table auth :', authResponse.error);
+        throw authResponse.error;
+      }
+
+      // Ensuite, créez l'utilisateur dans la table "utilisateur" (par exemple, pour d'autres informations)
+      const utilisateurResponse = await this.supabase
+        .from('utilisateur')
+        .upsert([formData]);
+
+      if (utilisateurResponse.error) {
+        console.error('Erreur lors de la création de l\'utilisateur dans la table utilisateur :', utilisateurResponse.error);
+        throw utilisateurResponse.error;
+      }
+
+      // Vérifiez si les données sont nulles et attribuez une valeur par défaut si nécessaire
+      const authData = authResponse.data || [];
+      const utilisateurData = utilisateurResponse.data || [];
+
+      return {
+        auth: authData,
+        utilisateur: utilisateurData
+      };
+    } catch (error) {
+      console.error('Erreur lors de la création de l\'utilisateur :', error);
+      throw error;
+    }
+  }
+  async getProfil(): Promise<any[]> {
+    try {
+      // Sur la table attribuerRoles je select les tables roles et utilisateur grâce à leur id qui sont en ForeignKeys
+      // Pour roles je récupére juste la donnée (role) - sur utilisateur je récupére toutes les données (*)
       // Avec .eq je compare l'id à celui obtenu dans authId initialisé dans la méthode signIn
-    const { data, error } = await this.supabase
-      .from('attribuerRoles')
-      .select('roles(role),utilisateur(*)')
-      .eq('idUtilisateur', this.authId);
+      const { data, error } = await this.supabase
+        .from('attribuerRoles')
+        .select('roles(role),utilisateur(*)')
+        .eq('idUtilisateur', this.authId);
 
-    if (error) {
-      console.log(error);
-      throw new Error(
-        "Une erreur s'est produite lors de la récupération des données."
-      );
-    }
-    if (data) return data;
+      if (error) {
+        console.log(error);
+        throw new Error(
+          "Une erreur s'est produite lors de la récupération des données."
+        );
+      }
+      if (data) return data;
 
       // Si data n'est pas défini, retourner un tableau vide par défaut
       return [];
@@ -414,15 +352,3 @@ async getProfil(): Promise<any[]> {
     }
   }
 }
-
-/* async getUserById(id: string) {
-  const { data, error } = await this.supabase.auth.admin.getUserById(id);
-  if (data) {
-    console.log("getUserById fonction ", data);
-  }
-  if (error) {
-    console.log(error);
-  }
-} */
-  // Vérifier que supabase vérifie un token d'authentification - DANGER Sécurité !!
-

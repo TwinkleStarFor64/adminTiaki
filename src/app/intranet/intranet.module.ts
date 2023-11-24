@@ -14,30 +14,26 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 
-
 @NgModule({
   declarations: [
     AccueilComponent,
     KineComponent,
     OptoComponent,
     NutritionComponent,
-    IntranetComponent,    
+    IntranetComponent,
     AsideBarComponent,
-    ProfilComponent,
-  
-    
+    ProfilComponent
   ],
   imports: [
     CommonModule,
-    IntranetRoutingModule, 
+    IntranetRoutingModule,
     ReactiveFormsModule,
     FormsModule,
     ButtonModule,
     InputTextModule,
-    ConfirmDialogModule,    
+    ConfirmDialogModule,
     ToastModule
-    
-  ],
- 
+  ]
+
 })
 export class IntranetModule { }

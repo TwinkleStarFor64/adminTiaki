@@ -15,8 +15,7 @@ import { TableModule } from 'primeng/table';
 import { CheckAccesPipe, GestionUtilisateursPipe } from 'src/app/pipes/gestion-utilisateurs.pipe';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
-
-
+import { UtilisateursComponent } from './utilisateurs/utilisateurs.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +27,8 @@ import { DropdownModule } from 'primeng/dropdown';
     GestionComponent,
     DeleteDataComponent,
     GestionUtilisateursPipe,
-    CheckAccesPipe
+    CheckAccesPipe,
+    UtilisateursComponent
   ],
   imports: [
     CommonModule,
