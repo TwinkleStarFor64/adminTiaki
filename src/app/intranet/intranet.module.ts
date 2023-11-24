@@ -16,7 +16,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast'; // Pour les pop-up de MessageService
 import { HttpClientModule } from '@angular/common/http';
 import { DonneesService } from '../partage/services/donnees.service';
-import { PlatsPipe } from '../pipes/plats.pipe';
+import { GetIngredientPipe, PlatsPipe } from '../pipes/plats.pipe';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { IngredientsPipe } from '../pipes/ingredients.pipe';
 
@@ -34,7 +34,8 @@ import { IngredientsPipe } from '../pipes/ingredients.pipe';
     AsideBarComponent,
     ProfilComponent, 
     PlatsPipe,
-    IngredientsPipe 
+    IngredientsPipe,
+    GetIngredientPipe 
     
   ],
   imports: [

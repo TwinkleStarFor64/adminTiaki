@@ -49,12 +49,18 @@
               <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="selectedPlats.description" name="description"></textarea>
               <label for="float-input">Description</label>
             </span>
+            <div *ngFor="let id of selectedPlats.idIngredients; let i=index">
+              <p>{{ id | getIngredient:'alim_nom_fr' }} <button (click)="supprIngredient(i)">Supprimer</button></p>
+            </div>
             <p-button styleClass="p-button-success" (onClick)="onSubmitForm()">Valider</p-button>
           </form>
           <span id="blocIngredients">   
             <h4>Ingrédients</h4>         
-            <div *ngFor="let ingredients of nutrition.ciqual">
+            <!-- <div *ngFor="let ingredients of nutrition.ciqual">
               <p>{{ ingredients["alim_nom_fr"] }}</p>
+            </div> -->
+            <div *ngFor="let id of selectedPlats.idIngredients; let i=index">
+              <p>{{ id | getIngredient:'alim_nom_fr' }} <button (click)="supprIngredient(i)">Supprimer</button></p>
             </div>
             <h4>Nutriments</h4> 
             <div id="nutriments">
@@ -94,7 +100,7 @@
       </span>
       <div>
         <!-- Utilisation du pipe ingredients pour rechercher des ingredients par leur alim_nom_fr -->        
-          <span *ngFor="let ingredients of nutrition.allCiqual | ingredients:filtreIngredients | paginate: { itemsPerPage: 30, currentPage: pageIngredients, id:'ingredients' }">
+          <span *ngFor="let ingredients of nutrition.ciqual | ingredients:filtreIngredients | paginate: { itemsPerPage: 30, currentPage: pageIngredients, id:'ingredients' }">
             <p>{{ ingredients.alim_nom_fr }}</p>
           </span>        
       </div>
