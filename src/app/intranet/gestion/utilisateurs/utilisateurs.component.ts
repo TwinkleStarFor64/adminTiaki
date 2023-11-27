@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { UtilisateurI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { ConfirmationService } from 'primeng/api';
@@ -28,12 +28,14 @@ export class UtilisateursComponent implements OnInit {
     public confirmationService: ConfirmationService,
     public supa: SupabaseService,
     public users: UsersService,
+    private cd: ChangeDetectorRef
   ) { }
 
   async ngOnInit(): Promise<void> {
     this.users.fetchListeUtilisateurs(); // Récupérer la liste des utilisateurs
     this.users.fetchRoles();
     this.tableauUtilisateurs = this.users.allUsersData;
+   
   }
 
   
@@ -110,6 +112,10 @@ export class UtilisateursComponent implements OnInit {
     }
   }
 
+  clearFilters() {
+    this.filtreSearch = '';
+    this.filtreRole = '';
+  }
   //Methode de selection des utilisateur avec la checkbox
   onUserSelectChange(user: UtilisateurI) {
     if (user.selected) {
@@ -157,6 +163,7 @@ export class UtilisateursComponent implements OnInit {
   openEditModal(user: UtilisateurI) {
     console.log('Ouverture de la modal pour :', user);
     this.users.fetchRoles();
+    this.selectedUserForEdit = user;
 
     // Check if a user has been selected for editing
     if (!user) {
@@ -191,70 +198,115 @@ export class UtilisateursComponent implements OnInit {
    * Sinon, un message d'erreur est affiché.
    * Si les rôles sélectionnés ne sont pas définis ou sont vides, un message d'erreur est affiché.
    */
+  // async updateUser() {
+  //   // Vérifiez si un utilisateur est sélectionné pour l'édition
+  //   if (!this.selectedUserForEdit) {
+  //     console.error('Aucun utilisateur sélectionné pour l\'édition');
+  //     return;
+  //   }
+
+  //   const selectedRoles = this.selectedUserForEdit.roles;
+  //   console.log('Roles sélectionnés avant la mise à jour :', selectedRoles);
+
+  //   // Vérifiez si des rôles sont sélectionnés
+  //   if (selectedRoles && selectedRoles.length > 0) {
+  //     console.log('Utilisateur mis à jour :', this.selectedUserForEdit);
+
+  //     // Mettre à jour la base de données
+  //     try {
+  //       const data = await this.supa.updateRole(this.selectedUserForEdit, selectedRoles);
+  //       if (data) {
+  //         console.log('Utilisateur mis à jour avec succès dans la base de données:', data);
+  //       }
+  //     } catch (error) {
+  //       console.error("Erreur lors de la mise à jour de l'utilisateur dans la base de données:", error);
+  //     }
+  //   } else {
+  //     console.error('Les rôles sélectionnés ne sont pas définis ou sont vides.');
+  //   }
+  // }
   async updateUser() {
     // Vérifiez si un utilisateur est sélectionné pour l'édition
     if (!this.selectedUserForEdit) {
       console.error('Aucun utilisateur sélectionné pour l\'édition');
       return;
     }
-
-    const selectedRoles = this.selectedUserForEdit.roles;
-    console.log('Roles sélectionnés avant la mise à jour :', selectedRoles);
-
-    // Vérifiez si des rôles sont sélectionnés
-    if (selectedRoles && selectedRoles.length > 0) {
-      console.log('Utilisateur mis à jour :', this.selectedUserForEdit);
-
-      // Mettre à jour la base de données
-      try {
-        const data = await this.supa.updateRole(this.selectedUserForEdit, selectedRoles);
-        if (data) {
-          console.log('Utilisateur mis à jour avec succès dans la base de données:', data);
-        }
-      } catch (error) {
-        console.error("Erreur lors de la mise à jour de l'utilisateur dans la base de données:", error);
+  
+    console.log('Utilisateur mis à jour :', this.selectedUserForEdit);
+  
+    // Préparez les données mises à jour
+    const updatedUserData = {
+      nom: this.selectedUserForEdit.nom,
+      email: this.selectedUserForEdit.email,
+      roles: this.selectedUserForEdit.roles
+    };
+  
+    // Mettre à jour la base de données
+    try {
+      const data = await this.supa.updateUser(this.selectedUserForEdit.id, updatedUserData);
+      if (data) {
+        console.log('Utilisateur mis à jour avec succès dans la base de données:', data);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour de l'utilisateur dans la base de données:", error);
+    }
+  }
+ 
+  /**
+   * Met à jour les rôles de l'utilisateur sélectionné.
+   * Si les rôles sélectionnés sont définis et non vides, les rôles de l'utilisateur sont mis à jour.
+   * Sinon, un message d'erreur est affiché.
+   */
+  onCheckboxChange(checked: boolean, role: string, user: UtilisateurI) {
+    if (checked) {
+      if (!user.roles.includes(role)) {
+        user.roles = [...user.roles, role];
       }
     } else {
-      console.error('Les rôles sélectionnés ne sont pas définis ou sont vides.');
-    }
-  }
-
-  /**
-   * 
-   * @param event 
-   */
-  onCheckboxChange(event: any, role: string) {
-    if (this.selectedUserForEdit) {
-      if (event.target.checked) {
-        // Add the role to the user's roles
-        this.selectedUserForEdit.roles = [...this.selectedUserForEdit.roles, role];
-      } else {
-        // Remove the role from the user's roles
-        this.selectedUserForEdit.roles = this.selectedUserForEdit.roles.filter(r => r !== role);
+      const index = user.roles.indexOf(role);
+      if (index > -1) {
+        user.roles = [...user.roles.slice(0, index), ...user.roles.slice(index + 1)];
       }
     }
   }
+
   // Sauvegarder les rôles sélectionnés pour l'utilisateur sélectionné
   onSave() {
-    if (this.selectedUserForEdit && this.selectedUserForEdit.selectedRoles) {
-      const selectedRoles = Object.keys(this.selectedUserForEdit.selectedRoles).filter(role => this.selectedUserForEdit?.selectedRoles && this.selectedUserForEdit.selectedRoles[role]);
+    if (this.selectedUserForEdit && this.selectedUserForEdit.roles) {
+      const selectedRoles = this.selectedUserForEdit.roles;
       console.log('Roles sélectionnés :', selectedRoles);
       console.log('Utilisateur sélectionné :', this.selectedUserForEdit);
+  
+
+         // Enregistrer le nom et l'email de l'utilisateur
+    this.supa.saveNameAndEmail(this.selectedUserForEdit.id, this.selectedUserForEdit.nom, this.selectedUserForEdit.email)
+    .then(() => {
+      console.log('Nom et email enregistrés avec succès');
+    })
+    .catch(error => {
+      console.error('Erreur lors de la sauvegarde du nom et de l\'email :', error);
+    });
 
       if (selectedRoles.length > 0) {
         this.supa.saveRoles(this.selectedUserForEdit.id, selectedRoles)
           .then(() => {
             this.closeEditModal();
+            this.updateUserList();  // Ajoutez cette ligne
           })
           .catch(error => {
             console.error('Erreur lors de la sauvegarde des rôles :', error);
           });
       } else {
-        console.error('Aucun rôle sélectionné pour l\'utilisateur');
+        console.error('Les rôles sélectionnés ne sont pas définis ou sont vides.');
       }
-    } else {
-      console.error('Aucun utilisateur sélectionné pour l\'édition');
     }
+  }
+
+  /* Mettre à jour la liste des utilisateurs */
+  updateUserList() {
+    this.users.fetchListeUtilisateurs().then(listeUtilisateurs => {
+      this.users.listeUtilisateurs = listeUtilisateurs;
+    });
   }
 
   /* Mettre à jour les rôles de l'utilisateur sélectionné */
@@ -269,18 +321,6 @@ export class UtilisateursComponent implements OnInit {
     }
   }
 
-  /** Vérifier les droits */
-  getRoleCheckedState(role: string): boolean {
-    return !!this.selectedUserForEdit?.selectedRoles?.[role];
-  }
-
-  handleUserRoleChange(role: string, event: any): void {
-    const isChecked = event.target.checked;
-
-    if (this.selectedUserForEdit) {
-      this.updateUserRole(role, isChecked);
-    }
-  }
 
   closeEditModal() {
     this.displayEditModal = false;

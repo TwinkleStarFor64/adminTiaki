@@ -22,11 +22,9 @@
     <select [(ngModel)]="filtreRole" name="roles">
       <option *ngFor="let role of users.listeRoles" [value]="role">{{ role }}</option>
     </select>
-    <button pButton class="clear" type="reset" label="Effacer"></button>
-    <!-- <button class="ajout" pButton routerLink="/intranet/gestion/ajout-utilisateurs" styleClass="p-button-success"
-      type="submit">
-      <img src="assets/images/icones/gestion-utilisateur/plus.svg" alt="plus" />Créer un utilisateur
-    </button> -->
+    <button pButton class="clear" label="Effacer" (click)="clearFilters()"></button>
+    <button class="erased" pButton *ngIf="selectedUsers.length > 0" (click)="deleteSelectedUsers()"
+      label="Supprimer les utilisateurs sélectionnés"></button>
   </form>
   </article>
   <article class="table-users">
@@ -49,11 +47,24 @@
           <td>
             <input type="checkbox" [(ngModel)]="user.selected" (change)="onUserSelectChange(user)" />
           </td>
-          <td>{{ user.nom }}</td>
-          <td>{{ user.email }}</td>
           <td>
-            <ng-container *ngFor="let role of user.roles; let last = last">
-              {{ role }}<span *ngIf="!last">, </span>
+            <input *ngIf="selectedUserForEdit && user === selectedUserForEdit" type="text" [(ngModel)]="user.nom" />
+            <span *ngIf="!selectedUserForEdit || user !== selectedUserForEdit">{{ user.nom }}</span>
+          </td>
+          <td>
+            <input *ngIf="selectedUserForEdit && user === selectedUserForEdit" type="text" [(ngModel)]="user.email" />
+            <span *ngIf="!selectedUserForEdit || user !== selectedUserForEdit">{{ user.email }}</span>
+          </td>
+          <td>
+            <div *ngIf="selectedUserForEdit && user === selectedUserForEdit">
+              <div *ngFor="let role of selectedUserForEdit.roles">
+                {{ role }}
+              </div>
+            </div>
+            <ng-container *ngIf="!selectedUserForEdit || user !== selectedUserForEdit">
+              <ng-container *ngFor="let role of user.roles; let last = last">
+                {{ role }}<span *ngIf="!last">, </span>
+              </ng-container>
             </ng-container>
           </td>
           <td>
@@ -96,21 +107,18 @@
           <label for="roles">Roles:</label>
           <div *ngFor="let role of users.listeRoles ">
             <input
-            *ngIf="selectedUserForEdit"
-            type="checkbox"
-            [checked]=" role | acces:selectedUserForEdit.roles!"
-            (change)="onCheckboxChange($event, role)"
-            [value]="role"
-          />
-            {{ role }}
+              type="checkbox"
+              [id]="role"
+              [ngModel]="selectedUserForEdit.roles.includes(role)"
+              (ngModelChange)="onCheckboxChange($event, role, selectedUserForEdit)"
+            />
+            <label for="{{role}}"></label> {{ role }}
           </div>
           <button styleClass="p-button-" pButton (click)="onCancel()" (click)="closeEditModal()" >Annuler</button>
-          <button styleClass="p-button-success" pButton >Enregistrer</button>
+          <button styleClass="p-button-success" (click)="onSave()" pButton >Enregistrer</button>
         </section>
       </div>
     </div>
   </article>
-  <button class="erased" pButton *ngIf="selectedUsers.length > 0" (click)="deleteSelectedUsers()"
-    label="Supprimer les utilisateurs sélectionnés"></button>
   <app-delete-data></app-delete-data>
 </section>

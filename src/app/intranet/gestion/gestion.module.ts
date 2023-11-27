@@ -17,6 +17,7 @@ import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { UtilisateursComponent } from './utilisateurs/utilisateurs.component';
 
+
 @NgModule({
   declarations: [
     MessagerieComponent,
@@ -40,6 +41,7 @@ import { UtilisateursComponent } from './utilisateurs/utilisateurs.component';
     FormsModule,
     ReactiveFormsModule,
     DropdownModule,
+    
   ],
   exports: [DeleteDataComponent],
   providers: [ConfirmationService, MessageService],

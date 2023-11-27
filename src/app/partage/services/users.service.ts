@@ -17,17 +17,19 @@ export class UsersService implements OnInit {
 
   ngOnInit(): void {}
 
-  async fetchListeUtilisateurs() {
+  async fetchListeUtilisateurs(): Promise<UtilisateurI[]> {
     const { data, error } = await this.supa.getListeUtilisateurs();
     if (data) {
       this.listeUtilisateurs = data;
       // Réduire l'objet roles à une liste de chaînes plutôt que de
       this.listeUtilisateurs.forEach((item:UtilisateurI) => item.roles = item.roles.map((r:any) => r.roles.role));
       console.log('Liste utilisateurs', this.listeUtilisateurs);
+      return this.listeUtilisateurs;  // Ajoutez cette ligne
     }
     if (error) {
       console.log(error);
     }
+    return [];  // Ajoutez cette ligne pour retourner un tableau vide en cas d'erreur
   }
   /** Récupérer la liste des types de roles dans la base de données */
   async fetchRoles() {

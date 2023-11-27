@@ -137,6 +137,19 @@ export class SupabaseService {
     return null;
   }
 
+async saveNameAndEmail(id: string, nom: string, email: string) {
+  const { data, error } = await this.supabase
+    .from('utilisateur')
+    .update({ nom: nom, email: email })
+    .eq('id', id);
+  if (data) {
+    console.log('update réussie');
+  }
+  if (error) {
+    console.log(error);
+  }
+}
+
   async saveRoles(userId: string, roleNames: string[]) {
     if (roleNames && roleNames.length > 0) {
       // Obtenir l'ID de chaque rôle à partir de son nom

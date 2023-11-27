@@ -10,6 +10,7 @@ import { ButtonModule } from 'primeng/button';
 import { RecoveryComponent } from './extranet/recovery/recovery.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { ResetComponent } from './extranet/reset/reset.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { ResetComponent } from './extranet/reset/reset.component';
     FormsModule,
     ButtonModule,
     InputTextModule,
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
