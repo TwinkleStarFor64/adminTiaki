@@ -25,18 +25,36 @@ section {
     width: 80%;
     height: 10vh;
     margin-top: 20px;
-    input {
-      margin-left: 50px;
-      height: 3vh;
-      border-radius: 5px;
-    }
-    .clear {
-      background-color: rgb(209, 147, 31);
-      border: rgb(209, 147, 31);
-    }
-    .ajout {
-      background-color: #33bb27;
-      border-color: #33bb27;
+    border-radius: 5px;
+
+    form {
+      display: flex;
+      width: 100%;
+      gap: 2vw;
+      align-items: center;
+      justify-content: center;
+      input {
+        margin-left: 50px;
+        height: 3vh;
+        border-radius: 5px;
+      }
+
+      select {
+        margin-left: 50px;
+        height: 3vh;
+        border-radius: 5px;
+
+        option {
+          height: 10vh;
+          border-radius: 5px;
+        }
+      }
+
+      .clear {
+        margin-left: 70px;
+        background-color: rgb(209, 147, 31);
+        border: rgb(209, 147, 31);
+      }
     }
   }
 

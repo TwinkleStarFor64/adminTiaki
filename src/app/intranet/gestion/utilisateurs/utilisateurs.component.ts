@@ -20,9 +20,7 @@ export class UtilisateursComponent implements OnInit {
   sortOrder: 'asc' | 'desc' = 'asc';
   selectedUserForEdit: UtilisateurI | null = null;
   showUserEditSection: boolean = false;
-  uniqueRoles: string[] = [];
   displayEditModal: boolean = false;
-  allRoles: any;
   selectedRoles: string[] = [];
   private initialRoles: string[] = [];
 
@@ -37,6 +35,8 @@ export class UtilisateursComponent implements OnInit {
     this.users.fetchRoles();
     this.tableauUtilisateurs = this.users.allUsersData;
   }
+
+  
   /**
    * Récupère les rôles uniques à partir de la liste des utilisateurs.
    * Parcourt chaque utilisateur et chaque rôle de l'utilisateur.
@@ -58,6 +58,7 @@ export class UtilisateursComponent implements OnInit {
     return allRoles;
   }
 
+  //Ouvrir la modale de suppression des utilisateurs
   openDeleteDataModal(user: UtilisateurI) {
     this.confirmationService.confirm({
       accept: () => {
@@ -136,6 +137,7 @@ export class UtilisateursComponent implements OnInit {
       },
     });
   }
+
   /** Supprimer un utilisateur de la liste dans le service des utilisateurs */
   removeUserById(userId: any) {
     const index = this.users.listeUtilisateurs.findIndex(
@@ -151,7 +153,7 @@ export class UtilisateursComponent implements OnInit {
     console.log('Utilisateur sélectionné pour l\'édition :', this.selectedUserForEdit);
   }
 
-
+/*Ouvrir la modale d'edition des utilisateurs */
   openEditModal(user: UtilisateurI) {
     console.log('Ouverture de la modal pour :', user);
     this.users.fetchRoles();
@@ -217,27 +219,20 @@ export class UtilisateursComponent implements OnInit {
     }
   }
 
-  onCheckboxChange(event: Event) {
-    const isChecked = (event.target as HTMLInputElement).checked;
-    const role = (event.target as HTMLInputElement).value;
-
-    // Vérifiez si selectedUserForEdit et selectedUserForEdit.roles sont définis
-    if (this.selectedUserForEdit?.roles) {
-      if (isChecked) {
-        this.selectedUserForEdit.roles.push(role);
+  /**
+   * 
+   * @param event 
+   */
+  onCheckboxChange(event: any, role: string) {
+    if (this.selectedUserForEdit) {
+      if (event.target.checked) {
+        // Add the role to the user's roles
+        this.selectedUserForEdit.roles = [...this.selectedUserForEdit.roles, role];
       } else {
-        const index = this.selectedUserForEdit.roles.indexOf(role);
-        if (index > -1) {
-          this.selectedUserForEdit.roles.splice(index, 1);
-        }
+        // Remove the role from the user's roles
+        this.selectedUserForEdit.roles = this.selectedUserForEdit.roles.filter(r => r !== role);
       }
-    } else {
-      console.error('selectedUserForEdit ou selectedUserForEdit.roles est indéfini');
     }
-  }
-  async handleClick() {
-    await this.updateUser();
-    this.onSave();
   }
   // Sauvegarder les rôles sélectionnés pour l'utilisateur sélectionné
   onSave() {
@@ -261,6 +256,8 @@ export class UtilisateursComponent implements OnInit {
       console.error('Aucun utilisateur sélectionné pour l\'édition');
     }
   }
+
+  /* Mettre à jour les rôles de l'utilisateur sélectionné */
   updateUserRole(role: string, isChecked: boolean): void {
     if (this.selectedUserForEdit?.roles) {
       if (isChecked && !this.selectedUserForEdit.roles.includes(role)) {

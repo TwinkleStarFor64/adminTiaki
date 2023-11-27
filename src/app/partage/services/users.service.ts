@@ -8,7 +8,6 @@ import { UtilisateurI } from '../modeles/Types';
 export class UsersService implements OnInit {
   allUsersData: UtilisateurI[] = [];
   allRolesData: any;
-  // utilisateur: UtilisateurI[] = []; //
   listeUtilisateurs: Array<UtilisateurI> = [];
   listeRoles:Array<string> = [];
   user!: UtilisateurI;
