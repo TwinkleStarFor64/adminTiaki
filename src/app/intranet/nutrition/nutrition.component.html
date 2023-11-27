@@ -59,8 +59,8 @@
               </div>
             </span>
             <span id="spanButton">
-              <p-button styleClass="p-button-warning">Annuler</p-button>
-              <p-button styleClass="p-button-success" (onClick)="onSubmitForm()" [disabled]="platForm.invalid!">Valider</p-button>
+              <p-button styleClass="p-button-warning" (onClick)="onCancelForm()">Annuler</p-button>              
+              <p-button styleClass="p-button-success" (onClick)="ConfirmDialog($event)" [disabled]="platForm.invalid!">Valider</p-button>
             </span>
           </form>
           <span id="blocIngredients">                     
@@ -128,3 +128,5 @@
   </ng-template>
 </p-confirmDialog>
 
+<!-- La modal de type pop-up pour valider les modifications du formulaire -->
+<p-confirmPopup key="formulaire"></p-confirmPopup>

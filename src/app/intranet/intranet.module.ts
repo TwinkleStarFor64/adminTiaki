@@ -19,6 +19,7 @@ import { DonneesService } from '../partage/services/donnees.service';
 import { GetIngredientPipe, PlatsPipe } from '../pipes/plats.pipe';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { IngredientsPipe } from '../pipes/ingredients.pipe';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
 
 
@@ -49,7 +50,8 @@ import { IngredientsPipe } from '../pipes/ingredients.pipe';
     ConfirmDialogModule,    
     ToastModule,
     HttpClientModule,    
-    NgxPaginationModule
+    NgxPaginationModule,
+    ConfirmPopupModule
      
   ],
   providers: [

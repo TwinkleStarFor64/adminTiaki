@@ -10,14 +10,16 @@ import { ConfirmationService, ConfirmEventType, MessageService,} from 'primeng/a
   styleUrls: ['./nutrition.component.scss'],
   providers: [ConfirmationService, MessageService], // Pour les modals PrimeNG
 })
-export class NutritionComponent implements OnInit {
-  selectedPlats?: PlatI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
-  filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats
-  filtreIngredients: string = ''; // Utiliser dans le ngModel affichant la liste des ingrédients - Filtre de recherche
-  platArray: PlatI[] = [];
+export class NutritionComponent implements OnInit {  
   pagePlats: number = 1; // Utilisé dans le paginator HTML de la liste des plats pour définir la page de départ - paginate: { itemsPerPage: 1, currentPage: pagePlats }
   pageIngredients: number = 1; // Comme ci-dessus mais pour la liste d'ingrédients
-  selectedIngredient?: CiqualI;
+  filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats
+  filtreIngredients: string = ''; // Utiliser dans le ngModel affichant la liste des ingrédients - Filtre de recherche
+
+  selectedPlats?: PlatI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
+  initialSelectedPlatsState!: PlatI; // Pour stocker l'état initial de selectedPlats dans onSelectPlat
+  //selectedIngredient?: CiqualI;
+  //platArray: PlatI[] = [];
 
   constructor(
     public supa: SupabaseService,
@@ -42,6 +44,10 @@ export class NutritionComponent implements OnInit {
 
 // Méthode qui attribue des valeurs aux variables correspondant à l'objet sur lequel je clique - Utilisé sur le nom du plat en HTML
   onSelectPlat(plat: PlatI, id: Array<number>) {
+    // Enregistrez l'état initial de selectedPlats lors de la sélection initiale
+    if (!this.initialSelectedPlatsState) {
+      this.initialSelectedPlatsState = { ...plat }; // J'utilise cette variable dans onCancelForm()
+    }
     // J'attribue à selectedPlats la value du plat ou j'ai cliqué - Utile pour le ngIf selectedPlats
     this.selectedPlats = plat;
     // J'attribue au paramétre id de la méthode le tableau d'alim_code contenu dans idIngredients
@@ -96,6 +102,25 @@ export class NutritionComponent implements OnInit {
       },
     });
   }  
+// Méthode pour confirmer ou annuler les modifications sur le formulaire d'un plat séléctionné
+  ConfirmDialog(event: Event) {
+    this.confirmationService.confirm({
+        target: event.target as EventTarget,
+        message: 'Confirmer la modification ?',
+        icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'oui', // Le label du bouton d'acceptation
+        rejectLabel: 'non', // Le label du bouton d'annulation
+        key: "formulaire",
+        accept: () => {
+          this.onSubmitForm(); // Si confirmé j'appelle la méthode d'envoie du formulaire
+          this.messageService.add({ severity: 'info', summary: 'Confirmation', detail: 'Modification confirmée' });
+        },
+        reject: () => { // Si annuler j'appelle la méthode d'annulation d'envoi du formulaire
+          this.onCancelForm();
+          this.messageService.add({ severity: 'error', summary: 'Annuler', detail: 'Vous avez annuler' });
+        }
+    });
+}
 
 // Méthode pour supprimer un plat sur la table plats
   async deletePlat(id: number) {
@@ -133,9 +158,16 @@ async onSubmitForm() {
       this.selectedPlats!.id,
       this.selectedPlats!
     );
+    this.nutrition.fetchPlats(); // Pour mettre à jour le formulaire ngModel 
   } catch (error) {
     console.error("Une erreur s'est produite :", error);
   }
 }
+
+onCancelForm() {  
+  // Je réattribue à selectedPlats les valeurs stockées dans onSelectPlat()
+  this.selectedPlats = { ...this.initialSelectedPlatsState };
+}
+
 
 }

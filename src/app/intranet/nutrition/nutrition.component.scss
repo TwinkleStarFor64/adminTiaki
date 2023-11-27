@@ -145,6 +145,14 @@ section {
         }
         div{ // Div contenant le span avec le ngFor
             overflow-y: auto;
+            span{
+                p{
+                    cursor: pointer;       
+                }
+                p:hover{
+                    font-size: 18px;
+                }
+            }
         }
         #paginationIngredients{ // Balise span avec la pagination
             padding-top: 5px;           
@@ -181,3 +189,4 @@ section {
     background-color: #F0C02E;
     border-color: #F0C02E;
 }
+

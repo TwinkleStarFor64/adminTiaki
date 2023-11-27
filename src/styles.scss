@@ -26,6 +26,32 @@ p-button-label {
   font-size: 15rem;  
 }
 
+/* Code ci-dessous pour la popup <p-confirmPopup> dans nutrition.component.html */
+.p-confirm-popup-footer{
+  button:nth-child(1){
+    background-color: #F0C02E!important;
+    border-color: #F0C02E!important;
+    color: white;
+    transition: all .3s ease; // all récupére le css du hover ci-dessous 
+  }
+  button:nth-child(1):hover{
+    background-color: #F0C02E;
+    border-color: #F0C02E;
+    color: white!important;
+  }
+  button:nth-child(2){    
+    background-color: #33BB27!important;
+    border-color: #33BB27!important;    
+    color: white;
+    transition: all .3s ease; // all récupére le css du hover ci-dessous 
+  }
+  button:nth-child(2):hover{
+    background-color: #33BB27;
+    border-color: #33BB27;
+    color: white!important;
+  }
+}
+
 /** BALISES GENERIQUES HTML */
 html,
 body {
