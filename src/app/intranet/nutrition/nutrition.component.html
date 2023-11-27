@@ -29,7 +29,8 @@
         <!-- Je précise un id:'plats' car j'utilise 2 paginator sur ce HTML (id:ingredients sur le second)--> 
         <div *ngFor="let plat of filteredPlats | paginate: { itemsPerPage: 15, currentPage: pagePlats, id:'plats' }">
           <p (click)="onSelectPlat(plat, plat.idIngredients)">{{ plat.nom }}</p>              
-          <figure (click)="DeleteDialog(plat.id)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>      
+          <figure (click)="DeleteDialog(plat.id, true)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
+        <!-- DeleteDialog() modal PrimeNG - En paramétres l'id du plat et la variable bolean del en true -->      
         </div>
       </ng-container>
       </span>      
@@ -49,18 +50,20 @@
               <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="selectedPlats.description" name="description"></textarea>
               <label for="float-input">Description</label>
             </span>
-            <h4>Ingrédients</h4> 
-            <div *ngFor="let id of selectedPlats.idIngredients; let i=index">
-              <!-- <p>{{ id | getIngredient:'alim_nom_fr' }} <button (click)="supprIngredient(i)">Supprimer</button></p> -->
-              <p>{{ id | getIngredient:'alim_nom_fr' }}<figure (click)="supprIngredient(i)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure></p>
-            </div>
-            <div id="divButton">
+            <span>
+              <h4>Ingrédients</h4> 
+              <div id="divIngredients" *ngFor="let id of selectedPlats.idIngredients; let i=index">
+                <figure (click)="DeleteDialog(i, false)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
+              <!-- DeleteDialog() modal PrimeNG - En paramétres l'index de l'ingrédients sur le tableau et la variable bolean del en false -->    
+                <p>{{ id | getIngredient:'alim_nom_fr' }}</p>
+              </div>
+            </span>
+            <span id="spanButton">
               <p-button styleClass="p-button-warning">Annuler</p-button>
-              <p-button styleClass="p-button-success" (onClick)="onSubmitForm()">Valider</p-button>
-            </div>
+              <p-button styleClass="p-button-success" (onClick)="onSubmitForm()" [disabled]="platForm.invalid!">Valider</p-button>
+            </span>
           </form>
-          <span id="blocIngredients">   
-            <h4>Ingrédients</h4>         
+          <span id="blocIngredients">                     
             <!-- <div *ngFor="let ingredients of nutrition.ciqual">
               <p>{{ ingredients["alim_nom_fr"] }}</p>
             </div> -->
@@ -88,11 +91,7 @@
                 <p>Cuivre : {{ nutrition.totals['cuivre'] | number: '1.2-2' }} Mg </p>
                 <p>Manganese : {{ nutrition.totals['manganese'] | number: '1.2-2' }} Mg </p>
               </span>
-            </div>
-            <div id="divButton">
-              <p-button styleClass="p-button-warning">Annuler</p-button>
-              <p-button styleClass="p-button-success" >Valider</p-button>
-            </div> 
+            </div>            
           </span>    
       </div>      
     </article> 
@@ -106,7 +105,7 @@
       <div>
         <!-- Utilisation du pipe ingredients pour rechercher des ingredients par leur alim_nom_fr -->        
           <span *ngFor="let ingredients of nutrition.ciqual | ingredients:filtreIngredients | paginate: { itemsPerPage: 30, currentPage: pageIngredients, id:'ingredients' }">
-            <p>{{ ingredients.alim_nom_fr }}</p>
+            <p (click)="onSelectIngredient(ingredients.alim_code)">{{ ingredients.alim_nom_fr }}</p>
           </span>        
       </div>
       <span id="paginationIngredients">
@@ -121,10 +120,11 @@
   <!-- Pour la pop-up MessageService -->
 <p-toast></p-toast>
 
-<!-- Le contenu de la Modal PrimeNG -->
+<!-- Le contenu de la Modal PrimeNG pour supprimer un plat OU un ingrédient -->
 <p-confirmDialog #cd [style]="{ width: '40vw' }">
   <ng-template pTemplate="footer">
     <button type="submit" class="acceptButton" pButton icon="pi pi-check" label="Oui" (click)="cd.accept()"></button>
     <button type="button" class="rejectButton" pButton icon="pi pi-times" label="Non" (click)="cd.reject()"></button>
   </ng-template>
 </p-confirmDialog>
+

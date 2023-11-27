@@ -28,10 +28,7 @@ export class UsersService implements OnInit {
         email: item['email'],
         nom: item['nom'],
       }));
-      console.log(
-        'Méthode fetchUtilisateur',
-        this.utilisateur.map((item) => item['id']).join(', ')
-      );
+      console.log('Méthode fetchUtilisateur', this.utilisateur.map((item) => item['id']).join(', '));
     }
     if (error) {
       console.log(error);

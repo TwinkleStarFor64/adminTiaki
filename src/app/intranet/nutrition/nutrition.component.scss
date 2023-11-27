@@ -97,10 +97,31 @@ section {
                 flex-direction: column;
                 margin-top: 25px;                
                 gap: 35px;
+                span:nth-child(3){
+                    h4{ // La balise Ingrédients
+                        border-bottom: black dashed 1px;
+                        font-weight: 600;
+                        padding-bottom: 5px;                        
+                    }
+                    div{ // Div avec le nom des aliments et l'icône de corbeille
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        figure{
+                            cursor: pointer;
+                        }                        
+                    }                    
+                }
+                #spanButton{ // Le span avec les boutons annuler & valider
+                    width: 50vw;
+                    display: flex;
+                    justify-content: flex-end;
+                    gap: 1vw;
+                    padding-right: 1vw;
+                }
             }
-            #blocIngredients{ // Le span avec la liste d'ingrédients et leurs nutriments
-                
-                h4{ // Les balises Ingrédients & Nutriments
+            #blocIngredients{ // Le span avec la liste d'ingrédients et leurs nutriments                
+                h4{ // La balise Nutriments
                     border-bottom: black dashed 1px;
                     font-weight: 600;
                     padding-bottom: 5px;
@@ -109,13 +130,7 @@ section {
                     display: flex;
                     flex-direction: row;
                     gap: 1vw;
-                }
-                #divButton{
-                    width: 50vw;
-                    display: flex;
-                    justify-content: flex-end;
-                    gap: 1vw;
-                }
+                }                
             }
         }
     }

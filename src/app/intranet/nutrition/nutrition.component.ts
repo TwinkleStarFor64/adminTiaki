@@ -1,12 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { NutritionService } from './nutrition.service';
-import { PlatI } from 'src/app/partage/modeles/Types';
-import {
-  ConfirmationService,
-  ConfirmEventType,
-  MessageService,
-} from 'primeng/api';
+import { CiqualI, PlatI } from 'src/app/partage/modeles/Types';
+import { ConfirmationService, ConfirmEventType, MessageService,} from 'primeng/api';
 
 @Component({
   selector: 'app-nutrition',
@@ -21,6 +17,7 @@ export class NutritionComponent implements OnInit {
   platArray: PlatI[] = [];
   pagePlats: number = 1; // Utilisé dans le paginator HTML de la liste des plats pour définir la page de départ - paginate: { itemsPerPage: 1, currentPage: pagePlats }
   pageIngredients: number = 1; // Comme ci-dessus mais pour la liste d'ingrédients
+  selectedIngredient?: CiqualI;
 
   constructor(
     public supa: SupabaseService,
@@ -54,26 +51,30 @@ export class NutritionComponent implements OnInit {
     this.nutrition.fetchCiqual(id);
   }
 
-// Méthode pour la modal de suppression d'un plat'
-  DeleteDialog(id: number) {
-    // Id correspond à plat.id au niveau du HTML
+// Méthode pour la modal de suppression d'un plat OU d'un ingrédient
+  DeleteDialog(id: number, del: boolean) {
+    // Id correspond à plat.id au niveau du Html OU à i de let i=index pour un ingrédient
     this.confirmationService.confirm({
       // Le contenu de la boîte de dialogue
-      message: 'Etes vous sûr de vouloir supprimer ce plat ?',
-      header: 'Supprimer le plat',
-      icon: 'pi pi-exclamation-triangle',
+      message: 'Etes vous sûr de vouloir supprimer ?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',      
       accept: () => {
-        this.deletePlat(id); // J'appele la méthode de suppression de plat et lui fournis id en paramétre
+        if (del) { // Si del est true (définie dans le html)
+          this.deletePlat(id); // J'appele la méthode de suppression de plat et lui fournis id en paramétre
+        } else {
+          this.supprIngredient(id); // J'appele la méthode de suppression d'ingrédients et lui fournis id en paramétre (paramétre i sur supprIngredient())
+        }
         // Pour la pop-up
         this.messageService.add({
           severity: 'info',
           summary: 'Confirmation',
-          detail: 'Le plat est supprimer',
+          detail: 'Suppression confirmée',
         });
       },
       reject: (type: ConfirmEventType) => {
         switch (type) {
-          case ConfirmEventType.REJECT:
+          case ConfirmEventType.REJECT:            
             this.messageService.add({
               // Pour la pop-up
               severity: 'error',
@@ -82,7 +83,7 @@ export class NutritionComponent implements OnInit {
             });
             console.log('Non a été cliqué, la modal sera simplement fermée.');
             break;
-          case ConfirmEventType.CANCEL:
+          case ConfirmEventType.CANCEL:            
             this.messageService.add({
               // Pour la pop-up
               severity: 'warn',
@@ -94,7 +95,7 @@ export class NutritionComponent implements OnInit {
         }
       },
     });
-  }
+  }  
 
 // Méthode pour supprimer un plat sur la table plats
   async deletePlat(id: number) {
@@ -107,21 +108,34 @@ export class NutritionComponent implements OnInit {
       .catch((error) => {
         console.log(error);
       });
-  }
+  }  
 
-  async onSubmitForm() {
-    try {
-      await this.nutrition.updatePlat(
-        this.selectedPlats!.id,
-        this.selectedPlats!
-      );
-    } catch (error) {
-      console.error("Une erreur s'est produite :", error);
-    }
-  }
-
-// Supprimer un ingrédient dans la liste
+// Supprimer un ingrédient dans la liste sur un plat séléctionné
   supprIngredient(i:number){
+    console.log("index de l'ingrédient : ", i);
     this.selectedPlats?.idIngredients?.splice(i, 1);
+  // splice supprime l'ingrédient sur lequel j'ai cliqué en l'enlevant du tableau this.selectedPlats.idIngredients  
   }
+
+// Ajouter un ingrédient sur un plat séléctionné
+onSelectIngredient(id: number) {
+  console.log("alim_code de l'ingrédient : ", id);
+  // this.selectedPlats?.idIngredients est-il défini et non nul ?
+  if (this.selectedPlats?.idIngredients) {
+  // Ajoute l'ingredient sur lequel j'ai cliqué à la fin du tableau this.selectedPlats.idIngredients en utilisant son alim_code comme id
+    this.selectedPlats.idIngredients.push(id);
+  }  
+}
+
+async onSubmitForm() {
+  try {
+    await this.nutrition.updatePlat(
+      this.selectedPlats!.id,
+      this.selectedPlats!
+    );
+  } catch (error) {
+    console.error("Une erreur s'est produite :", error);
+  }
+}
+
 }
