@@ -55,7 +55,7 @@
               <div id="divIngredients" *ngFor="let id of selectedPlats.idIngredients; let i=index">
                 <figure (click)="DeleteDialog(i, false)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
               <!-- DeleteDialog() modal PrimeNG - En paramétres l'index de l'ingrédients sur le tableau et la variable bolean del en false -->    
-                <p>{{ id | getIngredient:'alim_nom_fr' }}</p>
+                <p>{{ id | getIngredient:'alim_nom_fr' }}</p>                
               </div>
             </span>
             <span id="spanButton">
@@ -123,8 +123,8 @@
 <!-- Le contenu de la Modal PrimeNG pour supprimer un plat OU un ingrédient -->
 <p-confirmDialog #cd [style]="{ width: '40vw' }">
   <ng-template pTemplate="footer">
-    <button type="submit" class="acceptButton" pButton icon="pi pi-check" label="Oui" (click)="cd.accept()"></button>
     <button type="button" class="rejectButton" pButton icon="pi pi-times" label="Non" (click)="cd.reject()"></button>
+    <button type="submit" class="acceptButton" pButton icon="pi pi-check" label="Oui" (click)="cd.accept()"></button>
   </ng-template>
 </p-confirmDialog>
 

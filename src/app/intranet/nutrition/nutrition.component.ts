@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { NutritionService } from './nutrition.service';
-import { CiqualI, PlatI } from 'src/app/partage/modeles/Types';
+import { PlatI } from 'src/app/partage/modeles/Types';
 import { ConfirmationService, ConfirmEventType, MessageService,} from 'primeng/api';
 
 @Component({
@@ -65,10 +65,10 @@ export class NutritionComponent implements OnInit {
       message: 'Etes vous sûr de vouloir supprimer ?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',      
-      accept: () => {
+      accept: () => {        
         if (del) { // Si del est true (définie dans le html)
           this.deletePlat(id); // J'appele la méthode de suppression de plat et lui fournis id en paramétre
-        } else {
+        } else {         
           this.supprIngredient(id); // J'appele la méthode de suppression d'ingrédients et lui fournis id en paramétre (paramétre i sur supprIngredient())
         }
         // Pour la pop-up
@@ -77,7 +77,7 @@ export class NutritionComponent implements OnInit {
           summary: 'Confirmation',
           detail: 'Suppression confirmée',
         });
-      },
+      },      
       reject: (type: ConfirmEventType) => {
         switch (type) {
           case ConfirmEventType.REJECT:            
@@ -137,9 +137,10 @@ export class NutritionComponent implements OnInit {
 
 // Supprimer un ingrédient dans la liste sur un plat séléctionné
   supprIngredient(i:number){
-    console.log("index de l'ingrédient : ", i);
-    this.selectedPlats?.idIngredients?.splice(i, 1);
+    console.log("index de l'ingrédient : ", i);    
   // splice supprime l'ingrédient sur lequel j'ai cliqué en l'enlevant du tableau this.selectedPlats.idIngredients  
+    this.selectedPlats?.idIngredients?.splice(i, 1);
+    //this.nutrition.fetchCiqual(this.selectedPlats.idIngredients);
   }
 
 // Ajouter un ingrédient sur un plat séléctionné
@@ -149,6 +150,8 @@ onSelectIngredient(id: number) {
   if (this.selectedPlats?.idIngredients) {
   // Ajoute l'ingredient sur lequel j'ai cliqué à la fin du tableau this.selectedPlats.idIngredients en utilisant son alim_code comme id
     this.selectedPlats.idIngredients.push(id);
+  // Appelle de fetchCiqual() pour mettre à jour les composants et leur quantité si je rajoute un ingrédient
+    this.nutrition.fetchCiqual(this.selectedPlats.idIngredients);
   }  
 }
 
@@ -158,7 +161,7 @@ async onSubmitForm() {
       this.selectedPlats!.id,
       this.selectedPlats!
     );
-    this.nutrition.fetchPlats(); // Pour mettre à jour le formulaire ngModel 
+    this.nutrition.fetchPlats(); // Pour mettre à jour le formulaire ngModel      
   } catch (error) {
     console.error("Une erreur s'est produite :", error);
   }
