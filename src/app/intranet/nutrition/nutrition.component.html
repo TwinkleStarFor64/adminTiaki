@@ -17,7 +17,7 @@
         </figure>
         <h3>Gestion des plats</h3>
       </span>
-      <p-button  styleClass="p-button-success">Ajouter un plat</p-button>
+      <p-button styleClass="p-button-success" (click)="toggleFormVisibility(2)">Ajouter un plat</p-button>
       <span class="p-input-icon-left">
         <i class="pi pi-search"></i>
         <input type="text" pInputText [(ngModel)]="filtre" />
@@ -28,7 +28,7 @@
         <!-- Utilisation de ngx-pagination - Doc : https://github.com/michaelbromley/ngx-pagination/blob/master/README.md#demo --> 
         <!-- Je précise un id:'plats' car j'utilise 2 paginator sur ce HTML (id:ingredients sur le second)--> 
         <div *ngFor="let plat of filteredPlats | paginate: { itemsPerPage: 15, currentPage: pagePlats, id:'plats' }">
-          <p (click)="onSelectPlat(plat, plat.idIngredients)">{{ plat.nom }}</p>              
+          <p (click)="onSelectPlat(plat, plat.idIngredients)" (click)="toggleFormVisibility(1)">{{ plat.nom }}</p>              
           <figure (click)="DeleteDialog(plat.id, true)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
         <!-- DeleteDialog() modal PrimeNG - En paramétres l'id du plat et la variable bolean del en true -->      
         </div>
@@ -40,7 +40,7 @@
       </span>
     </article>
     <article>    
-      <div *ngIf="selectedPlats">  <!-- Le plat sur lequel j'ai cliqué -->     
+      <div *ngIf="selectedPlats && selectedPlatsVisible">  <!-- Le plat sur lequel j'ai cliqué -->     
           <form #platForm="ngForm"> 
             <span class="p-float-label">
               <input pInputText [(ngModel)]="selectedPlats.nom" name="nom" type="text" required minlength="1" />
@@ -93,7 +93,75 @@
               </span>
             </div>            
           </span>    
-      </div>      
+      </div>
+      <div *ngIf="ajoutPlatsVisible">      
+        <!-- <form #ajoutPlatForm="ngForm"> 
+          <span class="p-float-label">
+            <input pInputText [(ngModel)]="newPlat.nom" name="nom" type="text" required minlength="1" />
+            <label htmlFor="nom">Nom</label>
+          </span> 
+          <span class="p-float-label">
+            <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="newPlat.description" name="description"></textarea>
+            <label for="float-input">Description</label>
+          </span>
+          <span>
+            <h4>Ingrédients</h4> 
+            <div id="divIngredients" *ngFor="let id of newPlat.idIngredients; let i=index">
+              <figure (click)="DeleteDialog(i, false)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>    
+              <p>{{ id | getIngredient:'alim_nom_fr' }}</p>
+            </div>
+          </span>
+          <span id="spanButton">
+            <p-button styleClass="p-button-warning">Annuler</p-button>              
+            <p-button styleClass="p-button-success" (onClick)="onSubmitNewPlatForm()" [disabled]="ajoutPlatForm.invalid!">Valider</p-button>
+          </span>
+        </form> -->
+        <form [formGroup]="newPlatForm" (ngSubmit)="onSubmitNewPlatForm()">
+          <span class="p-float-label">
+            <input pInputText formControlName="nom" type="text" required minlength="1" />
+            <label htmlFor="nom">Nom</label>
+          </span> 
+          <span class="p-float-label">
+            <textarea id="float-input" rows="5" cols="40" pInputTextarea formControlName="description"></textarea>
+            <label for="float-input">Description</label>
+          </span>
+          <span>
+            <h4>Ingrédients</h4> 
+            <div id="divIngredients" *ngFor="let id of newPlat.idIngredients; let i=index">
+              <figure (click)="DeleteDialog(i, false)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>    
+              <p>{{ id | getIngredient:'alim_nom_fr' }}</p>
+            </div>
+          </span>
+          <span id="spanButton">
+            <p-button styleClass="p-button-warning">Annuler</p-button>              
+            <p-button styleClass="p-button-success" type="submit" [disabled]="newPlatForm.invalid!">Valider</p-button>
+          </span>
+        </form>
+        <span id="blocIngredients">         
+          <h4>Nutriments</h4> 
+          <div id="nutriments">
+            <span>
+              <p>Protéines : {{ nutrition.totals['proteine'] | number: '1.2-2' }} Gr</p>
+              <p>Glucides : {{ nutrition.totals['glucides'] | number: '1.2-2' }} Gr</p>
+              <p>Lipides : {{ nutrition.totals['lipides'] | number: '1.2-2' }} Gr</p>
+              <p>Sucres : {{ nutrition.totals['sucres'] | number: '1.2-2' }} Gr </p>
+            </span>
+            <span>
+              <p>Vitamine C : {{ nutrition.totals['vitamineC'] | number: '1.2-2' }} Mg </p>
+              <p>Vitamine B1 : {{ nutrition.totals['vitamineB1'] | number: '1.2-2' }} Mg </p>
+              <p>Vitamine B2 : {{ nutrition.totals['vitamineB2'] | number: '1.2-2' }} Mg </p>
+              <p>Vitamine B3 : {{ nutrition.totals['vitamineB3'] | number: '1.2-2' }} Mg </p>
+              <p>Vitamine B5 : {{ nutrition.totals['vitamineB5'] | number: '1.2-2' }} Mg </p>
+            </span>
+            <span>
+              <p>Magnesium : {{ nutrition.totals['magnesium'] | number: '1.2-2' }} Mg </p>
+              <p>Potassium : {{ nutrition.totals['potassium'] | number: '1.2-2' }} Mg </p>
+              <p>Cuivre : {{ nutrition.totals['cuivre'] | number: '1.2-2' }} Mg </p>
+              <p>Manganese : {{ nutrition.totals['manganese'] | number: '1.2-2' }} Mg </p>
+            </span>
+          </div>            
+        </span>    
+    </div>      
     </article> 
     <article>
       <h4>Ajout d'ingrédients</h4>

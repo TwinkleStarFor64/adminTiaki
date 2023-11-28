@@ -3,6 +3,7 @@ import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { NutritionService } from './nutrition.service';
 import { CiqualI, PlatI } from 'src/app/partage/modeles/Types';
 import { ConfirmationService, ConfirmEventType, MessageService,} from 'primeng/api';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-nutrition',
@@ -20,18 +21,46 @@ export class NutritionComponent implements OnInit {
   initialSelectedPlatsState!: PlatI; // Pour stocker l'état initial de selectedPlats dans onSelectPlat
   //selectedIngredient?: CiqualI;
   //platArray: PlatI[] = [];
+  ajoutPlatsVisible: boolean = false;
+  selectedPlatsVisible: boolean = false;
+  newPlat!: PlatI;
+  newPlatForm!: FormGroup;
 
   constructor(
     public supa: SupabaseService,
     public nutrition: NutritionService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private formbuilder: FormBuilder
   ) {}
 
   async ngOnInit(): Promise<void> {
     this.nutrition.fetchPlats();
   // La méthode getAllCiqual() permet de voir la liste des ingrédients et d'attribuer des valeurs via la méthode onSelectPlat() qui à besoin des ingrédients
-    this.nutrition.getAllCiqual();
+    this.nutrition.getAllCiqual(); 
+    this.newPlatForm = this.formbuilder.group({
+      nom: ['', Validators.required],
+      description: ['', Validators.required]
+    });
+
+    this.newPlat = {
+      id: 0,
+      nom: '',
+      description: '',
+      alim_code: 0,
+      idIngredients: [],
+    }
+  }
+
+  toggleFormVisibility(formNumber: number) {
+    //this.ajoutPlatsVisible = !this.ajoutPlatsVisible;
+    if (formNumber === 1) {
+      this.selectedPlatsVisible = true;
+      this.ajoutPlatsVisible = false;
+    } else if (formNumber === 2) {
+      this.ajoutPlatsVisible = true;
+      this.selectedPlatsVisible = false;
+    }
   }
 
 // Méthode utiliser dans l'input de recherche d'ingrédients afin de le réinitialiser
@@ -149,6 +178,7 @@ onSelectIngredient(id: number) {
   if (this.selectedPlats?.idIngredients) {
   // Ajoute l'ingredient sur lequel j'ai cliqué à la fin du tableau this.selectedPlats.idIngredients en utilisant son alim_code comme id
     this.selectedPlats.idIngredients.push(id);
+    //this.newPlat.idIngredients!.push(id);
   }  
 }
 
@@ -169,5 +199,10 @@ onCancelForm() {
   this.selectedPlats = { ...this.initialSelectedPlatsState };
 }
 
+onSubmitNewPlatForm() {
+  //console.log(this.newPlat.nom, this.newPlat.description);
+  console.log(this.newPlatForm.value);
+  
+}
 
 }
