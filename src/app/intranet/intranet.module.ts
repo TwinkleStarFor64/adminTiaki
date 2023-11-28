@@ -13,6 +13,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { ToastModule } from 'primeng/toast';
     ButtonModule,
     InputTextModule,
     ConfirmDialogModule,
-    ToastModule
+    ToastModule,
+    CheckboxModule
   ]
 
 })

@@ -18,14 +18,14 @@
 <section>
   <article class="search">
     <form>
-    <input pInputText name="search" type="search" [(ngModel)]="filtreSearch" placeholder="Nom" />
-    <select [(ngModel)]="filtreRole" name="roles">
-      <option *ngFor="let role of users.listeRoles" [value]="role">{{ role }}</option>
-    </select>
-    <button pButton class="clear" label="Effacer" (click)="clearFilters()"></button>
-    <button class="erased" pButton *ngIf="selectedUsers.length > 0" (click)="deleteSelectedUsers()"
-      label="Supprimer les utilisateurs sélectionnés"></button>
-  </form>
+      <input pInputText name="search" type="search" [(ngModel)]="filtreSearch" placeholder="Nom" />
+      <select [(ngModel)]="filtreRole" name="roles">
+        <option *ngFor="let role of users.listeRoles" [value]="role">{{ role }}</option>
+      </select>
+      <button pButton class="clear" label="Effacer" (click)="clearFilters()"></button>
+      <button class="rejectButton" pButton *ngIf="selectedUsers.length > 0" (click)="deleteSelectedUsers()"
+        label="Supprimer les utilisateurs sélectionnés"></button>
+    </form>
   </article>
   <article class="table-users">
     <table>
@@ -43,7 +43,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let user of users.listeUtilisateurs | utilisateurs:filtreSearch:filtreRole" >
+        <tr *ngFor="let user of users.listeUtilisateurs | utilisateurs:filtreSearch:filtreRole">
           <td>
             <input type="checkbox" [(ngModel)]="user.selected" (change)="onUserSelectChange(user)" />
           </td>
@@ -87,36 +87,37 @@
     </table>
     <div class="modal" [ngClass]="{'show': displayEditModal}">
       <div class="modal-content">
-        <span class="close" (click)="closeEditModal()"><img src="assets/images/icones/icones-communs/iconcross.svg" alt="close"></span>
+        <span class="close" (click)="closeEditModal()"><img src="assets/images/icones/icones-communs/iconcross.svg"
+            alt="close"></span>
         <p>Edition utilisateur</p>
         <!-- Modale -->
         <section *ngIf="selectedUserForEdit">
-          <div>
-            <label for="nom">Nom:</label>
-            <input pInputText type="text" id="nom" [ngModel]="selectedUserForEdit ? selectedUserForEdit.nom : ''"
-              (ngModelChange)="
-                selectedUserForEdit && (selectedUserForEdit.nom = $event)
-              " />
-          </div>
-          <div>
-            <label for="email">Email:</label>
-            <input type="text" id="email" [ngModel]="selectedUserForEdit ? selectedUserForEdit.email : ''"
-              (ngModelChange)="
-                selectedUserForEdit && (selectedUserForEdit.email = $event)
-              " />
-          </div>
-          <label for="roles">Roles:</label>
-          <div *ngFor="let role of users.listeRoles ">
-            <input
-              type="checkbox"
-              [id]="role"
-              [ngModel]="selectedUserForEdit.roles.includes(role)"
-              (ngModelChange)="onCheckboxChange($event, role, selectedUserForEdit)"
-            />
-            <label for="{{role}}"></label> {{ role }}
-          </div>
-          <button type="button" class="rejectButton"  pButton (click)="closeEditModal()" >Annuler</button>
-          <button type="button" class="acceptButton" pButton (click)="onSave()"  >Enregistrer</button>
+          <article class="modalArticle">
+            <div>
+              <label for="nom">Nom:</label>
+              <input pInputText type="text" id="nom" [ngModel]="selectedUserForEdit ? selectedUserForEdit.nom : ''"
+                (ngModelChange)="
+                 selectedUserForEdit && (selectedUserForEdit.nom = $event)
+               " />
+            </div>
+            <div>
+              <label for="email">Email:</label>
+              <input type="text" id="email" [ngModel]="selectedUserForEdit ? selectedUserForEdit.email : ''"
+                (ngModelChange)="
+                 selectedUserForEdit && (selectedUserForEdit.email = $event)
+               " />
+            </div>
+          </article>
+          <article class="modalArticle">
+            <label for="roles">Roles:</label>
+            <div *ngFor="let role of users.listeRoles ">
+              <input type="checkbox" [id]="role" [ngModel]="selectedUserForEdit.roles.includes(role)"
+                (ngModelChange)="onCheckboxChange($event, role, selectedUserForEdit)" />
+              <label for="{{role}}"></label> {{ role }}
+            </div>
+          </article>
+          <button type="button" class="rejectButton" pButton (click)="closeEditModal()">Annuler</button>
+          <button type="button" class="acceptButton" pButton (click)="onSave()">Enregistrer</button>
         </section>
       </div>
     </div>
