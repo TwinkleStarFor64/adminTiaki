@@ -2,6 +2,7 @@
   background-color: #f1d98e;
   width: 10px;
 }
+
 ::-webkit-scrollbar-thumb {
   height: auto;
   background-color: #f0c02e;
@@ -33,6 +34,7 @@ section {
       gap: 2vw;
       align-items: center;
       justify-content: center;
+
       input {
         margin-left: 50px;
         height: 3vh;
@@ -65,9 +67,11 @@ section {
     max-height: 60vh;
     overflow-y: auto;
     scrollbar-width: auto;
+
     ::-webkit-scrollbar {
       background-color: chocolate;
     }
+
     table {
       width: 80%;
 
@@ -82,6 +86,7 @@ section {
 
           .tri {
             cursor: pointer;
+
             i {
               height: 4vh;
             }
@@ -103,36 +108,92 @@ section {
       }
     }
   }
+
   .modal {
-    display: none; /* Assurez-vous que la modal est cachée par défaut */
+    display: none;
     position: fixed;
-    height: 50%;
-    width: 50%;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1;
-
-    &.show {
-      display: block; /* Ajoutez la classe "show" pour afficher la modal */
-    }
-  }
-
-  .modal-content {
-    background-color: #fefefe;
-    padding: 20px;
-    border: 1px solid #888;
     width: 80%;
     max-width: 600px;
-    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
 
-    input {
-      margin-left: 50px;
-      height: 3vh;
-      border-radius: 5px;
+
+    &.show {
+      display: block;
     }
-  }
 
-  .erased {
-    background-color: #d9042b;
-    border-color: #d9042b;
+    .modal-content {
+
+      p{
+        font-size: 2rem;
+        font-weight: 600;
+        color: #f0c02e;
+        margin: 0;
+
+      }
+
+      .close {
+        cursor: pointer;
+        float: right;
+
+      }
+
+      section {
+        display: flex;
+        flex-direction: column;
+
+        div {
+          margin-bottom: 10px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          width: 10vw;
+
+          label {
+            display: block;
+          }
+
+          input[type="text"] {
+            width: 100%;
+            padding: 5px;
+            border-radius: 5px;
+          }
+        }
+
+        input[type="checkbox"] {
+          margin-right: 5px;
+        }
+
+        button {
+          margin-top: 10px;
+          width: 33%;
+          padding: 10px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          text-align: center;
+
+          &.erased {
+            background-color: #d9042b;
+            color: #ffffff;
+          }
+
+        }
+        .save{
+          background: #4caf50;
+          color: white;
+        }
+      }
+    }
+
+    @media screen and (max-width: 600px) {
+      width: 100%;
+      height: 100%;
+      padding: 10px;
+    }
   }
 }
