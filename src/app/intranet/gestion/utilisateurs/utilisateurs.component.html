@@ -115,8 +115,8 @@
             />
             <label for="{{role}}"></label> {{ role }}
           </div>
-          <button class="erased" styleClass="p-button-" pButton (click)="onCancel()" (click)="closeEditModal()" >Annuler</button>
-          <button classe="save" styleClass="p-button-" (click)="onSave()" pButton >Enregistrer</button>
+          <button type="button" class="rejectButton"  pButton (click)="closeEditModal()" >Annuler</button>
+          <button type="button" class="acceptButton" pButton (click)="onSave()"  >Enregistrer</button>
         </section>
       </div>
     </div>

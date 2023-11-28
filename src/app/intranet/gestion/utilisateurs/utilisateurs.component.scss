@@ -120,7 +120,7 @@ section {
     max-width: 600px;
     padding: 20px;
     border: 1px solid #888;
-
+    background:rgb(252, 247, 231);
 
     &.show {
       display: block;
@@ -176,16 +176,14 @@ section {
           border-radius: 5px;
           cursor: pointer;
           text-align: center;
-
-          &.erased {
-            background-color: #d9042b;
-            color: #ffffff;
+          .acceptButton:hover {
+            background-color: #33BB27;
+            border-color: #33BB27;
           }
-
-        }
-        .save{
-          background: #4caf50;
-          color: white;
+          .rejectButton:hover {
+            background-color: #F0C02E;
+            border-color: #F0C02E;
+          }
         }
       }
     }

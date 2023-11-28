@@ -324,9 +324,6 @@ export class UtilisateursComponent implements OnInit {
 
   closeEditModal() {
     this.displayEditModal = false;
-  }
-
-  onCancel() {
     if (this.selectedUserForEdit) {
       this.selectedUserForEdit.roles = [...this.initialRoles];
     }
