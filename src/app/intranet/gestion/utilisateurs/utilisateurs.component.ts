@@ -1,13 +1,15 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { UtilisateurI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { UsersService } from 'src/app/partage/services/users.service';
+import { CheckAccesPipe, GestionUtilisateursPipe } from 'src/app/pipes/gestion-utilisateurs.pipe';
 
 @Component({
   selector: 'app-utilisateurs',
   templateUrl: './utilisateurs.component.html',
-  styleUrls: ['./utilisateurs.component.scss']
+  styleUrls: ['./utilisateurs.component.scss'],
+  providers: [ConfirmationService, MessageService,GestionUtilisateursPipe,CheckAccesPipe],
 })
 export class UtilisateursComponent implements OnInit {
   utilisateur: UtilisateurI[] = [];

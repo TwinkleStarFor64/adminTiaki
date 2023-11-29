@@ -1,11 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
-
 import { UtilisateursComponent } from './utilisateurs.component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { GestionUtilisateursPipe } from 'src/app/pipes/gestion-utilisateurs.pipe';
+import { CheckAccesPipe, GestionUtilisateursPipe } from 'src/app/pipes/gestion-utilisateurs.pipe';
 
 // Stub for app-delete-data
 @Component({
@@ -23,10 +22,10 @@ describe('UtilisateursComponent', () => {
       declarations: [
         UtilisateursComponent,
         GestionUtilisateursPipe,
-        DeleteDataStubComponent // Declare the stub here
+        DeleteDataStubComponent
       ],
       imports: [ConfirmDialogModule,FormsModule,ReactiveFormsModule],
-      providers: [ConfirmationService],
+      providers: [ConfirmationService,GestionUtilisateursPipe,CheckAccesPipe ],
     });
     fixture = TestBed.createComponent(UtilisateursComponent);
     component = fixture.componentInstance;

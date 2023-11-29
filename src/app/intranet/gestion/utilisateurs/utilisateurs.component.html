@@ -43,7 +43,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let user of users.listeUtilisateurs | utilisateurs:filtreSearch:filtreRole">
+        <tr *ngFor="let user of users.listeUtilisateurs | gestionUtilisateurs:filtreSearch:filtreRole">
           <td>
             <input type="checkbox" [(ngModel)]="user.selected" (change)="onUserSelectChange(user)" />
           </td>

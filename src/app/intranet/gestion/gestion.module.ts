@@ -27,9 +27,9 @@ import { UtilisateursComponent } from './utilisateurs/utilisateurs.component';
     AjoutUtilisateurComponent,
     GestionComponent,
     DeleteDataComponent,
+    UtilisateursComponent,
     GestionUtilisateursPipe,
-    CheckAccesPipe,
-    UtilisateursComponent
+    CheckAccesPipe
   ],
   imports: [
     CommonModule,
@@ -41,9 +41,8 @@ import { UtilisateursComponent } from './utilisateurs/utilisateurs.component';
     FormsModule,
     ReactiveFormsModule,
     DropdownModule,
-    
   ],
   exports: [DeleteDataComponent],
-  providers: [ConfirmationService, MessageService],
+  providers: [ConfirmationService, MessageService, GestionUtilisateursPipe, CheckAccesPipe],
 })
 export class GestionModule { }

@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { UtilisateurI } from '../partage/modeles/Types';
 
 @Pipe({
-  name: 'utilisateurs',
+  name: 'gestionUtilisateurs',
 })
 export class GestionUtilisateursPipe implements PipeTransform {
   transform(users:Array<UtilisateurI>, search:string='', role:string=''): any[] {

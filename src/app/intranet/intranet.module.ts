@@ -15,6 +15,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { CheckboxModule } from 'primeng/checkbox';
 
+
 @NgModule({
   declarations: [
     AccueilComponent,
@@ -23,7 +24,8 @@ import { CheckboxModule } from 'primeng/checkbox';
     NutritionComponent,
     IntranetComponent,
     AsideBarComponent,
-    ProfilComponent
+    ProfilComponent,
+
   ],
   imports: [
     CommonModule,
