@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthSession, createClient, SupabaseClient, } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
-import { RoleData, UtilisateurData } from '../modeles/Types';
+import { UserCreationResponse, UtilisateurI } from '../modeles/Types';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -10,9 +10,6 @@ import { Router } from '@angular/router';
 export class SupabaseService {
   private supabase: SupabaseClient; // Instance du client Supabase
   _session: AuthSession | null = null; // Session d'authentification
-  public utilisateurData: UtilisateurData[] = [];
-  public roleData: RoleData[] = [];
-
   user: any; // Utilisé dans la méthode signIn()
   token!: string; // Utilisé dans la méthode signIn() pour stocker le token de l'utilisateur
   authId!: string; // Utilisé dans la méthode signIn() pour stocker l'id de l'utilisateur
@@ -33,18 +30,13 @@ export class SupabaseService {
     this.supabase.auth
       .signInWithPassword({ email, password })
       .then((res) => {
-        console.log('Méthode signIn - ce que contient la réponse : ', res);
         this.user = res.data.user; // La réponse de la méthode avec toutes les données d'un utilisateur
         //console.log("L'id de l'utilisateur authentifié : ", this.user.id);
-
         if (res.data.user!.role === 'authenticated') {
           // Je vérifie que le rôle et 'authenticated' dans supabase - voir le résultat de console.log(res)
           this.token = res.data.session!.access_token; // Je stock la valeur du token retourné par supabase
           //console.log(this.token);          
-
           this.authId = res.data.user!.id; // j'attribue à la variable authId l'id de l'utilisateur (après son authentification)
-          //console.log(this.authUserId);          
-          //this.getAllData();
           this.router.navigate(['intranet']);
         }
       })
@@ -99,16 +91,16 @@ export class SupabaseService {
   }
 
   // Récupérer les utilisateurs sur la table public.utilisateur
-  async getUtilisateur() {
-    const data = await this.supabase.from('utilisateur').select('*');
-    console.log('Méthode getUtilisateur', data);
-    return data;
+  async getListeUtilisateurs() {
+    return await this.supabase
+    .from('utilisateur')
+    .select("*, roles:attribuerRoles!inner(roles(role))")
+    // .select("*, roles:attribuerRoles!inner(id, roles!inner(role))")
   }
 
   // Récupérer les utilisateurs sur la table auth.users (table d'authentification de supabase)
   async listUser() {
     const response = await this.supabase.auth.admin.listUsers();
-    console.log('Méthode listUser - response.data.users', response.data.users);
     return response.data.users; // Retournez les données des utilisateurs
   }
 
@@ -128,20 +120,7 @@ export class SupabaseService {
 
   // Récupérer les rôles utilisateurs (Admin, rédacteur, etc..) sur la table roles
   async getRoles() {
-    try {
-      const { data } = await this.supabase.from('roles').select('*');
-      if (data) {
-        console.log('Méthode getRoles - Données récupérées :', data);
-        return data;
-      } else {
-        throw new Error("Aucune donnée n'a été récupérée pour les rôles.");
-      }
-    } catch (error) {
-      console.error('Erreur lors de la récupération des rôles :', error);
-      throw new Error(
-        "Impossible de récupérer les rôles. Veuillez consulter les logs pour plus d'informations."
-      );
-    }
+    return await this.supabase.from('roles').select('role');
   }
 
   // Table attribuerRoles contient en tant que Foreign Key l'id de la table roles(int) et l'id de la table utilisateur(uuid)
@@ -149,76 +128,108 @@ export class SupabaseService {
     const { data, error } = await this.supabase
       .from('attribuerRoles')
       .select('idRole');
-    if (data) console.log('Méthode fetchAttribuerRoles', data);
-    if (error) console.log(error);
-  }
-
-  // Méthode pour récupérer les utilisateurs et leur rôles
-  async getAllUsersWithRoles(): Promise<UtilisateurData[]> {
-    // Récupérez uniquement l'email et le nom des utilisateurs depuis la table utilisateur.
-    const { data: utilisateursData, error: utilisateursError } =
-      await this.supabase.from('utilisateur').select('id,  email, nom'); // Incluez le champ "id" pour l'utilisateur.
-
-    if (utilisateursError) {
-      console.error(
-        'Erreur lors de la récupération des utilisateurs :',
-        utilisateursError
+    if (data) {
+      return data;
+    }
+    if (error) {
+      console.error('Erreur lors de la récupération des rôles attribués :', error);
+      throw new Error(
+        "Impossible de récupérer les rôles attribués. Veuillez consulter les logs pour plus d'informations."
       );
     }
+    return null;
+  }
 
-    // Récupérez les rôles associés à chaque utilisateur depuis la table attribuerRoles.
-    for (const utilisateur of utilisateursData as UtilisateurData[]) {
-      // Utilisez le type correct - interface UtilisateurData
-      const idUtilisateur = utilisateur.id; // Contient l'id des utilisateurs de la table utilisateur
-      //console.log("idUtilisateur", idUtilisateur);
+async saveNameAndEmail(id: string, nom: string, email: string) {
+  const { data, error } = await this.supabase
+    .from('utilisateur')
+    .update({ nom: nom, email: email })
+    .eq('id', id);
+  if (data) {
+    console.log('update réussie');
+  }
+  if (error) {
+    console.log(error);
+  }
+}
 
+  async saveRoles(userId: string, roleNames: string[]) {
+    if (roleNames && roleNames.length > 0) {
+      // Obtenir l'ID de chaque rôle à partir de son nom
       const { data: rolesData, error: rolesError } = await this.supabase
-        .from('attribuerRoles')
-        .select('idRole')
-        .eq('idUtilisateur', idUtilisateur); // Comparaison de l'id de la table avec l'id de la variable
-      // rolesData contient la ForeignKey idRole de la table attribuerRoles
-      //console.log("rolesData", rolesData);
+        .from('roles')
+        .select('id, role')
+        .in('role', roleNames);
 
       if (rolesError) {
-        console.error(
-          "Erreur lors de la récupération des rôles de l'utilisateur :",
-          rolesError
-        );
-        continue;
+        console.error('Erreur lors de la récupération des IDs des rôles :', rolesError);
+        throw rolesError;
       }
 
-      // Récupérez les détails des rôles depuis la table des rôles.
-      const idRoles = rolesData.map((entry) => entry.idRole);
-      // map sur rolesData afin de récupérer toutes les ForeignKeys
-      //console.log("idRoles", idRoles);
-      const { data: rolesDetailsData, error: rolesDetailsError } =
-        await this.supabase.from('roles').select('*').in('id', idRoles); // Comparaison de la ForeignKey avec les id de la table roles
-      // rolesDetailsData contient les résultats de la comparaison au dessus
-      //console.log(rolesDetailsData);
+      const roles: { [key: string]: number } = rolesData.reduce((obj, role) => ({ ...obj, [role.role]: role.id }), {});
 
-      if (rolesDetailsError) {
-        console.error(
-          'Erreur lors de la récupération des détails des rôles :',
-          rolesDetailsError
+      // Supprimer tous les rôles existants pour l'utilisateur
+      await this.supabase
+        .from('attribuerRoles')
+        .delete()
+        .match({ idUtilisateur: userId });
+
+      // Insérez les nouveaux rôles pour l'utilisateur
+      await this.supabase
+        .from('attribuerRoles')
+        .insert(
+          roleNames.map(roleName => ({ idUtilisateur: userId, idRole: roles[roleName] }))
         );
-        continue;
-      }
+    } else {
+      console.error(
+        'Les rôles sélectionnés ne sont pas définis ou sont vides.'
+      );
+    }
+  }
+  /** Mettre à jour un role */
+  async updateRole(user: UtilisateurI, roles: string[]) {
+    // Récupérer les rôles actuels de l'utilisateur
+    const { data: currentRoles, error: fetchError } = await this.supabase
+      .from('attribuerRoles')
+      .select('idRole')
+      .match({ id: user.id });
 
-      // Ajoutez les détails des rôles à l'objet utilisateur.
-      utilisateur.roles = rolesDetailsData as RoleData[]; // Utilisez le type correct - interface RoleData
-      //console.log("utilisateurs.roles ici : ", utilisateur.roles);
+    if (fetchError) {
+      console.error('Erreur lors de la récupération des rôles de l\'utilisateur :', fetchError);
+      return null;
     }
-    // Les utilisateurs avec email, nom et rôles sont maintenant dans utilisateursData.
-    //console.log('Utilisateurs avec email, nom et rôles :', utilisateursData);
-    // Pour afficher les rôles, vous pouvez utiliser une boucle ou une fonction map.
-    for (const utilisateur of utilisateursData as UtilisateurData[]) {
-      // Utilisez le type correct - interface RoleData
-      const roles = utilisateur.roles
-        .map((nomRole: RoleData) => nomRole.role)
-        .join(', ');
-      console.log(`Rôles de ${utilisateur.nom}: ${roles}`);
+    const currentRoleIds = currentRoles.map(role => role.idRole);
+
+    // Trouver les rôles à supprimer et les rôles à ajouter
+    const rolesToDelete = currentRoleIds.filter(roleId => !user.roles.includes(roleId));
+    const rolesToAdd = user.roles.filter(roleId => !currentRoleIds.includes(roleId));
+
+    // Supprimer les rôles qui ne sont plus nécessaires
+    for (const roleId of rolesToDelete) {
+      const { error: deleteError } = await this.supabase
+        .from('attribuerRoles')
+        .delete()
+        .match({ id: user.id, idRole: roleId });
+
+      if (deleteError) {
+        console.error('Erreur lors de la suppression du rôle de l\'utilisateur :', deleteError);
+        return null;
+      }
     }
-    return utilisateursData as UtilisateurData[];
+
+    // Ajouter les nouveaux rôles
+    for (const roleId of rolesToAdd) {
+      const { error: insertError } = await this.supabase
+        .from('attribuerRoles')
+        .insert({ id: user.id, idRole: roleId });
+
+      if (insertError) {
+        console.error('Erreur lors de l\'ajout du rôle à l\'utilisateur :', insertError);
+        return null;
+      }
+    }
+
+    return user.roles;
   }
 
   /* ----------------------------- Code pour la page profil utilisateur ---------------------------- */
@@ -226,7 +237,7 @@ export class SupabaseService {
   // Méthode pour récupérer les données d'un utilisateur identifié (sur la table auth)
   async getLoggedInUser() {
     const { data: { user } } = await this.supabase.auth.getUser();
-    console.log('Méthode getLoggedInUser : ', user);
+    // console.log('Méthode getLoggedInUser : ', user);
     return user;
   }
 
@@ -251,7 +262,84 @@ export class SupabaseService {
 
   /* --------------------------- Code utilisé dans le service users.service.ts -------------------------- */
 
-  // Vérifier que supabase vérifie un token d'authentification - DANGER Sécurité !!
+
+  // Update des données utilisateurs sur la page de gestion
+  async updateUser(userId: string, updatedUserData: any) {
+    try {
+      const { data, error } = await this.supabase
+        .from('utilisateur') // Remplacez 'utilisateurs' par le nom de votre table
+        .update(updatedUserData)
+        .eq('id', userId); // Mettez à jour l'utilisateur avec l'ID spécifié
+
+      if (error) {
+        throw error;
+      }
+
+      return data;
+    } catch (error) {
+      console.error("Une erreur s'est produite lors de la mise à jour de l'utilisateur :", error);
+      throw error;
+    }
+  }
+
+  async updateUserRoles(userId: string, roles: string[]) {
+    try {
+      // Supprimez tous les rôles existants pour l'utilisateur
+      await this.supabase
+        .from('attribuerRoles')
+        .delete()
+        .eq('idUtilisateur', userId);
+
+      // Insérez les nouveaux rôles pour l'utilisateur
+      await this.supabase
+        .from('attribuerRoles')
+        .insert(
+          roles.map(role => ({ idUtilisateur: userId, idRole: role }))
+        );
+      return { error: null };
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour des rôles de l\'utilisateur :', error);
+      return { error };
+    }
+  }
+
+
+
+  async createUserInTableUtilisateurAuth(formData: any): Promise<UserCreationResponse> {
+    try {
+      // D'abord, créez l'utilisateur dans la table "auth" (par exemple, pour le mail et le mot de passe)
+      const authResponse = await this.supabase
+        .from('auth')
+        .upsert([formData]);
+
+      if (authResponse.error) {
+        console.error('Erreur lors de la création de l\'utilisateur dans la table auth :', authResponse.error);
+        throw authResponse.error;
+      }
+
+      // Ensuite, créez l'utilisateur dans la table "utilisateur" (par exemple, pour d'autres informations)
+      const utilisateurResponse = await this.supabase
+        .from('utilisateur')
+        .upsert([formData]);
+
+      if (utilisateurResponse.error) {
+        console.error('Erreur lors de la création de l\'utilisateur dans la table utilisateur :', utilisateurResponse.error);
+        throw utilisateurResponse.error;
+      }
+
+      // Vérifiez si les données sont nulles et attribuez une valeur par défaut si nécessaire
+      const authData = authResponse.data || [];
+      const utilisateurData = utilisateurResponse.data || [];
+
+      return {
+        auth: authData,
+        utilisateur: utilisateurData
+      };
+    } catch (error) {
+      console.error('Erreur lors de la création de l\'utilisateur :', error);
+      throw error;
+    }
+  }
   async getProfil(): Promise<any[]> {
     try {
       // Sur la table attribuerRoles je select les tables roles et utilisateur grâce à leur id qui sont en ForeignKeys
@@ -326,9 +414,4 @@ export class SupabaseService {
       return []
     }
   }
-
-
-
-
-
 }

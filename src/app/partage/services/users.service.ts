@@ -1,104 +1,48 @@
 import { Injectable, OnInit } from '@angular/core';
 import { SupabaseService } from './supabase.service';
-import { RoleData, UtilisateurData, UtilisateurI } from '../modeles/Types';
+import { UtilisateurI } from '../modeles/Types';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UsersService implements OnInit {
-  allUsersData: UtilisateurData[] = [];
-  utilisateur: UtilisateurI[] = [];
-  authUsers: UtilisateurI[] = [];
-  selectedUsers: UtilisateurData[] = [];
-  user!: UtilisateurI;  
-
+  
+  allUsersData: UtilisateurI[] = [];
+  allRolesData: any;
+  listeUtilisateurs: Array<UtilisateurI> = [];
+  listeRoles:Array<string> = [];
+  user!: UtilisateurI;
   profil!: UtilisateurI;
 
   constructor(public supa: SupabaseService) {}
 
-  ngOnInit(): void {
-    
-  }
+  ngOnInit(): void {}
 
-  async fetchUtilisateur() {
-    const { data, error } = await this.supa.getUtilisateur();
+  async fetchListeUtilisateurs(): Promise<UtilisateurI[]> {
+    const { data, error } = await this.supa.getListeUtilisateurs();
     if (data) {
-      this.utilisateur = data.map((item: { [x: string]: any }) => ({
-        id: item['id'],
-        email: item['email'],
-        nom: item['nom'],
-      }));
-      console.log('Méthode fetchUtilisateur', this.utilisateur.map((item) => item['id']).join(', '));
+      this.listeUtilisateurs = data;
+      // Réduire l'objet roles à une liste de chaînes plutôt que de
+      this.listeUtilisateurs.forEach((item:UtilisateurI) => item.roles = item.roles.map((r:any) => r.roles.role));
+      console.log('Liste utilisateurs', this.listeUtilisateurs);
+      return this.listeUtilisateurs;  // Ajoutez cette ligne
+    }
+    if (error) {
+      console.log(error);
+    }
+    return [];  // Ajoutez cette ligne pour retourner un tableau vide en cas d'erreur
+  }
+  /** Récupérer la liste des types de roles dans la base de données */
+  async fetchRoles() {
+    const { data, error } = await this.supa.getRoles();
+    if (data) {
+      this.listeRoles = data.map(r => r.role); // Récupérer la liste des roles
     }
     if (error) {
       console.log(error);
     }
   }
-  /*
-   * Méthode de récupération des utilisateurs
-   */
-  async fetchAuthUsers() {
-    try {
-      const userData = await this.supa.listUser();
-      if (userData) {
-        this.authUsers = userData.map((item: { [x: string]: any }) => ({
-          id: item['id'],
-          email: item['email'],
-          nom: item['nom'],
-        }));
-        console.log(
-          'Méthode fetchAuthUsers : ',
-          this.authUsers.map((item) => item['email']).join(', ')
-        );
-      } else {
-        throw new Error('Aucune donnée utilisateur disponible.');
-      }
-    } catch (error) {
-      console.error('Erreur lors de la récupération des utilisateurs:', error);
-      throw new Error(
-        "Echec de la méthode fetchAuthUsers. Veuillez consulter les logs pour plus d'informations."
-      );
-    }
-  }
-
-  async fetchAllUsersWithRoles() {
-    try {
-      const usersWithRolesData: UtilisateurData[] =
-        await this.supa.getAllUsersWithRoles();
-      if (usersWithRolesData !== undefined) {
-        // Vérification de nullité
-        this.allUsersData = usersWithRolesData.map((item) => ({
-          id: item.id,
-          email: item.email,
-          nom: item.nom,
-          roles: item.roles,
-          selected: false,
-        }));
-
-        // Afficher les utilisateurs avec leurs emails et rôles dans la console
-        this.allUsersData.forEach((user) => {
-          const allRoles = user.roles
-            .map((role: RoleData) => role.role)
-            .join(', ');
-          console.log(
-            `Nom: ${user.nom}, Email: ${user.email}, Rôles: ${allRoles}`
-          );
-        });
-        return;
-      } else {
-        throw new Error('Aucune donnée utilisateur et rôles disponibles');
-      }
-    } catch (error) {
-      console.error(
-        'Erreur lors de la récupération des données rôles et utilisateurs',
-        error
-      );
-      throw new Error(
-        "Echec de la méthode fetchAllUsersWithRoles. Veuillez consulter les logs pour plus d'informations."
-      );
-    }
-  }
-
+  /** Récupérer le profil dans la base */
   async fetchProfil() {
     try {
       // La méthode getProfil() récupére toutes les données utilisateurs et tout les rôles de l'utilisateur authentifié

@@ -6,14 +6,21 @@ import { MessagerieComponent } from './messagerie/messagerie.component';
 import { CommunauteComponent } from './communaute/communaute.component';
 import { AbonnementComponent } from './abonnement/abonnement.component';
 import { MediaComponent } from './media/media.component';
+import { UtilisateursComponent } from './utilisateurs/utilisateurs.component';
+
 
 const routes: Routes = [
-  { path: '', component: GestionComponent },
-  { path: 'ajout-utilisateurs', component: AjoutUtilisateurComponent },
-  { path: 'messagerie', component: MessagerieComponent },
-  { path: 'communaute', component: CommunauteComponent },
-  { path: 'abonnement', component: AbonnementComponent },
-  { path: 'medias', component: MediaComponent },
+  {
+    path: '', component: GestionComponent, children: [
+      { path: '', component: UtilisateursComponent },
+      { path: 'ajout-utilisateurs', component: AjoutUtilisateurComponent },
+      { path: 'messagerie', component: MessagerieComponent },
+      { path: 'communaute', component: CommunauteComponent },
+      { path: 'abonnement', component: AbonnementComponent },
+      { path: 'medias', component: MediaComponent }
+    ]
+  },
+
 ];
 /**
  * @description Utilisation de forChild car il y a un loadChildren dans intranet-routing.module!!

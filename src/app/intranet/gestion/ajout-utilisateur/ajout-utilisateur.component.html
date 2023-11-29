@@ -1,1 +1,82 @@
-<p>ajout-utilisateur works!</p>
+<header>
+    <article>
+        <figure>
+            <img src="assets/images/logos/logo_tiaki.png" alt="" />
+        </figure>
+        <div>
+            <h1>Tiaki</h1>
+            <h2>Créer un Utilisateur</h2>
+        </div>
+    </article>
+    <article>
+        <figure>
+            <img src="assets/images/icones/gestion-utilisateur/yellowIcon.png" alt="" />
+        </figure>
+        <h3>Création Utilisateur</h3>
+    </article>
+</header>
+<section>
+    <form>
+        <h4>Identité</h4>
+        <fieldset class="p-float-label">
+            <input pInputText [(ngModel)]="userFormData.nom" name="nom" type="text" required minlength="1" />
+            <label for="nom">Nom</label>
+        </fieldset>
+        <fieldset class="p-float-label">
+            <input pInputText [(ngModel)]="userFormData.prenom" name="prenom" type="text" required minlength="1" />
+            <label for="prenom">Prénom</label>
+        </fieldset>
+        <fieldset class="p-float-label">
+            <input pInputText [(ngModel)]="userFormData.telephone" name="telephone" type="text" required minlength="10" />
+            <label for="telephone">Téléphone</label>
+        </fieldset>
+        <fieldset class="p-float-label">
+            <input pInputText [(ngModel)]="userFormData.email" name="email" type="text" required minlength="5" />
+            <label for="email">Email</label>
+        </fieldset>
+        <h4>Informations du compte</h4>
+        <fieldset>
+            <input type="checkbox" [(ngModel)]="userFormData.roles.admin" name="admin">
+            <p>Administrateur</p>
+            <input type="checkbox" [(ngModel)]="userFormData.roles.redacteur" name="redacteur">
+            <p>Rédacteur</p>
+            <input type="checkbox" [(ngModel)]="userFormData.roles.nutritionniste" name="nutritionniste">
+            <p>Nutritionniste</p>
+        </fieldset>
+        <fieldset>
+            <input type="checkbox" [(ngModel)]="userFormData.roles.kinesitherapeute" name="kinesitherapeute">
+            <p>Kinésithérapeute</p>
+            <input type="checkbox" [(ngModel)]="userFormData.roles.optometriste" name="optometriste">
+            <p>Optométriste</p>
+            <input type="checkbox" [(ngModel)]="userFormData.roles.autres" name="autres">
+            <p>Autres</p>
+        </fieldset>
+
+        <h4>Création de mot de passe</h4>
+        <span class="p-float-label">
+            <input pInputText [(ngModel)]="userFormData.password" name="password" type="password" />
+            <label for="newPassword">6 caractères</label>
+        </span>
+        <p-button type="submit" styleClass="p-button-help">Créer le compte utilisateur</p-button>
+    </form>
+
+</section>
+
+<!-- Pour la pop-up MessageService -->
+
+
+<!-- Le contenu de la Modal PrimeNG -->
+<p-confirmDialog #cd [style]="{ width: '40vw' }">
+    <ng-template pTemplate="footer">
+        <button type="submit" class="acceptButton" pButton icon="pi pi-check" label="Oui"
+            (click)="cd.accept()"></button>
+        <button type="button" class="rejectButton" pButton icon="pi pi-times" label="Non"
+            (click)="cd.reject()"></button>
+    </ng-template>
+</p-confirmDialog>
+
+<!-- <form>
+      <input name="truc" #ctlTruc="ngModel" >
+      <input type="text" name="muche" #ctlMuche="ngModel">
+      <span *ngIf="ctlTruc != ctlMuche">Les mots de passe doivent correspondre</span>
+  </form> -->

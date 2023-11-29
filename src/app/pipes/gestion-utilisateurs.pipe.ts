@@ -1,17 +1,30 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { UtilisateurI } from '../partage/modeles/Types';
 
 @Pipe({
   name: 'gestionUtilisateurs',
 })
 export class GestionUtilisateursPipe implements PipeTransform {
-  transform(values: any[], filtre: string): any[] {
-    if (!filtre || filtre.length < 3) {
-      return values; // Retourne le tableau non filtré si le filtre est vide ou a moins de 3 caractères.
+  transform(users:Array<UtilisateurI>, search:string='', role:string=''): any[] {
+    if(search.length < 3 && role.length < 3) return users;
+
+    search = search.toLowerCase();
+    return users.filter(u => 
+      role ? u.roles.includes(role) 
+           : u.nom.toLowerCase().startsWith(search) 
+             || u.email.toLowerCase().startsWith(search)
+    );
+  }
+}
+/** Vérifier les droits des utilisateurs pour donner des accès */
+@Pipe({
+  name: 'acces',
+})
+export class CheckAccesPipe implements PipeTransform {
+  transform(role: string, userRoles: Array<string>, check?:string): boolean {
+    if (!role || !userRoles) {
+      return false;
     }
-    filtre = filtre.toLowerCase(); // Convertit le filtre en minuscules pour une correspondance insensible à la casse.
-    return values.filter((utilisateur) => {
-      // Filtrer les utilisateurs dont le nom commence par le filtre.
-      return utilisateur.nom.toLowerCase().startsWith(filtre);
-    });
+    return userRoles.includes(role);
   }
 }

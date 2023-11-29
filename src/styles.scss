@@ -355,3 +355,22 @@ header {
     }
   }
 }
+/*Bouton accept et reject*/
+.acceptButton {    
+  background-color: #33BB27;
+  border-color: #33BB27;
+  transition: all .3s ease; // all récupére le css du hover ci-dessous    
+}
+.acceptButton:hover {
+  background-color: #33BB27 !important;
+  border-color: #33BB27 !important;
+}
+.rejectButton {
+  background-color: #F0C02E;
+  border-color: #F0C02E;
+  transition: all .3s ease; // all récupére le css du hover ci-dessous 
+}
+.rejectButton:hover {
+  background-color: #F0C02E !important;
+  border-color: #F0C02E !important;
+}

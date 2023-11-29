@@ -16,8 +16,6 @@ export class IntranetComponent implements OnInit{
 }
 
 
-
-
 /* async fetchAuthUserData() {
   try {
     const groupData = await this.supa.getAllData();

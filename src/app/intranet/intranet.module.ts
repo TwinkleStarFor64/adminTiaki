@@ -20,6 +20,7 @@ import { GetIngredientPipe, PlatsPipe } from '../pipes/plats.pipe';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { IngredientsPipe } from '../pipes/ingredients.pipe';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @NgModule({
   declarations: [
@@ -33,11 +34,10 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
     PlatsPipe,
     IngredientsPipe,
     GetIngredientPipe 
-    
   ],
   imports: [
     CommonModule,
-    IntranetRoutingModule, 
+    IntranetRoutingModule,
     ReactiveFormsModule,
     FormsModule,
     ButtonModule,
@@ -48,11 +48,10 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
     HttpClientModule,    
     NgxPaginationModule,
     ConfirmPopupModule
-         
+    CheckboxModule  
   ],
   providers: [
     DonneesService,    
   ]
- 
 })
 export class IntranetModule { }

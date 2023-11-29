@@ -12,9 +12,10 @@ import { DeleteDataComponent } from '../template/dialog/delete-data/delete-data.
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
-import { GestionUtilisateursPipe } from 'src/app/pipes/gestion-utilisateurs.pipe';
-import { EditUserComponent } from '../template/dialog/edit-user/edit-user.component';
+import { CheckAccesPipe, GestionUtilisateursPipe } from 'src/app/pipes/gestion-utilisateurs.pipe';
 import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
+import { UtilisateursComponent } from './utilisateurs/utilisateurs.component';
 
 
 @NgModule({
@@ -26,9 +27,9 @@ import { DialogModule } from 'primeng/dialog';
     AjoutUtilisateurComponent,
     GestionComponent,
     DeleteDataComponent,
+    UtilisateursComponent,
     GestionUtilisateursPipe,
-    EditUserComponent,
-  
+    CheckAccesPipe
   ],
   imports: [
     CommonModule,
@@ -36,10 +37,12 @@ import { DialogModule } from 'primeng/dialog';
     ConfirmDialogModule,
     ReactiveFormsModule,
     TableModule,
+    DialogModule,
     FormsModule,
-    DialogModule
+    ReactiveFormsModule,
+    DropdownModule,
   ],
   exports: [DeleteDataComponent],
-  providers: [ConfirmationService, MessageService],
+  providers: [ConfirmationService, MessageService, GestionUtilisateursPipe, CheckAccesPipe],
 })
 export class GestionModule { }
