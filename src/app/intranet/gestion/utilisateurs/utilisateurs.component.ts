@@ -198,33 +198,6 @@ export class UtilisateursComponent implements OnInit {
    * Sinon, un message d'erreur est affiché.
    * Si les rôles sélectionnés ne sont pas définis ou sont vides, un message d'erreur est affiché.
    */
-  // async updateUser() {
-  //   // Vérifiez si un utilisateur est sélectionné pour l'édition
-  //   if (!this.selectedUserForEdit) {
-  //     console.error('Aucun utilisateur sélectionné pour l\'édition');
-  //     return;
-  //   }
-
-  //   const selectedRoles = this.selectedUserForEdit.roles;
-  //   console.log('Roles sélectionnés avant la mise à jour :', selectedRoles);
-
-  //   // Vérifiez si des rôles sont sélectionnés
-  //   if (selectedRoles && selectedRoles.length > 0) {
-  //     console.log('Utilisateur mis à jour :', this.selectedUserForEdit);
-
-  //     // Mettre à jour la base de données
-  //     try {
-  //       const data = await this.supa.updateRole(this.selectedUserForEdit, selectedRoles);
-  //       if (data) {
-  //         console.log('Utilisateur mis à jour avec succès dans la base de données:', data);
-  //       }
-  //     } catch (error) {
-  //       console.error("Erreur lors de la mise à jour de l'utilisateur dans la base de données:", error);
-  //     }
-  //   } else {
-  //     console.error('Les rôles sélectionnés ne sont pas définis ou sont vides.');
-  //   }
-  // }
   async updateUser() {
     // Vérifiez si un utilisateur est sélectionné pour l'édition
     if (!this.selectedUserForEdit) {

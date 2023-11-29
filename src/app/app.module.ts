@@ -11,13 +11,15 @@ import { RecoveryComponent } from './extranet/recovery/recovery.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { ResetComponent } from './extranet/reset/reset.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DeleteDataStubComponent } from './test/delete-data-stub/delete-data-stub.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ConnexionComponent,
     RecoveryComponent,
-    ResetComponent
+    ResetComponent,
+    DeleteDataStubComponent
   ],
   exports:[
   ],

@@ -25,6 +25,7 @@ describe('ProfilComponent', () => {
     nom: 'John Doe',
     prenom: 'John',
     telephone: '1234567890',
+    roles: ['admin'],
     email: "toto@wanadoo.fr"
   };
 
