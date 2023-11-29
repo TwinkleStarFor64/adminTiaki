@@ -47,7 +47,7 @@ import { CheckboxModule } from 'primeng/checkbox';
     ToastModule,
     HttpClientModule,    
     NgxPaginationModule,
-    ConfirmPopupModule
+    ConfirmPopupModule,
     CheckboxModule  
   ],
   providers: [

@@ -19,7 +19,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     RecoveryComponent,
     ResetComponent,
     
-  ]
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
