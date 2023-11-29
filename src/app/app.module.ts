@@ -21,6 +21,8 @@ import { ResetComponent } from './extranet/reset/reset.component';
     RecoveryComponent,
     ResetComponent,
     
+   
+    
   ],
   imports: [
     BrowserModule,

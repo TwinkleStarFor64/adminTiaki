@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AuthSession, createClient, SupabaseClient,} from '@supabase/supabase-js';
+import { AuthSession, createClient, SupabaseClient, } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
 import { RoleData, UtilisateurData } from '../modeles/Types';
 import { Router } from '@angular/router';
@@ -9,15 +9,17 @@ import { Router } from '@angular/router';
 })
 export class SupabaseService {
   private supabase: SupabaseClient; // Instance du client Supabase
+  _session: AuthSession | null = null; // Session d'authentification
   public utilisateurData: UtilisateurData[] = [];
   public roleData: RoleData[] = [];
-  _session: AuthSession | null = null; // Session d'authentification
 
   user: any; // Utilisé dans la méthode signIn()
   token!: string; // Utilisé dans la méthode signIn() pour stocker le token de l'utilisateur
   authId!: string; // Utilisé dans la méthode signIn() pour stocker l'id de l'utilisateur
   badEmail = false; // Utilisé dans la méthode resetPasswordBis() - utiliser pour une popup
   badLogin = false; // Utilisé dans la méthode signIn() - utiliser pour une popup - Pas utilisé pour le moment ( optionel)
+
+  tokenDev!: string;
 
   constructor(private router: Router) {
     this.supabase = createClient(
@@ -33,17 +35,18 @@ export class SupabaseService {
       .then((res) => {
         console.log('Méthode signIn - ce que contient la réponse : ', res);
         this.user = res.data.user; // La réponse de la méthode avec toutes les données d'un utilisateur
-        console.log("L'id de l'utilisateur authentifié : ", this.user.id);
+        //console.log("L'id de l'utilisateur authentifié : ", this.user.id);
 
         if (res.data.user!.role === 'authenticated') {
           // Je vérifie que le rôle et 'authenticated' dans supabase - voir le résultat de console.log(res)
           this.token = res.data.session!.access_token; // Je stock la valeur du token retourné par supabase
+          //console.log(this.token);          
 
           this.authId = res.data.user!.id; // j'attribue à la variable authId l'id de l'utilisateur (après son authentification)
           //console.log(this.authUserId);          
           //this.getAllData();
           this.router.navigate(['intranet']);
-        }        
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -222,10 +225,10 @@ export class SupabaseService {
 
   // Méthode pour récupérer les données d'un utilisateur identifié (sur la table auth)
   async getLoggedInUser() {
-    const { data: {user} } = await this.supabase.auth.getUser();
+    const { data: { user } } = await this.supabase.auth.getUser();
     console.log('Méthode getLoggedInUser : ', user);
     return user;
-  }  
+  }
 
   // Méthode pour update son profil en tant qu'utilisateur (sur la table utilisateur)
   async updateProfil(
@@ -246,7 +249,7 @@ export class SupabaseService {
     }
   }
 
-/* --------------------------- Code utilisé dans le service users.service.ts -------------------------- */
+  /* --------------------------- Code utilisé dans le service users.service.ts -------------------------- */
 
   // Vérifier que supabase vérifie un token d'authentification - DANGER Sécurité !!
   async getProfil(): Promise<any[]> {
@@ -274,4 +277,58 @@ export class SupabaseService {
       throw error;
     }
   }
+
+  /* --------------------------------------- Code pour l'interface nutrition ---------------------------------------------- */
+
+  //Méthode de test et optimisation
+  async getAttribuerPlats(): Promise<any[]> {
+    const { data: platData, error: platError } = await this.supabase
+      .from('attribuerPlats')
+      .select('plats(*),ciqualAnses(*)');
+
+    if (platError) {
+      console.log("Erreur de la méthode getAttribuerPlats : ", platError);
+    }
+
+    if (platData) {
+      console.log("Ici platData : ", platData);
+      return platData;
+    } else {
+      return [];
+    }
+  }
+
+// Méthode collaboration Gérald
+  async getAttribuerPlatsBis() {
+    const { data, error } = await this.supabase
+      .from('plats')
+      .select(`
+        id, nom,
+        ingredients:attribuerPlats (ingredient:ciqualAnses(*))
+    `) 
+    if (error) {
+      console.log(error);
+    }
+    if (data) {
+      data.forEach(p => {
+        if (p['ingredients'] && p['ingredients'].length > 0) {
+          console.log(p['ingredients']);
+          p['ingredients'].forEach((i: any, index:number) => {
+            console.log(i, i['ingredient']);
+            p['ingredients'][index] = i['ingredient'];
+          })
+        }
+        return p;
+      });
+      console.log(data);
+      return data;
+    } else {
+      return []
+    }
+  }
+
+
+
+
+
 }

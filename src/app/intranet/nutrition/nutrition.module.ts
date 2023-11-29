@@ -6,18 +6,18 @@ import { IngredientsComponent } from './ingredients/ingredients.component';
 import { MenusComponent } from './menus/menus.component';
 import { NutritionRoutingModule } from './nutrition-routing.module';
 
-
-
 @NgModule({
   declarations: [
     AllergenesComponent,
     ComplementsComponent,
     IngredientsComponent,
-    MenusComponent
+    MenusComponent,
+         
   ],
   imports: [
     CommonModule,
-    NutritionRoutingModule
+    NutritionRoutingModule,
+    
   ]
 })
 export class NutritionModule { }

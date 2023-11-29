@@ -11,11 +11,15 @@ import { ProfilComponent } from './profil/profil.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast'; // Pour les pop-up de MessageService
 import { HttpClientModule } from '@angular/common/http';
 import { DonneesService } from '../partage/services/donnees.service';
-
+import { GetIngredientPipe, PlatsPipe } from '../pipes/plats.pipe';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { IngredientsPipe } from '../pipes/ingredients.pipe';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
 @NgModule({
   declarations: [
@@ -24,8 +28,11 @@ import { DonneesService } from '../partage/services/donnees.service';
     OptoComponent,
     NutritionComponent,
     IntranetComponent,    
-    AsideBarComponent,
-    ProfilComponent,   
+    AsideBarComponent,                                                                                                                                                                                              
+    ProfilComponent, 
+    PlatsPipe,
+    IngredientsPipe,
+    GetIngredientPipe 
     
   ],
   imports: [
@@ -35,13 +42,16 @@ import { DonneesService } from '../partage/services/donnees.service';
     FormsModule,
     ButtonModule,
     InputTextModule,
+    InputTextareaModule,
     ConfirmDialogModule,    
     ToastModule,
-    HttpClientModule,
-     
+    HttpClientModule,    
+    NgxPaginationModule,
+    ConfirmPopupModule
+         
   ],
   providers: [
-    DonneesService,
+    DonneesService,    
   ]
  
 })

@@ -20,9 +20,36 @@ $sombre: black;
 $head: 60px; // Hauteur de l'entête des pages
 $foot: 150px; // Hauteur des menus du bas
 $l: 75px; // Largeur du menu de droite qui permet de calculer la largeur des éléments de la page
+$header: 160px; // Hauteur du header sur les interfaces
 
 p-button-label {
   font-size: 15rem;  
+}
+
+/* Code ci-dessous pour la popup <p-confirmPopup> dans nutrition.component.html */
+.p-confirm-popup-footer{
+  button:nth-child(1){
+    background-color: #F0C02E!important;
+    border-color: #F0C02E!important;
+    color: white;
+    transition: all .3s ease; // all récupére le css du hover ci-dessous 
+  }
+  button:nth-child(1):hover{
+    background-color: #F0C02E;
+    border-color: #F0C02E;
+    color: white!important;
+  }
+  button:nth-child(2){    
+    background-color: #33BB27!important;
+    border-color: #33BB27!important;    
+    color: white;
+    transition: all .3s ease; // all récupére le css du hover ci-dessous 
+  }
+  button:nth-child(2):hover{
+    background-color: #33BB27;
+    border-color: #33BB27;
+    color: white!important;
+  }
 }
 
 /** BALISES GENERIQUES HTML */
@@ -30,8 +57,7 @@ html,
 body {
   height:100%;
   width:100%;
-  //overflow: hidden;
-  overflow-y: auto;  
+  overflow: hidden;
 }
 
 body {
@@ -283,9 +309,11 @@ article.cartel {
 
 /* Header commun à toutes les pages de l'application */
 header {
-  flex-direction: column;
+  flex-direction: row;
+  height: $header;
   article:nth-child(1) {
     display: flex;
+    flex-direction: row;
     align-items: center;
     figure {
       margin-bottom: 10px; // Le gros logo Tiaki
@@ -294,8 +322,8 @@ header {
       display: flex;
       align-items: center;
       border-bottom: #805E96 dashed 1px;
-      height: 80%;
-      width: 65%;
+      //height: 80%;
+      width: 65vw;
       margin-left: 120px;
       h1{        
         font-size: 3rem;

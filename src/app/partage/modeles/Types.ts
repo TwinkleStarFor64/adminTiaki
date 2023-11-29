@@ -31,3 +31,32 @@ export interface RoleData {
   id: number;
   role: string;
 }
+
+/* ---------------- Interface pour la nutrition ------------------- */
+export interface PlatI {
+    id: number;
+    nom: string;
+    description: string;
+    alim_code: number;
+    statut?: string;
+    reaction?: string;
+    idIngredients?: Array<number>;
+}
+
+export interface CiqualI {
+    alim_nom_fr: string;
+    proteine: number;
+    glucides: number;
+    lipides: number;
+    sucres: number;
+    vitamineC: number;
+    vitamineB1: number;
+    vitamineB2: number;
+    vitamineB3: number;
+    vitamineB5: number;
+    magnesium: number;
+    potassium: number;
+    cuivre: number;
+    manganese: number;
+    [key: string]: number | string; // Pour la méthode calculateTotals() qui crée un objet de type clé et valeur - Variable totals dans nutrition.service
+}
