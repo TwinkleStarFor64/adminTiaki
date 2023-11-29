@@ -21,10 +21,6 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { IngredientsPipe } from '../pipes/ingredients.pipe';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
-
-
-
-
 @NgModule({
   declarations: [
     AccueilComponent,
@@ -32,7 +28,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
     OptoComponent,
     NutritionComponent,
     IntranetComponent,    
-    AsideBarComponent,
+    AsideBarComponent,                                                                                                                                                                                              
     ProfilComponent, 
     PlatsPipe,
     IngredientsPipe,
@@ -52,10 +48,10 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
     HttpClientModule,    
     NgxPaginationModule,
     ConfirmPopupModule
-     
+         
   ],
   providers: [
-    DonneesService,
+    DonneesService,    
   ]
  
 })

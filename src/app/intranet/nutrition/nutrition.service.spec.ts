@@ -1,12 +1,15 @@
 import { TestBed } from '@angular/core/testing';
-
 import { NutritionService } from './nutrition.service';
 
 describe('NutritionService', () => {
   let service: NutritionService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      declarations: [],
+      imports: [],
+      providers: []
+    });
     service = TestBed.inject(NutritionService);
   });
 

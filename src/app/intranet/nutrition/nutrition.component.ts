@@ -3,13 +3,13 @@ import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { NutritionService } from './nutrition.service';
 import { PlatI } from 'src/app/partage/modeles/Types';
 import { ConfirmationService, ConfirmEventType, MessageService,} from 'primeng/api';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-nutrition',
   templateUrl: './nutrition.component.html',
-  styleUrls: ['./nutrition.component.scss'],
-  providers: [ConfirmationService, MessageService], // Pour les modals PrimeNG
+  styleUrls: ['./nutrition.component.scss'],  
+  providers: [ConfirmationService, MessageService], // Pour les modals PrimeNG  
 })
 export class NutritionComponent implements OnInit {  
   pagePlats: number = 1; // Utilisé dans le paginator HTML de la liste des plats pour définir la page de départ - paginate: { itemsPerPage: 1, currentPage: pagePlats }
@@ -21,8 +21,8 @@ export class NutritionComponent implements OnInit {
   initialSelectedPlatsState!: PlatI; // Pour stocker l'état initial de selectedPlats dans onSelectPlat
   //selectedIngredient?: CiqualI;
   //platArray: PlatI[] = [];
-  ajoutPlatsVisible: boolean = false;
-  selectedPlatsVisible: boolean = false;
+  ajoutPlatsVisible: boolean = false; // Pour rendre visible le formulaire d'ajout d'un plat
+  selectedPlatsVisible: boolean = false; // Pour rendre visible le formulaire d'un plat existant et le modifier
   newPlat!: PlatI;
   newPlatForm!: FormGroup;
 
@@ -31,7 +31,7 @@ export class NutritionComponent implements OnInit {
     public nutrition: NutritionService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
-    private formbuilder: FormBuilder
+    private formbuilder: FormBuilder    
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -40,7 +40,8 @@ export class NutritionComponent implements OnInit {
     this.nutrition.getAllCiqual(); 
     this.newPlatForm = this.formbuilder.group({
       nom: ['', Validators.required],
-      description: ['', Validators.required]
+      description: ['', Validators.required],
+      idIngredients: this.formbuilder.array([]),
     });
 
     this.newPlat = {
@@ -165,7 +166,7 @@ export class NutritionComponent implements OnInit {
   }  
 
 // Supprimer un ingrédient dans la liste sur un plat séléctionné
-  supprIngredient(i:number){
+  supprIngredient(i:number) {
     console.log("index de l'ingrédient : ", i);    
   // splice supprime l'ingrédient sur lequel j'ai cliqué en l'enlevant du tableau this.selectedPlats.idIngredients  
     this.selectedPlats?.idIngredients?.splice(i, 1);
@@ -203,8 +204,12 @@ onCancelForm() {
 
 onSubmitNewPlatForm() {
   //console.log(this.newPlat.nom, this.newPlat.description);
-  console.log(this.newPlatForm.value);
-  
+  console.log(this.newPlatForm.value);  
+}
+
+addIngredient() {
+  const idIngredientsArray = this.newPlatForm.get('idIngredients') as FormArray;
+  idIngredientsArray.push(this.formbuilder.control(''));
 }
 
 }

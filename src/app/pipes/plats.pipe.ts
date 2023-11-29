@@ -1,6 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { NutritionService } from '../intranet/nutrition/nutrition.service';
-import { CiqualI } from '../partage/modeles/Types';
 
 @Pipe({
   name: 'plats' // Le nom du pipe

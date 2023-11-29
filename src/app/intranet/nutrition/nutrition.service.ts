@@ -182,6 +182,16 @@ export class NutritionService implements OnInit {
     }
   }
 
+//------------------------------- Méthode pour créer un nouveau plat --------------------------------------
+async createPlat(plat: PlatI) {
+  const { error: createError } = await this.supabase
+    .from('plats')
+    .insert(plat)
+  if (createError) {
+    console.log(createError);    
+  }  
+}
+
   async fetchData() {
     try {
       this.listePlats = await this.supa.getAttribuerPlats();
