@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
+
 import { UtilisateursComponent } from './utilisateurs.component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
@@ -11,6 +12,7 @@ import { CheckAccesPipe, GestionUtilisateursPipe } from 'src/app/pipes/gestion-u
   selector: 'app-delete-data',
   template: ''
 })
+
 class DeleteDataStubComponent {}
 
 describe('UtilisateursComponent', () => {
@@ -22,10 +24,10 @@ describe('UtilisateursComponent', () => {
       declarations: [
         UtilisateursComponent,
         GestionUtilisateursPipe,
-        DeleteDataStubComponent
+        DeleteDataStubComponent // Declare the stub here
       ],
       imports: [ConfirmDialogModule,FormsModule,ReactiveFormsModule],
-      providers: [ConfirmationService,GestionUtilisateursPipe,CheckAccesPipe ],
+      providers: [ConfirmationService,GestionUtilisateursPipe,CheckAccesPipe],
     });
     fixture = TestBed.createComponent(UtilisateursComponent);
     component = fixture.componentInstance;

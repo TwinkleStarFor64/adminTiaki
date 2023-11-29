@@ -9,7 +9,8 @@ import { CheckAccesPipe, GestionUtilisateursPipe } from 'src/app/pipes/gestion-u
   selector: 'app-utilisateurs',
   templateUrl: './utilisateurs.component.html',
   styleUrls: ['./utilisateurs.component.scss'],
-  providers: [ConfirmationService, MessageService,GestionUtilisateursPipe,CheckAccesPipe],
+  providers: [ConfirmationService, MessageService],
+
 })
 export class UtilisateursComponent implements OnInit {
   utilisateur: UtilisateurI[] = [];
