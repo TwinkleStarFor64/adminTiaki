@@ -74,7 +74,8 @@ export class ProfilComponent implements OnInit {
               detail: 'Vous avez annuler',
             });
             console.log('Non a été cliqué, la modal sera simplement fermée.');
-            // Si j'annule les modifications je reviens aux valeurs initiales du formulaires                                        
+            this.users.fetchProfil();
+            // Si j'annule les modifications je reviens aux valeurs initiales du formulaires en rappelant this.users.fetchProfil();                                        
             break;
           case ConfirmEventType.CANCEL:
             this.messageService.add({
@@ -84,7 +85,8 @@ export class ProfilComponent implements OnInit {
               detail: 'Vous avez annuler',
             });
             console.log('Annulation');
-            // Si j'annule les modifications je reviens aux valeurs initiales du formulaires                       
+            this.users.fetchProfil();
+            // Si j'annule les modifications je reviens aux valeurs initiales du formulaires en rappelant this.users.fetchProfil();                       
             break;
         }
       },

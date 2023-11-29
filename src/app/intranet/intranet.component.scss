@@ -18,6 +18,8 @@ aside {
 main {
   width: calc(100vw - $l);
   flex-direction: column;
+  overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 main>* {

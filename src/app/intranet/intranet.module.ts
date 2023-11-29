@@ -11,10 +11,16 @@ import { ProfilComponent } from './profil/profil.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ToastModule } from 'primeng/toast';
+import { ToastModule } from 'primeng/toast'; // Pour les pop-up de MessageService
+import { HttpClientModule } from '@angular/common/http';
+import { DonneesService } from '../partage/services/donnees.service';
+import { GetIngredientPipe, PlatsPipe } from '../pipes/plats.pipe';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { IngredientsPipe } from '../pipes/ingredients.pipe';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { CheckboxModule } from 'primeng/checkbox';
-
 
 @NgModule({
   declarations: [
@@ -22,10 +28,12 @@ import { CheckboxModule } from 'primeng/checkbox';
     KineComponent,
     OptoComponent,
     NutritionComponent,
-    IntranetComponent,
-    AsideBarComponent,
-    ProfilComponent,
-
+    IntranetComponent,    
+    AsideBarComponent,                                                                                                                                                                                              
+    ProfilComponent, 
+    PlatsPipe,
+    IngredientsPipe,
+    GetIngredientPipe 
   ],
   imports: [
     CommonModule,
@@ -34,10 +42,16 @@ import { CheckboxModule } from 'primeng/checkbox';
     FormsModule,
     ButtonModule,
     InputTextModule,
-    ConfirmDialogModule,
+    InputTextareaModule,
+    ConfirmDialogModule,    
     ToastModule,
-    CheckboxModule
+    HttpClientModule,    
+    NgxPaginationModule,
+    ConfirmPopupModule
+    CheckboxModule  
+  ],
+  providers: [
+    DonneesService,    
   ]
-
 })
 export class IntranetModule { }

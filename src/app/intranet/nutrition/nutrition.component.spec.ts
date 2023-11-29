@@ -1,6 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { NutritionComponent } from './nutrition.component';
+import { ButtonModule } from 'primeng/button';
+import { GetIngredientPipe, PlatsPipe } from 'src/app/pipes/plats.pipe';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { IngredientsPipe } from 'src/app/pipes/ingredients.pipe';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { FormsModule } from '@angular/forms';
 
 describe('NutritionComponent', () => {
   let component: NutritionComponent;
@@ -8,7 +15,8 @@ describe('NutritionComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [NutritionComponent]
+      declarations: [NutritionComponent, PlatsPipe, IngredientsPipe, GetIngredientPipe ],
+      imports: [ButtonModule, NgxPaginationModule, ToastModule, ConfirmDialogModule, ConfirmPopupModule, FormsModule],
     });
     fixture = TestBed.createComponent(NutritionComponent);
     component = fixture.componentInstance;

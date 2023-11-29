@@ -11,6 +11,10 @@ h1,h2,h3 {
     color: #805E96;    
 }
 
+header {
+    flex-direction: column;
+}
+
 section {
     justify-content: center;         
     div {
@@ -42,6 +46,7 @@ section {
     }
 }
 
+// Le css pour les boutons de la modal PrineNG
 .acceptButton {    
     background-color: #33BB27;
     border-color: #33BB27;

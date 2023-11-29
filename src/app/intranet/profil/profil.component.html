@@ -4,7 +4,7 @@
       <img src="assets/images/logos/logo_tiaki.png" alt="" />
     </figure>
     <div>
-      <h1>Tiaki</h1>
+      <h1><a routerLink="/intranet">Tiaki</a></h1>
       <h2>Mon profil utilisateur</h2>
     </div>
   </article>
@@ -21,21 +21,18 @@
       <h4>Informations personelles</h4>
       <form #profilForm="ngForm">
         <span class="p-float-label">
-          <input pInputText [(ngModel)]="users.profil.nom" name="nom" type="text" required
-            minlength="1" />
+          <input pInputText [(ngModel)]="users.profil.nom" name="nom" type="text" required minlength="1" />
           <label htmlFor="nom">Nom</label>
         </span>
         <span class="p-float-label">
-          <input pInputText [(ngModel)]="users.profil.prenom" name="prenom" type="text" required
-            minlength="1" />
+          <input pInputText [(ngModel)]="users.profil.prenom" name="prenom" type="text" required minlength="1" />
           <label htmlFor="prenom">Prenom</label>
         </span>
         <span class="p-float-label">
           <input pInputText [(ngModel)]="users.profil.telephone" name="telephone" type="text" required minlength="10" />
           <label htmlFor="telephone">Telephone</label>
         </span>
-        <p-button class="modifier" styleClass="p-button-help" (click)="ConfirmDialog()"
-          [disabled]="profilForm.invalid!">Modifier</p-button>
+        <p-button class="modifier" styleClass="p-button-help" (click)="ConfirmDialog()" [disabled]="profilForm.invalid!">Modifier</p-button>
       </form>
     </article>
     <article>
