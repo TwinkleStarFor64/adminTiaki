@@ -106,7 +106,7 @@ export class NutritionService implements OnInit {
 
 // ---------------------Méthode pour fetch les ingrédients sur la table ciqualAnses et gérer leur affichage en HTML--------------------------- 
 // ids correspond au tableau idIngredients sur la table plats (supabase) - attribuer via onSelectPlat sur nutrition.component
-  async fetchCiqual(ids: Array<number>): Promise<any> { 
+  async fetchCiqual(ids: Array<number> | undefined): Promise<any> { 
     if (!ids) {  
     // Si pas d'id en paramétres return tableau vide - évite un message d'erreur si je clique sur un plat ne contenant pas idIngredients
       return []

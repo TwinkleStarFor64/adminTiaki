@@ -29,7 +29,7 @@
         <!-- Je précise un id:'plats' car j'utilise 2 paginator sur ce HTML (id:ingredients sur le second)--> 
         <div *ngFor="let plat of filteredPlats | paginate: { itemsPerPage: 15, currentPage: pagePlats, id:'plats' }">
           <p (click)="onSelectPlat(plat, plat.idIngredients)" (click)="toggleFormVisibility(1)">{{ plat.nom }}</p>              
-          <figure (click)="DeleteDialog(plat.id, true)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
+          <figure (click)="DeleteDialog(plat.id, true, plat.idIngredients)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
         <!-- DeleteDialog() modal PrimeNG - En paramétres l'id du plat et la variable bolean del en true -->      
         </div>
       </ng-container>
@@ -53,9 +53,9 @@
             <span>
               <h4>Ingrédients</h4> 
               <div id="divIngredients" *ngFor="let id of selectedPlats.idIngredients; let i=index">
-                <figure (click)="DeleteDialog(i, false)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
+                <figure (click)="DeleteDialog(i, false, selectedPlats.idIngredients)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
               <!-- DeleteDialog() modal PrimeNG - En paramétres l'index de l'ingrédients sur le tableau et la variable bolean del en false -->    
-                <p>{{ id | getIngredient:'alim_nom_fr' }}</p>                
+                <p>{{ id | getIngredient:'alim_nom_fr' }}</p>                               
               </div>
             </span>
             <span id="spanButton">
@@ -95,7 +95,7 @@
           </span>    
       </div>
       <div *ngIf="ajoutPlatsVisible">      
-        <!-- <form #ajoutPlatForm="ngForm"> 
+        <form #ajoutPlatForm="ngForm"> 
           <span class="p-float-label">
             <input pInputText [(ngModel)]="newPlat.nom" name="nom" type="text" required minlength="1" />
             <label htmlFor="nom">Nom</label>
@@ -107,16 +107,17 @@
           <span>
             <h4>Ingrédients</h4> 
             <div id="divIngredients" *ngFor="let id of newPlat.idIngredients; let i=index">
-              <figure (click)="DeleteDialog(i, false)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>    
+              <figure (click)="DeleteDialog(i, false, newPlat.idIngredients)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>    
               <p>{{ id | getIngredient:'alim_nom_fr' }}</p>
+              <p>{{ newPlat.idIngredients }}</p>
             </div>
           </span>
           <span id="spanButton">
             <p-button styleClass="p-button-warning">Annuler</p-button>              
             <p-button styleClass="p-button-success" (onClick)="onSubmitNewPlatForm()" [disabled]="ajoutPlatForm.invalid!">Valider</p-button>
           </span>
-        </form> -->
-        <form [formGroup]="newPlatForm" (ngSubmit)="onSubmitNewPlatForm()">
+        </form>
+        <!-- <form [formGroup]="newPlatForm" (ngSubmit)="onSubmitNewPlatForm()">
           <span class="p-float-label">
             <input pInputText formControlName="nom" type="text" required minlength="1" />
             <label htmlFor="nom">Nom</label>
@@ -128,7 +129,7 @@
           <span>
             <h4>Ingrédients</h4> 
             <div id="divIngredients" *ngFor="let id of newPlat.idIngredients; let i=index">
-              <figure (click)="DeleteDialog(i, false)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>    
+              <figure (click)="DeleteDialog(i, false, newPlat.idIngredients)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>    
               <p>{{ id | getIngredient:'alim_nom_fr' }}</p>
             </div>
           </span>
@@ -136,7 +137,7 @@
             <p-button styleClass="p-button-warning">Annuler</p-button>              
             <p-button styleClass="p-button-success" type="submit" [disabled]="newPlatForm.invalid!">Valider</p-button>
           </span>
-        </form>
+        </form> -->
         <span id="blocIngredients">         
           <h4>Nutriments</h4> 
           <div id="nutriments">
