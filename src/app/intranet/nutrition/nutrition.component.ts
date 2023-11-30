@@ -4,12 +4,14 @@ import { NutritionService } from './nutrition.service';
 import { PlatI } from 'src/app/partage/modeles/Types';
 import { ConfirmationService, ConfirmEventType, MessageService,} from 'primeng/api';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { AjoutPlatComponent } from '../template/dialog/ajout-plat/ajout-plat.component';
 
 @Component({
   selector: 'app-nutrition',
   templateUrl: './nutrition.component.html',
   styleUrls: ['./nutrition.component.scss'],  
-  providers: [ConfirmationService, MessageService], // Pour les modals PrimeNG  
+  providers: [ConfirmationService, MessageService, DialogService], // Pour les modals PrimeNG  
 })
 export class NutritionComponent implements OnInit {  
   pagePlats: number = 1; // Utilisé dans le paginator HTML de la liste des plats pour définir la page de départ - paginate: { itemsPerPage: 1, currentPage: pagePlats }
@@ -26,13 +28,27 @@ export class NutritionComponent implements OnInit {
   newPlat!: PlatI;
   newPlatForm!: FormGroup;
 
+  ref: DynamicDialogRef | undefined;
+
   constructor(
     public supa: SupabaseService,
     public nutrition: NutritionService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
-    private formbuilder: FormBuilder    
+    private formbuilder: FormBuilder,
+    public dialogService: DialogService    
   ) {}
+
+  ajoutPlat() {
+    this.ref = this.dialogService.open(AjoutPlatComponent, {
+            header: 'Select a Product',
+            width: '70%',
+            height: '80%',
+            contentStyle: { overflow: 'hidden' },
+            baseZIndex: 10000,
+            maximizable: true
+    })
+  }  
 
   async ngOnInit(): Promise<void> {
     this.nutrition.fetchPlats();

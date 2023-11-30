@@ -21,6 +21,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { IngredientsPipe } from '../pipes/ingredients.pipe';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { CheckboxModule } from 'primeng/checkbox';
+import { DynamicDialogModule } from 'primeng/dynamicdialog';
+import { AjoutPlatComponent } from './template/dialog/ajout-plat/ajout-plat.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { CheckboxModule } from 'primeng/checkbox';
     ProfilComponent, 
     PlatsPipe,
     IngredientsPipe,
-    GetIngredientPipe 
+    GetIngredientPipe,
+    AjoutPlatComponent 
   ],
   imports: [
     CommonModule,
@@ -48,7 +51,8 @@ import { CheckboxModule } from 'primeng/checkbox';
     HttpClientModule,    
     NgxPaginationModule,
     ConfirmPopupModule,
-    CheckboxModule  
+    CheckboxModule,
+    DynamicDialogModule  
   ],
   providers: [
     DonneesService,    

@@ -17,7 +17,8 @@
         </figure>
         <h3>Gestion des plats</h3>
       </span>
-      <p-button styleClass="p-button-success" (click)="toggleFormVisibility(2)">Ajouter un plat</p-button>
+      <!-- (click)="toggleFormVisibility(2)" -->
+      <p-button styleClass="p-button-success" (onClick)="ajoutPlat()">Ajouter un plat</p-button>
       <span class="p-input-icon-left">
         <i class="pi pi-search"></i>
         <input type="text" pInputText [(ngModel)]="filtre" />
