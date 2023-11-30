@@ -109,7 +109,7 @@
             <div id="divIngredients" *ngFor="let id of newPlat.idIngredients; let i=index">
               <figure (click)="DeleteDialog(i, false, newPlat.idIngredients)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>    
               <p>{{ id | getIngredient:'alim_nom_fr' }}</p>
-              <p>{{ newPlat.idIngredients }}</p>
+              <!-- <p>{{ newPlat.idIngredients }}</p> -->
             </div>
           </span>
           <span id="spanButton">

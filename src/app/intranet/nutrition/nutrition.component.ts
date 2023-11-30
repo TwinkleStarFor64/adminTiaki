@@ -185,6 +185,9 @@ onSelectIngredient(id: number) {
   // Appelle de fetchCiqual() pour mettre à jour les composants et leur quantité si je rajoute un ingrédient
     this.nutrition.fetchCiqual(this.selectedPlats.idIngredients);
   }  
+  if (this.newPlat?.idIngredients) {
+    this.newPlat.idIngredients.push(id);    
+  }
 }
 
 async onSubmitForm() {
