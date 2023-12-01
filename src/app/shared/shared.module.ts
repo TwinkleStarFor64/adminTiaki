@@ -13,13 +13,17 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { TableModule } from 'primeng/table';
+import { GestionUtilisateursPipe } from '../pipes/gestion-utilisateurs.pipe';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
     IngredientsPipe,
     MenusPipe,
     GetIngredientPipe,
-    PlatsPipe
+    PlatsPipe,
+    GestionUtilisateursPipe
   ],
   imports: [
     CommonModule,
@@ -33,11 +37,14 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     ConfirmPopupModule,
     InputTextModule,
     InputTextareaModule,
-    CheckboxModule 
+    CheckboxModule,
+    TableModule,
+
   ],
   exports: [
     PlatsPipe,
     MenusPipe,
+    GestionUtilisateursPipe,
     GetIngredientPipe,
     IngredientsPipe,
     NgxPaginationModule,
@@ -46,7 +53,9 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     ToastModule,
     FormsModule,
     ReactiveFormsModule,
-    ConfirmPopupModule
+    ConfirmPopupModule,
+    TableModule,
+  
   ]
 })
 export class SharedModule { }

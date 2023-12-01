@@ -6,10 +6,7 @@ import { IngredientsComponent } from './ingredients/ingredients.component';
 import { MenusComponent } from './menus/menus.component';
 import { NutritionRoutingModule } from './nutrition-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { IngredientsPipe } from 'src/app/pipes/ingredients.pipe';
-import { PlatsPipe } from 'src/app/pipes/plats.pipe';
-
-
+import { PlatsComponent } from './plats/plats.component';
 
 
 @NgModule({
@@ -18,15 +15,13 @@ import { PlatsPipe } from 'src/app/pipes/plats.pipe';
     ComplementsComponent,
     IngredientsComponent,
     MenusComponent,
+    PlatsComponent,
 
   ],
   imports: [
     CommonModule,
     NutritionRoutingModule,
     SharedModule
-  ],
-  exports:[
-    IngredientsPipe,
   ],
 })
 export class NutritionModule { }

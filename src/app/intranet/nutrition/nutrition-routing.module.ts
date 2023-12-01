@@ -5,13 +5,17 @@ import { MenusComponent } from './menus/menus.component';
 import { AllergenesComponent } from './allergenes/allergenes.component';
 import { ComplementsComponent } from './complements/complements.component';
 import { IngredientsComponent } from './ingredients/ingredients.component';
+import { PlatsComponent } from './plats/plats.component';
 
 const routes: Routes = [
-  { path: '', component: NutritionComponent },
+  { path: '', component: NutritionComponent, children: [
+  { path: '', component: PlatsComponent },
   { path : 'allergenes', component: AllergenesComponent },
   { path: 'complements', component: ComplementsComponent },
   { path: 'ingredients', component: IngredientsComponent },
-  { path: 'menus', component: MenusComponent },
+  { path: 'menus', component: MenusComponent }
+  ]
+},
 ];
 
 @NgModule({
