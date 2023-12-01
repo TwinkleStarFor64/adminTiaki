@@ -16,7 +16,6 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TableModule } from 'primeng/table';
 import { GestionUtilisateursPipe } from '../pipes/gestion-utilisateurs.pipe';
 
-
 @NgModule({
   declarations: [
     IngredientsPipe,
@@ -38,7 +37,7 @@ import { GestionUtilisateursPipe } from '../pipes/gestion-utilisateurs.pipe';
     InputTextModule,
     InputTextareaModule,
     CheckboxModule,
-    TableModule,
+    TableModule, 
 
   ],
   exports: [
@@ -54,7 +53,7 @@ import { GestionUtilisateursPipe } from '../pipes/gestion-utilisateurs.pipe';
     FormsModule,
     ReactiveFormsModule,
     ConfirmPopupModule,
-    TableModule,
+    TableModule,    
   
   ]
 })

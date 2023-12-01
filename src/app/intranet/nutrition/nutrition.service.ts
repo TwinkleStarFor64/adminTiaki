@@ -1,11 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { CiqualI, PlatI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
-import {
-  AuthSession,
-  createClient,
-  SupabaseClient,
-} from '@supabase/supabase-js';
+import { AuthSession,createClient,SupabaseClient } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
 
 @Injectable({
@@ -27,6 +23,9 @@ export class NutritionService implements OnInit {
 
   listePlats: any[] = [];
 
+  pageIngredients: number = 1; // Comme ci-dessus mais pour la liste d'ingrédients
+  filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats 
+  
   constructor(public supa: SupabaseService) {
     this.supabase = createClient(
       environment.supabaseUrl,
@@ -37,6 +36,14 @@ export class NutritionService implements OnInit {
   async ngOnInit(): Promise<void> {
     //this.fetchPlats();
   }
+
+// Méthode utiliser dans l'input de recherche d'ingrédients afin de le réinitialiser
+// Si l'input et vide ou pas vide la premiére page (pageIngredients) est défini à 1 afin de retrouver l'affichage initial
+onFilterChange() {
+  if (this.filtre === '' || this.filtre != '') {
+    this.pageIngredients = 1;
+  }
+}
 
   // ---------------------Méthode pour fetch les plats et gérer leur affichage en HTML---------------------------
   async fetchPlats(): Promise<any> {
@@ -106,7 +113,7 @@ export class NutritionService implements OnInit {
 
 // ---------------------Méthode pour fetch les ingrédients sur la table ciqualAnses et gérer leur affichage en HTML--------------------------- 
 // ids correspond au tableau idIngredients sur la table plats (supabase) - attribuer via onSelectPlat sur nutrition.component
-  async fetchCiqual(ids: Array<number>): Promise<any> { 
+  async fetchCiqual(ids: Array<number> | undefined): Promise<any> { 
     if (!ids) {  
     // Si pas d'id en paramétres return tableau vide - évite un message d'erreur si je clique sur un plat ne contenant pas idIngredients
       return []
@@ -183,10 +190,16 @@ export class NutritionService implements OnInit {
   }
 
 //------------------------------- Méthode pour créer un nouveau plat --------------------------------------
-async createPlat(plat: PlatI) {
+async createPlat(newEntry: {
+  nom: string;
+  description: string;
+  date?: Date;
+  idIngredients: Array<number>;
+}) {
+  newEntry.date = new Date();
   const { error: createError } = await this.supabase
     .from('plats')
-    .insert(plat)
+    .insert(newEntry)
   if (createError) {
     console.log(createError);    
   }  

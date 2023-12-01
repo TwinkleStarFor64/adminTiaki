@@ -1,0 +1,46 @@
+<section>
+    <article>
+        <form #ajoutPlatForm="ngForm"> 
+            <span class="p-float-label">
+              <input pInputText [(ngModel)]="newPlat.nom" name="nom" type="text" required minlength="1" />
+              <label htmlFor="nom">Nom</label>
+            </span> 
+            <span class="p-float-label">
+              <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="newPlat.description" name="description"></textarea>
+              <label for="float-input">Description</label>
+            </span>
+            <span>
+              <h4>Ingrédients</h4> 
+              <div id="divIngredients" *ngFor="let id of newPlat.idIngredients; let i=index">
+                <!-- <figure (click)="DeleteDialog(i, false, newPlat.idIngredients)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>   -->  
+                <p>{{ id | getIngredient:'alim_nom_fr' }}</p>
+                <!-- <p>{{ newPlat.idIngredients }}</p> -->
+              </div>
+            </span>
+            <span id="spanButton">
+              <p-button styleClass="p-button-warning" (onClick)="onCancelNewPlatForm()">Annuler</p-button>              
+              <p-button styleClass="p-button-success" (onClick)="onSubmitNewPlatForm()" [disabled]="ajoutPlatForm.invalid!">Valider</p-button>
+            </span>
+          </form>
+    </article>
+    <article>
+        <div>
+            <h4>Ajout d'ingrédients</h4>
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input type="text" pInputText [(ngModel)]="filtreIngredients" (input)="nutrition.onFilterChange()" />
+        <!-- Utilisation de onFilterChange() pour réinitialiser l'input -->
+      </span>
+      <div>
+        <!-- Utilisation du pipe ingredients pour rechercher des ingredients par leur alim_nom_fr -->        
+          <span *ngFor="let ingredients of nutrition.ciqual | ingredients:filtreIngredients | paginate: { itemsPerPage: 30, currentPage: nutrition.pageIngredients, id:'ingredients' }">
+            <p (click)="onSelectIngredient(ingredients.alim_code)">{{ ingredients.alim_nom_fr }}</p>            
+          </span>        
+      </div>
+      <span id="paginationIngredients">
+        <!-- [maxSize] pour le nombre de numéro de pages à afficher -->
+        <pagination-controls (pageChange)="nutrition.pageIngredients = $event" id="ingredients" previousLabel="Précédent" nextLabel="Suivant" [maxSize]="5"></pagination-controls>
+      </span>
+        </div>
+    </article>
+</section>
