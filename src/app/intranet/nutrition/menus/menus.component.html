@@ -5,7 +5,7 @@
       </figure>
       <div>
         <h1><a routerLink="/intranet">Tiaki</a></h1>
-        <h2>Les Menus</h2>
+        <h2>Les menus</h2>
       </div>
     </article>    
   </header>
@@ -23,7 +23,7 @@
         <input type="text" pInputText [(ngModel)]="filtre" />
       </span>
       <span>
-        <!-- Utilisation du pipe plats pour rechercher des plats par leur noms -->
+        <!-- Utilisation du pipe menus pour rechercher des menus par leur noms -->
         <ng-container *ngIf="nutrition.plats | menus:filtre as filteredPlats">
         <!-- Utilisation de ngx-pagination - Doc : https://github.com/michaelbromley/ngx-pagination/blob/master/README.md#demo --> 
         <!-- Je précise un id:'plats' car j'utilise 2 paginator sur ce HTML (id:ingredients sur le second)--> 

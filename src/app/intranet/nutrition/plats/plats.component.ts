@@ -10,7 +10,9 @@ import { AjoutPlatComponent } from '../../template/dialog/ajout-plat/ajout-plat.
 @Component({
   selector: 'app-plats',
   templateUrl: './plats.component.html',
-  styleUrls: ['./plats.component.scss','../nutrition.component.scss']
+  styleUrls: ['./plats.component.scss','../nutrition.component.scss'],
+  providers: [ConfirmationService, MessageService, DialogService], // Pour les modals PrimeNG  
+
 })
 export class PlatsComponent implements OnInit {
   pagePlats: number = 1; // Utilisé dans le paginator HTML de la liste des plats pour définir la page de départ - paginate: { itemsPerPage: 1, currentPage: pagePlats }
