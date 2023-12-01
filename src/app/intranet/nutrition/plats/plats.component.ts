@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PlatI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { NutritionService } from '../nutrition.service';
@@ -10,7 +9,8 @@ import { AjoutPlatComponent } from '../../template/dialog/ajout-plat/ajout-plat.
 @Component({
   selector: 'app-plats',
   templateUrl: './plats.component.html',
-  styleUrls: ['./plats.component.scss','../nutrition.component.scss']
+  styleUrls: ['./plats.component.scss','../nutrition.component.scss'],
+  providers: [ConfirmationService, MessageService, DialogService], // Pour les modals PrimeNG  
 })
 export class PlatsComponent implements OnInit {
   pagePlats: number = 1; // Utilisé dans le paginator HTML de la liste des plats pour définir la page de départ - paginate: { itemsPerPage: 1, currentPage: pagePlats }
@@ -20,30 +20,23 @@ export class PlatsComponent implements OnInit {
 
   selectedPlats?: PlatI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
   initialSelectedPlatsState!: PlatI; // Pour stocker l'état initial de selectedPlats dans onSelectPlat
-  //selectedIngredient?: CiqualI;
-  //platArray: PlatI[] = [];
-  ajoutPlatsVisible: boolean = false; // Pour rendre visible le formulaire d'ajout d'un plat
-  selectedPlatsVisible: boolean = false; // Pour rendre visible le formulaire d'un plat existant et le modifier
-  newPlat!: PlatI;
-  newPlatForm!: FormGroup;
-
-  ref: DynamicDialogRef | undefined;
+  
+  ref: DynamicDialogRef | undefined; // Pour la modal d'ajout de plat - DynamicDialogModule
 
   constructor(
     public supa: SupabaseService,
     public nutrition: NutritionService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
-    private formbuilder: FormBuilder,
     public dialogService: DialogService    
   ) {}
 
-  ajoutPlat() {
+  ajoutPlat() { // La méthode pour la modal d'ajout d'un nouveau plat
     this.ref = this.dialogService.open(AjoutPlatComponent, {
-            header: 'Select a Product',
+            header: 'Ajouter un plat',
             width: '70%',
             height: '80vh',
-            contentStyle: { overflow: 'hidden' },
+            contentStyle: { overflow: 'hidden' }, // Pour cacher l'overflow globale de la modal
             baseZIndex: 10000,
             maximizable: true
     })
@@ -52,40 +45,18 @@ export class PlatsComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.nutrition.fetchPlats();
   // La méthode getAllCiqual() permet de voir la liste des ingrédients et d'attribuer des valeurs via la méthode onSelectPlat() qui à besoin des ingrédients
-    this.nutrition.getAllCiqual(); 
-    this.newPlatForm = this.formbuilder.group({
-      nom: ['', Validators.required],
-      description: ['', Validators.required],
-      idIngredients: this.formbuilder.array([]),
-    });
-
-    this.newPlat = {
-      id: 0,
-      nom: '',
-      description: '',
-      alim_code: 0,
-      idIngredients: [],
-    }
+    this.nutrition.getAllCiqual();   
   }
 
-  toggleFormVisibility(formNumber: number) {
-    //this.ajoutPlatsVisible = !this.ajoutPlatsVisible;
-    if (formNumber === 1) {
-      this.selectedPlatsVisible = true;
-      this.ajoutPlatsVisible = false;
-    } else if (formNumber === 2) {
-      this.ajoutPlatsVisible = true;
-      this.selectedPlatsVisible = false;
-    }
-  }
+  
 
 // Méthode utiliser dans l'input de recherche d'ingrédients afin de le réinitialiser
 // Si l'input et vide ou pas vide la premiére page (pageIngredients) est défini à 1 afin de retrouver l'affichage initial
-  onFilterChange() {
+  /* onFilterChange() {
     if (this.filtre === '' || this.filtre != '') {
       this.pageIngredients = 1;
     }
-  }
+  } */
 
 // Méthode qui attribue des valeurs aux variables correspondant à l'objet sur lequel je clique - Utilisé sur le nom du plat en HTML
   onSelectPlat(plat: PlatI, id: Array<number>) {
@@ -111,10 +82,11 @@ export class PlatsComponent implements OnInit {
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',      
       accept: () => {        
-        if (del) { // Si del est true (définie dans le html)
+        if (del) { // Si del est true (définie dans le html) j'appelle la méthode ci-dessous 
           this.deletePlat(id); // J'appelle la méthode de suppression de plat et lui fournis id en paramétre
-        } else {         
-          this.supprIngredient(id, alimCode); // J'appelle la méthode de suppression d'ingrédients et lui fournis id en paramétre (paramétre i sur supprIngredient())
+        } else { // Si del est pas true j'appelle la méthode ci-dessous  
+  // J'appelle la méthode de suppression d'ingrédients et lui fournis id en paramétre (paramétre i sur supprIngredient() et alimCode correspondant à selectedPlats.idIngredients)        
+          this.supprIngredient(id, alimCode); 
         }
         // Pour la pop-up
         this.messageService.add({
@@ -169,7 +141,7 @@ export class PlatsComponent implements OnInit {
 
 // Méthode pour supprimer un plat sur la table plats
   async deletePlat(id: number) {
-    // Id correspond à plat.id au niveau du HTML récupérer via la méthode de la modal au dessus
+    // Id correspond à plat.id au niveau du HTML récupérer via la méthode de la modal DeleteDialog()
     await this.nutrition
       .deletePlatSupabase(id)
       .then(() => {
@@ -180,14 +152,13 @@ export class PlatsComponent implements OnInit {
       });
   }  
 
-// Supprimer un ingrédient dans la liste sur un plat séléctionné
+// Supprimer un ingrédient dans la liste sur un plat séléctionné - Paramétres récupérer dans DeleteDialog
   supprIngredient(i:number, alimCode: Array<number> | undefined) {
     console.log("index de l'ingrédient : ", i);    
   // splice supprime l'ingrédient sur lequel j'ai cliqué en l'enlevant du tableau this.selectedPlats.idIngredients  
     this.selectedPlats?.idIngredients?.splice(i, 1);
-    this.nutrition.fetchCiqual(alimCode);
-    console.log(alimCode);
-    
+    this.nutrition.fetchCiqual(alimCode); // Pour mettre à jour le grammage des nutriments si j'en supprime
+    console.log("Méthode supprIngredient", alimCode);    
   }
 
 // Ajouter un ingrédient sur un plat séléctionné
@@ -199,12 +170,10 @@ onSelectIngredient(id: number) {
     this.selectedPlats.idIngredients.push(id);
   // Appelle de fetchCiqual() pour mettre à jour les composants et leur quantité si je rajoute un ingrédient
     this.nutrition.fetchCiqual(this.selectedPlats.idIngredients);
-  }  
-  if (this.newPlat?.idIngredients) {
-    this.newPlat.idIngredients.push(id);    
   }
 }
 
+// Formulaire pour modifier un plat existant
 async onSubmitForm() {
   try {
     await this.nutrition.updatePlat(
@@ -217,18 +186,13 @@ async onSubmitForm() {
   }
 }
 
+// Annuler le formulaire de modification d'un plat et retrouver les valeurs initiales
 onCancelForm() {  
   // Je réattribue à selectedPlats les valeurs stockées dans onSelectPlat()
   this.selectedPlats = { ...this.initialSelectedPlatsState };
 }
 
-onSubmitNewPlatForm() {
-  console.log(this.newPlat);
-  //console.log(this.newPlatForm.value);  
-}
 
-addIngredient() {
-  const idIngredientsArray = this.newPlatForm.get('idIngredients') as FormArray;
-  idIngredientsArray.push(this.formbuilder.control(''));
-}
+
+
 }

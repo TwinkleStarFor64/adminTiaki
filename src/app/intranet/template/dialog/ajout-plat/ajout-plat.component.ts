@@ -8,7 +8,7 @@ import { PlatI } from 'src/app/partage/modeles/Types';
   selector: 'app-ajout-plat',
   templateUrl: './ajout-plat.component.html',
   styleUrls: ['./ajout-plat.component.scss'],
-  providers: [PaginationService], // Pour les modals PrimeNG 
+  providers: [PaginationService], // Pour le module de Pagination 
 })
 export class AjoutPlatComponent implements OnInit {
   newPlat!: PlatI;
@@ -24,15 +24,13 @@ export class AjoutPlatComponent implements OnInit {
       description: '',
       alim_code: null,
       idIngredients: [],
-    }
-    
-  }
-
-  
-
+    }    
+  }  
+// Méthode pour le formulaire d'ajout d'un plat
   async onSubmitNewPlatForm() {
     try {
-      console.log(this.newPlat);   
+      console.log(this.newPlat); 
+    // Je configure les valeurs de newPlat pour correspondre à newEntry sur createPlat()  
       await this.nutrition.createPlat({nom:this.newPlat.nom, description:this.newPlat.description, idIngredients:this.newPlat.idIngredients!});
       this.nutrition.fetchPlats();
     } catch (error) {
@@ -40,19 +38,23 @@ export class AjoutPlatComponent implements OnInit {
     }    
      
   }
-
+// Fermer le formulaire d'ajout de plat
   onCancelNewPlatForm() {
     this.ref.close();
   }
 
-// Ajouter un ingrédient sur un plat séléctionné
+// Ajouter un ingrédient 
   onSelectIngredient(id: number) {
-    console.log("alim_code de l'ingrédient : ", id);
-  // this.selectedPlats?.idIngredients est-il défini et non nul ?
-  
+    console.log("alim_code de l'ingrédient : ", id);  
   if (this.newPlat?.idIngredients) {
     this.newPlat.idIngredients.push(id);    
   }
 }
-
+// Supprimer un ingrédient
+onDeleteIngredient(i: number) {
+  if (this.newPlat?.idIngredients) {
+    this.newPlat.idIngredients.splice(i, 1);    
+  }
+}
+  
 }
