@@ -4,6 +4,8 @@ import { PlatI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { NutritionService } from '../nutrition.service';
 import { ConfirmEventType, ConfirmationService, MessageService } from 'primeng/api';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { AjoutPlatComponent } from '../../template/dialog/ajout-plat/ajout-plat.component';
 
 @Component({
   selector: 'app-plats',
@@ -25,13 +27,27 @@ export class PlatsComponent implements OnInit {
   newPlat!: PlatI;
   newPlatForm!: FormGroup;
 
+  ref: DynamicDialogRef | undefined;
+
   constructor(
     public supa: SupabaseService,
     public nutrition: NutritionService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
-    private formbuilder: FormBuilder    
+    private formbuilder: FormBuilder,
+    public dialogService: DialogService    
   ) {}
+
+  ajoutPlat() {
+    this.ref = this.dialogService.open(AjoutPlatComponent, {
+            header: 'Select a Product',
+            width: '70%',
+            height: '80vh',
+            contentStyle: { overflow: 'hidden' },
+            baseZIndex: 10000,
+            maximizable: true
+    })
+  }  
 
   async ngOnInit(): Promise<void> {
     this.nutrition.fetchPlats();
@@ -87,7 +103,7 @@ export class PlatsComponent implements OnInit {
   }
 
 // Méthode pour la modal de suppression d'un plat OU d'un ingrédient
-  DeleteDialog(id: number, del: boolean) {
+  DeleteDialog(id: number, del: boolean, alimCode: Array<number> | undefined) {
     // Id correspond à plat.id au niveau du Html OU à i de let i=index pour un ingrédient
     this.confirmationService.confirm({
       // Le contenu de la boîte de dialogue
@@ -96,9 +112,9 @@ export class PlatsComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',      
       accept: () => {        
         if (del) { // Si del est true (définie dans le html)
-          this.deletePlat(id); // J'appele la méthode de suppression de plat et lui fournis id en paramétre
+          this.deletePlat(id); // J'appelle la méthode de suppression de plat et lui fournis id en paramétre
         } else {         
-          this.supprIngredient(id); // J'appele la méthode de suppression d'ingrédients et lui fournis id en paramétre (paramétre i sur supprIngredient())
+          this.supprIngredient(id, alimCode); // J'appelle la méthode de suppression d'ingrédients et lui fournis id en paramétre (paramétre i sur supprIngredient())
         }
         // Pour la pop-up
         this.messageService.add({
@@ -165,11 +181,13 @@ export class PlatsComponent implements OnInit {
   }  
 
 // Supprimer un ingrédient dans la liste sur un plat séléctionné
-  supprIngredient(i:number) {
+  supprIngredient(i:number, alimCode: Array<number> | undefined) {
     console.log("index de l'ingrédient : ", i);    
   // splice supprime l'ingrédient sur lequel j'ai cliqué en l'enlevant du tableau this.selectedPlats.idIngredients  
     this.selectedPlats?.idIngredients?.splice(i, 1);
-    //this.nutrition.fetchCiqual(this.selectedPlats.idIngredients);
+    this.nutrition.fetchCiqual(alimCode);
+    console.log(alimCode);
+    
   }
 
 // Ajouter un ingrédient sur un plat séléctionné
@@ -182,6 +200,9 @@ onSelectIngredient(id: number) {
   // Appelle de fetchCiqual() pour mettre à jour les composants et leur quantité si je rajoute un ingrédient
     this.nutrition.fetchCiqual(this.selectedPlats.idIngredients);
   }  
+  if (this.newPlat?.idIngredients) {
+    this.newPlat.idIngredients.push(id);    
+  }
 }
 
 async onSubmitForm() {
@@ -202,8 +223,8 @@ onCancelForm() {
 }
 
 onSubmitNewPlatForm() {
-  //console.log(this.newPlat.nom, this.newPlat.description);
-  console.log(this.newPlatForm.value);  
+  console.log(this.newPlat);
+  //console.log(this.newPlatForm.value);  
 }
 
 addIngredient() {

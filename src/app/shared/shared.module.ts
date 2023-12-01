@@ -15,7 +15,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TableModule } from 'primeng/table';
 import { GestionUtilisateursPipe } from '../pipes/gestion-utilisateurs.pipe';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -38,7 +37,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     InputTextModule,
     InputTextareaModule,
     CheckboxModule,
-    TableModule,
+    TableModule, 
 
   ],
   exports: [
@@ -54,7 +53,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FormsModule,
     ReactiveFormsModule,
     ConfirmPopupModule,
-    TableModule,
+    TableModule,    
   
   ]
 })

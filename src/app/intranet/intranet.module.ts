@@ -10,9 +10,7 @@ import { AsideBarComponent } from './template/aside-bar/aside-bar.component';
 import { ProfilComponent } from './profil/profil.component';
 import { DonneesService } from '../partage/services/donnees.service';
 import { SharedModule } from '../shared/shared.module';
-import { PlatsPipe } from '../pipes/plats.pipe';
-
-
+import { AjoutPlatComponent } from './template/dialog/ajout-plat/ajout-plat.component';
 
 
 @NgModule({
@@ -23,15 +21,17 @@ import { PlatsPipe } from '../pipes/plats.pipe';
     NutritionComponent,
     IntranetComponent,    
     AsideBarComponent,                                                                                                                                                                                              
-    ProfilComponent, 
+    ProfilComponent,
+    AjoutPlatComponent
   ],
   imports: [
     CommonModule,
     IntranetRoutingModule,
     SharedModule
   ],
-exports:[],
+  exports:[
 
+  ],
   providers: [
     DonneesService,    
   ]
