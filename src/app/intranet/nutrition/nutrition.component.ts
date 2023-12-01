@@ -43,7 +43,7 @@ export class NutritionComponent implements OnInit {
     this.ref = this.dialogService.open(AjoutPlatComponent, {
             header: 'Select a Product',
             width: '70%',
-            height: '80%',
+            height: '80vh',
             contentStyle: { overflow: 'hidden' },
             baseZIndex: 10000,
             maximizable: true

@@ -24,8 +24,8 @@ export class NutritionService implements OnInit {
   listePlats: any[] = [];
 
   pageIngredients: number = 1; // Comme ci-dessus mais pour la liste d'ingrédients
-  filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats
-
+  filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats 
+  
   constructor(public supa: SupabaseService) {
     this.supabase = createClient(
       environment.supabaseUrl,
@@ -190,10 +190,16 @@ onFilterChange() {
   }
 
 //------------------------------- Méthode pour créer un nouveau plat --------------------------------------
-async createPlat(plat: PlatI) {
+async createPlat(newEntry: {
+  nom: string;
+  description: string;
+  date?: Date;
+  idIngredients: Array<number>;
+}) {
+  newEntry.date = new Date();
   const { error: createError } = await this.supabase
     .from('plats')
-    .insert(plat)
+    .insert(newEntry)
   if (createError) {
     console.log(createError);    
   }  

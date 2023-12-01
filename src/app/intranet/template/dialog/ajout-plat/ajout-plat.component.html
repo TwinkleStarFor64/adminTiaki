@@ -31,7 +31,7 @@
         <input type="text" pInputText [(ngModel)]="filtreIngredients" (input)="nutrition.onFilterChange()" />
         <!-- Utilisation de onFilterChange() pour réinitialiser l'input -->
       </span>
-      <div id="divListeIngredients">
+      <div>
         <!-- Utilisation du pipe ingredients pour rechercher des ingredients par leur alim_nom_fr -->        
           <span *ngFor="let ingredients of nutrition.ciqual | ingredients:filtreIngredients | paginate: { itemsPerPage: 30, currentPage: nutrition.pageIngredients, id:'ingredients' }">
             <p (click)="onSelectIngredient(ingredients.alim_code)">{{ ingredients.alim_nom_fr }}</p>            

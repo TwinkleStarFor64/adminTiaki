@@ -22,23 +22,32 @@ export class AjoutPlatComponent implements OnInit {
       id: 0,
       nom: '',
       description: '',
-      alim_code: 0,
+      alim_code: null,
       idIngredients: [],
     }
+    
   }
 
-  onSubmitNewPlatForm() {
-    console.log(this.newPlat);
-    //console.log(this.newPlatForm.value);  
+  
+
+  async onSubmitNewPlatForm() {
+    try {
+      console.log(this.newPlat);   
+      await this.nutrition.createPlat({nom:this.newPlat.nom, description:this.newPlat.description, idIngredients:this.newPlat.idIngredients!});
+      this.nutrition.fetchPlats();
+    } catch (error) {
+      console.log("Erreur de la méthode onSubmitNewPlatForm : ", error);      
+    }    
+     
   }
 
   onCancelNewPlatForm() {
     this.ref.close();
   }
 
-  // Ajouter un ingrédient sur un plat séléctionné
-onSelectIngredient(id: number) {
-  console.log("alim_code de l'ingrédient : ", id);
+// Ajouter un ingrédient sur un plat séléctionné
+  onSelectIngredient(id: number) {
+    console.log("alim_code de l'ingrédient : ", id);
   // this.selectedPlats?.idIngredients est-il défini et non nul ?
   
   if (this.newPlat?.idIngredients) {
