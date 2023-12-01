@@ -8,21 +8,12 @@ import { IntranetRoutingModule } from './intranet-routing.module';
 import { IntranetComponent } from './intranet.component';
 import { AsideBarComponent } from './template/aside-bar/aside-bar.component';
 import { ProfilComponent } from './profil/profil.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputTextareaModule } from 'primeng/inputtextarea';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ToastModule } from 'primeng/toast'; // Pour les pop-up de MessageService
-import { HttpClientModule } from '@angular/common/http';
 import { DonneesService } from '../partage/services/donnees.service';
-import { GetIngredientPipe, PlatsPipe } from '../pipes/plats.pipe';
-import { NgxPaginationModule } from 'ngx-pagination';
-import { IngredientsPipe } from '../pipes/ingredients.pipe';
-import { ConfirmPopupModule } from 'primeng/confirmpopup';
-import { CheckboxModule } from 'primeng/checkbox';
-import { DynamicDialogModule } from 'primeng/dynamicdialog';
-import { AjoutPlatComponent } from './template/dialog/ajout-plat/ajout-plat.component';
+import { SharedModule } from '../shared/shared.module';
+import { PlatsPipe } from '../pipes/plats.pipe';
+
+
+
 
 @NgModule({
   declarations: [
@@ -33,27 +24,14 @@ import { AjoutPlatComponent } from './template/dialog/ajout-plat/ajout-plat.comp
     IntranetComponent,    
     AsideBarComponent,                                                                                                                                                                                              
     ProfilComponent, 
-    PlatsPipe,
-    IngredientsPipe,
-    GetIngredientPipe,
-    AjoutPlatComponent 
   ],
   imports: [
     CommonModule,
     IntranetRoutingModule,
-    ReactiveFormsModule,
-    FormsModule,
-    ButtonModule,
-    InputTextModule,
-    InputTextareaModule,
-    ConfirmDialogModule,    
-    ToastModule,
-    HttpClientModule,    
-    NgxPaginationModule,
-    ConfirmPopupModule,
-    CheckboxModule,
-    DynamicDialogModule  
+    SharedModule
   ],
+exports:[],
+
   providers: [
     DonneesService,    
   ]

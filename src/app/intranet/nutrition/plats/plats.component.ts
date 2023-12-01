@@ -1,17 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ConfirmEventType, ConfirmationService, MessageService } from 'primeng/api';
 import { PlatI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { NutritionService } from '../nutrition.service';
+import { ConfirmEventType, ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
-  selector: 'app-menus',
-  templateUrl: './menus.component.html',
-  styleUrls: ['./menus.component.scss','../nutrition.component.scss'],
-  providers: [ConfirmationService, MessageService],
+  selector: 'app-plats',
+  templateUrl: './plats.component.html',
+  styleUrls: ['./plats.component.scss','../nutrition.component.scss']
 })
-export class MenusComponent {
+export class PlatsComponent implements OnInit {
   pagePlats: number = 1; // Utilisé dans le paginator HTML de la liste des plats pour définir la page de départ - paginate: { itemsPerPage: 1, currentPage: pagePlats }
   pageIngredients: number = 1; // Comme ci-dessus mais pour la liste d'ingrédients
   filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats
@@ -211,6 +210,4 @@ addIngredient() {
   const idIngredientsArray = this.newPlatForm.get('idIngredients') as FormArray;
   idIngredientsArray.push(this.formbuilder.control(''));
 }
-
 }
-

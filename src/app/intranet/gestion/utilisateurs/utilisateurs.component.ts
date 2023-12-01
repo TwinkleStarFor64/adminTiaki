@@ -3,7 +3,7 @@ import { UtilisateurI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { UsersService } from 'src/app/partage/services/users.service';
-import { CheckAccesPipe, GestionUtilisateursPipe } from 'src/app/pipes/gestion-utilisateurs.pipe';
+
 
 @Component({
   selector: 'app-utilisateurs',

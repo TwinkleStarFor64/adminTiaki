@@ -12,12 +12,14 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ResetComponent } from './extranet/reset/reset.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+
 @NgModule({
   declarations: [
     AppComponent,
     ConnexionComponent,
     RecoveryComponent,
     ResetComponent,
+
     
   ],
   imports: [

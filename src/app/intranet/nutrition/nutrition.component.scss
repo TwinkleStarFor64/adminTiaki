@@ -1,5 +1,5 @@
 $card-nutri: #D9042B;
-$header: 160px; // Hauteur du header sur les interfaces
+$header: 160px; /* Hauteur du header sur les interfaces*/
 
 h1,h2,h3{
     color: $card-nutri;
@@ -22,11 +22,12 @@ main{
 
 section {
     height: calc(100vh - $header);
-    article:nth-child(1){ // L'article sur la droite avec la liste des plats    
+    article:nth-child(1){   
         flex-direction: column;
         width: 20vw;
         height: calc(100vh - $header);
-        span:nth-child(1){ // Iĉone et <h3>Gestion des plats</h3>
+        span:nth-child(1){ 
+            /* Iĉone et <h3>Gestion des plats</h3>*/
             border-bottom: #805E96 dashed 1px;
             display: flex;
             align-items: center;
@@ -42,13 +43,16 @@ section {
             font-weight: 700;
             color: black;
         }
-        span:nth-child(3){ // L'input de recherche - PrimeNG
+        span:nth-child(3){ 
+            /* L'input de recherche - PrimeNG*/
             margin: 15px 0px 10px 20px;
         }
-        span:nth-child(4){ // Contient la boucle *ngFor avec la liste de tout les plats
+        span:nth-child(4){ 
+            /*Contient la boucle *ngFor avec la liste de tout les plats*/
             overflow-y: auto;
             height: 65vh;
-            div{ // La liste des plats
+            div{ 
+                /*La liste des plats*/
                 margin-left: 20px;
                 display: flex;
                 flex-direction: row;
@@ -61,29 +65,34 @@ section {
                     width: 90%;
                     cursor: pointer;
                 }
-                figure{ // l'icône de corbeille
+                figure{ 
+                    /*l'icône de corbeille*/
                     cursor:pointer;
                 }        
             }
         }
-        span:nth-child(5){ // contient la pagination ngx-paginator
+        span:nth-child(5){ 
+            /* contient la pagination ngx-paginator*/
             display: flex;
             flex-direction: row;            
             justify-content: center;
             align-items: flex-end;
         }
-        span:nth-child(5)::ng-deep .ngx-pagination{ // le composant ngx-paginator           
+        span:nth-child(5)::ng-deep .ngx-pagination{
+            /*le composant ngx-paginator  */         
             display: flex;
             flex-direction: row;
             justify-content: space-between;
             align-items: center;            
             padding: 0;            
         }
-        span:nth-child(5)::ng-deep .ngx-pagination .current{ // le bouton de la page courante
+        span:nth-child(5)::ng-deep .ngx-pagination .current{ 
+            /* le bouton de la page courante*/
             background-color: $card-nutri;
         }
     }
-    article:nth-child(2){ // Article central contient le formulaire
+    article:nth-child(2){ 
+        /*Article central contient le formulaire*/
         flex-direction: column;
         width: 55vw;
         align-items: flex-start;        
@@ -98,12 +107,14 @@ section {
                 margin-top: 25px;                
                 gap: 35px;
                 span:nth-child(3){
-                    h4{ // La balise Ingrédients
+                    h4{
+                        /* La balise Ingrédients*/
                         border-bottom: black dashed 1px;
                         font-weight: 600;
                         padding-bottom: 5px;                        
                     }
-                    div{ // Div avec le nom des aliments et l'icône de corbeille
+                    /*Div avec le nom des aliments et l'icône de corbeille*/
+                    div{ 
                         display: flex;
                         flex-direction: row;
                         align-items: center;
@@ -112,7 +123,8 @@ section {
                         }                        
                     }                    
                 }
-                #spanButton{ // Le span avec les boutons annuler & valider
+                /*Le span avec les boutons annuler & valider*/
+                #spanButton{ 
                     width: 50vw;
                     display: flex;
                     justify-content: flex-end;
@@ -120,13 +132,13 @@ section {
                     padding-right: 1vw;
                 }
             }
-            #blocIngredients{ // Le span avec la liste d'ingrédients et leurs nutriments                
-                h4{ // La balise Nutriments
+            #blocIngredients{ /* Le span avec la liste d'ingrédients et leurs nutriments */               
+                h4{ /* La balise Nutriments*/
                     border-bottom: black dashed 1px;
                     font-weight: 600;
                     padding-bottom: 5px;
                 }
-                #nutriments{ // La div avec la liste des nutriments
+                #nutriments{ /* La div avec la liste des nutriments*/
                     display: flex;
                     flex-direction: row;
                     gap: 1vw;
@@ -134,16 +146,16 @@ section {
             }
         }
     }
-    article:nth-child(3){ // Article sur la droite avec la liste d'ingrédients
+    article:nth-child(3){ /* Article sur la droite avec la liste d'ingrédients*/
         display: flex;
         flex-direction: column;       
         width: 25vw;
         border-left: $card-nutri 2px dashed;
         padding-left: 10px;
-        h4{ // La balise Ajout d'ingrédients           
+        h4{ /* La balise Ajout d'ingrédients */          
             font-weight: 600;            
         }
-        div{ // Div contenant le span avec le ngFor
+        div{ /* Div contenant le span avec le ngFor*/
             overflow-y: auto;
             span{
                 p{
@@ -154,27 +166,27 @@ section {
                 }
             }
         }
-        #paginationIngredients{ // Balise span avec la pagination
+        #paginationIngredients{ /* Balise span avec la pagination*/
             padding-top: 5px;           
         }
-        #paginationIngredients::ng-deep .ngx-pagination{ // le composant ngx-paginator           
+        #paginationIngredients::ng-deep .ngx-pagination{ /* le composant ngx-paginator */          
             display: flex;
             flex-direction: row;
             justify-content: space-between;
             align-items: center;            
             padding: 0;            
         }
-        #paginationIngredients::ng-deep .ngx-pagination .current{ // le bouton de la page courante
+        #paginationIngredients::ng-deep .ngx-pagination .current{ /* le bouton de la page courante*/
             background-color: $card-nutri;
         }
     }
 }
 
-// Le css pour les boutons de la modal PrineNG
+/* Le css pour les boutons de la modal PrineNG*/
 .acceptButton {    
     background-color: #33BB27;
     border-color: #33BB27;
-    transition: all .3s ease; // all récupére le css du hover ci-dessous    
+    transition: all .3s ease;/* all récupére le css du hover ci-dessous */   
 }
 .acceptButton:hover {
     background-color: #33BB27;
@@ -183,7 +195,7 @@ section {
 .rejectButton {
     background-color: #F0C02E;
     border-color: #F0C02E;
-    transition: all .3s ease; // all récupére le css du hover ci-dessous 
+    transition: all .3s ease; /* all récupére le css du hover ci-dessous */
 }
 .rejectButton:hover {
     background-color: #F0C02E;

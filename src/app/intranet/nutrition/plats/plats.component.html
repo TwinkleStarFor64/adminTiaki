@@ -1,11 +1,11 @@
 <header>
     <article>
       <figure>
-        <img src="assets/images/logos/logo_tiaki.png" alt="" />
+        <img src="assets/images/logos/logo_tiaki.png" alt="tiaki" />
       </figure>
       <div>
         <h1><a routerLink="/intranet">Tiaki</a></h1>
-        <h2>Les Menus</h2>
+        <h2>Les Plats</h2>
       </div>
     </article>    
   </header>
@@ -13,18 +13,18 @@
     <article>
       <span>
         <figure>
-          <img src="assets/images/icones/icones-communs/iconeNutrition.svg" alt="" />
+          <img src="assets/images/icones/icones-communs/iconeNutrition.svg" alt="nutrition" />
         </figure>
-        <h3>Gestion des menus</h3>
+        <h3>Gestion des plats</h3>
       </span>
-      <p-button styleClass="p-button-success" (click)="toggleFormVisibility(2)">Ajouter un menu</p-button>
+      <p-button styleClass="p-button-success" (click)="toggleFormVisibility(2)">Ajouter un plat</p-button>
       <span class="p-input-icon-left">
         <i class="pi pi-search"></i>
         <input type="text" pInputText [(ngModel)]="filtre" />
       </span>
       <span>
         <!-- Utilisation du pipe plats pour rechercher des plats par leur noms -->
-        <ng-container *ngIf="nutrition.plats | menus:filtre as filteredPlats">
+        <ng-container *ngIf="nutrition.plats | plats:filtre as filteredPlats">
         <!-- Utilisation de ngx-pagination - Doc : https://github.com/michaelbromley/ngx-pagination/blob/master/README.md#demo --> 
         <!-- Je précise un id:'plats' car j'utilise 2 paginator sur ce HTML (id:ingredients sur le second)--> 
         <div *ngFor="let plat of filteredPlats | paginate: { itemsPerPage: 15, currentPage: pagePlats, id:'plats' }">
