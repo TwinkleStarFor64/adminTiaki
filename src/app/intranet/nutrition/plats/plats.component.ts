@@ -61,9 +61,12 @@ export class PlatsComponent implements OnInit {
 // Méthode qui attribue des valeurs aux variables correspondant à l'objet sur lequel je clique - Utilisé sur le nom du plat en HTML
   onSelectPlat(plat: PlatI, id: Array<number>) {
     // Enregistrez l'état initial de selectedPlats lors de la sélection initiale
-    if (!this.initialSelectedPlatsState) {
+    /* if (!this.initialSelectedPlatsState) {
       this.initialSelectedPlatsState = { ...plat }; // J'utilise cette variable dans onCancelForm()
-    }
+      console.log(this.initialSelectedPlatsState );      
+    } */
+    this.initialSelectedPlatsState = { ...plat }; // J'utilise cette variable dans onCancelForm()
+      console.log(this.initialSelectedPlatsState );
     // J'attribue à selectedPlats la value du plat ou j'ai cliqué - Utile pour le ngIf selectedPlats
     this.selectedPlats = plat;
     // J'attribue au paramétre id de la méthode le tableau d'alim_code contenu dans idIngredients
@@ -189,7 +192,10 @@ async onSubmitForm() {
 // Annuler le formulaire de modification d'un plat et retrouver les valeurs initiales
 onCancelForm() {  
   // Je réattribue à selectedPlats les valeurs stockées dans onSelectPlat()
-  this.selectedPlats = { ...this.initialSelectedPlatsState };
+  //this.selectedPlats = { ...this.initialSelectedPlatsState };
+  this.selectedPlats = undefined; // Pour ne plus afficher la div contenant le formulaire du plat
+  this.nutrition.fetchPlats();
+  
 }
 
 

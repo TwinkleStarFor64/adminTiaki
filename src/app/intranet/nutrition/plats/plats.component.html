@@ -42,11 +42,11 @@
     <div *ngIf="selectedPlats">  <!-- Le plat sur lequel j'ai cliqué -->     
         <form #platForm="ngForm"> 
           <span class="p-float-label">
-            <input pInputText [(ngModel)]="selectedPlats.nom" name="nom" type="text" required minlength="1" />
+            <input pInputText [(ngModel)]="selectedPlats.nom" name="nom" type="text" required minlength="1"/>
             <label htmlFor="nom">Nom</label>
           </span> 
           <span class="p-float-label">
-            <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="selectedPlats.description" name="description"></textarea>
+            <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="selectedPlats.description" name="description" required minlength="1"></textarea>
             <label for="float-input">Description</label>
           </span>
           <span>
