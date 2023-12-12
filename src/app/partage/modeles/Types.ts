@@ -42,12 +42,12 @@ export interface UserCreationResponse {
 /* ---------------- Interface pour la nutrition ------------------- */
 export interface PlatI {
     id: number;
-    nom: string;
+    titre: string;
     description: string;
     alim_code: number | null;
     statut?: string;
     reaction?: string;
-    idIngredients?: Array<number>;
+    ingredients?: Array<number>;
 }
 
 export interface CiqualI {

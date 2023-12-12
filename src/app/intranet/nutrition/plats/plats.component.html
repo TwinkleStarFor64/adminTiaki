@@ -27,8 +27,8 @@
       <ng-container *ngIf="nutrition.plats | plats:filtre as filteredPlats">
       <!-- Utilisation de ngx-pagination - Doc : https://github.com/michaelbromley/ngx-pagination/blob/master/README.md#demo -->  
       <div *ngFor="let plat of filteredPlats | paginate: { itemsPerPage: 15, currentPage: pagePlats, id:'plats' }">
-        <p (click)="onSelectPlat(plat, plat.idIngredients)">{{ plat.nom }}</p>              
-        <figure (click)="DeleteDialog(plat.id, true, plat.idIngredients)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
+        <p (click)="onSelectPlat(plat, plat.ingredients)">{{ plat.titre }}</p>              
+        <figure (click)="DeleteDialog(plat.id, true, plat.ingredients)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
       <!-- DeleteDialog() modal PrimeNG - En paramétres l'id du plat et la variable bolean del en true -->      
       </div>
     </ng-container>
@@ -42,7 +42,7 @@
     <div *ngIf="selectedPlats">  <!-- Le plat sur lequel j'ai cliqué -->     
         <form #platForm="ngForm"> 
           <span class="p-float-label">
-            <input pInputText [(ngModel)]="selectedPlats.nom" name="nom" type="text" required minlength="1"/>
+            <input pInputText [(ngModel)]="selectedPlats.titre" name="titre" type="text" required minlength="1"/>
             <label htmlFor="nom">Nom</label>
           </span> 
           <span class="p-float-label">
@@ -51,8 +51,8 @@
           </span>
           <span>
             <h4>Ingrédients</h4> 
-            <div id="divIngredients" *ngFor="let id of selectedPlats.idIngredients; let i=index">
-              <figure (click)="DeleteDialog(i, false, selectedPlats.idIngredients)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
+            <div id="divIngredients" *ngFor="let id of selectedPlats.ingredients; let i=index">
+              <figure (click)="DeleteDialog(i, false, selectedPlats.ingredients)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
             <!-- DeleteDialog() modal PrimeNG - En paramétres l'index de l'ingrédients sur le tableau et la variable bolean del en false -->    
               <p>{{ id | getIngredient:'alim_nom_fr' }}</p>                               
             </div>

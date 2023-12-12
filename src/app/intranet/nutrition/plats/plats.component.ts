@@ -69,9 +69,11 @@ export class PlatsComponent implements OnInit {
       console.log(this.initialSelectedPlatsState );
     // J'attribue à selectedPlats la value du plat ou j'ai cliqué - Utile pour le ngIf selectedPlats
     this.selectedPlats = plat;
+    console.log("miaou", this.selectedPlats);
+    
     // J'attribue au paramétre id de la méthode le tableau d'alim_code contenu dans idIngredients
-    this.selectedPlats.idIngredients = id;
-    console.log("J'ai cliqué sur : " + this.selectedPlats.idIngredients);
+    this.selectedPlats.ingredients = id;
+    console.log("J'ai cliqué sur : " + this.selectedPlats.ingredients);
     // Je passe en paramétre de la méthode fetchCiqual le tableau d'id obtenu au dessus
     this.nutrition.fetchCiqual(id);
   }
@@ -159,7 +161,7 @@ export class PlatsComponent implements OnInit {
   supprIngredient(i:number, alimCode: Array<number> | undefined) {
     console.log("index de l'ingrédient : ", i);    
   // splice supprime l'ingrédient sur lequel j'ai cliqué en l'enlevant du tableau this.selectedPlats.idIngredients  
-    this.selectedPlats?.idIngredients?.splice(i, 1);
+    this.selectedPlats?.ingredients?.splice(i, 1);
     this.nutrition.fetchCiqual(alimCode); // Pour mettre à jour le grammage des nutriments si j'en supprime
     console.log("Méthode supprIngredient", alimCode);    
   }
@@ -168,11 +170,11 @@ export class PlatsComponent implements OnInit {
 onSelectIngredient(id: number) {
   console.log("alim_code de l'ingrédient : ", id);
   // this.selectedPlats?.idIngredients est-il défini et non nul ?
-  if (this.selectedPlats?.idIngredients) {
+  if (this.selectedPlats?.ingredients) {
   // Ajoute l'ingredient sur lequel j'ai cliqué à la fin du tableau this.selectedPlats.idIngredients en utilisant son alim_code comme id
-    this.selectedPlats.idIngredients.push(id);
+    this.selectedPlats.ingredients.push(id);
   // Appelle de fetchCiqual() pour mettre à jour les composants et leur quantité si je rajoute un ingrédient
-    this.nutrition.fetchCiqual(this.selectedPlats.idIngredients);
+    this.nutrition.fetchCiqual(this.selectedPlats.ingredients);
   }
 }
 

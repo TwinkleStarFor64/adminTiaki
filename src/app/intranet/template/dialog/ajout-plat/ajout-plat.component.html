@@ -2,7 +2,7 @@
     <article>
         <form #ajoutPlatForm="ngForm"> 
             <span class="p-float-label">
-              <input pInputText [(ngModel)]="newPlat.nom" name="nom" type="text" required minlength="1"/>
+              <input pInputText [(ngModel)]="newPlat.titre" name="nom" type="text" required minlength="1"/>
               <label htmlFor="nom">Nom</label>
             </span> 
             <span class="p-float-label">
@@ -11,10 +11,13 @@
             </span>
             <span>
               <h4>Ingrédients</h4> 
-              <div id="divIngredients" *ngFor="let id of newPlat.idIngredients; let i=index">
+              <div id="divIngredients" *ngFor="let id of newPlat.ingredients; let i=index">
                 <figure (click)="onDeleteIngredient(i)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
                 <p>{{ id | getIngredient:'alim_nom_fr' }}</p>
               </div>
+            </span>
+            <span>
+              <p>Protéines : {{ nutrition.totals['proteine'] | number: '1.2-2' }} Gr</p>
             </span>
             <span id="spanButton">
               <p-button styleClass="p-button-warning" (onClick)="onCancelNewPlatForm()">Annuler</p-button>              

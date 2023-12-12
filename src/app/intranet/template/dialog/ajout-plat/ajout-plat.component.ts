@@ -20,10 +20,10 @@ export class AjoutPlatComponent implements OnInit {
   ngOnInit(): void {
     this.newPlat = {
       id: 0,
-      nom: '',
+      titre: '',
       description: '',
       alim_code: null,
-      idIngredients: [],
+      ingredients: [],
     }    
   }  
 // Méthode pour le formulaire d'ajout d'un plat
@@ -31,7 +31,7 @@ export class AjoutPlatComponent implements OnInit {
     try {
       console.log(this.newPlat); 
     // Je configure les valeurs de newPlat pour correspondre à newEntry sur createPlat()  
-      await this.nutrition.createPlat({nom:this.newPlat.nom, description:this.newPlat.description, idIngredients:this.newPlat.idIngredients!});
+      await this.nutrition.createPlat({titre:this.newPlat.titre, description:this.newPlat.description, ingredients:this.newPlat.ingredients!});
       this.nutrition.fetchPlats();
     } catch (error) {
       console.log("Erreur de la méthode onSubmitNewPlatForm : ", error);      
@@ -46,14 +46,14 @@ export class AjoutPlatComponent implements OnInit {
 // Ajouter un ingrédient 
   onSelectIngredient(id: number) {
     console.log("alim_code de l'ingrédient : ", id);  
-  if (this.newPlat?.idIngredients) {
-    this.newPlat.idIngredients.push(id);    
+  if (this.newPlat?.ingredients) {
+    this.newPlat.ingredients.push(id);    
   }
 }
 // Supprimer un ingrédient
 onDeleteIngredient(i: number) {
-  if (this.newPlat?.idIngredients) {
-    this.newPlat.idIngredients.splice(i, 1);    
+  if (this.newPlat?.ingredients) {
+    this.newPlat.ingredients.splice(i, 1);    
   }
 }
   

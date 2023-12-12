@@ -15,7 +15,7 @@ export class PlatsPipe implements PipeTransform {
     //Retour des données filtrées, la fonction filter renvoie un tableau d'aliments trouvés
     return values.filter((plat) => {
       if (
-        plat.nom.toLowerCase().indexOf(filtre.toLowerCase()) != -1        
+        plat.titre.toLowerCase().indexOf(filtre.toLowerCase()) != -1        
         //Ci-dessus j'utilise != -1 afin de vérifier qu'au moins un élément correspond au filtre
         )
         return plat; // Les plats correspondant au nom recherché (ex: soupe afficher toutes les soupes)       
