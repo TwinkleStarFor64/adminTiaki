@@ -4,16 +4,15 @@ import { UsersService } from '../partage/services/users.service';
 
 export const redacteurOptoGuard: CanActivateFn = () => {
   const usersService = inject(UsersService);    
-  const roles = usersService.profil.roles!;
-  const isRedacteur = roles.includes('redacteur');
-  const isAdmin = roles.includes('admin');
-  const isOpto = roles.includes('opto');
+  const isRedacteur = usersService.profil.roles!.includes('redacteur');
+  const isAdmin = usersService.profil.roles!.includes('admin');
+  const isOpto = usersService.profil.roles!.includes('opto');
 
   if (isRedacteur || isAdmin || isOpto) {
-    console.log("j'ai le bon rôle", roles);      
+    console.log("j'ai le bon rôle", usersService.profil.roles);      
     return true;
   } else {
-    console.log("j'ai pas le bon rôle", roles);    
+    console.log("j'ai pas le bon rôle", usersService.profil.roles);    
     return false;
   }
 };

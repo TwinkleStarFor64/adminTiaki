@@ -22,6 +22,8 @@ export class UsersService implements OnInit {
     const { data, error } = await this.supa.getListeUtilisateurs();
     if (data) {
       this.listeUtilisateurs = data;
+      console.log(data);
+            
       // Réduire l'objet roles à une liste de chaînes plutôt que de
       this.listeUtilisateurs.forEach((item:UtilisateurI) => item.roles = item.roles.map((r:any) => r.roles.role));
       console.log('Liste utilisateurs', this.listeUtilisateurs);
@@ -32,6 +34,7 @@ export class UsersService implements OnInit {
     }
     return [];  // Ajoutez cette ligne pour retourner un tableau vide en cas d'erreur
   }
+
   /** Récupérer la liste des types de roles dans la base de données */
   async fetchRoles() {
     const { data, error } = await this.supa.getRoles();
@@ -42,6 +45,7 @@ export class UsersService implements OnInit {
       console.log(error);
     }
   }
+
   /** Récupérer le profil dans la base */
   async fetchProfil() {
     try {

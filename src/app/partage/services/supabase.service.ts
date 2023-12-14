@@ -60,7 +60,7 @@ export class SupabaseService {
         console.log('email trouvé');
         // Si l'email existe en BDD
         const data = await this.supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: 'http://localhost:4200/reset',
+          redirectTo: '/reset',
         });
         return data;
       } else {
@@ -93,8 +93,8 @@ export class SupabaseService {
   // Récupérer les utilisateurs sur la table public.utilisateur
   async getListeUtilisateurs() {
     return await this.supabase
-      .from('utilisateurs')
-      .select("*, roles:attribuerRoles!utilisateurs_roles_fkey!inner(roles(role))")
+    .from('utilisateurs')
+    .select("*, roles:attribuerRoles!utilisateurs_roles_fkey!inner(roles(role))")
     // .select("*, roles:attribuerRoles!inner(id, roles!inner(role))")
   }
 
@@ -241,7 +241,7 @@ export class SupabaseService {
     return user;
   }
 
-  // Méthode pour update son profil en tant qu'utilisateur (sur la table utilisateur)
+  // Méthode pour update son profil en tant qu'utilisateur (sur la table utilisateurs)
   async updateProfil(
     id: string,
     newEntry: {
@@ -261,7 +261,6 @@ export class SupabaseService {
   }
 
   /* --------------------------- Code utilisé dans le service users.service.ts -------------------------- */
-
 
   // Update des données utilisateurs sur la page de gestion
   async updateUser(userId: string, updatedUserData: any) {
@@ -340,72 +339,23 @@ export class SupabaseService {
       throw error;
     }
   }
-  // async getProfil(): Promise<any[]> {
-  //   try {
-  //     // Sur la table attribuerRoles je select les tables roles et utilisateur grâce à leur id qui sont en ForeignKeys
-  //     // Pour roles je récupére juste la donnée (role) - sur utilisateur je récupére toutes les données (*)
-  //     // Avec .eq je compare l'id à celui obtenu dans authId initialisé dans la méthode signIn
-  //     const { data, error } = await this.supabase
-  //     .from('attribuerRoles')
-  //     .select('*, roles(role), utilisateurs(*)')
-  //     .eq('idUtilisateur', this.authId);
-  //     if (error) {
-  //       console.log(error);
-  //       throw new Error(
-  //         "Une erreur s'est produite lors de la récupération des données."
-  //       );
-  //     }
-  //     if (data) return data;
 
-  //     // Si data n'est pas défini, retourner un tableau vide par défaut
-  //     return [];
-  //   } catch (error) {
-  //     console.error("Une erreur s'est produite :", error);
-  //     throw error;
-  //   }
-  // }
   async getProfil(): Promise<any[]> {
     try {
-      // Récupérer les données de 'attribuerRoles'
-      let { data: attribuerRolesData, error } = await this.supabase
+      // Sur la table attribuerRoles je select les tables roles et utilisateur grâce à leur id qui sont en ForeignKeys
+      // Pour roles je récupére juste la donnée (role) - sur utilisateur je récupére toutes les données (*)
+      // Avec .eq je compare l'id à celui obtenu dans authId initialisé dans la méthode signIn
+      const { data, error } = await this.supabase
         .from('attribuerRoles')
-        .select('*')
+        .select('roles(role),utilisateurs!attribuerRoles_idUtilisateur_fkey(*)')
         .eq('idUtilisateur', this.authId);
-  
+
       if (error) {
         console.log(error);
-        throw new Error(
-          "Une erreur s'est produite lors de la récupération des données."
-        );
+        throw new Error("Une erreur s'est produite lors de la récupération des données.");
       }
-  
-      // Récupérer les données de 'utilisateurs' et 'roles' en utilisant les données de 'attribuerRoles'
-      if (attribuerRolesData) {
-        for (let attribuerRole of attribuerRolesData) {
-          let { data: utilisateurData, error: utilisateurError } = await this.supabase
-            .from('utilisateurs')
-            .select('*')
-            .eq('id', attribuerRole.idUtilisateur);
-  
-          let { data: roleData, error: roleError } = await this.supabase
-            .from('roles')
-            .select('role')
-            .eq('id', attribuerRole.idRole);
-  
-          if (utilisateurError || roleError) {
-            console.log(utilisateurError, roleError);
-            throw new Error(
-              "Une erreur s'est produite lors de la récupération des données."
-            );
-          }
-  
-          attribuerRole.utilisateur = utilisateurData;
-          attribuerRole.role = roleData;
-        }
-  
-        return attribuerRolesData;
-      }
-  
+      if (data) return data;
+
       // Si data n'est pas défini, retourner un tableau vide par défaut
       return [];
     } catch (error) {
