@@ -17,6 +17,7 @@ import { TableModule } from 'primeng/table';
 import { GestionUtilisateursPipe } from '../pipes/gestion-utilisateurs.pipe';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 
+
 @NgModule({
   declarations: [
     IngredientsPipe,
@@ -64,6 +65,7 @@ import { DynamicDialogModule } from 'primeng/dynamicdialog';
   ],
   providers: [
 
-  ],
+  ] 
+,
 })
 export class SharedModule { }

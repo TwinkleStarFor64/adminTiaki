@@ -54,12 +54,13 @@ onFilterChange() {
         //Chaque élément de data est représenté par l'objet { [x: string]: any; }, que nous convertissons en un objet PlatI en utilisant les propriétés nécessaires.
         this.plats = platData.map((item: { [x: string]: any }) => ({
           id: item['id'],
-          nom: item['nom'],
+          titre: item['titre'],
           description: item['description'],
           alim_code: item['alim_code'],
-          idIngredients: item['idIngredients'],
+          ingredients: item['ingredients'],
         }));
-        console.log(this.plats.map((item) => item['nom']));
+        console.log(this.plats.map((item) => item['titre']));
+        console.log(this.plats.map((item) => item['ingredients']));
         return this.plats;
       }
     } catch (error) {
@@ -191,10 +192,10 @@ onFilterChange() {
 
 //------------------------------- Méthode pour créer un nouveau plat --------------------------------------
 async createPlat(newEntry: {
-  nom: string;
+  titre: string;
   description: string;
   date?: Date;
-  idIngredients: Array<number>;
+  ingredients: Array<number>;
 }) {
   newEntry.date = new Date();
   const { error: createError } = await this.supabase

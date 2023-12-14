@@ -8,7 +8,7 @@ import { PlatI } from 'src/app/partage/modeles/Types';
   selector: 'app-ajout-plat',
   templateUrl: './ajout-plat.component.html',
   styleUrls: ['./ajout-plat.component.scss'],
-  providers: [PaginationService], // Pour les modals PrimeNG 
+  providers: [PaginationService], // Pour le module de Pagination 
 })
 export class AjoutPlatComponent implements OnInit {
   newPlat!: PlatI;
@@ -20,39 +20,41 @@ export class AjoutPlatComponent implements OnInit {
   ngOnInit(): void {
     this.newPlat = {
       id: 0,
-      nom: '',
+      titre: '',
       description: '',
       alim_code: null,
-      idIngredients: [],
-    }
-    
-  }
-
-  
-
+      ingredients: [],
+    }    
+  }  
+// Méthode pour le formulaire d'ajout d'un plat
   async onSubmitNewPlatForm() {
     try {
-      console.log(this.newPlat);   
-      await this.nutrition.createPlat({nom:this.newPlat.nom, description:this.newPlat.description, idIngredients:this.newPlat.idIngredients!});
+      console.log(this.newPlat); 
+    // Je configure les valeurs de newPlat pour correspondre à newEntry sur createPlat()  
+      await this.nutrition.createPlat({titre:this.newPlat.titre, description:this.newPlat.description, ingredients:this.newPlat.ingredients!});
       this.nutrition.fetchPlats();
     } catch (error) {
       console.log("Erreur de la méthode onSubmitNewPlatForm : ", error);      
     }    
      
   }
-
+// Fermer le formulaire d'ajout de plat
   onCancelNewPlatForm() {
     this.ref.close();
   }
 
-// Ajouter un ingrédient sur un plat séléctionné
+// Ajouter un ingrédient 
   onSelectIngredient(id: number) {
-    console.log("alim_code de l'ingrédient : ", id);
-  // this.selectedPlats?.idIngredients est-il défini et non nul ?
-  
-  if (this.newPlat?.idIngredients) {
-    this.newPlat.idIngredients.push(id);    
+    console.log("alim_code de l'ingrédient : ", id);  
+  if (this.newPlat?.ingredients) {
+    this.newPlat.ingredients.push(id);    
   }
 }
-
+// Supprimer un ingrédient
+onDeleteIngredient(i: number) {
+  if (this.newPlat?.ingredients) {
+    this.newPlat.ingredients.splice(i, 1);    
+  }
+}
+  
 }
