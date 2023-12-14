@@ -4,9 +4,9 @@ import { UsersService } from '../partage/services/users.service';
 
 export const redacteurNutrtionGuard: CanActivateFn = (route, state) => {
   const usersService = inject(UsersService);    
-  const isRedacteur = usersService.profil.roles!.includes('Rédacteur');
-  const isAdmin = usersService.profil.roles!.includes('Administrateur');
-  const isNutri = usersService.profil.roles!.includes('Rédacteur Nutrition');
+  const isRedacteur = usersService.profil.roles!.includes('redacteur');
+  const isAdmin = usersService.profil.roles!.includes('admin');
+  const isNutri = usersService.profil.roles!.includes('nutri');
 
   if (isRedacteur || isAdmin || isNutri) {
     console.log("j'ai le bon rôle", usersService.profil.roles);      

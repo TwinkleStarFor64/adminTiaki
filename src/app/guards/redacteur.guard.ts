@@ -4,8 +4,8 @@ import { inject } from '@angular/core';
 
 export const redacteurGuard: CanActivateFn = (route, state) => {
   const usersService = inject(UsersService);    
-  const isRedacteur = usersService.profil.roles!.includes('Rédacteur');
-  const isAdmin = usersService.profil.roles!.includes('Administrateur');
+  const isRedacteur = usersService.profil.roles!.includes('redacteur');
+  const isAdmin = usersService.profil.roles!.includes('admin');
 
   if (isRedacteur || isAdmin) {
     console.log("j'ai le bon rôle", usersService.profil.roles);      

@@ -39,7 +39,7 @@ import { DynamicDialogModule } from 'primeng/dynamicdialog';
     InputTextareaModule,
     CheckboxModule,
     TableModule, 
-    DynamicDialogModule
+    DynamicDialogModule 
   ],
   exports: [
     PlatsPipe,

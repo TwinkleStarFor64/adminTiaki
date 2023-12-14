@@ -144,7 +144,9 @@ export class UtilisateursComponent implements OnInit {
         }
         this.selectedUsers = [];
       },
+      
     });
+
   }
 
   /** Supprimer un utilisateur de la liste dans le service des utilisateurs */
