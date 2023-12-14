@@ -93,8 +93,8 @@ export class SupabaseService {
   // Récupérer les utilisateurs sur la table public.utilisateur
   async getListeUtilisateurs() {
     return await this.supabase
-    .from('utilisateur')
-    .select("*, roles:attribuerRoles!inner(roles(role))")
+    .from('utilisateurs')
+    .select("*, roles:attribuerRoles!utilisateurs_roles_fkey!inner(roles(role))")
     // .select("*, roles:attribuerRoles!inner(id, roles!inner(role))")
   }
 

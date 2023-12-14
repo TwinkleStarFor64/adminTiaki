@@ -22,6 +22,8 @@ export class UsersService implements OnInit {
     const { data, error } = await this.supa.getListeUtilisateurs();
     if (data) {
       this.listeUtilisateurs = data;
+      console.log(data);
+            
       // Réduire l'objet roles à une liste de chaînes plutôt que de
       this.listeUtilisateurs.forEach((item:UtilisateurI) => item.roles = item.roles.map((r:any) => r.roles.role));
       console.log('Liste utilisateurs', this.listeUtilisateurs);
