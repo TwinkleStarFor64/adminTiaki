@@ -94,7 +94,7 @@ export class SupabaseService {
   async getListeUtilisateurs() {
     return await this.supabase
     .from('utilisateurs')
-    .select("*, roles:attribuerRoles!utilisateurs_roles_fkey!inner(roles(role))")
+    .select("*, roles:attribuerRoles!attribuerRoles_idUtilisateur_fkey!inner(roles(role))")
     // .select("*, roles:attribuerRoles!inner(id, roles!inner(role))")
   }
 
