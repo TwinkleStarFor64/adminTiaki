@@ -187,15 +187,6 @@ export class UtilisateursComponent implements OnInit {
       email: user.email,
       nom: user.nom,
       roles: user.roles ? [...user.roles] : [],
-      prenom: user.prenom,
-      dateNaissance: user.dateNaissance,
-      telephone: user.telephone,
-      mobile: user.mobile,
-      adresse: user.adresse,
-      ville: user.ville,
-      codePostal: user.codePostal,
-      avatar: user.avatar,
-      selected: user.selected,
     };
 
     // Keep a copy of the initial state of the roles
