@@ -48,6 +48,21 @@ export interface PlatI {
     statut?: string;
     reaction?: string;
     ingredients?: Array<number>;
+    //types:PlatE
+}
+
+export enum PlatE {
+  petitDej = 'petit déjeuner',
+  encas = 'encas',
+  dejeuner = 'déjeuner',
+  gouter = 'goûter',
+  diner= 'diner'
+}
+
+export enum MesuresE {
+  mgr = 'mgr',
+  gr = 'gr',
+  kgs = 'kgs'
 }
 
 export interface CiqualI {
