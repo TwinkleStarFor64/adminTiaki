@@ -6,7 +6,7 @@ import { ProfilComponent } from './profil/profil.component';
 import { adminGuard } from '../guards/admin.guard';
 import { redacteurOptoGuard } from '../guards/redacteur-opto.guard';
 import { redacteurKineGuard } from '../guards/redacteur-kine.guard';
-import { redacteurNutrtionGuard } from '../guards/redacteur-nutrtion.guard';
+import { redacteurNutritionGuard } from '../guards/redacteur-nutrtion.guard';
 
 const routes: Routes = [
   {
@@ -29,7 +29,7 @@ const routes: Routes = [
       },
       { 
         path: 'nutrition',
-        canActivate: [redacteurNutrtionGuard],
+        canActivate: [redacteurNutritionGuard],
         loadChildren: () =>
           import('./nutrition/nutrition.module').then((m) => m.NutritionModule),
       },

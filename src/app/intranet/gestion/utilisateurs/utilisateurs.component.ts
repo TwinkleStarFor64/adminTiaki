@@ -78,7 +78,7 @@ export class UtilisateursComponent implements OnInit {
 
   //supprimer un utilisateur en fonction de son ID.
   async deleteUserById(users: UtilisateurI): Promise<any> {
-    this.selectedUtilisateur = users.id;
+    this.selectedUtilisateur= users.id.toString();
     console.log('La méthodedeleteUserById', this.selectedUtilisateur);
 
     this.supa
@@ -187,6 +187,15 @@ export class UtilisateursComponent implements OnInit {
       email: user.email,
       nom: user.nom,
       roles: user.roles ? [...user.roles] : [],
+      prenom: user.prenom,
+      dateNaissance: user.dateNaissance,
+      telephone: user.telephone,
+      mobile: user.mobile,
+      adresse: user.adresse,
+      ville: user.ville,
+      codePostal: user.codePostal,
+      avatar: user.avatar,
+      selected: user.selected,
     };
 
     // Keep a copy of the initial state of the roles
@@ -221,7 +230,7 @@ export class UtilisateursComponent implements OnInit {
   
     // Mettre à jour la base de données
     try {
-      const data = await this.supa.updateUser(this.selectedUserForEdit.id, updatedUserData);
+      const data = await this.supa.updateUser(this.selectedUserForEdit.id.toString(), updatedUserData);
       if (data) {
         console.log('Utilisateur mis à jour avec succès dans la base de données:', data);
       }
@@ -257,7 +266,7 @@ export class UtilisateursComponent implements OnInit {
   
 
          // Enregistrer le nom et l'email de l'utilisateur
-    this.supa.saveNameAndEmail(this.selectedUserForEdit.id, this.selectedUserForEdit.nom, this.selectedUserForEdit.email)
+    this.supa.saveNameAndEmail(this.selectedUserForEdit.id.toString(), this.selectedUserForEdit.nom, this.selectedUserForEdit.email)
     .then(() => {
       console.log('Nom et email enregistrés avec succès');
     })
@@ -266,7 +275,7 @@ export class UtilisateursComponent implements OnInit {
     });
 
       if (selectedRoles.length > 0) {
-        this.supa.saveRoles(this.selectedUserForEdit.id, selectedRoles)
+        this.supa.saveRoles(this.selectedUserForEdit.id.toString(), selectedRoles)
           .then(() => {
             this.closeEditModal();
             this.updateUserList();  // Ajoutez cette ligne

@@ -7,7 +7,6 @@ import { MessagerieComponent } from './messagerie/messagerie.component';
 import { AjoutUtilisateurComponent } from './ajout-utilisateur/ajout-utilisateur.component';
 import { GestionRoutingModule } from './gestion-routing.module';
 import { GestionComponent } from './gestion.component';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DeleteDataComponent } from '../template/dialog/delete-data/delete-data.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CheckAccesPipe, GestionUtilisateursPipe } from 'src/app/pipes/gestion-utilisateurs.pipe';

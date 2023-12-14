@@ -15,20 +15,50 @@ export interface NutriProgrammeI{
   statut: -1 | 0 | 1;
 }
 export interface PlatI {
-  id?:number;
-  nom: string;
-  description?: string;
-  statut?:-1 | 0 | 1;
-  qualites?:string;
-  allergenes?:Array<number>;
-  ingredients:Array<IngredientI>;
-  nutriments?:Array<NutrimentI>;
-  astuces?:string;
-  notes?:string;
-  date?:string | number;
+  id: number;
+  titre: string;
+  description: string;
+  alim_code: number | null;
+  statut?: string;
+  reaction?: string;
+  ingredients?: Array<number>;
+  //types:PlatE
+}
+
+export enum PlatE {
+petitDej = 'petit déjeuner',
+encas = 'encas',
+dejeuner = 'déjeuner',
+gouter = 'goûter',
+diner= 'diner'
+}
+
+export enum MesuresE {
+mgr = 'mgr',
+gr = 'gr',
+kgs = 'kgs'
+}
+
+export interface CiqualI {
+  alim_nom_fr: string;
+  proteine: number;
+  glucides: number;
+  lipides: number;
+  sucres: number;
+  vitamineC: number;
+  vitamineB1: number;
+  vitamineB2: number;
+  vitamineB3: number;
+  vitamineB5: number;
+  magnesium: number;
+  potassium: number;
+  cuivre: number;
+  manganese: number;
+  [key: string]: number | string; // Pour la méthode calculateTotals() qui crée un objet de type clé et valeur - Variable totals dans nutrition.service
 }
 export interface IngredientI{
   id:number;
+  titre:string;
   alim_code:string;
   quantite:number;
   mesure:MesuresE;
@@ -146,15 +176,40 @@ export interface UtilisateurI {
   nom: string;
   prenom: string;
   dateNaissance?: number | string | Date;
-  email?: string;
+  email: string;
   telephone?:string;
   mobile?:string;
   adresse?: string;
   ville?:string;
   codePostal?:number | string;
   avatar?:string;
-  roles:Array<RoleI>;
+  selected?:boolean;
+  roles: Array<string>;
+  selectedRoles?: { [key: string]: boolean };
 }
+
+export interface RolesI{
+  id:number;
+  role:string;
+}
+
+export enum RolesE {
+  anonyme = 'anonyme',
+  lambda = 'lambda',
+  admin = 'admin',
+  redacteur = 'redacteur',
+  opto = 'opto',
+  nutri= 'nutri',
+  super= 'super',
+  kine= 'kine',
+}
+
+export interface UserCreationResponse {
+  auth: any[] | undefined; 
+  utilisateur: any[] | undefined; 
+}
+
+
 export interface AidantI extends UtilisateurI{
   idAidant:number;
   cheris:Array<CheriI>;
@@ -175,29 +230,8 @@ export interface TherapeuteI extends UtilisateurI{
   type:TypeTherapeute;
   notes?:Array<string>;
 }
-interface RoleI{
-  id:number;
-  role:string;
-}
-// Interface pour la page ingrédient de la table Ciqual
-export interface CiqualI {
-  id?:number,
-  alim_code: number;
-  alim_nom_fr: string;
-  ['Protéines, N x 6.25 (g/100 g)']: string;
-  ['Glucides (g/100 g)']: string;
-  ['Lipides (g/100 g)']: string;
-  ['Sucres (g/100 g)']: string;
-  ['Vitamine C (mg/100 g)']: string;
-  ['Vitamine B1 ou Thiamine (mg/100 g)']: string;
-  ['Vitamine B2 ou Riboflavine (mg/100 g)']: string;
-  ['Vitamine B3 ou PP ou Niacine (mg/100 g)']: string;
-  ['Vitamine B5 ou Acide pantothénique (mg/100 g)']: string;
-  ['Magnésium (mg/100 g)']: string;
-  ['Potassium (mg/100 g)']: string;
-  ['Cuivre (mg/100 g)']: string;
-  ['Manganèse (mg/100 g)']: string;
-}
+
+
 /** INTERFACES POUR LA COMMUNAUTE */
 export interface CommentaireI {
   id: number;
@@ -270,12 +304,7 @@ export interface ParamI{
   description:string;
   url:string;
 }
-// Enumération pour nos types
-export enum MesuresE{
-  mgr = 'mgr',
-  gr = 'gr',
-  kgs = 'kgs'
-}
+
 export enum NoteE {
   commentaire = "Commentaire",
   note = "Note",
@@ -293,13 +322,7 @@ export enum ImportanceE{
   forte = 'Forte',
   critique = 'Critique'
 }
-export enum PlatE{
-  ptitdej = "P'tit déj.",
-  encas = "Encas",
-  dejeuner = "Déjeuner",
-  Goûter = "Goûter",
-  diner = "Diner"
-}
+
 /** POUBELLE */
 export interface EchangeI {
   nom: string;
