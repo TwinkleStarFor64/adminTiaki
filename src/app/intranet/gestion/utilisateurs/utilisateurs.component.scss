@@ -46,8 +46,7 @@ section {
         height: 3vh;
         border-radius: 5px;
 
-        option {
-          height: 10vh;
+        .option {
           border-radius: 5px;
         }
       }
@@ -154,7 +153,7 @@ section {
           height: 100%;
           padding: 10px;
           border: 1px solid #888;
-          background: #fff1c6;
+          background: #ffffff;
           border-radius: 5px;
 
           label {
@@ -202,7 +201,7 @@ section {
 
           /* Change la couleur de la case à cocher lorsque elle est cochée */
           input[type="checkbox"]:checked+label:before {
-            background-color: #33BB27;
+            background-color: #f0c02e;
           }
         }
 

@@ -1,11 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { CiqualI, PlatI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
-import {
-  AuthSession,
-  createClient,
-  SupabaseClient,
-} from '@supabase/supabase-js';
+import { AuthSession,createClient,SupabaseClient } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
 
 @Injectable({
@@ -27,6 +23,9 @@ export class NutritionService implements OnInit {
 
   listePlats: any[] = [];
 
+  pageIngredients: number = 1; // Comme ci-dessus mais pour la liste d'ingrédients
+  filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats 
+  
   constructor(public supa: SupabaseService) {
     this.supabase = createClient(
       environment.supabaseUrl,
@@ -38,6 +37,14 @@ export class NutritionService implements OnInit {
     //this.fetchPlats();
   }
 
+// Méthode utiliser dans l'input de recherche d'ingrédients afin de le réinitialiser
+// Si l'input et vide ou pas vide la premiére page (pageIngredients) est défini à 1 afin de retrouver l'affichage initial
+onFilterChange() {
+  if (this.filtre === '' || this.filtre != '') {
+    this.pageIngredients = 1;
+  }
+}
+
   // ---------------------Méthode pour fetch les plats et gérer leur affichage en HTML---------------------------
   async fetchPlats(): Promise<any> {
     try {
@@ -47,12 +54,13 @@ export class NutritionService implements OnInit {
         //Chaque élément de data est représenté par l'objet { [x: string]: any; }, que nous convertissons en un objet PlatI en utilisant les propriétés nécessaires.
         this.plats = platData.map((item: { [x: string]: any }) => ({
           id: item['id'],
-          nom: item['nom'],
+          titre: item['titre'],
           description: item['description'],
           alim_code: item['alim_code'],
-          idIngredients: item['idIngredients'],
+          ingredients: item['ingredients'],
         }));
-        console.log(this.plats.map((item) => item['nom']));
+        console.log(this.plats.map((item) => item['titre']));
+        console.log(this.plats.map((item) => item['ingredients']));
         return this.plats;
       }
     } catch (error) {
@@ -183,10 +191,16 @@ export class NutritionService implements OnInit {
   }
 
 //------------------------------- Méthode pour créer un nouveau plat --------------------------------------
-async createPlat(plat: PlatI) {
+async createPlat(newEntry: {
+  titre: string;
+  description: string;
+  date?: Date;
+  ingredients: Array<number>;
+}) {
+  newEntry.date = new Date();
   const { error: createError } = await this.supabase
     .from('plats')
-    .insert(plat)
+    .insert(newEntry)
   if (createError) {
     console.log(createError);    
   }  

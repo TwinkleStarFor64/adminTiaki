@@ -60,7 +60,7 @@ export class SupabaseService {
         console.log('email trouvé');
         // Si l'email existe en BDD
         const data = await this.supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: 'http://localhost:4200/reset',
+          redirectTo: '/reset',
         });
         return data;
       } else {
@@ -93,8 +93,8 @@ export class SupabaseService {
   // Récupérer les utilisateurs sur la table public.utilisateur
   async getListeUtilisateurs() {
     return await this.supabase
-    .from('utilisateur')
-    .select("*, roles:attribuerRoles!inner(roles(role))")
+    .from('utilisateurs')
+    .select("*, roles:attribuerRoles!attribuerRoles_idUtilisateur_fkey!inner(roles(role))")
     // .select("*, roles:attribuerRoles!inner(id, roles!inner(role))")
   }
 
@@ -140,18 +140,18 @@ export class SupabaseService {
     return null;
   }
 
-async saveNameAndEmail(id: string, nom: string, email: string) {
-  const { data, error } = await this.supabase
-    .from('utilisateur')
-    .update({ nom: nom, email: email })
-    .eq('id', id);
-  if (data) {
-    console.log('update réussie');
+  async saveNameAndEmail(id: string, nom: string, email: string) {
+    const { data, error } = await this.supabase
+      .from('utilisateurs')
+      .update({ nom: nom, email: email })
+      .eq('id', id);
+    if (data) {
+      console.log('update réussie');
+    }
+    if (error) {
+      console.log(error);
+    }
   }
-  if (error) {
-    console.log(error);
-  }
-}
 
   async saveRoles(userId: string, roleNames: string[]) {
     if (roleNames && roleNames.length > 0) {
@@ -241,7 +241,7 @@ async saveNameAndEmail(id: string, nom: string, email: string) {
     return user;
   }
 
-  // Méthode pour update son profil en tant qu'utilisateur (sur la table utilisateur)
+  // Méthode pour update son profil en tant qu'utilisateur (sur la table utilisateurs)
   async updateProfil(
     id: string,
     newEntry: {
@@ -251,7 +251,7 @@ async saveNameAndEmail(id: string, nom: string, email: string) {
     }
   ) {
     const { error: updateError } = await this.supabase
-      .from('utilisateur')
+      .from('utilisateurs')
       .update(newEntry)
       .eq('id', id);
 
@@ -262,12 +262,11 @@ async saveNameAndEmail(id: string, nom: string, email: string) {
 
   /* --------------------------- Code utilisé dans le service users.service.ts -------------------------- */
 
-
   // Update des données utilisateurs sur la page de gestion
   async updateUser(userId: string, updatedUserData: any) {
     try {
       const { data, error } = await this.supabase
-        .from('utilisateur') // Remplacez 'utilisateurs' par le nom de votre table
+        .from('utilisateurs') // Remplacez 'utilisateurs' par le nom de votre table
         .update(updatedUserData)
         .eq('id', userId); // Mettez à jour l'utilisateur avec l'ID spécifié
 
@@ -319,7 +318,7 @@ async saveNameAndEmail(id: string, nom: string, email: string) {
 
       // Ensuite, créez l'utilisateur dans la table "utilisateur" (par exemple, pour d'autres informations)
       const utilisateurResponse = await this.supabase
-        .from('utilisateur')
+        .from('utilisateurs')
         .upsert([formData]);
 
       if (utilisateurResponse.error) {
@@ -340,6 +339,7 @@ async saveNameAndEmail(id: string, nom: string, email: string) {
       throw error;
     }
   }
+
   async getProfil(): Promise<any[]> {
     try {
       // Sur la table attribuerRoles je select les tables roles et utilisateur grâce à leur id qui sont en ForeignKeys
@@ -347,14 +347,12 @@ async saveNameAndEmail(id: string, nom: string, email: string) {
       // Avec .eq je compare l'id à celui obtenu dans authId initialisé dans la méthode signIn
       const { data, error } = await this.supabase
         .from('attribuerRoles')
-        .select('roles(role),utilisateur(*)')
+        .select('roles(role),utilisateurs!attribuerRoles_idUtilisateur_fkey(*)')
         .eq('idUtilisateur', this.authId);
 
       if (error) {
         console.log(error);
-        throw new Error(
-          "Une erreur s'est produite lors de la récupération des données."
-        );
+        throw new Error("Une erreur s'est produite lors de la récupération des données.");
       }
       if (data) return data;
 
@@ -365,7 +363,6 @@ async saveNameAndEmail(id: string, nom: string, email: string) {
       throw error;
     }
   }
-
   /* --------------------------------------- Code pour l'interface nutrition ---------------------------------------------- */
 
   //Méthode de test et optimisation
@@ -386,14 +383,14 @@ async saveNameAndEmail(id: string, nom: string, email: string) {
     }
   }
 
-// Méthode collaboration Gérald
+  // Méthode collaboration Gérald
   async getAttribuerPlatsBis() {
     const { data, error } = await this.supabase
       .from('plats')
       .select(`
         id, nom,
         ingredients:attribuerPlats (ingredient:ciqualAnses(*))
-    `) 
+    `)
     if (error) {
       console.log(error);
     }
@@ -401,7 +398,7 @@ async saveNameAndEmail(id: string, nom: string, email: string) {
       data.forEach(p => {
         if (p['ingredients'] && p['ingredients'].length > 0) {
           console.log(p['ingredients']);
-          p['ingredients'].forEach((i: any, index:number) => {
+          p['ingredients'].forEach((i: any, index: number) => {
             console.log(i, i['ingredient']);
             p['ingredients'][index] = i['ingredient'];
           })

@@ -8,6 +8,7 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 describe('NutritionComponent', () => {
   let component: NutritionComponent;
@@ -16,7 +17,7 @@ describe('NutritionComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [NutritionComponent, PlatsPipe, IngredientsPipe, GetIngredientPipe ],
-      imports: [ButtonModule, NgxPaginationModule, ToastModule, ConfirmDialogModule, ConfirmPopupModule, FormsModule],
+      imports: [RouterModule,ButtonModule, NgxPaginationModule, ToastModule, ConfirmDialogModule, ConfirmPopupModule, FormsModule],
     });
     fixture = TestBed.createComponent(NutritionComponent);
     component = fixture.componentInstance;

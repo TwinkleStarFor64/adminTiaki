@@ -7,15 +7,11 @@ import { MessagerieComponent } from './messagerie/messagerie.component';
 import { AjoutUtilisateurComponent } from './ajout-utilisateur/ajout-utilisateur.component';
 import { GestionRoutingModule } from './gestion-routing.module';
 import { GestionComponent } from './gestion.component';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DeleteDataComponent } from '../template/dialog/delete-data/delete-data.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TableModule } from 'primeng/table';
 import { CheckAccesPipe, GestionUtilisateursPipe } from 'src/app/pipes/gestion-utilisateurs.pipe';
-import { DialogModule } from 'primeng/dialog';
-import { DropdownModule } from 'primeng/dropdown';
 import { UtilisateursComponent } from './utilisateurs/utilisateurs.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -28,19 +24,12 @@ import { UtilisateursComponent } from './utilisateurs/utilisateurs.component';
     GestionComponent,
     DeleteDataComponent,
     UtilisateursComponent,
-    GestionUtilisateursPipe,
-    CheckAccesPipe
+   
   ],
   imports: [
     CommonModule,
     GestionRoutingModule,
-    ConfirmDialogModule,
-    ReactiveFormsModule,
-    TableModule,
-    DialogModule,
-    FormsModule,
-    ReactiveFormsModule,
-    DropdownModule,
+    SharedModule 
   ],
   exports: [DeleteDataComponent],
   providers: [ConfirmationService, MessageService, GestionUtilisateursPipe, CheckAccesPipe],

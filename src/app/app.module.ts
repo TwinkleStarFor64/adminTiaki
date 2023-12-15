@@ -5,30 +5,24 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { ConnexionComponent } from './extranet/connexion/connexion.component';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
 import { RecoveryComponent } from './extranet/recovery/recovery.component';
-import { InputTextModule } from 'primeng/inputtext';
 import { ResetComponent } from './extranet/reset/reset.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     ConnexionComponent,
     RecoveryComponent,
-    ResetComponent,
-    
+    ResetComponent,    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     RouterModule,
     CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    ButtonModule,
-    InputTextModule,
+    SharedModule,
     BrowserAnimationsModule,
   ],
   providers: [],
