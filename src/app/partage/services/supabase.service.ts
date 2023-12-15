@@ -78,7 +78,7 @@ export class SupabaseService {
   // Récupérer son mot de passe en cas de perte - Reset du Password
   async resetPassword(email: string) {
     const data = await this.supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'http://localhost:4200/reset',
+      redirectTo: '/reset', //http://localhost:4200/reset
     });
     return data;
   }
@@ -364,52 +364,5 @@ async saveNameAndEmail(id: string, nom: string, email: string) {
     }
   }
 
-  /* --------------------------------------- Code pour l'interface nutrition ---------------------------------------------- */
 
-  //Méthode de test et optimisation
-  async getAttribuerPlats(): Promise<any[]> {
-    const { data: platData, error: platError } = await this.supabase
-      .from('attribuerPlats')
-      .select('plats(*),ciqualAnses(*)');
-
-    if (platError) {
-      console.log("Erreur de la méthode getAttribuerPlats : ", platError);
-    }
-
-    if (platData) {
-      console.log("Ici platData : ", platData);
-      return platData;
-    } else {
-      return [];
-    }
-  }
-
-// Méthode collaboration Gérald
-  async getAttribuerPlatsBis() {
-    const { data, error } = await this.supabase
-      .from('plats')
-      .select(`
-        id, nom,
-        ingredients:attribuerPlats (ingredient:ciqualAnses(*))
-    `) 
-    if (error) {
-      console.log(error);
-    }
-    if (data) {
-      data.forEach(p => {
-        if (p['ingredients'] && p['ingredients'].length > 0) {
-          console.log(p['ingredients']);
-          p['ingredients'].forEach((i: any, index:number) => {
-            console.log(i, i['ingredient']);
-            p['ingredients'][index] = i['ingredient'];
-          })
-        }
-        return p;
-      });
-      console.log(data);
-      return data;
-    } else {
-      return []
-    }
-  }
 }

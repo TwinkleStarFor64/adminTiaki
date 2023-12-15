@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { CanActivateFn } from '@angular/router';
 
-import { redacteurNutrtionGuard } from './redacteur-nutrtion.guard';
+import { redacteurNutritionGuard } from './redacteur-nutrition.guard';
 
 describe('redacteurNutrtionGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) => 
-      TestBed.runInInjectionContext(() => redacteurNutrtionGuard(...guardParameters));
+      TestBed.runInInjectionContext(() => redacteurNutritionGuard(...guardParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

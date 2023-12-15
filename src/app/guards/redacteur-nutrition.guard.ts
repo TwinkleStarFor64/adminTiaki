@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
 import { UsersService } from '../partage/services/users.service';
 
-export const redacteurNutrtionGuard: CanActivateFn = (route, state) => {
+export const redacteurNutritionGuard: CanActivateFn = (route, state) => {
   const usersService = inject(UsersService);    
   const isRedacteur = usersService.profil.roles!.includes('redacteur');
   const isAdmin = usersService.profil.roles!.includes('admin');
