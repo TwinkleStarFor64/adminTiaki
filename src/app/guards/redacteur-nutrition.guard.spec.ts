@@ -3,7 +3,7 @@ import { CanActivateFn } from '@angular/router';
 
 import { redacteurNutritionGuard } from './redacteur-nutrition.guard';
 
-describe('redacteurNutrtionGuard', () => {
+describe('redacteurNutritionGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) => 
       TestBed.runInInjectionContext(() => redacteurNutritionGuard(...guardParameters));
 

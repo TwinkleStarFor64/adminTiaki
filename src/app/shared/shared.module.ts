@@ -17,6 +17,7 @@ import { TableModule } from 'primeng/table';
 import { GestionUtilisateursPipe } from '../pipes/gestion-utilisateurs.pipe';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 
+
 @NgModule({
   declarations: [
     IngredientsPipe,
@@ -38,9 +39,8 @@ import { DynamicDialogModule } from 'primeng/dynamicdialog';
     InputTextModule,
     InputTextareaModule,
     CheckboxModule,
-    TableModule,
-    DynamicDialogModule
-
+    TableModule, 
+    DynamicDialogModule 
   ],
   exports: [
     PlatsPipe,
@@ -61,8 +61,11 @@ import { DynamicDialogModule } from 'primeng/dynamicdialog';
     InputTextareaModule,
     CheckboxModule,
     HttpClientModule,
-    DynamicDialogModule 
-  
-  ]
+    DynamicDialogModule
+  ],
+  providers: [
+
+  ] 
+,
 })
 export class SharedModule { }

@@ -40,7 +40,7 @@ export class ProfilComponent implements OnInit {
   async onSubmitForm() {    
     try {       
         // j'utilise l'id de l'user pour update son profil
-        await this.supa.updateProfil(this.users.profil.id,{nom:this.users.profil.nom, prenom:this.users.profil.prenom!, telephone:this.users.profil.telephone!});
+        await this.supa.updateProfil(this.users.profil.id.toString(),{nom:this.users.profil.nom, prenom:this.users.profil.prenom!, telephone:this.users.profil.telephone!});
             
       } catch (error) {
       console.error("Une erreur s'est produite :", error);

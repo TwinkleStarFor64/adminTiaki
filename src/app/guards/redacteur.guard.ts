@@ -8,12 +8,10 @@ export const redacteurGuard: CanActivateFn = (route, state) => {
   const isAdmin = usersService.profil.roles!.includes('admin');
 
   if (isRedacteur || isAdmin) {
-    console.log("j'ai le bon rôle", usersService.profil.roles);      
+    console.log("j'ai le bon rôle",  usersService.profil.roles);      
     return true;
   } else {
-    console.log("j'ai pas le bon rôle", usersService.profil.roles);    
+    console.log("j'ai pas le bon rôle",  usersService.profil.roles);    
     return false;
   }
-
-  
 };

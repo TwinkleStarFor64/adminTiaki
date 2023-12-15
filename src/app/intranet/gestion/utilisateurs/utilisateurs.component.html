@@ -12,9 +12,9 @@
 <section>
   <article class="search">
     <form>
-      <input pInputText name="search" type="search" [(ngModel)]="filtreSearch" placeholder="Nom" />
+      <input pInputText name="search" type="search" [(ngModel)]="filtreSearch" placeholder="Nom ou Email" />
       <select [(ngModel)]="filtreRole" name="roles">
-        <option *ngFor="let role of users.listeRoles" [value]="role">{{ role }}</option>
+        <option class="option" *ngFor="let role of users.listeRoles" [value]="role">{{ role }}</option>
       </select>
       <button pButton class="clear" label="Effacer" (click)="clearFilters()"></button>
       <button class="rejectButton" pButton *ngIf="selectedUsers.length > 0" (click)="deleteSelectedUsers()"
@@ -96,7 +96,7 @@
             </div>
             <div>
               <label for="email">Email:</label>
-              <input type="text" id="email" [ngModel]="selectedUserForEdit ? selectedUserForEdit.email : ''"
+              <input pInputText type="text" id="email" [ngModel]="selectedUserForEdit ? selectedUserForEdit.email : ''"
                 (ngModelChange)="
                  selectedUserForEdit && (selectedUserForEdit.email = $event)
                " />

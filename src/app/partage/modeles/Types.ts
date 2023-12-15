@@ -2,25 +2,25 @@
  * @description Interface de l'aside bar
  */
 export interface AsideI {
-    nom?: string;
-    image: string;
-    url: string;
+  nom?: string;
+  image: string;
+  url: string;
 }
 
 /**
- * @description Interface des utilisateurs
- */
+* @description Interface des utilisateurs
+*/
 export interface UtilisateurI {
-    id: string;
-    email: string;
-    nom: string;
-    prenom?: string;
-    telephone?: string;
-    roles: Array<string>;
-    selectedRoles?: { [key: string]: boolean };
-    selected?: boolean;
-  }
-  
+  id: string;
+  email: string;
+  nom: string;
+  prenom?: string;
+  telephone?: string;
+  roles: Array<string>;
+  selectedRoles?: { [key: string]: boolean };
+  selected?: boolean;
+}
+
 // export interface UtilisateurData {
 //     id: any;
 //     email: string;
@@ -30,55 +30,55 @@ export interface UtilisateurI {
 // }
 
 export interface RoleData {
-  name: string;
-  selected: boolean;
+name: string;
+selected: boolean;
 }
 
 export interface UserCreationResponse {
-    auth: any[] | undefined; 
-    utilisateur: any[] | undefined; 
-  }
-  
+  auth: any[] | undefined; 
+  utilisateur: any[] | undefined; 
+}
+
 /* ---------------- Interface pour la nutrition ------------------- */
 export interface PlatI {
-    id: number;
-    titre: string;
-    description: string;
-    alim_code: number | null;
-    statut?: string;
-    reaction?: string;
-    ingredients?: Array<number>;
-    //types:PlatE
+  id: number;
+  titre: string;
+  description: string;
+  alim_code: number | null;
+  statut?: string;
+  reaction?: string;
+  ingredients?: Array<number>;
+  //types:PlatE
 }
 
 export enum PlatE {
-  petitDej = 'petit déjeuner',
-  encas = 'encas',
-  dejeuner = 'déjeuner',
-  gouter = 'goûter',
-  diner= 'diner'
+petitDej = 'petit déjeuner',
+encas = 'encas',
+dejeuner = 'déjeuner',
+gouter = 'goûter',
+diner= 'diner'
 }
 
 export enum MesuresE {
-  mgr = 'mgr',
-  gr = 'gr',
-  kgs = 'kgs'
+mgr = 'mgr',
+gr = 'gr',
+kgs = 'kgs'
 }
 
 export interface CiqualI {
-    alim_nom_fr: string;
-    proteine: number;
-    glucides: number;
-    lipides: number;
-    sucres: number;
-    vitamineC: number;
-    vitamineB1: number;
-    vitamineB2: number;
-    vitamineB3: number;
-    vitamineB5: number;
-    magnesium: number;
-    potassium: number;
-    cuivre: number;
-    manganese: number;
-    [key: string]: number | string; // Pour la méthode calculateTotals() qui crée un objet de type clé et valeur - Variable totals dans nutrition.service
+  alim_nom_fr: string;
+  proteine: number;
+  glucides: number;
+  lipides: number;
+  sucres: number;
+  vitamineC: number;
+  vitamineB1: number;
+  vitamineB2: number;
+  vitamineB3: number;
+  vitamineB5: number;
+  magnesium: number;
+  potassium: number;
+  cuivre: number;
+  manganese: number;
+  [key: string]: number | string; // Pour la méthode calculateTotals() qui crée un objet de type clé et valeur - Variable totals dans nutrition.service
 }

@@ -140,18 +140,18 @@ export class SupabaseService {
     return null;
   }
 
-async saveNameAndEmail(id: string, nom: string, email: string) {
-  const { data, error } = await this.supabase
-    .from('utilisateur')
-    .update({ nom: nom, email: email })
-    .eq('id', id);
-  if (data) {
-    console.log('update réussie');
+  async saveNameAndEmail(id: string, nom: string, email: string) {
+    const { data, error } = await this.supabase
+      .from('utilisateurs')
+      .update({ nom: nom, email: email })
+      .eq('id', id);
+    if (data) {
+      console.log('update réussie');
+    }
+    if (error) {
+      console.log(error);
+    }
   }
-  if (error) {
-    console.log(error);
-  }
-}
 
   async saveRoles(userId: string, roleNames: string[]) {
     if (roleNames && roleNames.length > 0) {
@@ -318,7 +318,7 @@ async saveNameAndEmail(id: string, nom: string, email: string) {
 
       // Ensuite, créez l'utilisateur dans la table "utilisateur" (par exemple, pour d'autres informations)
       const utilisateurResponse = await this.supabase
-        .from('utilisateur')
+        .from('utilisateurs')
         .upsert([formData]);
 
       if (utilisateurResponse.error) {

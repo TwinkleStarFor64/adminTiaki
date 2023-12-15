@@ -13,6 +13,9 @@ import { SharedModule } from '../shared/shared.module';
 import { AjoutPlatComponent } from './template/dialog/ajout-plat/ajout-plat.component';
 
 
+
+
+
 @NgModule({
   declarations: [
     AccueilComponent,
@@ -22,16 +25,16 @@ import { AjoutPlatComponent } from './template/dialog/ajout-plat/ajout-plat.comp
     IntranetComponent,    
     AsideBarComponent,                                                                                                                                                                                              
     ProfilComponent,
-    AjoutPlatComponent
+    AjoutPlatComponent 
+
   ],
   imports: [
     CommonModule,
     IntranetRoutingModule,
     SharedModule
   ],
-  exports:[
+exports:[],
 
-  ],
   providers: [
     DonneesService,    
   ]
