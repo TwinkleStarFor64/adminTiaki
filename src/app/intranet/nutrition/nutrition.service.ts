@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { CiqualI, PlatI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { AuthSession,createClient,SupabaseClient } from '@supabase/supabase-js';
@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environement';
 @Injectable({
   providedIn: 'root',
 })
-export class NutritionService implements OnInit {
+export class NutritionService {
   private supabase: SupabaseClient; // Instance du client Supabase
   _session: AuthSession | null = null; // Session d'authentification Supabase
 
@@ -33,9 +33,7 @@ export class NutritionService implements OnInit {
     );
   }
 
-  async ngOnInit(): Promise<void> {
-    //this.fetchPlats();
-  }
+  
 
 // Méthode utiliser dans l'input de recherche d'ingrédients afin de le réinitialiser
 // Si l'input et vide ou pas vide la premiére page (pageIngredients) est défini à 1 afin de retrouver l'affichage initial
@@ -108,7 +106,6 @@ onFilterChange() {
     if (ciqualBDD) {
     // J'attribue à la variable ciqual de type CiqualI le résultat de ciqualBDD - je peux maintenant utiliser ciqual dans d'autres méthodes
       this.ciqual = ciqualBDD; 
-      //console.log("Résultat de la méthode getAllCiqual : ", this.ciqual);
     } 
   }
 
@@ -316,20 +313,7 @@ async createPlat(newEntry: {
     }
   } */
 
-// async updatePlat(
-  //   id: number,
-  //   newEntry: {
-  //   description: string;
-  // }) {
-  //   const { error: platError } = await this.supabase
-  //     .from('plats')
-  //     .update(newEntry)
-  //     .eq('id', id);
 
-  //   if (platError) {
-  //     console.log(platError);
-  //   }
-  // }
 
 
 
