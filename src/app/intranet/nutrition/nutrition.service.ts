@@ -34,7 +34,7 @@ export class NutritionService implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    //this.fetchPlats();
+    
   }
 
 // Méthode utiliser dans l'input de recherche d'ingrédients afin de le réinitialiser
@@ -60,7 +60,6 @@ onFilterChange() {
           ingredients: item['ingredients'],
         }));
         console.log(this.plats.map((item) => item['titre']));
-        console.log(this.plats.map((item) => item['ingredients']));
         return this.plats;
       }
     } catch (error) {
@@ -206,14 +205,6 @@ async createPlat(newEntry: {
   }  
 }
 
-  async fetchData() {
-    try {
-      this.listePlats = await this.supa.getAttribuerPlats();
-      console.log(this.listePlats);
-    } catch (error) {
-      console.error("Une erreur s'est produite :", error);
-    }
-  }
 
 }
 
