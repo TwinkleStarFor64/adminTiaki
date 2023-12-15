@@ -96,7 +96,7 @@
             </div>
             <div>
               <label for="email">Email:</label>
-              <input type="text" id="email" [ngModel]="selectedUserForEdit ? selectedUserForEdit.email : ''"
+              <input pInputText type="text" id="email" [ngModel]="selectedUserForEdit ? selectedUserForEdit.email : ''"
                 (ngModelChange)="
                  selectedUserForEdit && (selectedUserForEdit.email = $event)
                " />
