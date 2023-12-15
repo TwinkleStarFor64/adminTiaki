@@ -17,7 +17,7 @@ describe('NutritionComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [NutritionComponent, PlatsPipe, IngredientsPipe, GetIngredientPipe ],
-      imports: [RouterModule,ButtonModule, NgxPaginationModule, ToastModule, ConfirmDialogModule, ConfirmPopupModule, FormsModule],
+      imports: [RouterModule, ButtonModule, NgxPaginationModule, ToastModule, ConfirmDialogModule, ConfirmPopupModule, FormsModule],
     });
     fixture = TestBed.createComponent(NutritionComponent);
     component = fixture.componentInstance;

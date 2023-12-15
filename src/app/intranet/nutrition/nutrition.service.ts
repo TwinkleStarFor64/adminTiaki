@@ -58,7 +58,6 @@ onFilterChange() {
           ingredients: item['ingredients'],
         }));
         console.log(this.plats.map((item) => item['titre']));
-        console.log(this.plats.map((item) => item['ingredients']));
         return this.plats;
       }
     } catch (error) {
@@ -203,14 +202,6 @@ async createPlat(newEntry: {
   }  
 }
 
-  async fetchData() {
-    try {
-      this.listePlats = await this.supa.getAttribuerPlats();
-      console.log(this.listePlats);
-    } catch (error) {
-      console.error("Une erreur s'est produite :", error);
-    }
-  }
 
 }
 
