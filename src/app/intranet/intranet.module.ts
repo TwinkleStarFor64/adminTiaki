@@ -11,6 +11,7 @@ import { ProfilComponent } from './profil/profil.component';
 import { DonneesService } from '../partage/services/donnees.service';
 import { SharedModule } from '../shared/shared.module';
 import { AjoutPlatComponent } from './template/dialog/ajout-plat/ajout-plat.component';
+import { AjoutMenuComponent } from './template/dialog/ajout-menu/ajout-menu.component';
 
 
 
@@ -25,7 +26,8 @@ import { AjoutPlatComponent } from './template/dialog/ajout-plat/ajout-plat.comp
     IntranetComponent,    
     AsideBarComponent,                                                                                                                                                                                              
     ProfilComponent,
-    AjoutPlatComponent 
+    AjoutPlatComponent,
+    AjoutMenuComponent 
 
   ],
   imports: [

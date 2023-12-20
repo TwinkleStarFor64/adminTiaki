@@ -21,19 +21,6 @@ export interface UtilisateurI {
   selected?: boolean;
 }
 
-// export interface UtilisateurData {
-//     id: any;
-//     email: string;
-//     nom: string;
-//     roles: RoleData[];
-//     selected?: boolean; 
-// }
-
-export interface RoleData {
-name: string;
-selected: boolean;
-}
-
 export interface UserCreationResponse {
   auth: any[] | undefined; 
   utilisateur: any[] | undefined; 
@@ -49,6 +36,22 @@ export interface PlatI {
   reaction?: string;
   ingredients?: Array<number>;
   //types:PlatE
+}
+
+export interface MenuI {
+  id: number;
+  titre: string;
+  description: string;
+  plats?: Array<number>;
+  statut?:MenuE ;
+  reaction?: string;
+
+}
+
+export enum MenuE {
+  valide = '1',
+  invalide = '0',
+  enAttente = '-1'
 }
 
 export enum PlatE {

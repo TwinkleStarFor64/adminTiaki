@@ -1,5 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
-import { CiqualI, PlatI } from 'src/app/partage/modeles/Types';
+import { CiqualI, MenuI, PlatI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { AuthSession,createClient,SupabaseClient } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
@@ -11,6 +11,7 @@ export class NutritionService implements OnInit {
   private supabase: SupabaseClient; // Instance du client Supabase
   _session: AuthSession | null = null; // Session d'authentification Supabase
 
+  menus: MenuI[] = [];
   plats: PlatI[] = [];
   ciqual: CiqualI[] = [];
   allCiqual: CiqualI[] = [];
@@ -24,8 +25,10 @@ export class NutritionService implements OnInit {
   listePlats: any[] = [];
 
   pageIngredients: number = 1; // Comme ci-dessus mais pour la liste d'ingrédients
+  pagePlats:number = 1;
+
   filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats 
-  
+  flitrePlats: string = ''; // Utiliser dans le ngModel affichant la liste des plats - Filtre de recherche
   constructor(public supa: SupabaseService) {
     this.supabase = createClient(
       environment.supabaseUrl,
@@ -42,6 +45,12 @@ export class NutritionService implements OnInit {
 onFilterChange() {
   if (this.filtre === '' || this.filtre != '') {
     this.pageIngredients = 1;
+  }
+}
+
+onFilterChangePlats() {
+  if (this.flitrePlats === '' || this.flitrePlats != '') {
+    this.pagePlats = 1;
   }
 }
 
@@ -215,10 +224,90 @@ async createPlat(newEntry: {
     }
   }
 
+
+
+
+/* --------------------------Méthode pour récupérer les menus sur la table menus de supabase--------------------------------*/
+
+  async fetchMenus(): Promise<any> {
+    try {
+      const menuData = await this.getMenus(); // Appelle la méthode getMenus ci-dessous
+      if (menuData) {
+        //Ici, nous utilisons la méthode map pour créer un nouveau tableau de plats à partir de data.
+        //Chaque élément de data est représenté par l'objet { [x: string]: any; }, que nous convertissons en un objet PlatI en utilisant les propriétés nécessaires.
+        this.menus = menuData.map((item: { [x: string]: any }) => ({
+          id: item['id'],
+          titre: item['titre'],
+          description: item['description'],
+          statut: item['statut'],
+        }));
+        console.log(this.menus.map((item) => item['titre']));
+        return this.menus;
+      }
+    } catch (error) {
+      console.error(
+        "Une erreur s'est produite sur la méthode fetchPlats :",
+        error
+      );
+    }
+  }
+
+  // ----------------------Méthode pour récupérer tout les plats sur la table Menus de supabase-------------------
+  async getMenus() {
+    const { data, error } = await this.supabase.from('menus').select('*');
+    if (error) {
+      console.log('Erreur de la méthode getMenus : ', error);
+    }
+    if (data) {
+      console.log('Data de la méthode getMenus: ', data);
+      return data;
+    } else {
+      return [];
+    }
+  }
+
+  // -------------------------Méthode pour supprimer un menu-------------------------------------
+  async deleteMenuSupabase(id: number) {
+    // id récupérer sur la méthode deletePlat de nutrition.component
+    const { error: deleteError } = await this.supabase
+      .from('menus')
+      .delete()
+      .eq('id', id);
+    if (deleteError) {
+      console.log('Erreur de suppression de menus', deleteError);
+    }
+  }
+//------------------------------- Méthode pour créer un nouveau menu --------------------------------------
+async createMenu(newEntry: {
+  titre: string;
+  description: string;
+  date?: Date;
+  plats?: Array<number>;
+  statut?: string;
+  reaction?: string;
+}) {
+  newEntry.date = new Date();
+  const { error: createError } = await this.supabase
+    .from('menus')
+    .insert(newEntry)
+  if (createError) {
+    console.log(createError);    
+  }  
 }
 
+//------------------------------- Méthode pour modifier un menu -------------------------------------  
+async updateMenu(id: number, menu: MenuI) {
+  const { error: platError } = await this.supabase
+    .from('menus')
+    .update(menu) // Update de tout l'objet menu qui correspond au type MenuI
+    .eq('id', id);
 
+  if (platError) {
+    console.log(platError);
+  }
+}
 
+}
 /* ----------------------------------------------------------------- Méthode fetchCiqual avec un forEach ------------------------------------------------------------ */
   /* async fetchCiqual(ids: Array<number>): Promise<any> {
     const listeIngredients = ids.map((id) =>
