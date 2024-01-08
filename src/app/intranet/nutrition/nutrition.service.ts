@@ -15,6 +15,7 @@ export class NutritionService {
   menus: MenuI[] = [];
   plats: PlatI[] = [];
   ciqual: CiqualI[] = [];
+  ciqualJSON: CiqualI[] = [];
   allCiqual: CiqualI[] = [];
 
   mappedIngredients: any[] = [];
@@ -30,7 +31,8 @@ export class NutritionService {
 
   filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats 
   flitrePlats: string = ''; // Utiliser dans le ngModel affichant la liste des plats - Filtre de recherche
-  constructor(public supa: SupabaseService) {
+
+  constructor(public supa: SupabaseService, private http: HttpClient) {
     this.supabase = createClient(
       environment.supabaseUrl,
       environment.supabaseKey
@@ -108,12 +110,16 @@ onFilterChangePlats() {
   getCiqualJSON() {
     this.http.get<CiqualI[]>('assets/data/ciqual.json').subscribe(
       {
-        next: (res) => (this.ciqual = res),
+        next: (res) => (this.ciqualJSON = res),
         error: (err) => console.log(err),
-        complete: () => console.log(this.ciqual),        
+        complete: () => console.log(this.ciqualJSON),        
       }
     );
-    return this.ciqual;
+    return this.ciqualJSON;
+  }
+
+  async fetchCiqualJSON() {
+    
   }
 
   //------------------------ Méthode pour récupérer TOUTE la table ciqual ------------------------------------------

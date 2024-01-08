@@ -69,6 +69,7 @@ kgs = 'kgs'
 }
 
 export interface CiqualI {
+  //alim_code: number,
   alim_nom_fr: string;
   proteine: number;
   glucides: number;

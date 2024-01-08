@@ -20,11 +20,11 @@
     <p-button styleClass="p-button-success" (onClick)="ajoutPlat()">Ajouter un plat</p-button>
     <span class="p-input-icon-left">
       <i class="pi pi-search"></i>
-      <input type="text" pInputText [(ngModel)]="filtre" />
+      <input type="text" pInputText [(ngModel)]="nutrition.filtre" />
     </span>
     <span>
       <!-- Utilisation du pipe plats pour rechercher des plats par leur noms -->
-      <ng-container *ngIf="nutrition.plats | plats:filtre as filteredPlats">
+      <ng-container *ngIf="nutrition.plats | plats:nutrition.filtre as filteredPlats">
       <!-- Utilisation de ngx-pagination - Doc : https://github.com/michaelbromley/ngx-pagination/blob/master/README.md#demo -->  
       <div *ngFor="let plat of filteredPlats | paginate: { itemsPerPage: 15, currentPage: pagePlats, id:'plats' }">
         <p (click)="onSelectPlat(plat, plat.ingredients)">{{ plat.titre }}</p>              
