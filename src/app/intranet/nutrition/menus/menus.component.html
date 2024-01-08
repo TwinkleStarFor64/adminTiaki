@@ -95,7 +95,7 @@
         <!-- Utilisation de onFilterChange() pour réinitialiser l'input -->
       </span>
       <div>
-        <!-- Utilisation du pipe ingredients pour rechercher des ingredients par leur alim_nom_fr -->        
+        <!-- Utilisation du pipe plats pour rechercher des plats -->        
           <span *ngFor="let plat of nutrition.plats| plats:filtrePlats| paginate: { itemsPerPage: 30, currentPage: pageIngredients, id:'plats' }">
             <p (click)="onSelectPlats(plat)">{{plat.titre }}</p>
           </span>        
