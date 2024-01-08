@@ -3,6 +3,7 @@ import { CiqualI, PlatI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { AuthSession,createClient,SupabaseClient } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,7 @@ export class NutritionService implements OnInit {
   pageIngredients: number = 1; // Comme ci-dessus mais pour la liste d'ingrédients
   filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats 
   
-  constructor(public supa: SupabaseService) {
+  constructor(public supa: SupabaseService, private http: HttpClient) {
     this.supabase = createClient(
       environment.supabaseUrl,
       environment.supabaseKey
@@ -94,6 +95,18 @@ onFilterChange() {
     if (deleteError) {
       console.log('Erreur de suppression de plat', deleteError);
     }
+  }
+
+  // ----------------------- Méthode pour récupérer la table ciqual JSON ------------------------------------------
+  getCiqualJSON() {
+    this.http.get<CiqualI[]>('assets/data/ciqual.json').subscribe(
+      {
+        next: (res) => (this.ciqual = res),
+        error: (err) => console.log(err),
+        complete: () => console.log(this.ciqual),        
+      }
+    );
+    return this.ciqual;
   }
 
   //------------------------ Méthode pour récupérer TOUTE la table ciqual ------------------------------------------

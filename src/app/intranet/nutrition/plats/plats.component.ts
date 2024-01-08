@@ -44,7 +44,7 @@ export class PlatsComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.nutrition.fetchPlats();
   // La méthode getAllCiqual() permet de voir la liste des ingrédients et d'attribuer des valeurs via la méthode onSelectPlat() qui à besoin des ingrédients
-    this.nutrition.getAllCiqual();   
+    this.nutrition.getAllCiqual();  
   }
 
 // Méthode utiliser dans l'input de recherche d'ingrédients afin de le réinitialiser
