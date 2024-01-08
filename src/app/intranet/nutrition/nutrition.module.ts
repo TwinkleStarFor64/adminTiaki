@@ -16,8 +16,6 @@ import { PlatsComponent } from './plats/plats.component';
     IngredientsComponent,
     MenusComponent,
     PlatsComponent,
-    
-
   ],
   imports: [
     CommonModule,

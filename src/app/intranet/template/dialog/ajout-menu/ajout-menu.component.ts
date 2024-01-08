@@ -1,27 +1,33 @@
 import { Component } from '@angular/core';
+import { PaginationService } from 'ngx-pagination';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { NutritionService } from 'src/app/intranet/nutrition/nutrition.service';
-import { MenuI } from 'src/app/partage/modeles/Types';
+import { MenuI, PlatI } from 'src/app/partage/modeles/Types';
+import { MenusPipe } from 'src/app/pipes/menus.pipe';
+
 
 @Component({
   selector: 'app-ajout-menu',
   templateUrl: './ajout-menu.component.html',
-  styleUrls: ['./ajout-menu.component.scss']
+  styleUrls: ['./ajout-menu.component.scss'],
+  providers: [PaginationService,MenusPipe], 
+
 })
 export class AjoutMenuComponent {
   newMenu!: MenuI;
   filtrePlats: string = ''; // Utiliser dans le ngModel affichant la liste des plats - Filtre de recherche
   selectedMenus?: MenuI; // Utiliser dans onSelectPlat() - Pour savoir sur quel menu je clique et gérer le *ngIf
-
+  plats: PlatI[] = [];
   constructor(public ref: DynamicDialogRef, public nutrition: NutritionService) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.newMenu = {
       id: 0,
       titre: '',
       description: '',
       plats: [],
-    }    
+    }  
+    this.plats = await this.nutrition.getPlats();  
   }  
 // Méthode pour le formulaire d'ajout d'un menu
   async onSubmitNewMenuForm() {

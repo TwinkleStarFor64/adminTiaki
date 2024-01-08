@@ -25,6 +25,24 @@ export class MenusPipe implements PipeTransform {
 
 }
 @Pipe({
+  name: 'getPlat'
+})
+export class GetPlatPipe implements PipeTransform {
+
+  constructor(private nutri:NutritionService){};
+
+  transform(id: number): string {
+    if (!id) {
+      return ''
+    } 
+    const plat = this.nutri.getPlatById(id);
+    console.log("Le pipe getPlat : ", plat);
+    
+    return plat ? plat.titre : '';
+  }
+
+}
+@Pipe({
   name: 'getIngredient' // Le nom du pipe
 })
 export class GetIngredientPipe implements PipeTransform {
@@ -49,6 +67,5 @@ export class GetIngredientPipe implements PipeTransform {
   // Dans ce cas, 'alim_nom_fr' serait passé en tant qu'attribut
     return ingredient ? ingredient[attribut] : '';
   };
+
 }
-
-

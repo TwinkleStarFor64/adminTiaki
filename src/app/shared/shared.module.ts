@@ -5,7 +5,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
-import { GetIngredientPipe, MenusPipe } from '../pipes/menus.pipe';
+import { GetIngredientPipe, GetPlatPipe, MenusPipe } from '../pipes/menus.pipe';
 import { PlatsPipe } from '../pipes/plats.pipe';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -24,7 +24,8 @@ import { DynamicDialogModule } from 'primeng/dynamicdialog';
     MenusPipe,
     GetIngredientPipe,
     PlatsPipe,
-    GestionUtilisateursPipe
+    GestionUtilisateursPipe,
+    GetPlatPipe,
   ],
   imports: [
     CommonModule,

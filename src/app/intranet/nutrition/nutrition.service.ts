@@ -211,7 +211,12 @@ async createPlat(newEntry: {
   }  
 }
 
-
+// In your NutritionService
+getPlatById(id: number): PlatI | undefined {
+  console.log("Plat trouvé : ", this.plats.find(plat => plat.id === id));
+  return this.plats.find(plat => plat.id === id);
+  
+}
 
 
 
