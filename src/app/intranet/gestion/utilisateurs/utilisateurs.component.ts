@@ -169,6 +169,7 @@ export class UtilisateursComponent implements OnInit {
     console.log('Ouverture de la modal pour :', user);
     this.users.fetchRoles();
     this.selectedUserForEdit = user;
+    
 
     // Check if a user has been selected for editing
     if (!user) {

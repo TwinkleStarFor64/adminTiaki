@@ -1,95 +1,88 @@
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmEventType, ConfirmationService, MessageService } from 'primeng/api';
-import { PlatI } from 'src/app/partage/modeles/Types';
+import { MenuE, MenuI, PlatI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { NutritionService } from '../nutrition.service';
+import { AjoutMenuComponent } from '../../template/dialog/ajout-menu/ajout-menu.component';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-menus',
   templateUrl: './menus.component.html',
   styleUrls: ['./menus.component.scss','../nutrition.component.scss'],
-  providers: [ConfirmationService, MessageService],
+  providers: [ConfirmationService, MessageService,DialogService],
 })
 export class MenusComponent {
   pagePlats: number = 1; // Utilisé dans le paginator HTML de la liste des plats pour définir la page de départ - paginate: { itemsPerPage: 1, currentPage: pagePlats }
+  pageMenus: number = 1; // Utilisé dans le paginator HTML de la liste des plats pour définir la page de départ - paginate: { itemsPerPage: 1, currentPage: pagePlats }
   pageIngredients: number = 1; // Comme ci-dessus mais pour la liste d'ingrédients
   filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats
-  filtreIngredients: string = ''; // Utiliser dans le ngModel affichant la liste des ingrédients - Filtre de recherche
+  filtrePlats: string = ''; // Utiliser dans le ngModel affichant la liste des ingrédients - Filtre de recherche
 
-  selectedPlats?: PlatI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
-  initialSelectedPlatsState!: PlatI; // Pour stocker l'état initial de selectedPlats dans onSelectPlat
+  selectedMenus?: MenuI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
+  initialSelectedMenusState!: MenuI; // Pour stocker l'état initial de selectedPlats dans onSelectPlat
   //selectedIngredient?: CiqualI;
   //platArray: PlatI[] = [];
-  ajoutPlatsVisible: boolean = false; // Pour rendre visible le formulaire d'ajout d'un plat
-  selectedPlatsVisible: boolean = false; // Pour rendre visible le formulaire d'un plat existant et le modifier
-  newPlat!: PlatI;
-  newPlatForm!: FormGroup;
+  ajoutMenuVisible: boolean = false; // Pour rendre visible le formulaire d'ajout d'un plat
+  selectedMenusVisible: boolean = false; // Pour rendre visible le formulaire d'un plat existant et le modifier
+  newMenu!: MenuI; // Pour le formulaire d'ajout d'un menu
+  newMenuForm!: FormGroup;
+
+  ref: DynamicDialogRef | undefined;
 
   constructor(
     public supa: SupabaseService,
     public nutrition: NutritionService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
-    private formbuilder: FormBuilder    
+    private formbuilder: FormBuilder,
+    public dialogService: DialogService    
   ) {}
+  ajoutMenu() { // La méthode pour la modal d'ajout d'un nouveau plat
+    this.ref = this.dialogService.open(AjoutMenuComponent, {
+            header: 'Ajouter un Menu',
+            width: '70%',
+            height: '80vh',
+            contentStyle: { overflow: 'hidden' }, // Pour cacher l'overflow globale de la modal
+            baseZIndex: 10000,
+            maximizable: true
+    })
+  }  
 
   async ngOnInit(): Promise<void> {
+    this.nutrition.fetchMenus();
     this.nutrition.fetchPlats();
-  // La méthode getAllCiqual() permet de voir la liste des ingrédients et d'attribuer des valeurs via la méthode onSelectPlat() qui à besoin des ingrédients
-    this.nutrition.getAllCiqual(); 
-    this.newPlatForm = this.formbuilder.group({
+
+    this.newMenuForm = this.formbuilder.group({
       nom: ['', Validators.required],
       description: ['', Validators.required],
-      idIngredients: this.formbuilder.array([]),
+      idPlats: this.formbuilder.array([]),
     });
 
-    this.newPlat = {
+    this.newMenu = {
       id: 0,
       titre: '',
       description: '',
-      alim_code: 0,
-      ingredients: [],
+      plats: [],
+      statut: MenuE.valide,
+      reaction: '',
     }
   }
 
-  toggleFormVisibility(formNumber: number) {
-    //this.ajoutPlatsVisible = !this.ajoutPlatsVisible;
-    if (formNumber === 1) {
-      this.selectedPlatsVisible = true;
-      this.ajoutPlatsVisible = false;
-    } else if (formNumber === 2) {
-      this.ajoutPlatsVisible = true;
-      this.selectedPlatsVisible = false;
-    }
+
+// Méthode qui attribue des valeurs aux variables correspondant à l'objet sur lequel je clique - Utilisé sur le nom du menu en HTML
+  onSelectMenu(menu: MenuI, id: Array<number>) {
+   this.initialSelectedMenusState = { ...menu }; 
+    console.log(this.initialSelectedMenusState );
+    this.selectedMenus = menu;
+    console.log("J'ai cliqué sur : " + this.selectedMenus.titre);
+    this.nutrition.fetchPlats();
   }
 
-// Méthode utiliser dans l'input de recherche d'ingrédients afin de le réinitialiser
-// Si l'input et vide ou pas vide la premiére page (pageIngredients) est défini à 1 afin de retrouver l'affichage initial
-  onFilterChange() {
-    if (this.filtre === '' || this.filtre != '') {
-      this.pageIngredients = 1;
-    }
-  }
-
-// Méthode qui attribue des valeurs aux variables correspondant à l'objet sur lequel je clique - Utilisé sur le nom du plat en HTML
-  onSelectPlat(plat: PlatI, id: Array<number>) {
-    // Enregistrez l'état initial de selectedPlats lors de la sélection initiale
-    if (!this.initialSelectedPlatsState) {
-      this.initialSelectedPlatsState = { ...plat }; // J'utilise cette variable dans onCancelForm()
-    }
-    // J'attribue à selectedPlats la value du plat ou j'ai cliqué - Utile pour le ngIf selectedPlats
-    this.selectedPlats = plat;
-    // J'attribue au paramétre id de la méthode le tableau d'alim_code contenu dans idIngredients
-    this.selectedPlats.ingredients = id;
-    console.log("J'ai cliqué sur : " + this.selectedPlats.ingredients);
-    // Je passe en paramétre de la méthode fetchCiqual le tableau d'id obtenu au dessus
-    this.nutrition.fetchCiqual(id);
-  }
-
-// Méthode pour la modal de suppression d'un plat OU d'un ingrédient
+// Méthode pour la modal de suppression d'un menu OU d'un plat
   DeleteDialog(id: number, del: boolean) {
-    // Id correspond à plat.id au niveau du Html OU à i de let i=index pour un ingrédient
+    // Id correspond à menu.id au niveau du Html OU à i de let i=index pour un plat
     this.confirmationService.confirm({
       // Le contenu de la boîte de dialogue
       message: 'Etes vous sûr de vouloir supprimer ?',
@@ -97,9 +90,9 @@ export class MenusComponent {
       icon: 'pi pi-exclamation-triangle',      
       accept: () => {        
         if (del) { // Si del est true (définie dans le html)
-          this.deletePlat(id); // J'appele la méthode de suppression de plat et lui fournis id en paramétre
+          this.deleteMenu(id); // J'appele la méthode de suppression de menu et lui fournis id en paramétre
         } else {         
-          this.supprIngredient(id); // J'appele la méthode de suppression d'ingrédients et lui fournis id en paramétre (paramétre i sur supprIngredient())
+          this.supprPlat(id); // J'appele la méthode de suppression d'un plat et lui fournis id en paramétre (paramétre i sur supprIngredient())
         }
         // Pour la pop-up
         this.messageService.add({
@@ -112,7 +105,6 @@ export class MenusComponent {
         switch (type) {
           case ConfirmEventType.REJECT:            
             this.messageService.add({
-              // Pour la pop-up
               severity: 'error',
               summary: 'Annuler',
               detail: 'Vous avez annuler',
@@ -121,7 +113,6 @@ export class MenusComponent {
             break;
           case ConfirmEventType.CANCEL:            
             this.messageService.add({
-              // Pour la pop-up
               severity: 'warn',
               summary: 'Annuler',
               detail: 'Vous avez annuler',
@@ -152,46 +143,48 @@ export class MenusComponent {
     });
 }
 
-// Méthode pour supprimer un plat sur la table plats
-  async deletePlat(id: number) {
-    // Id correspond à plat.id au niveau du HTML récupérer via la méthode de la modal au dessus
-    await this.nutrition
-      .deletePlatSupabase(id)
-      .then(() => {
-        this.nutrition.fetchPlats();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }  
+// Méthode pour supprimer un menu sur la table menus
 
-// Supprimer un ingrédient dans la liste sur un plat séléctionné
-  supprIngredient(i:number) {
-    console.log("index de l'ingrédient : ", i);    
-  // splice supprime l'ingrédient sur lequel j'ai cliqué en l'enlevant du tableau this.selectedPlats.idIngredients  
-    this.selectedPlats?.ingredients?.splice(i, 1);
-    //this.nutrition.fetchCiqual(this.selectedPlats.idIngredients);
-  }
+async deleteMenu(id: number) {
+  // Id correspond à plat.id au niveau du HTML récupérer via la méthode de la modal DeleteDialog()
+  await this.nutrition
+    .deleteMenuSupabase(id)
+    .then(() => {
+      this.nutrition.fetchMenus();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}  
 
+
+// Supprimer un ingrédient dans la liste sur un plat séléctionné - Paramétres récupérer dans DeleteDialog
+supprPlat(i:number) {
+  console.log("index du plat : ", i);    
+// splice supprime l'ingrédient sur lequel j'ai cliqué en l'enlevant du tableau this.selectedPlats.idIngredients  
+  this.selectedMenus?.plats?.splice(i, 1);
+  this.nutrition.fetchPlats(); 
+  console.log("Méthode supprPlats");    
+}
 // Ajouter un ingrédient sur un plat séléctionné
-onSelectIngredient(id: number) {
-  console.log("alim_code de l'ingrédient : ", id);
-  // this.selectedPlats?.idIngredients est-il défini et non nul ?
-  if (this.selectedPlats?.ingredients) {
-  // Ajoute l'ingredient sur lequel j'ai cliqué à la fin du tableau this.selectedPlats.idIngredients en utilisant son alim_code comme id
-    this.selectedPlats.ingredients.push(id);
+onSelectPlats(id: number) {
+  console.log("id du plat : ", id);
+  // this.selectedMenus?.idIngredients est-il défini et non nul ?
+  if (this.selectedMenus?.plats) {
+  // Ajoute l'ingredient sur lequel j'ai cliqué à la fin du tableau this.selectedMenus.idIngredients en utilisant son alim_code comme id
+    this.selectedMenus.plats.push(id);
   // Appelle de fetchCiqual() pour mettre à jour les composants et leur quantité si je rajoute un ingrédient
-    this.nutrition.fetchCiqual(this.selectedPlats.ingredients);
+    this.nutrition.fetchPlats();
   }  
 }
 
 async onSubmitForm() {
   try {
-    await this.nutrition.updatePlat(
-      this.selectedPlats!.id,
-      this.selectedPlats!
+    await this.nutrition.updateMenu(
+      this.selectedMenus!.id,
+      this.selectedMenus!
     );
-    this.nutrition.fetchPlats(); // Pour mettre à jour le formulaire ngModel      
+    this.nutrition.fetchMenus(); // Pour mettre à jour le formulaire ngModel      
   } catch (error) {
     console.error("Une erreur s'est produite :", error);
   }
@@ -199,18 +192,19 @@ async onSubmitForm() {
 
 onCancelForm() {  
   // Je réattribue à selectedPlats les valeurs stockées dans onSelectPlat()
-  this.selectedPlats = { ...this.initialSelectedPlatsState };
+  this.selectedMenus = undefined; // Pour ne plus afficher la div contenant le formulaire du plat
+  this.nutrition.fetchMenus();
+
 }
 
-onSubmitNewPlatForm() {
-  //console.log(this.newPlat.nom, this.newPlat.description);
-  console.log(this.newPlatForm.value);  
-}
+// onSubmitNewMenuForm() {
+//   console.log(this.newMenuForm.value);  
+// }
 
-addIngredient() {
-  const idIngredientsArray = this.newPlatForm.get('idIngredients') as FormArray;
-  idIngredientsArray.push(this.formbuilder.control(''));
-}
+// addPlat() {
+//   const idPlatsArray = this.newMenuForm.get('idPlats') as FormArray;
+//   idPlatsArray.push(this.formbuilder.control(''));
+// }
 
 }
 

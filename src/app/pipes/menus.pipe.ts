@@ -49,5 +49,6 @@ export class GetIngredientPipe implements PipeTransform {
   // Dans ce cas, 'alim_nom_fr' serait passé en tant qu'attribut
     return ingredient ? ingredient[attribut] : '';
   };
-
 }
+
+
