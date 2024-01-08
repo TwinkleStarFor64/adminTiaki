@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environement';
 @Injectable({
   providedIn: 'root',
 })
-export class NutritionService implements OnInit {
+export class NutritionService {
   private supabase: SupabaseClient; // Instance du client Supabase
   _session: AuthSession | null = null; // Session d'authentification Supabase
 
@@ -36,9 +36,7 @@ export class NutritionService implements OnInit {
     );
   }
 
-  async ngOnInit(): Promise<void> {
-    //this.fetchPlats();
-  }
+  
 
 // Méthode utiliser dans l'input de recherche d'ingrédients afin de le réinitialiser
 // Si l'input et vide ou pas vide la premiére page (pageIngredients) est défini à 1 afin de retrouver l'affichage initial
@@ -69,7 +67,6 @@ onFilterChangePlats() {
           ingredients: item['ingredients'],
         }));
         console.log(this.plats.map((item) => item['titre']));
-        console.log(this.plats.map((item) => item['ingredients']));
         return this.plats;
       }
     } catch (error) {
@@ -117,7 +114,6 @@ onFilterChangePlats() {
     if (ciqualBDD) {
     // J'attribue à la variable ciqual de type CiqualI le résultat de ciqualBDD - je peux maintenant utiliser ciqual dans d'autres méthodes
       this.ciqual = ciqualBDD; 
-      //console.log("Résultat de la méthode getAllCiqual : ", this.ciqual);
     } 
   }
 
@@ -215,14 +211,6 @@ async createPlat(newEntry: {
   }  
 }
 
-  async fetchData() {
-    try {
-      this.listePlats = await this.supa.getAttribuerPlats();
-      console.log(this.listePlats);
-    } catch (error) {
-      console.error("Une erreur s'est produite :", error);
-    }
-  }
 
 
 
@@ -405,20 +393,7 @@ async updateMenu(id: number, menu: MenuI) {
     }
   } */
 
-// async updatePlat(
-  //   id: number,
-  //   newEntry: {
-  //   description: string;
-  // }) {
-  //   const { error: platError } = await this.supabase
-  //     .from('plats')
-  //     .update(newEntry)
-  //     .eq('id', id);
 
-  //   if (platError) {
-  //     console.log(platError);
-  //   }
-  // }
 
 
 

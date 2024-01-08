@@ -19,8 +19,7 @@ export class PlatsComponent implements OnInit {
   filtreIngredients: string = ''; // Utiliser dans le ngModel affichant la liste des ingrédients - Filtre de recherche
 
   selectedPlats?: PlatI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
-  initialSelectedPlatsState!: PlatI; // Pour stocker l'état initial de selectedPlats dans onSelectPlat
-  
+    
   ref: DynamicDialogRef | undefined; // Pour la modal d'ajout de plat - DynamicDialogModule
 
   constructor(
@@ -48,8 +47,6 @@ export class PlatsComponent implements OnInit {
     this.nutrition.getAllCiqual();   
   }
 
-  
-
 // Méthode utiliser dans l'input de recherche d'ingrédients afin de le réinitialiser
 // Si l'input et vide ou pas vide la premiére page (pageIngredients) est défini à 1 afin de retrouver l'affichage initial
   /* onFilterChange() {
@@ -59,22 +56,14 @@ export class PlatsComponent implements OnInit {
   } */
 
 // Méthode qui attribue des valeurs aux variables correspondant à l'objet sur lequel je clique - Utilisé sur le nom du plat en HTML
-  onSelectPlat(plat: PlatI, id:Array<number>) {
-    // Enregistrez l'état initial de selectedPlats lors de la sélection initiale
-    /* if (!this.initialSelectedPlatsState) {
-      this.initialSelectedPlatsState = { ...plat }; // J'utilise cette variable dans onCancelForm()
-      console.log(this.initialSelectedPlatsState );      
-    } */
-    this.initialSelectedPlatsState = { ...plat }; // J'utilise cette variable dans onCancelForm()
-      console.log(this.initialSelectedPlatsState );
-    // J'attribue à selectedPlats la value du plat ou j'ai cliqué - Utile pour le ngIf selectedPlats
+  onSelectPlat(plat: PlatI, id: Array<number>) {
+  // J'attribue à selectedPlats la value du plat ou j'ai cliqué - Utile pour le ngIf selectedPlats
     this.selectedPlats = plat;
-    console.log("miaou", this.selectedPlats);
-    
-    // J'attribue au paramétre id de la méthode le tableau d'alim_code contenu dans idIngredients
+    console.log("ici selectedPlats : ", this.selectedPlats);    
+  // J'attribue au paramétre id de la méthode le tableau d'alim_code contenu dans idIngredients
     this.selectedPlats.ingredients = id;
     console.log("J'ai cliqué sur : " + this.selectedPlats.ingredients);
-    // Je passe en paramétre de la méthode fetchCiqual le tableau d'id obtenu au dessus
+  // Je passe en paramétre de la méthode fetchCiqual le tableau d'id obtenu au dessus
     this.nutrition.fetchCiqual(id);
   }
 
@@ -124,6 +113,7 @@ export class PlatsComponent implements OnInit {
       },
     });
   }  
+
 // Méthode pour confirmer ou annuler les modifications sur le formulaire d'un plat séléctionné
   ConfirmDialog(event: Event) {
     this.confirmationService.confirm({
@@ -193,11 +183,8 @@ async onSubmitForm() {
 
 // Annuler le formulaire de modification d'un plat et retrouver les valeurs initiales
 onCancelForm() {  
-  // Je réattribue à selectedPlats les valeurs stockées dans onSelectPlat()
-  //this.selectedPlats = { ...this.initialSelectedPlatsState };
   this.selectedPlats = undefined; // Pour ne plus afficher la div contenant le formulaire du plat
-  this.nutrition.fetchPlats();
-  
+  this.nutrition.fetchPlats();  
 }
 
 
