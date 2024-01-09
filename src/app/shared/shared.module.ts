@@ -8,7 +8,7 @@ import { ToastModule } from 'primeng/toast';
 import { GetIngredientPipe, GetPlatPipe, MenusPipe } from '../pipes/menus.pipe';
 import { PlatsPipe } from '../pipes/plats.pipe';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
@@ -62,7 +62,7 @@ import { DynamicDialogModule } from 'primeng/dynamicdialog';
     InputTextareaModule,
     CheckboxModule,
     HttpClientModule,
-    DynamicDialogModule
+    DynamicDialogModule,
   ],
   providers: [
 

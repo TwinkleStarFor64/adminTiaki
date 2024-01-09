@@ -1,1 +1,88 @@
-<p>complements works!</p>
+<header>
+    <article>
+      <figure>
+        <img src="assets/images/logos/logo_tiaki.png" alt="" />
+      </figure>
+      <div>
+        <h1><a routerLink="/intranet">Tiaki</a></h1>
+        <h2>Les Plats</h2>
+      </div>
+    </article>    
+  </header>
+  <section>
+    <article>
+      <span id="firstSpan">
+        <figure>
+          <img src="assets/images/icones/icones-communs/iconeNutrition.svg" alt="" />
+        </figure>
+        <h3>Gestion des plats</h3>
+      </span>    
+      <p-button styleClass="p-button-success">Ajouter un plat</p-button>
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input type="text" pInputText/>
+      </span>
+      <span>
+        <ng-container>
+        <div>
+          <p></p>              
+          <figure ><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>     
+        </div>
+      </ng-container>
+      </span>      
+      <span>
+
+        <pagination-controls  id="plats" previousLabel="Précédent" nextLabel="Suivant" [maxSize]="5"></pagination-controls>
+      </span>
+    </article>
+    <article>    
+      <div>     
+          <form #platForm="ngForm"> 
+            <span class="p-float-label">
+              <input pInputText  name="titre" type="text" required minlength="1"/>
+              <label htmlFor="nom">Nom</label>
+            </span> 
+            <span class="p-float-label">
+              <textarea id="float-input" rows="5" cols="40" pInputTextarea  name="description" required minlength="1"></textarea>
+              <label for="float-input">Description</label>
+            </span>
+            <span>
+              <h4>Ingrédients</h4> 
+              <div id="divIngredients" >
+                <figure><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>                               
+              </div>
+            </span>
+            <span id="spanButton">
+              <p-button styleClass="p-button-warning" >Annuler</p-button>              
+              <p-button styleClass="p-button-success"  [disabled]="platForm.invalid!">Valider</p-button>
+            </span>
+          </form>
+          <span id="blocIngredients">                     
+            <h4>Nutriments</h4> 
+          </span>    
+      </div>
+    </article> 
+    <article>
+      <h4>Ajout d'ingrédients</h4>
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input type="text" pInputText />
+      </span>
+      <div>
+          <span>
+            <p></p>
+          </span>        
+      </div>
+      <span id="paginationIngredients">
+        <pagination-controls></pagination-controls>
+      </span>
+    </article>   
+  </section>
+  <p-toast></p-toast>
+  <p-confirmDialog #cd [style]="{ width: '40vw' }">
+  <ng-template pTemplate="footer">
+    <button type="button" class="rejectButton" pButton icon="pi pi-times" label="Non" (click)="cd.reject()"></button>
+    <button type="submit" class="acceptButton" pButton icon="pi pi-check" label="Oui" (click)="cd.accept()"></button>
+  </ng-template>
+  </p-confirmDialog>
+  <p-confirmPopup key="formulaire"></p-confirmPopup>

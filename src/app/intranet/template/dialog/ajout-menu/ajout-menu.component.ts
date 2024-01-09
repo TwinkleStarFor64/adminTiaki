@@ -18,7 +18,8 @@ export class AjoutMenuComponent {
   filtrePlats: string = ''; // Utiliser dans le ngModel affichant la liste des plats - Filtre de recherche
   selectedMenus?: MenuI; // Utiliser dans onSelectPlat() - Pour savoir sur quel menu je clique et gérer le *ngIf
   plats: PlatI[] = [];
-  constructor(public ref: DynamicDialogRef, public nutrition: NutritionService) {}
+  platsTitres: string[] = []; 
+  constructor(public ref: DynamicDialogRef, public nutrition: NutritionService,private nutri: NutritionService) {}
 
   async ngOnInit(): Promise<void> {
     this.newMenu = {
@@ -26,8 +27,10 @@ export class AjoutMenuComponent {
       titre: '',
       description: '',
       plats: [],
+     
     }  
-    this.plats = await this.nutrition.getPlats();  
+    this.plats = await this.nutrition.getPlats();
+      
   }  
 // Méthode pour le formulaire d'ajout d'un menu
   async onSubmitNewMenuForm() {
@@ -47,10 +50,16 @@ export class AjoutMenuComponent {
   }
 
 // Ajouter un Plat
-  onSelectPlat(id: number) {
-    console.log("id du plat", id);  
-  if (this.newMenu?.plats) {
-    this.newMenu?.plats.push(id);    
+onSelectPlat(id: number) {
+  console.log("id du plat", id);  
+  const plat = this.nutri.getPlatById(id);
+  if (plat) {
+    if (this.newMenu && this.newMenu.plats) {
+      this.newMenu.plats.push(id);    
+      this.platsTitres.push(plat.titre);
+    }
+  } else {
+    console.log(`Aucun plat trouvé avec l'ID ${id}`);
   }
 }
 // Supprimer un Plat
