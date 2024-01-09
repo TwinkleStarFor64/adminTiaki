@@ -1,5 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
-import { CiqualI, MenuI, PlatI } from 'src/app/partage/modeles/Types';
+import { CiqualI, MenuI, PlatI, PlatTypeI, RegimesI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { AuthSession,createClient,SupabaseClient } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
@@ -16,7 +16,10 @@ export class NutritionService {
   plats: PlatI[] = [];
   ciqual: CiqualI[] = [];
   ciqualJSON: CiqualI[] = [];
-  allCiqual: CiqualI[] = [];
+  //allCiqual: CiqualI[] = [];
+
+  regimes: RegimesI[] = [];
+  platsTypes: PlatTypeI[] = [];
 
   mappedIngredients: any[] = [];
 
@@ -67,7 +70,7 @@ onFilterChangePlats() {
           titre: item['titre'],
           description: item['description'],
           alim_code: item['alim_code'],
-          ingredients: item['ingredients'],
+          ingredients: item['ingredients'],          
         }));
         console.log(this.plats.map((item) => item['titre']));
         return this.plats;
@@ -118,10 +121,6 @@ onFilterChangePlats() {
     return this.ciqualJSON;
   }
 
-  async fetchCiqualJSON() {
-    
-  }
-
   //------------------------ Méthode pour récupérer TOUTE la table ciqual ------------------------------------------
   async getAllCiqual(): Promise<void> {
     const { data: ciqualBDD, error: ciqualError } = await this.supabase
@@ -137,7 +136,7 @@ onFilterChangePlats() {
   }
 
 // ---------------------Méthode pour fetch les ingrédients sur la table ciqualAnses et gérer leur affichage en HTML--------------------------- 
-// ids correspond au tableau idIngredients sur la table plats (supabase) - attribuer via onSelectPlat sur nutrition.component
+// ids correspond au tableau idIngredients sur la table plats (supabase) - attribuer via onSelectPlat sur plats.component
   async fetchCiqual(ids: Array<number> | undefined): Promise<any> { 
     if (!ids) {  
     // Si pas d'id en paramétres return tableau vide - évite un message d'erreur si je clique sur un plat ne contenant pas idIngredients
@@ -230,12 +229,7 @@ async createPlat(newEntry: {
   }  
 }
 
-
-
-
-
 /* --------------------------Méthode pour récupérer les menus sur la table menus de supabase--------------------------------*/
-
   async fetchMenus(): Promise<any> {
     try {
       const menuData = await this.getMenus(); // Appelle la méthode getMenus ci-dessous
@@ -314,7 +308,91 @@ async updateMenu(id: number, menu: MenuI) {
   }
 }
 
+//------------------------------- Méthode pour fetch les régimes associer à un plat ---------------------
+async getRegimes(idPlats: number): Promise<any> {  
+  const { data, error } = await this.supabase
+    .from('attribuerRegimes')
+    .select('plats!attribuerRegimes_idPlats_fkey(*),regimes!attribuerRegimes_idRegimes_fkey(*)')
+    .eq('idPlats', idPlats)
+    //.eq('idRegimes', 2)
+  if (error) {
+    console.log('Erreur de la méthode getRegimes : ', error);    
+  }  
+  if (Array.isArray(data)) {  
+    this.regimes = data.flatMap((item: any) => item['regimes']);
+    console.log('Data de la méthode getRegimes : ', data);
+    console.log('ici this.regimes : ', this.regimes);    
+    const mappedRegimes = this.regimes.map((regime: any) => ({
+      id: regime.id,
+      titre: regime.titre,
+      description: regime.description,
+      type: regime.type,
+    }));
+    console.log('Régimes après map : ', mappedRegimes);
+    return mappedRegimes;
+  } else {
+    return [];
+  }  
+} 
+
+//---------------------------- Méthode pour fetch les types (déjeuner, diner, etc....) associer à un plat ------------------------
+async getTypeOfPlats(idPlats: number): Promise<any> {
+  const { data, error } = await this.supabase
+    .from('attribuerPlatsTypes')
+    .select('platsTypes!attribuerPlatsTypes_idType_fkey(*)')
+    .eq('idPlat', idPlats)
+  if (error) {
+    console.log('Erreur de la méthode getTypeOfPlats : ', error);    
+  }
+  if (data) {
+    console.log(data);
+    this.platsTypes = data.flatMap((item: any) => item['platsTypes']);
+    const mappedType = this.platsTypes.map((platsTypes: any) => ({
+      id: platsTypes.id,
+      type: platsTypes.type,
+    }));
+    console.log("mappedType : ", mappedType);
+    
+    return mappedType;
+  }
 }
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ----------------------------------------------------------------- Méthode fetchCiqual avec un forEach ------------------------------------------------------------ */
   /* async fetchCiqual(ids: Array<number>): Promise<any> {
     const listeIngredients = ids.map((id) =>

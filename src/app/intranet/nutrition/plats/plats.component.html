@@ -85,7 +85,19 @@
               <p>Manganese : {{ nutrition.totals['manganese'] | number: '1.2-2' }} Mg </p>
             </span>
           </div>            
-        </span>    
+        </span>
+        <span>
+          <h4>Régimes alimentaires</h4>
+          <div *ngFor="let diet of nutrition.regimes">
+            <p>{{ diet.titre }}</p>
+          </div>
+        </span>  
+        <span>
+          <h4>types</h4>
+          <div *ngFor="let platType of nutrition.platsTypes">
+            <p>{{ platType.type }}</p>
+          </div>
+        </span>  
     </div>
   </article> 
   <article>

@@ -34,7 +34,7 @@ export interface PlatI {
   alim_code: number | null;
   statut?: string;
   reaction?: string;
-  ingredients?: Array<number>;
+  ingredients?: Array<number>;   
   //types:PlatE
 }
 
@@ -45,27 +45,6 @@ export interface MenuI {
   plats?: Array<number>;
   statut?:MenuE ;
   reaction?: string;
-
-}
-
-export enum MenuE {
-  valide = '1',
-  invalide = '0',
-  enAttente = '-1'
-}
-
-export enum PlatE {
-petitDej = 'petit déjeuner',
-encas = 'encas',
-dejeuner = 'déjeuner',
-gouter = 'goûter',
-diner= 'diner'
-}
-
-export enum MesuresE {
-mgr = 'mgr',
-gr = 'gr',
-kgs = 'kgs'
 }
 
 export interface CiqualI {
@@ -85,4 +64,37 @@ export interface CiqualI {
   cuivre: number;
   manganese: number;
   [key: string]: number | string; // Pour la méthode calculateTotals() qui crée un objet de type clé et valeur - Variable totals dans nutrition.service
+}
+
+export interface RegimesI {
+  id: number;
+  titre: string;
+  description?: string;
+  type?: string;
+}
+
+export interface PlatTypeI {
+  id: number;
+  type: string;
+}
+
+/* -------------- ENUM --------------------- */
+export enum MenuE {
+  valide = '1',
+  invalide = '0',
+  enAttente = '-1'
+}
+
+export enum PlatE {
+petitDej = 'petit déjeuner',
+encas = 'encas',
+dejeuner = 'déjeuner',
+gouter = 'goûter',
+diner= 'diner'
+}
+
+export enum MesuresE {
+mgr = 'mgr',
+gr = 'gr',
+kgs = 'kgs'
 }
