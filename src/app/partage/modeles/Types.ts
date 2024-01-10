@@ -1,3 +1,11 @@
+export interface LienI {
+  id: number;
+  titre: string;
+  url: string;
+  description?: string;
+  cible?: '_self' | '_blank'
+}
+
 /**
  * @description Interface de l'aside bar
  */
@@ -36,7 +44,8 @@ export interface PlatI {
   reaction?: string;
   ingredients?: Array<number>;
   qualites?: string; 
-  astuces?: string;    
+  astuces?: string;
+  nbPersonnes?: number;    
   //types:PlatE
 }
 
@@ -87,6 +96,19 @@ export interface AllergeneI {
   type: 'ingredient' | 'nutriment'
 }
 
+export interface NutrimentI {
+  id: number;
+  titre: string;
+  quantite: number;
+  mesure: MesuresE;
+}
+
+export interface NutriProgrammeI {
+  id: number;
+  titre: string;
+  description?: string;
+  statut: -1 | 0 | 1;
+}
 /* -------------- ENUM --------------------- */
 export enum MenuE {
   valide = '1',
@@ -107,3 +129,4 @@ mgr = 'mgr',
 gr = 'gr',
 kgs = 'kgs'
 }
+

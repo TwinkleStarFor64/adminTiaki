@@ -49,6 +49,14 @@
             <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="selectedPlats.description" name="description" required minlength="1"></textarea>
             <label for="float-input">Description</label>
           </span>
+          <span class="p-float-label">
+            <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="selectedPlats.astuces" name="astuces" required minlength="1"></textarea>
+            <label for="float-input">Astuces</label>
+          </span>
+          <span class="p-float-label">
+            <textarea id="float-input" rows="2" cols="40" pInputTextarea [(ngModel)]="selectedPlats.qualites" name="qualites" required minlength="1"></textarea>
+            <label for="float-input">Qualités</label>
+          </span>
           <span>
             <h4>Ingrédients</h4> 
             <div id="divIngredients" *ngFor="let id of selectedPlats.ingredients; let i=index">
@@ -104,6 +112,26 @@
             <p>{{ allergenes.titre }}</p>
           </div>
         </span> 
+        <span>
+          <h4>Nutriments complémentaire</h4>
+          <div *ngFor="let nutriment of nutrition.nutriments">
+            <p>{{ nutriment.titre }}</p>
+            <p>{{ nutriment.mesure }}</p>
+          </div>
+        </span> 
+        <span>
+          <h4>Liens</h4>
+          <div *ngFor="let lien of nutrition.liens">
+            <p>{{ lien.titre }}</p>
+          </div>
+        </span>
+        <span>
+          <h4>Programme de nutrition</h4>
+          <div *ngFor="let nutriProg of nutrition.nutriProgrammes">
+            <p>{{ nutriProg.titre }}</p>
+            <p>{{ nutriProg.statut }}</p>
+          </div>
+        </span>
     </div>
   </article> 
   <article>
