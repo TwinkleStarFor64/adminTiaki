@@ -7,6 +7,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MenusPipe } from 'src/app/pipes/menus.pipe';
 import { PlatsPipe } from 'src/app/pipes/plats.pipe';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('AjoutMenuComponent', () => {
   let component: AjoutMenuComponent;
@@ -15,7 +16,7 @@ describe('AjoutMenuComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [AjoutMenuComponent,MenusPipe,PlatsPipe],
-      imports: [ReactiveFormsModule,FormsModule,ButtonModule,NgxPaginationModule],
+      imports: [ReactiveFormsModule,FormsModule,ButtonModule,NgxPaginationModule,HttpClientModule],
       providers: [DynamicDialogRef]
     });
     fixture = TestBed.createComponent(AjoutMenuComponent);

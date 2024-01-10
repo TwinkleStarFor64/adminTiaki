@@ -10,6 +10,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('MenusComponent', () => {
   let component: MenusComponent;
@@ -18,7 +19,7 @@ describe('MenusComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [MenusComponent, PlatsPipe,MenusPipe, IngredientsPipe],
-      imports: [ButtonModule, PaginatorModule, NgxPaginationModule, ToastModule, ConfirmDialogModule, ConfirmPopupModule]
+      imports: [ButtonModule, PaginatorModule, NgxPaginationModule, ToastModule, ConfirmDialogModule, ConfirmPopupModule,HttpClientModule]
     });
 
     fixture = TestBed.createComponent(MenusComponent);

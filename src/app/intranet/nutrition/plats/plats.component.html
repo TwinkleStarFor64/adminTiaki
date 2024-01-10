@@ -20,11 +20,11 @@
     <p-button styleClass="p-button-success" (onClick)="ajoutPlat()">Ajouter un plat</p-button>
     <span class="p-input-icon-left">
       <i class="pi pi-search"></i>
-      <input type="text" pInputText [(ngModel)]="filtre" />
+      <input type="text" pInputText [(ngModel)]="nutrition.filtre" />
     </span>
     <span>
       <!-- Utilisation du pipe plats pour rechercher des plats par leur noms -->
-      <ng-container *ngIf="nutrition.plats | plats:filtre as filteredPlats">
+      <ng-container *ngIf="nutrition.plats | plats:nutrition.filtre as filteredPlats">
       <!-- Utilisation de ngx-pagination - Doc : https://github.com/michaelbromley/ngx-pagination/blob/master/README.md#demo -->  
       <div *ngFor="let plat of filteredPlats | paginate: { itemsPerPage: 15, currentPage: pagePlats, id:'plats' }">
         <p (click)="onSelectPlat(plat, plat.ingredients)">{{ plat.titre }}</p>              
@@ -48,6 +48,14 @@
           <span class="p-float-label">
             <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="selectedPlats.description" name="description" required minlength="1"></textarea>
             <label for="float-input">Description</label>
+          </span>
+          <span class="p-float-label">
+            <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="selectedPlats.astuces" name="astuces" required minlength="1"></textarea>
+            <label for="float-input">Astuces</label>
+          </span>
+          <span class="p-float-label">
+            <textarea id="float-input" rows="2" cols="40" pInputTextarea [(ngModel)]="selectedPlats.qualites" name="qualites" required minlength="1"></textarea>
+            <label for="float-input">Qualités</label>
           </span>
           <span>
             <h4>Ingrédients</h4> 
@@ -85,7 +93,45 @@
               <p>Manganese : {{ nutrition.totals['manganese'] | number: '1.2-2' }} Mg </p>
             </span>
           </div>            
-        </span>    
+        </span>
+        <span>
+          <h4>Régimes alimentaires</h4>
+          <div *ngFor="let diet of nutrition.regimes">
+            <p>{{ diet.titre }}</p>
+          </div>
+        </span>  
+        <span>
+          <h4>types</h4>
+          <div *ngFor="let platType of nutrition.platsTypes">
+            <p>{{ platType.type }}</p>
+          </div>
+        </span> 
+        <span>
+          <h4>Allergènes</h4>
+          <div *ngFor="let allergenes of nutrition.allergenes">
+            <p>{{ allergenes.titre }}</p>
+          </div>
+        </span> 
+        <span>
+          <h4>Nutriments complémentaire</h4>
+          <div *ngFor="let nutriment of nutrition.nutriments">
+            <p>{{ nutriment.titre }}</p>
+            <p>{{ nutriment.mesure }}</p>
+          </div>
+        </span> 
+        <span>
+          <h4>Liens</h4>
+          <div *ngFor="let lien of nutrition.liens">
+            <p>{{ lien.titre }}</p>
+          </div>
+        </span>
+        <span>
+          <h4>Programme de nutrition</h4>
+          <div *ngFor="let nutriProg of nutrition.nutriProgrammes">
+            <p>{{ nutriProg.titre }}</p>
+            <p>{{ nutriProg.statut }}</p>
+          </div>
+        </span>
     </div>
   </article> 
   <article>
