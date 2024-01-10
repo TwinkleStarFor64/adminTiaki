@@ -34,7 +34,9 @@ export interface PlatI {
   alim_code: number | null;
   statut?: string;
   reaction?: string;
-  ingredients?: Array<number>;   
+  ingredients?: Array<number>;
+  qualites?: string; 
+  astuces?: string;    
   //types:PlatE
 }
 
@@ -76,6 +78,13 @@ export interface RegimesI {
 export interface PlatTypeI {
   id: number;
   type: string;
+}
+
+export interface AllergeneI {
+  id: number;
+  titre: string;
+  description?: string;
+  type: 'ingredient' | 'nutriment'
 }
 
 /* -------------- ENUM --------------------- */

@@ -97,7 +97,13 @@
           <div *ngFor="let platType of nutrition.platsTypes">
             <p>{{ platType.type }}</p>
           </div>
-        </span>  
+        </span> 
+        <span>
+          <h4>Allergènes</h4>
+          <div *ngFor="let allergenes of nutrition.allergenes">
+            <p>{{ allergenes.titre }}</p>
+          </div>
+        </span> 
     </div>
   </article> 
   <article>

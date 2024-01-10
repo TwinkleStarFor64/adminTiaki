@@ -1,5 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
-import { CiqualI, MenuI, PlatI, PlatTypeI, RegimesI } from 'src/app/partage/modeles/Types';
+import { AllergeneI, CiqualI, MenuI, PlatI, PlatTypeI, RegimesI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { AuthSession,createClient,SupabaseClient } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
@@ -20,6 +20,7 @@ export class NutritionService {
 
   regimes: RegimesI[] = [];
   platsTypes: PlatTypeI[] = [];
+  allergenes: AllergeneI[] = [];
 
   mappedIngredients: any[] = [];
 
@@ -63,6 +64,7 @@ onFilterChangePlats() {
     try {
       const platData = await this.getPlats(); // Appelle la méthode getPlats ci-dessous
       if (platData) {
+        console.log(platData);      
         //Ici, nous utilisons la méthode map pour créer un nouveau tableau de plats à partir de data.
         //Chaque élément de data est représenté par l'objet { [x: string]: any; }, que nous convertissons en un objet PlatI en utilisant les propriétés nécessaires.
         this.plats = platData.map((item: { [x: string]: any }) => ({
@@ -70,7 +72,9 @@ onFilterChangePlats() {
           titre: item['titre'],
           description: item['description'],
           alim_code: item['alim_code'],
-          ingredients: item['ingredients'],          
+          ingredients: item['ingredients'],
+          qualites: item['qualites'],
+          astuces: item['astuces'],          
         }));
         console.log(this.plats.map((item) => item['titre']));
         return this.plats;
@@ -314,21 +318,20 @@ async getRegimes(idPlats: number): Promise<any> {
     .from('attribuerRegimes')
     .select('plats!attribuerRegimes_idPlats_fkey(*),regimes!attribuerRegimes_idRegimes_fkey(*)')
     .eq('idPlats', idPlats)
-    //.eq('idRegimes', 2)
   if (error) {
     console.log('Erreur de la méthode getRegimes : ', error);    
   }  
   if (Array.isArray(data)) {  
     this.regimes = data.flatMap((item: any) => item['regimes']);
-    console.log('Data de la méthode getRegimes : ', data);
-    console.log('ici this.regimes : ', this.regimes);    
+    //console.log('Data de la méthode getRegimes : ', data);
+    //console.log('ici this.regimes : ', this.regimes);    
     const mappedRegimes = this.regimes.map((regime: any) => ({
       id: regime.id,
       titre: regime.titre,
       description: regime.description,
       type: regime.type,
     }));
-    console.log('Régimes après map : ', mappedRegimes);
+    //console.log('Régimes après map : ', mappedRegimes);
     return mappedRegimes;
   } else {
     return [];
@@ -345,18 +348,42 @@ async getTypeOfPlats(idPlats: number): Promise<any> {
     console.log('Erreur de la méthode getTypeOfPlats : ', error);    
   }
   if (data) {
-    console.log(data);
+    //console.log(data);
     this.platsTypes = data.flatMap((item: any) => item['platsTypes']);
     const mappedType = this.platsTypes.map((platsTypes: any) => ({
       id: platsTypes.id,
       type: platsTypes.type,
     }));
-    console.log("mappedType : ", mappedType);
-    
+    //console.log("mappedType : ", mappedType);    
     return mappedType;
+  } else {
+    return [];
   }
 }
 
+//-------------------------- Méthode pour fetch les allergènes associer à un plat -----------------------------------------------
+async getAllergenes(idPlats: number): Promise<any> {
+  const { data, error } = await this.supabase
+    .from('attribuerAllergenes')
+    .select('allergenes!attribuerAllergenes_idAllergenes_fkey(*)')
+    .eq('idPlats', idPlats)
+  if (error) {
+    console.log('Erreur de la méthode getAllergenes', error);    
+  }
+  if (data) {
+    console.log(data);
+    this.allergenes = data.flatMap((item: any) => item['allergenes']).map((allergenes: any) => ({
+      id: allergenes.id,
+      titre: allergenes.titre,
+      description: allergenes.description,
+      type: allergenes.type,
+    }));
+    console.log("Ici this.allergenes : ", this.allergenes);
+    return this.allergenes;    
+  } else {
+    return [];
+  }
+}
 
 
 

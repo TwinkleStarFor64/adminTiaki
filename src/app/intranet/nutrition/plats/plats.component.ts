@@ -72,6 +72,7 @@ export class PlatsComponent implements OnInit {
     this.nutrition.fetchCiqual(id);
     this.nutrition.getRegimes(this.selectedPlats.id);
     this.nutrition.getTypeOfPlats(this.selectedPlats.id);
+    this.nutrition.getAllergenes(this.selectedPlats.id);
   }
 
 // Méthode pour la modal de suppression d'un plat OU d'un ingrédient
