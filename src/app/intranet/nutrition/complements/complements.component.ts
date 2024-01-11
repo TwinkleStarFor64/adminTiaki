@@ -31,9 +31,7 @@ export class ComplementsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.nutrition.fetchComplements().subscribe(data => {
-      console.log(data);
-    });
+   
     
   }
 

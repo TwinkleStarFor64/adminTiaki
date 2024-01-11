@@ -48,6 +48,21 @@ export interface MenuI {
 
 }
 
+export interface NutrimentI {
+  id: number;
+  titre: string;
+  quantite: string;
+  represente?: string;
+  reaction?: string;
+  mesure: MesuresE;
+}
+
+export enum MesureE{
+  mcg ='',
+  gr ='',
+  kg=''
+}
+
 export enum MenuE {
   valide = '1',
   invalide = '0',

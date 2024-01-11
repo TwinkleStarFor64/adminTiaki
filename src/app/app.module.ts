@@ -9,13 +9,14 @@ import { RecoveryComponent } from './extranet/recovery/recovery.component';
 import { ResetComponent } from './extranet/reset/reset.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
+import { NutrimentsPipe } from './pipes/nutriments.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     ConnexionComponent,
     RecoveryComponent,
-    ResetComponent,    
+    ResetComponent,   
   ],
   imports: [
     BrowserModule,

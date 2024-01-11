@@ -16,6 +16,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TableModule } from 'primeng/table';
 import { GestionUtilisateursPipe } from '../pipes/gestion-utilisateurs.pipe';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
+import { NutrimentsPipe } from '../pipes/nutriments.pipe';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { DynamicDialogModule } from 'primeng/dynamicdialog';
     PlatsPipe,
     GestionUtilisateursPipe,
     GetPlatPipe,
+    NutrimentsPipe
   ],
   imports: [
     CommonModule,

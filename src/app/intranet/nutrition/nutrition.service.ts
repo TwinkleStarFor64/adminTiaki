@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CiqualI, MenuI, PlatI } from 'src/app/partage/modeles/Types';
+import { CiqualI, MenuI, NutrimentI, PlatI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { AuthSession, createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
@@ -13,6 +13,7 @@ export class NutritionService {
   private supabase: SupabaseClient; // Instance du client Supabase
   _session: AuthSession | null = null; // Session d'authentification Supabase
 
+  nutriments: NutrimentI[] = [];
   menus: MenuI[] = [];
   plats: PlatI[] = [];
   ciqual: CiqualI[] = [];
@@ -300,12 +301,61 @@ export class NutritionService {
     }
   }
 
-  fetchComplements(): Observable<any> {
-    return this.http.get('assets/data/complements.json');
+  async fetchNutriments(): Promise<any> {
+    try {
+      const nutrimentData = await this.getNutriments(); // Appelle la méthode getNutriments ci-dessous
+      if (nutrimentData) {
+        this.nutriments = nutrimentData.map((item: { [x: string]: any }) => ({
+          id: item['id'],
+          titre: item['titre'],
+          quantite: item['quantite'],
+          represente: item['represente'],
+          reaction: item['reaction'],
+          mesure: item['mesure'],
+        }));
+        console.log(this.menus.map((item) => item['titre']));
+        return this.menus;
+      }
+    } catch (error) {
+      console.error(
+        "Une erreur s'est produite sur la méthode fetchPlats :",
+        error
+      );
+    }
+  }
+  async getNutriments() {
+    const { data, error } = await this.supabase.from('nutriments').select('*');
+    if (error) {
+      console.log('Erreur de la méthode getMenus : ', error);
+    }
+    if (data) {
+      console.log('Data de la méthode getMenus: ', data);
+      return data;
+    } else {
+      return [];
+    }
+  }
+  async deleteNutrimentSupabase(id: number) {
+    // id récupérer sur la méthode deletePlat de nutrition.component
+    const { error: deleteError } = await this.supabase
+      .from('nutriments')
+      .delete()
+      .eq('id', id);
+    if (deleteError) {
+      console.log('Erreur de suppression de nutriment', deleteError);
+    }
+  }
+  async updateNutriments(id: number, nutriment: NutrimentI) {
+    const { error: platError } = await this.supabase
+      .from('nutriments')
+      .update(nutriment) // Update de tout l'objet nutriment qui correspond au type NutrimentI  
+      .eq('id', id);
+
+    if (platError) {
+      console.log(platError);
+    }
   }
 }
-
-
 
 
 

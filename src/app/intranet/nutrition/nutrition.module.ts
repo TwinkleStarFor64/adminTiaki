@@ -7,6 +7,8 @@ import { MenusComponent } from './menus/menus.component';
 import { NutritionRoutingModule } from './nutrition-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { PlatsComponent } from './plats/plats.component';
+import { NutrimentsComponent } from './nutriments/nutriments.component';
+import { NutrimentsPipe } from 'src/app/pipes/nutriments.pipe';
 
 
 @NgModule({
@@ -16,6 +18,7 @@ import { PlatsComponent } from './plats/plats.component';
     IngredientsComponent,
     MenusComponent,
     PlatsComponent,
+    NutrimentsComponent,
   ],
   imports: [
     CommonModule,
