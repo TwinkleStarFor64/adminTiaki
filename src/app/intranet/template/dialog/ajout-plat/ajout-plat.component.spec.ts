@@ -15,7 +15,7 @@ describe('AjoutPlatComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [AjoutPlatComponent,IngredientsPipe,NutrimentsPipe],
-      imports: [ReactiveFormsModule,FormsModule,ButtonModule,NgxPaginationModule,HttpClientModule],
+      imports: [ReactiveFormsModule,FormsModule,ButtonModule,NgxPaginationModule,HttpClientModule,ToastModule],
       providers: [DynamicDialogRef]
     });
     fixture = TestBed.createComponent(AjoutPlatComponent);
