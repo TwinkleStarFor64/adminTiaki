@@ -73,7 +73,7 @@ export class PlatsComponent implements OnInit {
     this.nutrition.getRegimes(this.selectedPlats.id);
     this.nutrition.getTypeOfPlats(this.selectedPlats.id);
     this.nutrition.getAllergenes(this.selectedPlats.id);
-    this.nutrition.getNutriments(this.selectedPlats.id);
+    // this.nutrition.getNutriments(this.selectedPlats.id);
     this.nutrition.getLiens(this.selectedPlats.id);
     this.nutrition.getNutriProgrammes(this.selectedPlats.id);
   }

@@ -1,9 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PlatsComponent } from './plats.component';
 import { ButtonModule } from 'primeng/button';
-import { PlatsPipe } from 'src/app/pipes/plats.pipe';
+import { PlatsPipe, IngredientsPipe } from 'src/app/pipes/nutrition.pipe';
 import { PaginatorModule } from 'primeng/paginator';
-import { IngredientsPipe } from 'src/app/pipes/ingredients.pipe';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -17,7 +16,8 @@ describe('PlatsComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [PlatsComponent, PlatsPipe, IngredientsPipe],
-      imports: [ButtonModule, PaginatorModule, NgxPaginationModule, ToastModule, ConfirmDialogModule, ConfirmPopupModule, HttpClientModule]
+      imports: [ButtonModule, PaginatorModule, NgxPaginationModule, ToastModule, ConfirmDialogModule, ConfirmPopupModule,HttpClientModule]
+
     });
     fixture = TestBed.createComponent(PlatsComponent);
     component = fixture.componentInstance;

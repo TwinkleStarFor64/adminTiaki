@@ -1,8 +1,9 @@
-import { Injectable, OnInit } from '@angular/core';
-import { AllergeneI, CiqualI, LienI, MenuI, NutriProgrammeI, NutrimentI, PlatI, PlatTypeI, RegimesI } from 'src/app/partage/modeles/Types';
+import { Injectable } from '@angular/core';
+import { AllergeneI, CiqualI, LienI, MenuI, NutrimentI, NutriProgrammeI,PlatI, PlatTypeI, RegimesI } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
-import { AuthSession,createClient,SupabaseClient } from '@supabase/supabase-js';
+import { AuthSession, createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
+
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -12,7 +13,7 @@ export class NutritionService {
   private supabase: SupabaseClient; // Instance du client Supabase
   _session: AuthSession | null = null; // Session d'authentification Supabase
 
-  //allCiqual: CiqualI[] = [];
+  nutriments: NutrimentI[] = [];
   menus: MenuI[] = [];
   plats: PlatI[] = [];
   ciqual: CiqualI[] = [];
@@ -20,7 +21,6 @@ export class NutritionService {
   regimes: RegimesI[] = [];
   platsTypes: PlatTypeI[] = [];
   allergenes: AllergeneI[] = [];
-  nutriments: NutrimentI[] = [];
   liens: LienI[] = [];
   nutriProgrammes : NutriProgrammeI[] = [];
 
@@ -33,7 +33,7 @@ export class NutritionService {
   listePlats: any[] = [];
 
   pageIngredients: number = 1; // Comme ci-dessus mais pour la liste d'ingrédients
-  pagePlats:number = 1;
+  pagePlats: number = 1;
 
   filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats 
   flitrePlats: string = ''; // Utiliser dans le ngModel affichant la liste des plats - Filtre de recherche
@@ -53,11 +53,11 @@ onFilterChange() {
   }
 }
 
-onFilterChangePlats() {
-  if (this.flitrePlats === '' || this.flitrePlats != '') {
-    this.pagePlats = 1;
+  onFilterChangePlats() {
+    if (this.flitrePlats === '' || this.flitrePlats != '') {
+      this.pagePlats = 1;
+    }
   }
-}
 
 // ---------------------Méthode pour fetch les plats et gérer leur affichage en HTML---------------------------
   async fetchPlats(): Promise<any> {
@@ -135,9 +135,9 @@ onFilterChangePlats() {
       console.log('Erreur de la méthode getAllCiqual : ', ciqualError);
     }
     if (ciqualBDD) {
-    // J'attribue à la variable ciqual de type CiqualI le résultat de ciqualBDD - je peux maintenant utiliser ciqual dans d'autres méthodes
-      this.ciqual = ciqualBDD; 
-    } 
+      // J'attribue à la variable ciqual de type CiqualI le résultat de ciqualBDD - je peux maintenant utiliser ciqual dans d'autres méthodes
+      this.ciqual = ciqualBDD;
+    }
   }
 
 // ---------------------Méthode pour fetch les ingrédients sur la table ciqualAnses et gérer leur affichage en HTML--------------------------- 
@@ -149,29 +149,29 @@ onFilterChangePlats() {
     }
     const listeIngredients = ids.map((id) => this.ciqual.find((ing) => ing['alim_code'] == id));
     if (listeIngredients.length > 0) {
-    // Utilisez map pour transformer chaque élément de listeIngredients
-    this.mappedIngredients = listeIngredients.map((item) => ({
-      alim_nom_fr: item!['alim_nom_fr'],
-    // Ci-dessous avec parseFloat je convertis une string en number (données de type texte en BDD)
-    // Avec .replace(',', '.')) || 0 - Je remplace le . par une , - Si j'ai autre chose qu'un number en BDD la valeur par défaut est 0
-      proteine: parseFloat(String(item!['Protéines, N x 6.25 (g/100 g)']).replace(',', '.')) || 0,
-      glucides: parseFloat(String(item!['Glucides (g/100 g)']).replace(',', '.')) || 0,
-      lipides: parseFloat(String(item!['Lipides (g/100 g)']).replace(',', '.')) || 0,
-      sucres: parseFloat(String(item!['Sucres (g/100 g)']).replace(',', '.')) || 0,
-      vitamineC: parseFloat(String(item!['Vitamine C (mg/100 g)']).replace(',', '.')) || 0,
-      vitamineB1: parseFloat(String(item!['Vitamine B1 ou Thiamine (mg/100 g)']).replace(',', '.')) || 0,
-      vitamineB2: parseFloat(String(item!['Vitamine B2 ou Riboflavine (mg/100 g)']).replace(',', '.')) || 0,
-      vitamineB3: parseFloat(String(item!['Vitamine B3 ou PP ou Niacine (mg/100 g)']).replace(',', '.')) || 0,
-      vitamineB5: parseFloat(String(item!['Vitamine B5 ou Acide pantothénique (mg/100 g)']).replace(',','.')) || 0,
-      magnesium: parseFloat(String(item!['Magnésium (mg/100 g)']).replace(',', '.')) || 0,
-      potassium: parseFloat(String(item!['Potassium (mg/100 g)']).replace(',', '.')) || 0,
-      cuivre: parseFloat(String(item!['Cuivre (mg/100 g)']).replace(',', '.')) || 0,
-      manganese: parseFloat(String(item!['Manganèse (mg/100 g)']).replace(',', '.')) || 0,
-    }));
-    this.calculateTotals(); // Après le map je fais appelle à cette méthode pour additioner les valeurs des items définis au dessus
-    //console.log('Ciqual traité, mappé', this.ciqual);
-    //console.log(this.mappedIngredients.map((item) => item.proteine));    
-    return this.mappedIngredients;
+      // Utilisez map pour transformer chaque élément de listeIngredients
+      this.mappedIngredients = listeIngredients.map((item) => ({
+        alim_nom_fr: item!['alim_nom_fr'],
+        // Ci-dessous avec parseFloat je convertis une string en number (données de type texte en BDD)
+        // Avec .replace(',', '.')) || 0 - Je remplace le . par une , - Si j'ai autre chose qu'un number en BDD la valeur par défaut est 0
+        proteine: parseFloat(String(item!['Protéines, N x 6.25 (g/100 g)']).replace(',', '.')) || 0,
+        glucides: parseFloat(String(item!['Glucides (g/100 g)']).replace(',', '.')) || 0,
+        lipides: parseFloat(String(item!['Lipides (g/100 g)']).replace(',', '.')) || 0,
+        sucres: parseFloat(String(item!['Sucres (g/100 g)']).replace(',', '.')) || 0,
+        vitamineC: parseFloat(String(item!['Vitamine C (mg/100 g)']).replace(',', '.')) || 0,
+        vitamineB1: parseFloat(String(item!['Vitamine B1 ou Thiamine (mg/100 g)']).replace(',', '.')) || 0,
+        vitamineB2: parseFloat(String(item!['Vitamine B2 ou Riboflavine (mg/100 g)']).replace(',', '.')) || 0,
+        vitamineB3: parseFloat(String(item!['Vitamine B3 ou PP ou Niacine (mg/100 g)']).replace(',', '.')) || 0,
+        vitamineB5: parseFloat(String(item!['Vitamine B5 ou Acide pantothénique (mg/100 g)']).replace(',', '.')) || 0,
+        magnesium: parseFloat(String(item!['Magnésium (mg/100 g)']).replace(',', '.')) || 0,
+        potassium: parseFloat(String(item!['Potassium (mg/100 g)']).replace(',', '.')) || 0,
+        cuivre: parseFloat(String(item!['Cuivre (mg/100 g)']).replace(',', '.')) || 0,
+        manganese: parseFloat(String(item!['Manganèse (mg/100 g)']).replace(',', '.')) || 0,
+      }));
+      this.calculateTotals(); // Après le map je fais appelle à cette méthode pour additioner les valeurs des items définis au dessus
+      //console.log('Ciqual traité, mappé', this.ciqual);
+      //console.log(this.mappedIngredients.map((item) => item.proteine));    
+      return this.mappedIngredients;
     } else {
       console.log('Pas de ciqual !');
       return [];
@@ -197,7 +197,7 @@ onFilterChangePlats() {
     ];
     for (const property of numericProperties) {
       // J'utilise la variable totals qui défini un objet avec clé et valeur
-      this.totals[property] = this.mappedIngredients.reduce((sum, item) => sum + (Number(item[property]) || 0),0);
+      this.totals[property] = this.mappedIngredients.reduce((sum, item) => sum + (Number(item[property]) || 0), 0);
       // item représente un des items (par ex: proteine) - sum et l'addition de cet item à chaque itération
       // L'addition est faite ici : sum + (Number(item[property]) || 0) - Number(...) convertit cette valeur en nombre.
       // Si la conversion échoue (si la valeur est null ou undefined), cela renvoie NaN (Not a Number) - Dans ce cas || 0 renvoie 0
@@ -233,7 +233,15 @@ async createPlat(newEntry: {
   }  
 }
 
-/* --------------------------Méthode pour récupérer les menus sur la table menus de supabase--------------------------------*/
+  // In your NutritionService
+  getPlatById(id: number): PlatI | undefined {
+    console.log("Plat trouvé : ", this.plats.find(plat => plat.id === id));
+    return this.plats.find(plat => plat.id === id);
+
+  }
+
+  /* --------------------------Méthode pour récupérer les menus sur la table menus de supabase--------------------------------*/
+
   async fetchMenus(): Promise<any> {
     try {
       const menuData = await this.getMenus(); // Appelle la méthode getMenus ci-dessous
@@ -282,37 +290,59 @@ async createPlat(newEntry: {
       console.log('Erreur de suppression de menus', deleteError);
     }
   }
-
+  
 //------------------------------- Méthode pour créer un nouveau menu --------------------------------------
-async createMenu(newEntry: {
-  titre: string;
-  description: string;
-  date?: Date;
-  plats?: Array<number>;
-  statut?: string;
-  reaction?: string;
-}) {
-  newEntry.date = new Date();
-  const { error: createError } = await this.supabase
-    .from('menus')
-    .insert(newEntry)
-  if (createError) {
-    console.log(createError);    
-  }  
-}
-
-//------------------------------- Méthode pour modifier un menu -------------------------------------  
-async updateMenu(id: number, menu: MenuI) {
-  const { error: platError } = await this.supabase
-    .from('menus')
-    .update(menu) // Update de tout l'objet menu qui correspond au type MenuI
-    .eq('id', id);
-
-  if (platError) {
-    console.log(platError);
+  async createMenu(newEntry: {
+    titre: string;
+    description: string;
+    date?: Date;
+    plats?: Array<number>;
+    statut?: string;
+    reaction?: string;
+  }) {
+    newEntry.date = new Date();
+    const { error: createError } = await this.supabase
+      .from('menus')
+      .insert(newEntry)
+    if (createError) {
+      console.log(createError);
+    }
   }
-}
 
+  //------------------------------- Méthode pour modifier un menu -------------------------------------  
+  async updateMenu(id: number, menu: MenuI) {
+    const { error: platError } = await this.supabase
+      .from('menus')
+      .update(menu) // Update de tout l'objet menu qui correspond au type MenuI
+      .eq('id', id);
+
+    if (platError) {
+      console.log(platError);
+    }
+  }
+
+  async fetchNutriments(): Promise<any> {
+    try {
+      const nutrimentData = await this.getNutriments(); // Appelle la méthode getNutriments ci-dessous
+      if (nutrimentData) {
+        this.nutriments = nutrimentData.map((item: { [x: string]: any }) => ({
+          id: item['id'],
+          titre: item['titre'],
+          quantite: item['quantite'],
+          represente: item['represente'],
+          reaction: item['reaction'],
+          mesure: item['mesure'],
+        }));
+        console.log(this.menus.map((item) => item['titre']));
+        return this.menus;
+      }
+    } catch (error) {
+      console.error(
+        "Une erreur s'est produite sur la méthode fetchPlats :",
+        error
+      );
+      }
+    }
 //------------------------------- Méthode pour fetch les régimes associer à un plat ---------------------
 async getRegimes(idPlats: number): Promise<any> {  
   const { data, error } = await this.supabase
@@ -385,28 +415,28 @@ async getAllergenes(idPlats: number): Promise<any> {
 }
 
 //---------------------------- Méthode pour fetch les nutriments associer à un plat ---------------------------------------------
-async getNutriments(idPlats: number): Promise<any> {
-  const { data, error } = await this.supabase
-    .from('attribuerNutriments')
-    .select('nutriments!attribuerNutriments_idNutriments_fkey(*)')
-    .eq('idPlats', idPlats)
-  if (error) {
-    console.log('Erreur de la méthode getNutriments : ', error);    
-  }
-  if (data) {
-    //console.log('Data de la méthode getNutriments : ', data);    
-    this.nutriments = data.flatMap((item: any) => item['nutriments']).map((nutriments: NutrimentI) => ({
-      id: nutriments.id,
-      titre: nutriments.titre,
-      quantite: nutriments.quantite,
-      mesure: nutriments.mesure,
-    }));
-    //console.log("Ici this.nutriments : ", this.nutriments);
-    return this.nutriments    
-  } else {
-    return [];
-  }
-}
+// async getNutriments(idPlats: number): Promise<any> {
+//   const { data, error } = await this.supabase
+//     .from('attribuerNutriments')
+//     .select('nutriments!attribuerNutriments_idNutriments_fkey(*)')
+//     .eq('idPlats', idPlats)
+//   if (error) {
+//     console.log('Erreur de la méthode getNutriments : ', error);    
+//   }
+//   if (data) {
+//     //console.log('Data de la méthode getNutriments : ', data);    
+//     this.nutriments = data.flatMap((item: any) => item['nutriments']).map((nutriments: NutrimentI) => ({
+//       id: nutriments.id,
+//       titre: nutriments.titre,
+//       quantite: nutriments.quantite,
+//       mesure: nutriments.mesure,
+//     }));
+//     //console.log("Ici this.nutriments : ", this.nutriments);
+//     return this.nutriments    
+//   } else {
+//     return [];
+//   }
+// }
 
 //----------------------------- Méthode pour fetch les liens associer à un plat ---------------------------------------------------
 async getLiens(idPlats: number): Promise<any> {
@@ -458,38 +488,39 @@ async getNutriProgrammes(idPlats: number): Promise<any> {
 }
 
 
-
-
+async getNutriments() {
+  const { data, error } = await this.supabase.from('nutriments').select('*');
+  if (error) {
+    console.log('Erreur de la méthode getMenus : ', error);
+  }
+  if (data) {
+    console.log('Data de la méthode getMenus: ', data);
+    return data;
+  } else {
+    return [];
+  }
 }
 
+async deleteNutrimentSupabase(id: number) {
+  // id récupérer sur la méthode deletePlat de nutrition.component
+  const { error: deleteError } = await this.supabase
+    .from('nutriments')
+    .delete()
+    .eq('id', id);
+  if (deleteError) {
+    console.log('Erreur de suppression de nutriment', deleteError);
+  }
+}
+async updateNutriments(id: number, nutriment: NutrimentI) {
+  const { error: platError } = await this.supabase
+    .from('nutriments')
+    .update(nutriment) // Update de tout l'objet nutriment qui correspond au type NutrimentI  
+    .eq('id', id);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  if (platError) {
+    console.log(platError);
+  }
+}
 
 
 /* ----------------------------------------------------------------- Méthode fetchCiqual avec un forEach ------------------------------------------------------------ */
@@ -580,17 +611,85 @@ async getNutriProgrammes(idPlats: number): Promise<any> {
       .in('alim_code', id); //.in filtre les résultats de la table ciqualAnses où la colonne alim_code correspond à l'une des valeurs dans le tableau id
     if (ciqualError) {
       console.log('Erreur de la méthode getCiqual : ', ciqualError);
+  async fetchNutriments(): Promise<any> {
+    try {
+      const nutrimentData = await this.getNutriments(); // Appelle la méthode getNutriments ci-dessous
+      if (nutrimentData) {
+        this.nutriments = nutrimentData.map((item: { [x: string]: any }) => ({
+          id: item['id'],
+          titre: item['titre'],
+          quantite: item['quantite'],
+          represente: item['represente'],
+          reaction: item['reaction'],
+          mesure: item['mesure'],
+        }));
+        console.log(this.menus.map((item) => item['titre']));
+        return this.menus;
+      }
+    } catch (error) {
+      console.error(
+        "Une erreur s'est produite sur la méthode fetchPlats :",
+        error
+      );
     }
-    if (ciqualData) {
-      console.log('Data de la méthode getCiqual : ', ciqualData);
-      return ciqualData;
+  }
+  async getNutriments() {
+    const { data, error } = await this.supabase.from('nutriments').select('*');
+    if (error) {
+      console.log('Erreur de la méthode getMenus : ', error);
+    }
+    if (data) {
+      console.log('Data de la méthode getMenus: ', data);
+      return data;
     } else {
       return [];
     }
+  }
+  async deleteNutrimentSupabase(id: number) {
+    // id récupérer sur la méthode deletePlat de nutrition.component
+    const { error: deleteError } = await this.supabase
+      .from('nutriments')
+      .delete()
+      .eq('id', id);
+    if (deleteError) {
+      console.log('Erreur de suppression de nutriment', deleteError);
+    }
+  }
+  async updateNutriments(id: number, nutriment: NutrimentI) {
+    const { error: platError } = await this.supabase
+      .from('nutriments')
+      .update(nutriment) // Update de tout l'objet nutriment qui correspond au type NutrimentI  
+      .eq('id', id);
+
+    if (platError) {
+      console.log(platError);
+    }
+  }
+}
+
+
+
+  }
+  async deleteNutrimentSupabase(id: number) {
+    // id récupérer sur la méthode deletePlat de nutrition.component
+    const { error: deleteError } = await this.supabase
+      .from('nutriments')
+      .delete()
+      .eq('id', id);
+    if (deleteError) {
+      console.log('Erreur de suppression de nutriment', deleteError);
+    }
+  }
+  async updateNutriments(id: number, nutriment: NutrimentI) {
+    const { error: platError } = await this.supabase
+      .from('nutriments')
+      .update(nutriment) // Update de tout l'objet nutriment qui correspond au type NutrimentI  
+      .eq('id', id);
+
+    if (platError) {
+      console.log(platError);
+    }
+  }
+
   } */
-
-
-
-
-
-
+}

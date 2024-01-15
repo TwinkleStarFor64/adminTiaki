@@ -1,26 +1,25 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MenusComponent } from './menus.component';
+import { NutrimentsComponent } from './nutriments.component';
 import { ButtonModule } from 'primeng/button';
 import { PaginatorModule } from 'primeng/paginator';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
-import { IngredientsPipe, MenusPipe, NutrimentsPipe, PlatsPipe } from 'src/app/pipes/nutrition.pipe';
+import { MenusPipe, NutrimentsPipe } from 'src/app/pipes/nutrition.pipe';
 import { HttpClientModule } from '@angular/common/http';
 
-describe('MenusComponent', () => {
-  let component: MenusComponent;
-  let fixture: ComponentFixture<MenusComponent>;
+describe('NutrimentsComponent', () => {
+  let component: NutrimentsComponent;
+  let fixture: ComponentFixture<NutrimentsComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [MenusComponent, NutrimentsPipe, MenusPipe, PlatsPipe, IngredientsPipe],
-
+      declarations: [NutrimentsComponent,NutrimentsPipe,MenusPipe],
       imports: [ButtonModule, PaginatorModule, NgxPaginationModule, ToastModule, ConfirmDialogModule, ConfirmPopupModule,HttpClientModule]
+      
     });
-
-    fixture = TestBed.createComponent(MenusComponent);
+    fixture = TestBed.createComponent(NutrimentsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
