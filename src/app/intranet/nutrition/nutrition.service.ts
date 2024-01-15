@@ -13,7 +13,7 @@ export class NutritionService {
   private supabase: SupabaseClient; // Instance du client Supabase
   _session: AuthSession | null = null; // Session d'authentification Supabase
 
-  //allCiqual: CiqualI[] = [];
+  nutriments: NutrimentI[] = [];
   menus: MenuI[] = [];
   plats: PlatI[] = [];
   ciqual: CiqualI[] = [];
@@ -21,7 +21,6 @@ export class NutritionService {
   regimes: RegimesI[] = [];
   platsTypes: PlatTypeI[] = [];
   allergenes: AllergeneI[] = [];
-  nutriments: NutrimentI[] = [];
   liens: LienI[] = [];
   nutriProgrammes : NutriProgrammeI[] = [];
 
@@ -234,7 +233,15 @@ async createPlat(newEntry: {
   }  
 }
 
-/* --------------------------Méthode pour récupérer les menus sur la table menus de supabase--------------------------------*/
+  // In your NutritionService
+  getPlatById(id: number): PlatI | undefined {
+    console.log("Plat trouvé : ", this.plats.find(plat => plat.id === id));
+    return this.plats.find(plat => plat.id === id);
+
+  }
+
+  /* --------------------------Méthode pour récupérer les menus sur la table menus de supabase--------------------------------*/
+
   async fetchMenus(): Promise<any> {
     try {
       const menuData = await this.getMenus(); // Appelle la méthode getMenus ci-dessous
@@ -314,6 +321,28 @@ async createPlat(newEntry: {
     }
   }
 
+  async fetchNutriments(): Promise<any> {
+    try {
+      const nutrimentData = await this.getNutriments(); // Appelle la méthode getNutriments ci-dessous
+      if (nutrimentData) {
+        this.nutriments = nutrimentData.map((item: { [x: string]: any }) => ({
+          id: item['id'],
+          titre: item['titre'],
+          quantite: item['quantite'],
+          represente: item['represente'],
+          reaction: item['reaction'],
+          mesure: item['mesure'],
+        }));
+        console.log(this.menus.map((item) => item['titre']));
+        return this.menus;
+      }
+    } catch (error) {
+      console.error(
+        "Une erreur s'est produite sur la méthode fetchPlats :",
+        error
+      );
+      }
+    }
 //------------------------------- Méthode pour fetch les régimes associer à un plat ---------------------
 async getRegimes(idPlats: number): Promise<any> {  
   const { data, error } = await this.supabase
@@ -459,28 +488,6 @@ async getNutriProgrammes(idPlats: number): Promise<any> {
 }
 
 
-async fetchNutriments(): Promise<any> {
-  try {
-    const nutrimentData = await this.getNutriments(); // Appelle la méthode getNutriments ci-dessous
-    if (nutrimentData) {
-      this.nutriments = nutrimentData.map((item: { [x: string]: any }) => ({
-        id: item['id'],
-        titre: item['titre'],
-        quantite: item['quantite'],
-        represente: item['represente'],
-        reaction: item['reaction'],
-        mesure: item['mesure'],
-      }));
-      console.log(this.menus.map((item) => item['titre']));
-      return this.menus;
-    }
-  } catch (error) {
-    console.error(
-      "Une erreur s'est produite sur la méthode fetchPlats :",
-      error
-    );
-  }
-}
 async getNutriments() {
   const { data, error } = await this.supabase.from('nutriments').select('*');
   if (error) {
@@ -513,37 +520,6 @@ async updateNutriments(id: number, nutriment: NutrimentI) {
     console.log(platError);
   }
 }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /* ----------------------------------------------------------------- Méthode fetchCiqual avec un forEach ------------------------------------------------------------ */
@@ -667,6 +643,31 @@ async updateNutriments(id: number, nutriment: NutrimentI) {
     } else {
       return [];
     }
+  }
+  async deleteNutrimentSupabase(id: number) {
+    // id récupérer sur la méthode deletePlat de nutrition.component
+    const { error: deleteError } = await this.supabase
+      .from('nutriments')
+      .delete()
+      .eq('id', id);
+    if (deleteError) {
+      console.log('Erreur de suppression de nutriment', deleteError);
+    }
+  }
+  async updateNutriments(id: number, nutriment: NutrimentI) {
+    const { error: platError } = await this.supabase
+      .from('nutriments')
+      .update(nutriment) // Update de tout l'objet nutriment qui correspond au type NutrimentI  
+      .eq('id', id);
+
+    if (platError) {
+      console.log(platError);
+    }
+  }
+}
+
+
+
   }
   async deleteNutrimentSupabase(id: number) {
     // id récupérer sur la méthode deletePlat de nutrition.component

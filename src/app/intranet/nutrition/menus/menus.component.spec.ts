@@ -16,6 +16,7 @@ describe('MenusComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [MenusComponent, NutrimentsPipe, MenusPipe, PlatsPipe, IngredientsPipe],
+
       imports: [ButtonModule, PaginatorModule, NgxPaginationModule, ToastModule, ConfirmDialogModule, ConfirmPopupModule,HttpClientModule]
     });
 
