@@ -4,7 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ButtonModule } from 'primeng/button';
 import { PaginatorModule } from 'primeng/paginator';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { IngredientsPipe } from 'src/app/pipes/ingredients.pipe';
+import { IngredientsPipe } from 'src/app/pipes/nutrition.pipe';
 
 describe('IngredientsComponent', () => {
   let component: IngredientsComponent;
