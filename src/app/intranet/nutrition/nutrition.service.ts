@@ -132,7 +132,7 @@ export class NutritionService {
       console.log('Erreur de la méthode getPlats : ', error);
     }
     if (data) {
-      //console.log('Data de la méthode getPlats : ', data);
+      console.log('Data de la méthode getPlats : ', data);
       return this.flatNestedData(data, 'enfant');
     } else {
       return [];
