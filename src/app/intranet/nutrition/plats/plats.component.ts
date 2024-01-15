@@ -38,13 +38,18 @@ export class PlatsComponent implements OnInit {
             contentStyle: { overflow: 'hidden' }, // Pour cacher l'overflow globale de la modal
             baseZIndex: 10000,
             maximizable: true
-    })
+    });
+    this.ref.onClose.subscribe(() => {       
+        this.messageService.add({severity:'info', summary: 'Product Selected', detail: 'confirmation'});      
+    });
+    
   }  
 
   async ngOnInit(): Promise<void> {
     this.nutrition.fetchPlats();
   // La méthode getAllCiqual() permet de voir la liste des ingrédients et d'attribuer des valeurs via la méthode onSelectPlat() qui à besoin des ingrédients
-    this.nutrition.getAllCiqual();   
+    this.nutrition.getAllCiqual();  
+    //this.nutrition.getRegimes();
   }
 
 // Méthode utiliser dans l'input de recherche d'ingrédients afin de le réinitialiser
@@ -65,6 +70,12 @@ export class PlatsComponent implements OnInit {
     console.log("J'ai cliqué sur : " + this.selectedPlats.ingredients);
   // Je passe en paramétre de la méthode fetchCiqual le tableau d'id obtenu au dessus
     this.nutrition.fetchCiqual(id);
+    this.nutrition.getRegimes(this.selectedPlats.id);
+    this.nutrition.getTypeOfPlats(this.selectedPlats.id);
+    this.nutrition.getAllergenes(this.selectedPlats.id);
+    this.nutrition.getNutriments(this.selectedPlats.id);
+    this.nutrition.getLiens(this.selectedPlats.id);
+    this.nutrition.getNutriProgrammes(this.selectedPlats.id);
   }
 
 // Méthode pour la modal de suppression d'un plat OU d'un ingrédient
@@ -141,6 +152,7 @@ export class PlatsComponent implements OnInit {
       .deletePlatSupabase(id)
       .then(() => {
         this.nutrition.fetchPlats();
+        this.selectedPlats = undefined; // Pour ne plus afficher la div contenant le formulaire du plat
       })
       .catch((error) => {
         console.log(error);

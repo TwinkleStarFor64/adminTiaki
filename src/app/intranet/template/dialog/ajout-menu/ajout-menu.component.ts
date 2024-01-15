@@ -51,18 +51,18 @@ export class AjoutMenuComponent {
   }
 
 // Ajouter un Plat
-onSelectPlat(id: number) {
-  console.log("id du plat", id);  
-  const plat = this.nutri.getPlatById(id);
-  if (plat) {
-    if (this.newMenu && this.newMenu.plats) {
-      this.newMenu.plats.push(id);    
-      this.platsTitres.push(plat.titre);
-    }
-  } else {
-    console.log(`Aucun plat trouvé avec l'ID ${id}`);
-  }
-}
+// onSelectPlat(id: number) {
+//   console.log("id du plat", id);  
+//   const plat = this.nutri.getPlatById(id);
+//   if (plat) {
+//     if (this.newMenu && this.newMenu.plats) {
+//       this.newMenu.plats.push(id);    
+//       this.platsTitres.push(plat.titre);
+//     }
+//   } else {
+//     console.log(`Aucun plat trouvé avec l'ID ${id}`);
+//   }
+// }
 // Supprimer un Plat
 onDeletePlat(i: number) {
   if (this.newMenu?.plats) {

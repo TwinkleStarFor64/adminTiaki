@@ -13,7 +13,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TableModule } from 'primeng/table';
 import { GestionUtilisateursPipe } from '../pipes/gestion-utilisateurs.pipe';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
-import { GetIngredientPipe, GetPlatPipe, IngredientsPipe, MenusPipe, NutrimentsPipe, PlatsPipe } from '../pipes/nutrition.pipe';
+import { GetIngredientPipe, IngredientsPipe, MenusPipe, NutrimentsPipe, PlatsPipe } from '../pipes/nutrition.pipe';
 
 
 
@@ -24,7 +24,6 @@ import { GetIngredientPipe, GetPlatPipe, IngredientsPipe, MenusPipe, NutrimentsP
     GetIngredientPipe,
     PlatsPipe,
     GestionUtilisateursPipe,
-    GetPlatPipe,
     NutrimentsPipe
   ],
   imports: [
