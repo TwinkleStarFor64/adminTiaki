@@ -6,11 +6,6 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MenusPipe, NutrimentsPipe, PlatsPipe } from 'src/app/pipes/nutrition.pipe';
 import { HttpClientModule } from '@angular/common/http';
-<<<<<<< HEAD
-
-=======
-import { HttpClientModule } from '@angular/common/http';
->>>>>>> deab73b21c8948804160e526efb04bc57815ccc1
 
 describe('AjoutMenuComponent', () => {
   let component: AjoutMenuComponent;
@@ -18,10 +13,6 @@ describe('AjoutMenuComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-<<<<<<< HEAD
-=======
-
->>>>>>> deab73b21c8948804160e526efb04bc57815ccc1
       declarations: [AjoutMenuComponent,MenusPipe,PlatsPipe, NutrimentsPipe],
       imports: [ReactiveFormsModule,FormsModule,ButtonModule,NgxPaginationModule,HttpClientModule],
       providers: [DynamicDialogRef]

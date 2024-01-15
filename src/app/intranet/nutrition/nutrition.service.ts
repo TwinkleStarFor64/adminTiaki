@@ -500,6 +500,7 @@ async getNutriments() {
     return [];
   }
 }
+
 async deleteNutrimentSupabase(id: number) {
   // id récupérer sur la méthode deletePlat de nutrition.component
   const { error: deleteError } = await this.supabase

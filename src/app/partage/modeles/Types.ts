@@ -96,12 +96,7 @@ export interface AllergeneI {
   type: 'ingredient' | 'nutriment'
 }
 
-export interface NutrimentI {
-  id: number;
-  titre: string;
-  quantite: number;
-  mesure: MesuresE;
-}
+
 
 export interface NutriProgrammeI {
   id: number;
@@ -120,7 +115,7 @@ export enum StatutE {
 export interface NutrimentI {
   id: number;
   titre: string;
-  quantite: number;
+  quantite: string;
   represente?: string;
   reaction?: string;
   mesure: MesuresE;
