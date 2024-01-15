@@ -35,24 +35,24 @@ export class MenusPipe implements PipeTransform {
 
 }
 
-// @Pipe({
-//   name: 'getPlat'
-// })
-// export class GetPlatPipe implements PipeTransform {
+@Pipe({
+  name: 'getPlat'
+})
+export class GetPlatPipe implements PipeTransform {
 
-//   constructor(private nutri: NutritionService) { };
+  constructor(private nutri: NutritionService) { };
 
-//   transform(id: number): string {
-//     if (!id) {
-//       return ''
-//     }
-//     // const plat = this.nutri.getPlatById(id);
-//     console.log("Le pipe getPlat : ", plat);
+  transform(id: number): string {
+    if (!id) {
+      return ''
+    }
+    const plat = this.nutri.getPlatById(id);
+    console.log("Le pipe getPlat : ", plat);
 
-//     return plat ? plat.titre : '';
-//   }
+    return plat ? plat.titre : '';
+  }
 
-// }
+}
 @Pipe({
   name: 'getIngredient' // Le nom du pipe
 })
