@@ -36,17 +36,22 @@ export interface UserCreationResponse {
 
 /* ---------------- Interface pour la nutrition ------------------- */
 export interface PlatI {
+  //alim_code: number | null;
   id: number;
   titre: string;
   description: string;
-  alim_code: number | null;
-  statut?: string;
+  statut?: StatutE,
   reaction?: string;
   ingredients?: Array<number>;
   qualites?: string; 
   astuces?: string;
-  nbPersonnes?: number;    
-  //types:PlatE
+  nbPersonnes?: number;
+  allergenes?: Array<AllergeneI>;
+  nutriments?: Array<NutrimentI>;
+  regimes?: Array<RegimesI>;
+  types?: Array<PlatTypeI>;
+  liens?: Array<LienI>;
+  programmes?: Array<NutriProgrammeI>;
 }
 
 export interface MenuI {
@@ -87,6 +92,7 @@ export interface RegimesI {
 export interface PlatTypeI {
   id: number;
   type: string;
+  descritpion?: string;
 }
 
 export interface AllergeneI {
@@ -130,3 +136,8 @@ gr = 'gr',
 kgs = 'kgs'
 }
 
+export enum StatutE {
+  depublie = '-1',
+  brouillon = '0',
+  publie = '1',
+}

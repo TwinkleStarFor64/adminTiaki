@@ -16,6 +16,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TableModule } from 'primeng/table';
 import { GestionUtilisateursPipe } from '../pipes/gestion-utilisateurs.pipe';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { DynamicDialogModule } from 'primeng/dynamicdialog';
     InputTextareaModule,
     CheckboxModule,
     TableModule, 
-    DynamicDialogModule 
+    DynamicDialogModule,
+    InputNumberModule 
   ],
   exports: [
     PlatsPipe,

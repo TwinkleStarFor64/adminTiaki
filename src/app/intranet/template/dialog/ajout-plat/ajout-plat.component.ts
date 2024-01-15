@@ -23,8 +23,9 @@ export class AjoutPlatComponent implements OnInit {
       id: 0,
       titre: '',
       description: '',
-      alim_code: null,
+      //alim_code: null,
       ingredients: [],
+      allergenes: [],
     }    
   }  
 // Méthode pour le formulaire d'ajout d'un plat

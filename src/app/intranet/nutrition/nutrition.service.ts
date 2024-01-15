@@ -12,6 +12,7 @@ export class NutritionService {
   private supabase: SupabaseClient; // Instance du client Supabase
   _session: AuthSession | null = null; // Session d'authentification Supabase
 
+  excludedArrayName = 'ingredients';
   //allCiqual: CiqualI[] = [];
   menus: MenuI[] = [];
   plats: PlatI[] = [];
@@ -59,12 +60,32 @@ onFilterChangePlats() {
   }
 }
 
+flatNestedData(data: Array<any>, key: any): Array<any> {
+  data.forEach(d => {
+    for (let k in d) {
+      if (k === this.excludedArrayName) {
+        continue;
+      }
+      if (Array.isArray(d[k])) {          
+        d[k] = this.mapNestedData(d[k], key);          
+      }
+    }
+  });
+  return data;
+}
+
+mapNestedData(data: Array<any>, key: string) {
+  return data.map(d => {
+    if(d.hasOwnProperty(key)) return d = d[key]
+  });
+}
+
 // ---------------------Méthode pour fetch les plats et gérer leur affichage en HTML---------------------------
   async fetchPlats(): Promise<any> {
     try {
       const platData = await this.getPlats(); // Appelle la méthode getPlats ci-dessous
       if (platData) {
-        //console.log("Data de fetchPlats : ",platData);      
+        console.log("Data de fetchPlats : ",platData);      
         //Ici, nous utilisons la méthode map pour créer un nouveau tableau de plats à partir de data.
         //Chaque élément de data est représenté par l'objet { [x: string]: any; }, que nous convertissons en un objet PlatI en utilisant les propriétés nécessaires.
         this.plats = platData.map((item: { [x: string]: any }) => ({
@@ -75,28 +96,46 @@ onFilterChangePlats() {
           ingredients: item['ingredients'],
           qualites: item['qualites'],
           astuces: item['astuces'],
-          nbPersonnes: item['nbPersonnes'],          
+          nbPersonnes: item['nbPersonnes'], 
+          statut: item['statut'], 
+          allergenes: item['allergenes'],
+          nutriments: item['nutriments'],
+          regimes: item['regimes'],
+          types: item['types'],
+          liens: item['liens'],
+          programmes: item['programmes']        
         }));
-        //console.log(this.plats.map((item) => item['titre']));
+        //console.log(this.plats.map((item) => item['allergenes']));
         return this.plats;
       }
     } catch (error) {
-      console.error(
-        "Une erreur s'est produite sur la méthode fetchPlats :",
-        error
-      );
+      console.error("Une erreur s'est produite sur la méthode fetchPlats :", error);
     }
   }
-
+  
+  //allergenes:attribuerAllergenes_idPlats_fkey(allergenes:attribuerAllergenes_idAllergenes_fkey(*))  
+  //allergenes:attribuerAllergenes!attribuerAllergenes_idPlats_fkey(allergenes!idAllergenes(*)),
+  //allergenes:allergenes!attribuerAllergenes!attribuerAllergenes_idPlats_fkey(*),
 // ----------------------Méthode pour récupérer tout les plats sur la table Plats de supabase-------------------
   async getPlats() {
-    const { data, error } = await this.supabase.from('plats').select('*');
+    const { data, error } = await this.supabase
+    .from('plats')
+    .select(`*,
+      allergenes:attribuerAllergenes!attribuerAllergenes_idPlats_fkey(enfant:allergenes!inner!idAllergenes(*)),
+      nutriments:attribuerNutriments!attribuerNutriments_idPlats_fkey(enfant:nutriments!idNutriments(*)),
+      regimes:attribuerRegimes!attribuerRegimes_idPlats_fkey(enfant:regimes!idRegimes(*)),
+      types:attribuerPlatsTypes!attribuerPlatsTypes_idPlat_fkey(enfant:platsTypes!idType(*)),
+      liens:attribuerLiens!attribuerLiens_idPlats_fkey(enfant:liens!idLiens(*)),
+      programmes:attribuerNutriProgrammes_idPlats_fkey(enfant:nutriProgrammes!idNutriProgrammes(*))
+    `)
     if (error) {
       console.log('Erreur de la méthode getPlats : ', error);
     }
     if (data) {
-      console.log('Data de la méthode getPlats : ', data);
-      return data;
+      //console.log('Data de la méthode getPlats : ', data);
+
+      return this.flatNestedData(data,'enfant');
+     
     } else {
       return [];
     }
@@ -312,152 +351,6 @@ async updateMenu(id: number, menu: MenuI) {
     console.log(platError);
   }
 }
-
-//------------------------------- Méthode pour fetch les régimes associer à un plat ---------------------
-async getRegimes(idPlats: number): Promise<any> {  
-  const { data, error } = await this.supabase
-    .from('attribuerRegimes')
-    .select('plats!attribuerRegimes_idPlats_fkey(*),regimes!attribuerRegimes_idRegimes_fkey(*)')
-    .eq('idPlats', idPlats)
-  if (error) {
-    console.log('Erreur de la méthode getRegimes : ', error);    
-  }  
-  if (data) {  
-    //console.log('Data de la méthode getRegimes : ', data);
-    this.regimes = data.flatMap((item: any) => item['regimes']);        
-    const mappedRegimes = this.regimes.map((regime: RegimesI) => ({
-      id: regime.id,
-      titre: regime.titre,
-      description: regime.description,
-      type: regime.type,
-    }));
-    //console.log('Régimes après map : ', mappedRegimes);
-    return mappedRegimes;
-  } else {
-    return [];
-  }  
-} 
-
-//---------------------------- Méthode pour fetch les types (déjeuner, diner, etc....) associer à un plat ------------------------
-async getTypeOfPlats(idPlats: number): Promise<any> {
-  const { data, error } = await this.supabase
-    .from('attribuerPlatsTypes')
-    .select('platsTypes!attribuerPlatsTypes_idType_fkey(*)')
-    .eq('idPlat', idPlats)
-  if (error) {
-    console.log('Erreur de la méthode getTypeOfPlats : ', error);    
-  }
-  if (data) {
-    //console.log('Data de la méthode getTypeOfPlats : ', data);
-    this.platsTypes = data.flatMap((item: any) => item['platsTypes']).map((platsTypes : PlatTypeI) => ({
-      id: platsTypes.id,
-      type: platsTypes.type,
-    }))    
-    //console.log("Ici this.platsTypes : ", this.platsTypes);    
-    return this.platsTypes;
-  } else {
-    return [];
-  }
-}
-
-//-------------------------- Méthode pour fetch les allergènes associer à un plat -----------------------------------------------
-async getAllergenes(idPlats: number): Promise<any> {
-  const { data, error } = await this.supabase
-    .from('attribuerAllergenes')
-    .select('allergenes!attribuerAllergenes_idAllergenes_fkey(*)')
-    .eq('idPlats', idPlats)
-  if (error) {
-    console.log('Erreur de la méthode getAllergenes', error);    
-  }
-  if (data) {
-    //console.log('Data de la méthode getAllergenes : ', data);
-    this.allergenes = data.flatMap((item: any) => item['allergenes']).map((allergenes: AllergeneI) => ({
-      id: allergenes.id,
-      titre: allergenes.titre,
-      description: allergenes.description,
-      type: allergenes.type,
-    }));
-    //console.log("Ici this.allergenes : ", this.allergenes);
-    return this.allergenes;    
-  } else {
-    return [];
-  }
-}
-
-//---------------------------- Méthode pour fetch les nutriments associer à un plat ---------------------------------------------
-async getNutriments(idPlats: number): Promise<any> {
-  const { data, error } = await this.supabase
-    .from('attribuerNutriments')
-    .select('nutriments!attribuerNutriments_idNutriments_fkey(*)')
-    .eq('idPlats', idPlats)
-  if (error) {
-    console.log('Erreur de la méthode getNutriments : ', error);    
-  }
-  if (data) {
-    //console.log('Data de la méthode getNutriments : ', data);    
-    this.nutriments = data.flatMap((item: any) => item['nutriments']).map((nutriments: NutrimentI) => ({
-      id: nutriments.id,
-      titre: nutriments.titre,
-      quantite: nutriments.quantite,
-      mesure: nutriments.mesure,
-    }));
-    //console.log("Ici this.nutriments : ", this.nutriments);
-    return this.nutriments    
-  } else {
-    return [];
-  }
-}
-
-//----------------------------- Méthode pour fetch les liens associer à un plat ---------------------------------------------------
-async getLiens(idPlats: number): Promise<any> {
-  const { data, error } = await this.supabase
-    .from('attribuerLiens')
-    .select('liens!attribuerLiens_idLiens_fkey(*)')
-    .eq('idPlats', idPlats)
-  if (error) {
-    console.log('Erreur de la méthode getLiens : ', error);    
-  }
-  if (data) {
-    //console.log('Data de la méthode getLiens : ', data);    
-    this.liens = data.flatMap((item: any) => item['liens']).map((liens: LienI) => ({
-      id: liens.id,
-      titre: liens.titre,
-      url: liens.url,
-      description: liens.description,
-      cible: liens.cible,
-    }));
-    //console.log("Ici this.liens : ", this.liens);
-    return this.liens   
-  } else {
-    return [];
-  }
-}
-
-//------------------------------ Méthode pour fetch les programmes de nutrition associer au plat ------------------------------------
-async getNutriProgrammes(idPlats: number): Promise<any> {
-  const { data, error } = await this.supabase
-    .from('attribuerNutriProgrammes')
-    .select('nutriProgrammes!attribuerNutriProgrammes_idNutriProgrammes_fkey(*)')
-    .eq('idPlats', idPlats)
-  if (error) {
-    console.log('Erreur de la méthode getNutriProgrammes : ', error);    
-  }
-  if (data) {
-    //console.log('Data de la méthode getNutriProgrammes : ', data);    
-    this.nutriProgrammes = data.flatMap((item: any) => item['nutriProgrammes']).map((nutriProgrammes: NutriProgrammeI) => ({
-      id: nutriProgrammes.id,
-      titre: nutriProgrammes.titre,
-      description: nutriProgrammes.description,
-      statut: nutriProgrammes.statut,      
-    }));
-    //console.log("Ici this.nutriProgrammes : ", this.nutriProgrammes);
-    return this.nutriProgrammes 
-  } else {
-    return [];
-  }
-}
-
-
 
 
 }
