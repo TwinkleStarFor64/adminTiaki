@@ -3,7 +3,6 @@ import { CiqualI, MenuI, NutrimentI, PlatI } from 'src/app/partage/modeles/Types
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { AuthSession, createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
-import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({

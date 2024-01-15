@@ -3,7 +3,8 @@ import { PaginationService } from 'ngx-pagination';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { NutritionService } from 'src/app/intranet/nutrition/nutrition.service';
 import { MenuI, PlatI } from 'src/app/partage/modeles/Types';
-import { MenusPipe } from 'src/app/pipes/menus.pipe';
+import { MenusPipe } from 'src/app/pipes/nutrition.pipe';
+
 
 
 @Component({

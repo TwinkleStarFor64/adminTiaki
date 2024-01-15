@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { AjoutPlatComponent } from './ajout-plat.component';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { IngredientsPipe } from 'src/app/pipes/ingredients.pipe';
+import { IngredientsPipe, NutrimentsPipe } from 'src/app/pipes/nutrition.pipe';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('AjoutPlatComponent', () => {
   let component: AjoutPlatComponent;
@@ -13,8 +13,8 @@ describe('AjoutPlatComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [AjoutPlatComponent,IngredientsPipe],
-      imports: [ReactiveFormsModule,FormsModule,ButtonModule,NgxPaginationModule],
+      declarations: [AjoutPlatComponent,IngredientsPipe,NutrimentsPipe],
+      imports: [ReactiveFormsModule,FormsModule,ButtonModule,NgxPaginationModule,HttpClientModule],
       providers: [DynamicDialogRef]
     });
     fixture = TestBed.createComponent(AjoutPlatComponent);
