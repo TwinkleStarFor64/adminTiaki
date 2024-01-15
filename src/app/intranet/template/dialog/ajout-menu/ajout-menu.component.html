@@ -12,7 +12,9 @@
       </span>
       <span>
         <h4>Plats</h4>
-        <div id="divIngredients" *ngFor="let id of newMenu.plats; let i=index">
+        <div id="divIngredients" *ngFor="let id of newMenu.plats ; let i=index">
+          <figure (click)="onDeletePlat(i)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
+          <p *ngFor="let plat of newMenu.plats ">{{plat}}</p>
         </div>
       </span>
       <span>
@@ -27,7 +29,7 @@
   </article>
   <article>
     <div>
-      <h4>Ajout d'ingrédients</h4>
+      <h4>Ajout de plats</h4>
       <span class="p-input-icon-left">
         <i class="pi pi-search"></i>
         <input type="text" pInputText [(ngModel)]="filtrePlats" (input)="nutrition.onFilterChange()" />

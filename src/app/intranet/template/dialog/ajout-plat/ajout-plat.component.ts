@@ -25,8 +25,7 @@ export class AjoutPlatComponent implements OnInit {
       description: '',
       //alim_code: null,
       ingredients: [],
-      allergenes: [],
-    }    
+    }   
   }  
 // Méthode pour le formulaire d'ajout d'un plat
   async onSubmitNewPlatForm() {
