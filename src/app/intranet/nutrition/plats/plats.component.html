@@ -57,6 +57,20 @@
             <textarea id="float-input" rows="2" cols="40" pInputTextarea [(ngModel)]="selectedPlats.qualites" name="qualites" required minlength="1"></textarea>
             <label for="float-input">Qualités</label>
           </span>
+          <span *ngFor="let toto of selectedPlats.allergenes">
+            <p>{{ toto.titre }}</p>
+          </span>
+          <span *ngFor="let toto of selectedPlats.regimes">
+            <p>regimes</p>
+            <p>{{ toto.titre }}</p>
+          </span>
+          
+                     
+            <!-- <span class="p-float-label">
+              <p-inputNumber inputId="integeronly" [(ngModel)]="selectedPlats.nbPersonnes" name="nbPersonnes"> </p-inputNumber>
+              <label for="number-input">Number</label>
+            </span>  -->           
+          
           <span>
             <h4>Ingrédients</h4> 
             <div id="divIngredients" *ngFor="let id of selectedPlats.ingredients; let i=index">
@@ -93,44 +107,6 @@
               <p>Manganese : {{ nutrition.totals['manganese'] | number: '1.2-2' }} Mg </p>
             </span>
           </div>            
-        </span>
-        <span>
-          <h4>Régimes alimentaires</h4>
-          <div *ngFor="let diet of nutrition.regimes">
-            <p>{{ diet.titre }}</p>
-          </div>
-        </span>  
-        <span>
-          <h4>types</h4>
-          <div *ngFor="let platType of nutrition.platsTypes">
-            <p>{{ platType.type }}</p>
-          </div>
-        </span> 
-        <span>
-          <h4>Allergènes</h4>
-          <div *ngFor="let allergenes of nutrition.allergenes">
-            <p>{{ allergenes.titre }}</p>
-          </div>
-        </span> 
-        <span>
-          <h4>Nutriments complémentaire</h4>
-          <div *ngFor="let nutriment of nutrition.nutriments">
-            <p>{{ nutriment.titre }}</p>
-            <p>{{ nutriment.mesure }}</p>
-          </div>
-        </span> 
-        <span>
-          <h4>Liens</h4>
-          <div *ngFor="let lien of nutrition.liens">
-            <p>{{ lien.titre }}</p>
-          </div>
-        </span>
-        <span>
-          <h4>Programme de nutrition</h4>
-          <div *ngFor="let nutriProg of nutrition.nutriProgrammes">
-            <p>{{ nutriProg.titre }}</p>
-            <p>{{ nutriProg.statut }}</p>
-          </div>
         </span>
     </div>
   </article> 
