@@ -1,3 +1,11 @@
+export interface LienI {
+  id: number;
+  titre: string;
+  url: string;
+  description?: string;
+  cible?: '_self' | '_blank'
+}
+
 /**
  * @description Interface de l'aside bar
  */
@@ -35,6 +43,9 @@ export interface PlatI {
   statut?: string;
   reaction?: string;
   ingredients?: Array<number>;
+  qualites?: string; 
+  astuces?: string;
+  nbPersonnes?: number;    
   //types:PlatE
 }
 
@@ -45,8 +56,53 @@ export interface MenuI {
   plats?: Array<number>;
   statut?:MenuE ;
   reaction?: string;
-
 }
+
+export interface CiqualI {
+  //alim_code: number,
+  alim_nom_fr: string;
+  proteine: number;
+  glucides: number;
+  lipides: number;
+  sucres: number;
+  vitamineC: number;
+  vitamineB1: number;
+  vitamineB2: number;
+  vitamineB3: number;
+  vitamineB5: number;
+  magnesium: number;
+  potassium: number;
+  cuivre: number;
+  manganese: number;
+  [key: string]: number | string; // Pour la méthode calculateTotals() qui crée un objet de type clé et valeur - Variable totals dans nutrition.service
+}
+
+export interface RegimesI {
+  id: number;
+  titre: string;
+  description?: string;
+  type?: string;
+}
+
+export interface PlatTypeI {
+  id: number;
+  type: string;
+}
+
+export interface AllergeneI {
+  id: number;
+  titre: string;
+  description?: string;
+  type: 'ingredient' | 'nutriment'
+}
+
+export interface NutrimentI {
+  id: number;
+  titre: string;
+  quantite: number;
+  mesure: MesuresE;
+}
+
 
 export interface NutrimentI {
   id: number;
@@ -62,6 +118,15 @@ export enum MesureE{
   gr ='',
   kg=''
 }
+
+=======
+export interface NutriProgrammeI {
+  id: number;
+  titre: string;
+  description?: string;
+  statut: -1 | 0 | 1;
+}
+/* -------------- ENUM --------------------- */
 
 export enum MenuE {
   valide = '1',
@@ -83,20 +148,3 @@ gr = 'gr',
 kgs = 'kgs'
 }
 
-export interface CiqualI {
-  alim_nom_fr: string;
-  proteine: number;
-  glucides: number;
-  lipides: number;
-  sucres: number;
-  vitamineC: number;
-  vitamineB1: number;
-  vitamineB2: number;
-  vitamineB3: number;
-  vitamineB5: number;
-  magnesium: number;
-  potassium: number;
-  cuivre: number;
-  manganese: number;
-  [key: string]: number | string; // Pour la méthode calculateTotals() qui crée un objet de type clé et valeur - Variable totals dans nutrition.service
-}

@@ -6,6 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { IngredientsPipe, NutrimentsPipe } from 'src/app/pipes/nutrition.pipe';
 import { HttpClientModule } from '@angular/common/http';
+import { ToastModule } from 'primeng/toast';
 
 describe('AjoutPlatComponent', () => {
   let component: AjoutPlatComponent;
@@ -13,8 +14,9 @@ describe('AjoutPlatComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+
       declarations: [AjoutPlatComponent,IngredientsPipe,NutrimentsPipe],
-      imports: [ReactiveFormsModule,FormsModule,ButtonModule,NgxPaginationModule,HttpClientModule],
+      imports: [ReactiveFormsModule,FormsModule,ButtonModule,NgxPaginationModule,HttpClientModule,ToastModule],
       providers: [DynamicDialogRef]
     });
     fixture = TestBed.createComponent(AjoutPlatComponent);

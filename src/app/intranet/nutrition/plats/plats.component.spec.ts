@@ -17,6 +17,7 @@ describe('PlatsComponent', () => {
     TestBed.configureTestingModule({
       declarations: [PlatsComponent, PlatsPipe, IngredientsPipe],
       imports: [ButtonModule, PaginatorModule, NgxPaginationModule, ToastModule, ConfirmDialogModule, ConfirmPopupModule,HttpClientModule]
+
     });
     fixture = TestBed.createComponent(PlatsComponent);
     component = fixture.componentInstance;
