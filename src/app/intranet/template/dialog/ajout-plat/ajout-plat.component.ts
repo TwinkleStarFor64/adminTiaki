@@ -23,7 +23,7 @@ export class AjoutPlatComponent implements OnInit {
       id: 0,
       titre: '',
       description: '',
-      alim_code: null,
+      //alim_code: null,
       ingredients: [],
     }   
   }  

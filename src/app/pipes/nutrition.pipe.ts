@@ -46,7 +46,7 @@ export class GetPlatPipe implements PipeTransform {
     if (!id) {
       return ''
     }
-    const plat = this.nutri.getPlatById(id);
+     const plat = this.nutri.getPlatById(id);
     console.log("Le pipe getPlat : ", plat);
 
     return plat ? plat.titre : '';

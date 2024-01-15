@@ -15,6 +15,7 @@ import { GestionUtilisateursPipe } from '../pipes/gestion-utilisateurs.pipe';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { GetIngredientPipe, IngredientsPipe, MenusPipe, NutrimentsPipe, PlatsPipe } from '../pipes/nutrition.pipe';
 
+import { InputNumberModule } from 'primeng/inputnumber';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { GetIngredientPipe, IngredientsPipe, MenusPipe, NutrimentsPipe, PlatsPip
     InputTextareaModule,
     CheckboxModule,
     TableModule, 
-    DynamicDialogModule 
+    DynamicDialogModule,
+    InputNumberModule 
   ],
   exports: [
     PlatsPipe,
