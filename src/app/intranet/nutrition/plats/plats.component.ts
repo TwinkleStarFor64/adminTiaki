@@ -84,7 +84,7 @@ export class PlatsComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',      
       accept: () => {        
         if (del) { // Si del est true (définie dans le html) j'appelle la méthode ci-dessous 
-          this.deletePlat(id); // J'appelle la méthode de suppression de plat et lui fournis id en paramétre
+          this.deletePlat(); // J'appelle la méthode de suppression de plat et lui fournis id en paramétre
         } else { // Si del est pas true j'appelle la méthode ci-dessous  
   // J'appelle la méthode de suppression d'ingrédients et lui fournis id en paramétre (paramétre i sur supprIngredient() et alimCode correspondant à selectedPlats.idIngredients)        
           this.supprIngredient(id, alimCode); 
@@ -122,7 +122,7 @@ export class PlatsComponent implements OnInit {
   }  
 
 // Méthode pour confirmer ou annuler les modifications sur le formulaire d'un plat séléctionné
-  ConfirmDialog(event: Event) {
+  ConfirmDialog(event: Event,) {
     this.confirmationService.confirm({
         target: event.target as EventTarget,
         message: 'Confirmer la modification ?',
@@ -142,10 +142,10 @@ export class PlatsComponent implements OnInit {
 }
 
 // Méthode pour supprimer un plat sur la table plats
-  async deletePlat(id: number) {
+  async  deletePlat() {
     // Id correspond à plat.id au niveau du HTML récupérer via la méthode de la modal DeleteDialog()
     await this.nutrition
-      .deletePlatSupabase(id)
+      .deletePlatSupabase(this.selectedPlats!.id)
       .then(() => {
         this.nutrition.fetchPlats();
         this.selectedPlats = undefined; // Pour ne plus afficher la div contenant le formulaire du plat

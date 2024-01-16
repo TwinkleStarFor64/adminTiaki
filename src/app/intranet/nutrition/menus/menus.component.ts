@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmEventType, ConfirmationService, MessageService } from 'primeng/api';
-import { MenuE, MenuI} from 'src/app/partage/modeles/Types';
+import { MenuE, MenuI, PlatI} from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { NutritionService } from '../nutrition.service';
 import { AjoutMenuComponent } from '../../template/dialog/ajout-menu/ajout-menu.component';
@@ -19,7 +19,7 @@ export class MenusComponent {
   pageIngredients: number = 1; // Comme ci-dessus mais pour la liste d'ingrédients
   filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats
   filtrePlats: string = ''; // Utiliser dans le ngModel affichant la liste des ingrédients - Filtre de recherche
-
+  selectedPlat?: PlatI;
   selectedMenus?: MenuI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
   initialSelectedMenusState!: MenuI; // Pour stocker l'état initial de selectedPlats dans onSelectPlat
   //selectedIngredient?: CiqualI;
@@ -72,13 +72,19 @@ export class MenusComponent {
 
 
   // Méthode qui attribue des valeurs aux variables correspondant à l'objet sur lequel je clique - Utilisé sur le nom du menu en HTML
-  onSelectMenu(menu: MenuI, id: Array<number>) {
+  onSelectMenu(menu: MenuI, id: Array<PlatI>) {
     this.initialSelectedMenusState = { ...menu };
     console.log(this.initialSelectedMenusState);
-    this.selectedMenus = menu;
+    
+    if (!this.selectedMenus) {
+      this.selectedMenus = { ...menu };
+    }
+    this.selectedMenus.plats = id; 
     console.log("J'ai cliqué sur : " + this.selectedMenus.titre);
     this.nutrition.fetchPlats();
   }
+
+
 
   // Méthode pour la modal de suppression d'un menu OU d'un plat
   DeleteDialog(id: number, del: boolean) {
@@ -164,19 +170,23 @@ export class MenusComponent {
     // splice supprime l'ingrédient sur lequel j'ai cliqué en l'enlevant du tableau this.selectedPlats.idIngredients  
     this.selectedMenus?.plats?.splice(i, 1);
     this.nutrition.fetchPlats();
-    console.log("Méthode supprPlats");
+    console.log("Méthode supprPlats", this.selectedMenus?.plats);
   }
-  // Ajouter un ingrédient sur un plat séléctionné
+
+  // Ajouter un plat sur un menu séléctionné
   onSelectPlats(id: number) {
     console.log("id du plat : ", id);
-    // this.selectedMenus?.idIngredients est-il défini et non nul ?
     if (this.selectedMenus?.plats) {
-      // Ajoute l'ingredient sur lequel j'ai cliqué à la fin du tableau this.selectedMenus.idIngredients en utilisant son alim_code comme id
-      this.selectedMenus.plats.push(id);
-      // Appelle de fetchCiqual() pour mettre à jour les composants et leur quantité si je rajoute un ingrédient
+      // Trouver le plat avec l'ID correspondant
+      const plat = this.nutrition.plats.find(plat => plat.id === id);
+      if (plat) {
+        // Ajouter l'objet plat complet à this.selectedMenus.plats
+        this.selectedMenus.plats.push(plat);
+      }
       this.nutrition.fetchPlats();
     }
   }
+
 
   async onSubmitForm() {
     try {

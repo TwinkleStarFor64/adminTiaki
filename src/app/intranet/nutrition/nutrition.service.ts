@@ -3,7 +3,6 @@ import { AllergeneI, CiqualI, LienI, MenuI, NutrimentI, NutriProgrammeI, PlatI, 
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { AuthSession, createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
-
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -12,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 export class NutritionService {
   private supabase: SupabaseClient; // Instance du client Supabase
   _session: AuthSession | null = null; // Session d'authentification Supabase
-
+ 
   excludedArrayName = 'ingredients';
   menus: MenuI[] = [];
   plats: PlatI[] = [];
@@ -24,7 +23,7 @@ export class NutritionService {
   liens: LienI[] = [];
   nutriProgrammes: NutriProgrammeI[] = [];
   nutriments: NutrimentI[] = [];
-
+  mappedPlats: any[] = []; // Utilisé dans fetchPlats()
   mappedIngredients: any[] = []; // Utilisé dans fetchCiqual()
 
   totals: { [key: string]: number } = {}; // Objet pour stocker tous les totaux - Les crochets {} sont utilisés pour définir un objet
