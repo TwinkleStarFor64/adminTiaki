@@ -9,6 +9,14 @@
               <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="newPlat.description" name="description" required minlength="1"></textarea>
               <label for="float-input">Description</label>
             </span>
+            <span class="p-float-label">
+              <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="newPlat.qualites" name="qualites" required minlength="1"></textarea>
+              <label for="float-input">Qualités</label>
+            </span>
+            <span class="p-float-label">
+              <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="newPlat.astuces" name="astuces" required minlength="1"></textarea>
+              <label for="float-input">Astuces</label>
+            </span>
             <span>
               <h4>Ingrédients</h4> 
               <div id="divIngredients" *ngFor="let id of newPlat.ingredients; let i=index">
@@ -17,8 +25,10 @@
               </div>
             </span>
             <span>
-              <p>Protéines : {{ nutrition.totals['proteine'] | number: '1.2-2' }} Gr</p>
+              <p-dropdown [options]="nutrition.platsTypes" [(ngModel)]="selectedPlatsTypes" name="type" optionLabel="type" [showClear]="true" placeholder="Choisir un type"></p-dropdown> 
+              <p *ngIf="selectedPlatsTypes">le type : {{ selectedPlatsTypes.id }}</p>
             </span>
+            
             <span id="spanButton">
               <p-button styleClass="p-button-warning" (onClick)="onCancelNewPlatForm()">Annuler</p-button>              
               <p-button styleClass="p-button-success" (onClick)="onSubmitNewPlatForm()" [disabled]="ajoutPlatForm.invalid!">Valider</p-button>

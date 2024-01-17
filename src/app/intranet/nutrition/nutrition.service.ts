@@ -3,8 +3,8 @@ import { AllergeneI, CiqualI, LienI, MenuI, NutrimentI, NutriProgrammeI, PlatI, 
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { AuthSession, createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
-
 import { HttpClient } from '@angular/common/http';
+import { UtilsService } from 'src/app/partage/services/utils.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,6 @@ export class NutritionService {
   private supabase: SupabaseClient; // Instance du client Supabase
   _session: AuthSession | null = null; // Session d'authentification Supabase
 
-  excludedArrayName = 'ingredients';
   menus: MenuI[] = [];
   plats: PlatI[] = [];
   ciqual: CiqualI[] = [];
@@ -24,6 +23,7 @@ export class NutritionService {
   liens: LienI[] = [];
   nutriProgrammes: NutriProgrammeI[] = [];
   nutriments: NutrimentI[] = [];
+  //listePlats: any[] = [];
 
   mappedIngredients: any[] = []; // Utilisé dans fetchCiqual()
 
@@ -31,15 +31,13 @@ export class NutritionService {
   // totals est un objet qui peut avoir des clés(key) de type string (par exemple, 'proteine', 'glucides', 'lipides', etc.)
   // et des valeurs associées de type number
 
-  //listePlats: any[] = [];
-
   pageIngredients: number = 1; // Comme ci-dessus mais pour la liste d'ingrédients
   pagePlats: number = 1;
 
   filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats 
   flitrePlats: string = ''; // Utiliser dans le ngModel affichant la liste des plats - Filtre de recherche
 
-  constructor(public supa: SupabaseService, private http: HttpClient) {
+  constructor(public supa: SupabaseService, private http: HttpClient, public utils: UtilsService) {
     this.supabase = createClient(
       environment.supabaseUrl,
       environment.supabaseKey
@@ -58,26 +56,6 @@ export class NutritionService {
     if (this.flitrePlats === '' || this.flitrePlats != '') {
       this.pagePlats = 1;
     }
-  }
-
-  flatNestedData(data: Array<any>, key: any): Array<any> {
-    data.forEach(d => {
-      for (let k in d) {
-        if (k === this.excludedArrayName) {
-          continue;
-        }
-        if (Array.isArray(d[k])) {
-          d[k] = this.mapNestedData(d[k], key);
-        }
-      }
-    });
-    return data;
-  }
-
-  mapNestedData(data: Array<any>, key: string) {
-    return data.map(d => {
-      if (d.hasOwnProperty(key)) return d = d[key]
-    });
   }
 
   // ---------------------Méthode pour fetch les plats et gérer leur affichage en HTML---------------------------
@@ -133,7 +111,7 @@ export class NutritionService {
     }
     if (data) {
       //console.log('Data de la méthode getPlats : ', data);
-      return this.flatNestedData(data, 'enfant');
+      return this.utils.flatNestedData(data, 'enfant');
     } else {
       return [];
     }
@@ -260,14 +238,26 @@ export class NutritionService {
     description: string;
     date?: Date;
     ingredients: Array<number>;
+    qualites?: string;
+    astuces?: string;    
   }) {
     newEntry.date = new Date();
-    const { error: createError } = await this.supabase
+    const { data: createData, error: createError } = await this.supabase
       .from('plats')
       .insert(newEntry)
-    if (createError) {
-      console.log(createError);
-    }
+      console.log("huhu", createData);      
+      if (createError) {
+        console.log(createError);              
+      }    
+  }
+
+  async createPlatType(id: number) {
+    const { error: typeError } = await this.supabase
+        .from('attribuerPlatsType')
+        .insert({idType: id})
+        if (typeError) {
+          console.log(typeError);          
+        }
   }
 
   // In your NutritionService
@@ -416,5 +406,39 @@ export class NutritionService {
     }
   }
 
+//-------------------------------- Méthode pour la création des plats et leur types (travail en cours) ------------------------
+  async getPlatsTypes() {
+    const { data, error } = await this.supabase
+      .from('platsTypes')
+      .select('*');
+    if (error) {
+      console.log("Erreur de la méthode getPlatsTypes : ", error);      
+    }
+    if (data) {
+      console.log('Data de la méthode getPlatsTypes : ', data);
+      this.platsTypes = data.map((item: { [x: string]: any }) => ({
+        id: item['id'],
+        type: item['type'],
+        description: item['description'],  
+      }));
+      console.log(this.platsTypes);
+      
+      return this.platsTypes;
+    } else {
+      return [];
+    }
+  }
+
+//-------------------------------- Méthode pour update avec un upsert (travail en cours) ------------------------------------------
+  async updatePlatsTypes(idPlat: number, idType: number) {
+    const { error } = await this.supabase
+      .from('attribuerPlatsTypes')
+      .upsert({idPlat: idPlat, idType: idType}, {onConflict: 'idPlat'})
+    if (error) {
+      console.log("Erreur updatePlatsTypes : ", error);      
+    }
+  }
 
 }
+
+

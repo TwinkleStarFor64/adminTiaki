@@ -40,7 +40,7 @@ export interface PlatI {
   id: number;
   titre: string;
   description: string;
-  statut?: StatutE,
+  statut: StatutE,
   reaction?: string;
   ingredients?: Array<number>;
   qualites?: string; 
@@ -102,20 +102,11 @@ export interface AllergeneI {
   type: 'ingredient' | 'nutriment'
 }
 
-
-
 export interface NutriProgrammeI {
   id: number;
   titre: string;
   description?: string;
-  statut: -1 | 0 | 1;
-}
-/* -------------- ENUM --------------------- */
-
-export enum StatutE {
-  valide = '1',
-  invalide = '0',
-  enAttente = '-1'
+  statut: StatutE;
 }
 
 export interface NutrimentI {
@@ -127,11 +118,12 @@ export interface NutrimentI {
   mesure: MesuresE;
 }
 
-export enum MesureE{
-  mcg ='',
-  gr ='',
-  kg=''
-}
+/* -------------- ENUM --------------------- */
+/* export enum StatutE {
+  valide = '1',
+  invalide = '0',
+  enAttente = '-1'
+} */
 
 export enum MenuE {
   valide = '1',

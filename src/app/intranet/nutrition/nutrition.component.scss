@@ -26,8 +26,7 @@ section {
         flex-direction: column;
         width: 20vw;
         height: calc(100vh - $header);
-        #firstSpan{ 
-            /* Iĉone et <h3>Gestion des plats</h3>*/
+        #firstSpan{ /* Iĉone et <h3>Gestion des plats</h3>*/            
             border-bottom: #805E96 dashed 1px;
             display: flex;
             align-items: center;
@@ -43,16 +42,13 @@ section {
             font-weight: 700;
             color: black;
         }
-        span:nth-child(3){ 
-            /* L'input de recherche - PrimeNG*/
+        span:nth-child(3){ /* L'input de recherche - PrimeNG*/            
             margin: 15px 0px 10px 20px;
         }
-        span:nth-child(4){ 
-            /*Contient la boucle *ngFor avec la liste de tout les plats*/
+        span:nth-child(4){ /*Contient la boucle *ngFor avec la liste de tout les plats*/            
             overflow-y: auto;
             height: 65vh;
-            div{ 
-                /*La liste des plats*/
+            div{ /*La liste des plats*/                
                 margin-left: 20px;
                 display: flex;
                 flex-direction: row;
@@ -65,34 +61,29 @@ section {
                     width: 90%;
                     cursor: pointer;
                 }
-                figure{ 
-                    /*l'icône de corbeille*/
+                figure{ /*l'icône de corbeille*/                    
                     cursor:pointer;
                 }        
             }
         }
-        span:nth-child(5){ 
-            /* contient la pagination ngx-paginator*/
+        span:nth-child(5){ /* contient la pagination ngx-paginator*/           
             display: flex;
             flex-direction: row;            
             justify-content: center;
             align-items: flex-end;
         }
-        span:nth-child(5)::ng-deep .ngx-pagination{
-            /*le composant ngx-paginator  */         
+        span:nth-child(5)::ng-deep .ngx-pagination{ /*le composant ngx-paginator  */                     
             display: flex;
             flex-direction: row;
             justify-content: space-between;
             align-items: center;            
             padding: 0;            
         }
-        span:nth-child(5)::ng-deep .ngx-pagination .current{ 
-            /* le bouton de la page courante*/
+        span:nth-child(5)::ng-deep .ngx-pagination .current{ /* le bouton de la page courante*/            
             background-color: $card-nutri;
         }
     }
-    article:nth-child(2){ 
-        /*Article central contient le formulaire*/
+    article:nth-child(2){ /*Article central contient le formulaire*/        
         flex-direction: column;
         width: 55vw;
         align-items: flex-start;        
@@ -105,16 +96,14 @@ section {
                 display: flex;
                 flex-direction: column;
                 margin-top: 25px;                
-                gap: 35px;
-                span:nth-child(3){
-                    h4{
-                        /* La balise Ingrédients*/
-                        border-bottom: black dashed 1px;
+                gap: 35px;                
+                #spanIngredients{
+                    h4{/* La balise Ingrédients*/ 
+                        border-bottom: black dashed 1px;                       
                         font-weight: 600;
                         padding-bottom: 5px;                        
                     }
-                    /*Div avec le nom des aliments et l'icône de corbeille*/
-                    div{ 
+                    div{ /*Div avec le nom des aliments et l'icône de corbeille*/
                         display: flex;
                         flex-direction: row;
                         align-items: center;
@@ -123,13 +112,19 @@ section {
                         }                        
                     }                    
                 }
-                /*Le span avec les boutons annuler & valider*/
-                #spanButton{ 
+                #spanButton{ /*Le span avec les boutons annuler & valider*/
                     width: 50vw;
                     display: flex;
                     justify-content: flex-end;
                     gap: 1vw;
                     padding-right: 1vw;
+                }
+                #platData{ /* La div contenant les Allergènes les Régimes et les Programmes */
+                    h4{
+                        border-bottom: black dashed 1px;                       
+                        font-weight: 600;
+                        padding-bottom: 5px;                        
+                    }
                 }
             }
             #blocIngredients{ /* Le span avec la liste d'ingrédients et leurs nutriments */               
