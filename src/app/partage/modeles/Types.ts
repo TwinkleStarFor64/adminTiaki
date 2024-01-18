@@ -40,7 +40,8 @@ export interface PlatI {
   id: number;
   titre: string;
   description: string;
-  statut: StatutE,
+  statut?: -1 | 0 | 1;
+  //statut?: StatutE;
   reaction?: string;
   ingredients?: Array<number>;
   qualites?: string; 
@@ -106,7 +107,8 @@ export interface NutriProgrammeI {
   id: number;
   titre: string;
   description?: string;
-  statut: StatutE;
+  //statut: StatutE;
+  statut: -1 | 0 | 1;
 }
 
 export interface NutrimentI {

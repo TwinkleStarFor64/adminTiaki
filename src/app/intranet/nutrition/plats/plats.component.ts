@@ -18,15 +18,13 @@ export class PlatsComponent implements OnInit {
   pageIngredients: number = 1; // Comme ci-dessus mais pour la liste d'ingrédients
   filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats
   filtreIngredients: string = ''; // Utiliser dans le ngModel affichant la liste des ingrédients - Filtre de recherche
-  statutPlat: string = ''; // Utiliser dans ngOnInit pour lui attribuer le statut de publication d'un plat
-  statutProgramme: string = ''; // Utiliser dans ngOnInit pour lui attribuer le statut de publication d'un programme de nutrition
   plat!: PlatI;
   allergene: AllergeneI[] =[];
   selectedPlats?: PlatI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
   selectedType: PlatTypeI | undefined;
-  
+  statut = Object.values(StatutE).map(value => value as StatutE); 
   ref: DynamicDialogRef | undefined; // Pour la modal d'ajout de plat - DynamicDialogModule
-
+  
   constructor(
     public supa: SupabaseService,
     public nutrition: NutritionService,
@@ -47,16 +45,13 @@ export class PlatsComponent implements OnInit {
     });
     this.ref.onClose.subscribe(() => {       
         this.messageService.add({severity:'info', summary: 'Product Selected', detail: 'confirmation'});      
-    });
-    
+    });    
   }  
 
   async ngOnInit(): Promise<void> {
     this.nutrition.fetchPlats();
   // La méthode getAllCiqual() permet de voir la liste des ingrédients et d'attribuer des valeurs via la méthode onSelectPlat() qui à besoin des ingrédients
     this.nutrition.getAllCiqual();
-    this.nutrition.getPlatsTypes();
-    this.utils.initializeStatuts();
   }
 
 // Méthode qui attribue des valeurs aux variables correspondant à l'objet sur lequel je clique - Utilisé sur le nom du plat en HTML
@@ -69,11 +64,7 @@ export class PlatsComponent implements OnInit {
     //console.log("J'ai cliqué sur les alim_code : " + this.selectedPlats.ingredients);
   // Je passe en paramétre de la méthode fetchCiqual le tableau d'id obtenu au dessus
     this.nutrition.fetchCiqual(id);    
-    //console.log("Allergenes du plat : ", this.selectedPlats.allergenes);    
-    this.statutPlat = this.utils.convertirStatutEnTexte(this.selectedPlats.statut)
-    this.statutProgramme = this.utils.convertirStatutEnTexte(this.selectedPlats.programmes![0].statut)
-    console.log(this.selectedPlats.programmes![0].statut);
-    
+    //console.log("Allergenes du plat : ", this.selectedPlats.allergenes);
   }
 
 // Méthode pour la modal de suppression d'un plat OU d'un ingrédient

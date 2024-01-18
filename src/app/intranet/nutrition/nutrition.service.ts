@@ -239,13 +239,14 @@ export class NutritionService {
     date?: Date;
     ingredients: Array<number>;
     qualites?: string;
-    astuces?: string;    
+    astuces?: string;
+    nbPersonnes?: number;
+    statut?: number;    
   }) {
     newEntry.date = new Date();
-    const { data: createData, error: createError } = await this.supabase
+    const { error: createError } = await this.supabase
       .from('plats')
-      .insert(newEntry)
-      console.log("huhu", createData);      
+      .insert(newEntry)      
       if (createError) {
         console.log(createError);              
       }    
@@ -406,7 +407,7 @@ export class NutritionService {
     }
   }
 
-//-------------------------------- Méthode pour la création des plats et leur types (travail en cours) ------------------------
+//-------------------------------- Méthode pour réupérer les types de plats (travail en cours) ------------------------
   async getPlatsTypes() {
     const { data, error } = await this.supabase
       .from('platsTypes')

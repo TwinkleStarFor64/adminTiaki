@@ -4,12 +4,13 @@ import { StatutE } from '../modeles/Types';
 @Injectable({
   providedIn: 'root'
 })
-export class UtilsService {
+export class UtilsService  {
   
   excludedArrayName = 'ingredients'; //Utiliser dans flatNestedData - pour exclure le tableau 'ingredients'
   statuts: { statut: string }[] = [];
-
-  constructor() { }
+  
+  
+  constructor() { }  
 
   /**
    * Traiter les données pour écraser les 'enfants'
@@ -40,6 +41,7 @@ export class UtilsService {
     });
   }
 
+// Méthode pour convertir l'enum statut de sa valeur en number en string
   convertirStatutEnTexte(statut: string): string {
     switch (statut) {
       case StatutE.depublie:
@@ -53,14 +55,24 @@ export class UtilsService {
     }
   }
 
-
-  initializeStatuts(): void {
-    // Créer un tableau d'options à partir des valeurs de l'enum
-    this.statuts = Object.keys(StatutE)
-      .filter(key => isNaN(Number(key))) // Filtrer les clés numériques générées par TypeScript pour les enums
-      .map(key => ({ statut: key }));
+// Méthode pour map les valeurs de l'enum StatutE
+  getStatutEnum(): StatutE[] {
+    return Object.values(StatutE).map(value => value as StatutE);
   }
 
+
+  convertStatut(statut: number): string {
+    switch (statut) {
+      case -1:
+        return 'Dépublié';
+      case 0:
+        return 'Brouillon';
+      case 1:
+        return 'Publié';
+      default:
+        return 'Statut inconnu';
+    }
+  }
   
 
 }

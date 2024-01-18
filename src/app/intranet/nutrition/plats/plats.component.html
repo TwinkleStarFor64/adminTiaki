@@ -54,11 +54,11 @@
             <label for="float-input">Astuces</label>
           </span>
           <span class="p-float-label">
-            <textarea id="float-input" rows="2" cols="40" pInputTextarea [(ngModel)]="selectedPlats.qualites" name="qualites" required minlength="1"></textarea>
+            <textarea id="float-input" rows="4" cols="40" pInputTextarea [(ngModel)]="selectedPlats.qualites" name="qualites" required minlength="1"></textarea>
             <label for="float-input">Qualités</label>
           </span>
           <span class="p-float-label">
-            <p-inputNumber inputId="integeronly" [(ngModel)]="selectedPlats.nbPersonnes" name="nbPersonnes"> </p-inputNumber>
+            <p-inputNumber id="inputNumber" inputId="integeronly" [(ngModel)]="selectedPlats.nbPersonnes" name="nbPersonnes" [showButtons]="true" [min]="0"> </p-inputNumber>
             <label for="number-input">Nombres de personnes</label>
           </span> 
           <!-- <p-dropdown [options]="nutrition.platsTypes" [(ngModel)]="selectedType"  name="type" optionLabel="type" [showClear]="true" placeholder="Choisir un type"></p-dropdown>  --> 
@@ -67,7 +67,8 @@
           </span>
           <!-- <p-dropdown [options]="utils.statuts" [(ngModel)]="statutTexte" name="statut" optionLabel="statut" placeholder="Choisir un statut"></p-dropdown> -->
           <span>
-            <p>Statut de publication : {{ statutPlat }}</p>
+            <p>Statut de publication : {{ utils.convertStatut(selectedPlats.statut!) }}</p>
+            <p>Statut de publication : {{ selectedPlats.statut }}</p>
           </span>
           <span id="spanIngredients">
             <h4>Ingrédients</h4> 
@@ -117,7 +118,8 @@
               <span *ngFor="let programme of selectedPlats.programmes">
                 <p>Nom du programme : {{ programme.titre }}</p>
                 <p>Description : {{ programme.description }}</p>
-                <p>Statut de publication : {{ statutProgramme }}</p>
+                <p>Statut de publication : {{ utils.convertStatut(programme.statut)  }}</p>
+                <p>Statut de publication : {{ programme.statut }}</p>
               </span>
           </div>
           <span id="spanButton">

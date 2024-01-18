@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/api';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { NutritionService } from 'src/app/intranet/nutrition/nutrition.service';
 import { PlatI, PlatTypeI, StatutE } from 'src/app/partage/modeles/Types';
+import { UtilsService } from 'src/app/partage/services/utils.service';
 
 @Component({
   selector: 'app-ajout-plat',
@@ -14,9 +15,12 @@ import { PlatI, PlatTypeI, StatutE } from 'src/app/partage/modeles/Types';
 export class AjoutPlatComponent implements OnInit {
   newPlat!: PlatI;
   filtreIngredients: string = ''; // Utiliser dans le ngModel affichant la liste des ingrédients - Filtre de recherche
-  selectedPlats?: PlatI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
+  //selectedPlats?: PlatI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
   selectedPlatsTypes!: PlatTypeI;
-  constructor(public ref: DynamicDialogRef, public nutrition: NutritionService, private messageService: MessageService) {}
+  
+  statut = Object.values(StatutE).map(value => value as StatutE); 
+
+  constructor(public ref: DynamicDialogRef, public nutrition: NutritionService,public utils: UtilsService, private messageService: MessageService) {}
 
   ngOnInit(): void {
     this.newPlat = {
@@ -24,19 +28,20 @@ export class AjoutPlatComponent implements OnInit {
       titre: '',
       description: '',      
       ingredients: [],
-      statut: StatutE.brouillon,
-    }   
+      statut: 0,
+      nbPersonnes: 0,
+    };      
   }  
+  
 // Méthode pour le formulaire d'ajout d'un plat
   async onSubmitNewPlatForm() {
     try {
       console.log(this.newPlat); 
     // Je configure les valeurs de newPlat pour correspondre à newEntry sur createPlat()  
-      await this.nutrition.createPlat({titre:this.newPlat.titre, description:this.newPlat.description, ingredients:this.newPlat.ingredients!, qualites:this.newPlat.qualites, astuces:this.newPlat.astuces});
-      await this.nutrition.createPlatType(this.selectedPlatsTypes.id)
+      await this.nutrition.createPlat({titre:this.newPlat.titre, description:this.newPlat.description, ingredients:this.newPlat.ingredients!, qualites:this.newPlat.qualites, astuces:this.newPlat.astuces, statut:this.newPlat.statut, nbPersonnes:this.newPlat.nbPersonnes});
+      //await this.nutrition.createPlatType(this.selectedPlatsTypes.id)
       this.nutrition.fetchPlats();
-      this.ref.close();
-      
+      this.ref.close();      
     } catch (error) {
       console.log("Erreur de la méthode onSubmitNewPlatForm : ", error);      
     }     

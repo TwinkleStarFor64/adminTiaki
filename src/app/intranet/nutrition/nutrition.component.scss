@@ -96,7 +96,10 @@ section {
                 display: flex;
                 flex-direction: column;
                 margin-top: 25px;                
-                gap: 35px;                
+                gap: 35px;    
+                #inputNumber{
+                    height: 50px;
+                }            
                 #spanIngredients{
                     h4{/* La balise Ingrédients*/ 
                         border-bottom: black dashed 1px;                       
