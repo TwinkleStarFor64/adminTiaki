@@ -22,7 +22,8 @@ export class PlatsComponent implements OnInit {
   allergene: AllergeneI[] =[];
   selectedPlats?: PlatI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
   selectedType: PlatTypeI | undefined;
-  statut = Object.values(StatutE).map(value => value as StatutE); 
+  //statut = Object.values(StatutE).map(value => value as StatutE); 
+
   ref: DynamicDialogRef | undefined; // Pour la modal d'ajout de plat - DynamicDialogModule
   
   constructor(
@@ -50,8 +51,8 @@ export class PlatsComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.nutrition.fetchPlats();
-  // La méthode getAllCiqual() permet de voir la liste des ingrédients et d'attribuer des valeurs via la méthode onSelectPlat() qui à besoin des ingrédients
-    this.nutrition.getAllCiqual();
+  // La méthode getCiqualJSON() permet de voir la liste des ingrédients et d'attribuer des valeurs via la méthode onSelectPlat() qui à besoin des ingrédients
+    this.nutrition.getCiqualJSON();
   }
 
 // Méthode qui attribue des valeurs aux variables correspondant à l'objet sur lequel je clique - Utilisé sur le nom du plat en HTML

@@ -7,10 +7,7 @@ import { StatutE } from '../modeles/Types';
 export class UtilsService  {
   
   excludedArrayName = 'ingredients'; //Utiliser dans flatNestedData - pour exclure le tableau 'ingredients'
-  statuts: { statut: string }[] = [];
-  
-  
-  constructor() { }  
+  statuts: { statut: string }[] = []; 
 
   /**
    * Traiter les données pour écraser les 'enfants'
@@ -41,6 +38,19 @@ export class UtilsService  {
     });
   }
 
+  convertStatut(statut: number): string {
+    switch (statut) {
+      case -1:
+        return 'Dépublié';
+      case 0:
+        return 'Brouillon';
+      case 1:
+        return 'Publié';
+      default:
+        return 'Statut inconnu';
+    }
+  }
+
 // Méthode pour convertir l'enum statut de sa valeur en number en string
   convertirStatutEnTexte(statut: string): string {
     switch (statut) {
@@ -61,18 +71,7 @@ export class UtilsService  {
   }
 
 
-  convertStatut(statut: number): string {
-    switch (statut) {
-      case -1:
-        return 'Dépublié';
-      case 0:
-        return 'Brouillon';
-      case 1:
-        return 'Publié';
-      default:
-        return 'Statut inconnu';
-    }
-  }
+
   
 
 }

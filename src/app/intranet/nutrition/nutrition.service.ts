@@ -23,13 +23,11 @@ export class NutritionService {
   liens: LienI[] = [];
   nutriProgrammes: NutriProgrammeI[] = [];
   nutriments: NutrimentI[] = [];
-  //listePlats: any[] = [];
 
   mappedIngredients: any[] = []; // Utilisé dans fetchCiqual()
 
   totals: { [key: string]: number } = {}; // Objet pour stocker tous les totaux - Les crochets {} sont utilisés pour définir un objet
-  // totals est un objet qui peut avoir des clés(key) de type string (par exemple, 'proteine', 'glucides', 'lipides', etc.)
-  // et des valeurs associées de type number
+  // totals est un objet qui peut avoir des clés(key) de type string (par exemple, 'proteine', 'glucides', 'lipides', etc.) et des valeurs associées de type number
 
   pageIngredients: number = 1; // Comme ci-dessus mais pour la liste d'ingrédients
   pagePlats: number = 1;
@@ -141,29 +139,15 @@ export class NutritionService {
     return this.ciqualJSON;
   }
 
-  //------------------------ Méthode pour récupérer TOUTE la table ciqual sur Supabase ------------------------------------------
-  async getAllCiqual(): Promise<void> {
-    const { data: ciqualBDD, error: ciqualError } = await this.supabase
-      .from('ciqualAnses')
-      .select('*');
-    if (ciqualError) {
-      console.log('Erreur de la méthode getAllCiqual : ', ciqualError);
-    }
-    if (ciqualBDD) {
-      // J'attribue à la variable ciqual de type CiqualI le résultat de ciqualBDD - je peux maintenant utiliser ciqual dans d'autres méthodes
-      this.ciqual = ciqualBDD;
-    }
-  }
-
   // ---------------------Méthode pour fetch les ingrédients sur la table ciqualAnses et gérer leur affichage en HTML--------------------------- 
   // ids correspond au tableau idIngredients sur la table plats (supabase) - attribuer via onSelectPlat sur plats.component
   async fetchCiqual(ids: Array<number> | undefined): Promise<any> {
     if (!ids) {
       // Si pas d'id en paramétres return tableau vide - évite un message d'erreur si je clique sur un plat ne contenant pas idIngredients
       return []
-    }
-    const listeIngredients = ids.map((id) => this.ciqual.find((ing) => ing['alim_code'] == id));
-    if (listeIngredients.length > 0) {
+    }    
+    const listeIngredients = ids.map((id) => this.ciqualJSON.find((ing) => ing['alim_code'] == id));
+    if (listeIngredients.length > 0) {      
       // Utilisez map pour transformer chaque élément de listeIngredients
       this.mappedIngredients = listeIngredients.map((item) => ({
         alim_nom_fr: item!['alim_nom_fr'],
@@ -443,3 +427,16 @@ export class NutritionService {
 }
 
 
+  //------------------------ Méthode pour récupérer TOUTE la table ciqual sur Supabase - Remplacer par getCiqualJSON ------------------------------------------
+/*   async getAllCiqual(): Promise<void> {
+    const { data: ciqualBDD, error: ciqualError } = await this.supabase
+      .from('ciqualAnses')
+      .select('*');
+    if (ciqualError) {
+      console.log('Erreur de la méthode getAllCiqual : ', ciqualError);
+    }
+    if (ciqualBDD) {
+      // J'attribue à la variable ciqual de type CiqualI le résultat de ciqualBDD - je peux maintenant utiliser ciqual dans d'autres méthodes
+      this.ciqual = ciqualBDD;
+    }
+  } */

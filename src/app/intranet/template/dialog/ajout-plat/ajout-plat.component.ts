@@ -30,7 +30,7 @@ export class AjoutPlatComponent implements OnInit {
       ingredients: [],
       statut: 0,
       nbPersonnes: 0,
-    };      
+    };       
   }  
   
 // Méthode pour le formulaire d'ajout d'un plat
