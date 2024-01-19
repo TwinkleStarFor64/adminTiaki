@@ -23,7 +23,6 @@ export class PlatsComponent implements OnInit {
   selectedPlats?: PlatI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
   selectedType: PlatTypeI | undefined;
   //statut = Object.values(StatutE).map(value => value as StatutE); 
-
   ref: DynamicDialogRef | undefined; // Pour la modal d'ajout de plat - DynamicDialogModule
   
   constructor(
@@ -44,10 +43,19 @@ export class PlatsComponent implements OnInit {
             baseZIndex: 10000,
             maximizable: true
     });
-    this.ref.onClose.subscribe(() => {       
-        this.messageService.add({severity:'info', summary: 'Product Selected', detail: 'confirmation'});      
+    this.ref.onClose.subscribe((data: any) => {
+        let summaryAndDetail;       
+        if (data) {
+          //console.log(data.buttonType);
+          const buttonType = data?.buttonType;
+          // Si un buttonType est défini premier message sinon le second
+          summaryAndDetail = buttonType ? { summary :'Annulation', detail : 'Vous avez annuler', severity: 'error' } : { summary :'Validation', detail : 'Plat enregistré', severity: 'info' };
+        } else {
+          summaryAndDetail = { summary :'Fermeture', detail : 'Vous avez fermer', severity: 'warn' };
+        }
+        this.messageService.add({...summaryAndDetail});      
     });    
-  }  
+  };  
 
   async ngOnInit(): Promise<void> {
     this.nutrition.fetchPlats();
@@ -66,6 +74,9 @@ export class PlatsComponent implements OnInit {
   // Je passe en paramétre de la méthode fetchCiqual le tableau d'id obtenu au dessus
     this.nutrition.fetchCiqual(id);    
     //console.log("Allergenes du plat : ", this.selectedPlats.allergenes);
+    console.log("statut ", this.selectedPlats.statut);
+    console.log("Youhou ", this.utils.convertStatut(this.selectedPlats.statut));
+        
   }
 
 // Méthode pour la modal de suppression d'un plat OU d'un ingrédient

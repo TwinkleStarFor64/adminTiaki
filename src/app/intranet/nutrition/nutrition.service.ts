@@ -15,7 +15,7 @@ export class NutritionService {
 
   menus: MenuI[] = [];
   plats: PlatI[] = [];
-  ciqual: CiqualI[] = [];
+  //ciqual: CiqualI[] = [];
   ciqualJSON: CiqualI[] = [];
   regimes: RegimesI[] = [];
   platsTypes: PlatTypeI[] = [];

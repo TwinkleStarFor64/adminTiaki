@@ -8,7 +8,7 @@ export class UtilsService  {
   
   excludedArrayName = 'ingredients'; //Utiliser dans flatNestedData - pour exclure le tableau 'ingredients'
   statuts: { statut: string }[] = []; 
-
+  statutTexte: string = '';
   /**
    * Traiter les données pour écraser les 'enfants'
    * @param data {any} Des données à traiter pour enlever les enfants et renvoyer les objets sans le paramètre 'enfant'
@@ -48,6 +48,20 @@ export class UtilsService  {
         return 'Publié';
       default:
         return 'Statut inconnu';
+    }
+  }
+
+  onSelectStatut(statut: number) {
+    if (statut == -1) {
+      this.statutTexte = "Dépublié";
+    }
+    if (statut == 0) {
+      this.statutTexte = "Brouillon";
+    }
+    if (statut == 1) {
+      this.statutTexte = "Publié";
+    } else {
+      this.statutTexte = "Aucun statut"
     }
   }
 

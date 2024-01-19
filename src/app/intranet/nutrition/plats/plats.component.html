@@ -138,7 +138,7 @@
     </span>
     <div>
       <!-- Utilisation du pipe ingredients pour rechercher des ingredients par leur alim_nom_fr -->        
-        <span *ngFor="let ingredients of nutrition.ciqual | ingredients:filtreIngredients | paginate: { itemsPerPage: 30, currentPage: pageIngredients, id:'ingredients' }">
+        <span *ngFor="let ingredients of nutrition.ciqualJSON | ingredients:filtreIngredients | paginate: { itemsPerPage: 30, currentPage: pageIngredients, id:'ingredients' }">
           <p (click)="onSelectIngredient(ingredients.alim_code)">{{ ingredients.alim_nom_fr }}</p>
         </span>        
     </div>

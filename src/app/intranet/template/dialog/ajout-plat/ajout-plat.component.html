@@ -37,8 +37,8 @@
               <p *ngIf="newPlat.types">le type : {{ selectedPlatsTypes.type }}</p>
             </span>            
             <span id="spanButton">
-              <p-button styleClass="p-button-warning" (onClick)="onCancelNewPlatForm()">Annuler</p-button>              
-              <p-button styleClass="p-button-success" (onClick)="onSubmitNewPlatForm()" [disabled]="ajoutPlatForm.invalid!">Valider</p-button>
+              <p-button styleClass="p-button-warning" (onClick)="onCancelNewPlatForm({ buttonType: 'Cancel', summary: 'Annulation' })">Annuler</p-button>              
+              <p-button styleClass="p-button-success" (onClick)="onSubmitNewPlatForm({ summary: 'Validation' })" [disabled]="ajoutPlatForm.invalid!">Valider</p-button>
             </span>
           </form>
     </article>
@@ -52,7 +52,7 @@
       </span>
       <div>
         <!-- Utilisation du pipe ingredients pour rechercher des ingredients par leur alim_nom_fr -->        
-          <span *ngFor="let ingredients of nutrition.ciqual | ingredients:filtreIngredients | paginate: { itemsPerPage: 30, currentPage: nutrition.pageIngredients, id:'ingredients' }">
+          <span *ngFor="let ingredients of nutrition.ciqualJSON | ingredients:filtreIngredients | paginate: { itemsPerPage: 30, currentPage: nutrition.pageIngredients, id:'ingredients' }">
             <p (click)="onSelectIngredient(ingredients.alim_code)">{{ ingredients.alim_nom_fr }}</p>            
           </span>        
       </div>

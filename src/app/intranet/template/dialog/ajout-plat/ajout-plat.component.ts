@@ -33,23 +33,23 @@ export class AjoutPlatComponent implements OnInit {
     };       
   }  
   
-// Méthode pour le formulaire d'ajout d'un plat
-  async onSubmitNewPlatForm() {
+// Méthode pour le formulaire d'ajout d'un plat - data pour passer des données sur la modal ajoutPlat
+  async onSubmitNewPlatForm(data: any) {
     try {
       console.log(this.newPlat); 
     // Je configure les valeurs de newPlat pour correspondre à newEntry sur createPlat()  
       await this.nutrition.createPlat({titre:this.newPlat.titre, description:this.newPlat.description, ingredients:this.newPlat.ingredients!, qualites:this.newPlat.qualites, astuces:this.newPlat.astuces, statut:this.newPlat.statut, nbPersonnes:this.newPlat.nbPersonnes});
       //await this.nutrition.createPlatType(this.selectedPlatsTypes.id)
       this.nutrition.fetchPlats();
-      this.ref.close();      
+      this.ref.close(data);      
     } catch (error) {
       console.log("Erreur de la méthode onSubmitNewPlatForm : ", error);      
     }     
   }
 
-// Fermer le formulaire d'ajout de plat
-  onCancelNewPlatForm() {    
-    this.ref.close();    
+// Fermer le formulaire d'ajout de plat - data pour passer des données sur la modal ajoutPlat
+  onCancelNewPlatForm(data: any) {    
+    this.ref.close(data);      
   }
 
 // Ajouter un ingrédient 
