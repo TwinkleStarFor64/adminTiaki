@@ -50,10 +50,12 @@
             </span>
             <span>
               <h4>Plats</h4> 
-              <div id="divIngredients" *ngFor="let plat of selectedPlat?.titre; let i=index">
-                <figure (click)="DeleteDialog(i, false)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
-                <!-- DeleteDialog() modal PrimeNG - En paramétres l'index du plat sur le tableau et la variable bolean del en false -->    
-                <p>{{plat}}</p>                
+              <div *ngIf="selectedPlat">
+                <div id="divIngredients">
+                  <p>{{selectedPlat.titre}}</p>                
+                  <figure (click)="DeleteDialog(selectedPlat.id, false)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
+                  <!-- DeleteDialog() modal PrimeNG - En paramétres l'id du plat et la variable bolean del en false -->    
+                </div>
               </div>
             </span>
             <span id="spanButton">
@@ -97,7 +99,7 @@
       <div>
         <!-- Utilisation du pipe plats pour rechercher des plats -->        
           <span *ngFor="let plat of nutrition.plats| plats:filtrePlats| paginate: { itemsPerPage: 30, currentPage: pageIngredients, id:'plats' }">
-            <p (click)="onSelectPlats(plat.titre)">{{plat.titre }}</p>
+            <p (click)="onSelectPlats(plat.titre)">{{ plat.titre }}</p>
           </span>        
       </div>
       <span id="paginationPlats">

@@ -23,7 +23,7 @@ export class MenusComponent {
   pageIngredients: number = 1; 
   filtre: string = ''; 
   filtrePlats: string = ''; // Utiliser dans le ngModel affichant la liste des ingrédients - Filtre de recherche
-  selectedPlat?: PlatI;
+  public selectedPlat?: PlatI;
   selectedMenus?: MenuI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
   initialSelectedMenusState!: MenuI; // Pour stocker l'état initial de selectedPlats dans onSelectPlat
   //selectedIngredient?: CiqualI;
@@ -76,16 +76,16 @@ export class MenusComponent {
   }
 
   // Méthode qui attribue des valeurs aux variables correspondant à l'objet sur lequel je clique - Utilisé sur le nom du menu en HTML
-  onSelectMenu(menu: MenuI, id: Array<PlatI>) {
+  onSelectMenu(menu: MenuI, id: Array<MenuI>) {
     this.initialSelectedMenusState = { ...menu };
     console.log(this.initialSelectedMenusState);
 
     if (!this.selectedMenus) {
       this.selectedMenus = { ...menu };
     }
-    this.selectedMenus.plats = id;
+    this.selectedMenus = menu;
     console.log("J'ai cliqué sur : " + this.selectedMenus.titre);
-    this.nutrition.fetchPlats();
+    this.nutrition.fetchMenus();
   }
 
   // Méthode pour la modal de suppression d'un menu OU d'un plat
@@ -207,27 +207,31 @@ export class MenusComponent {
   }
 
   // Ajouter un plat sur un menu séléctionné
-  onSelectPlats(id: number) {
-    console.log('id du plat : ', id);
-    const plat = this.nutrition.plats.find((plat) => plat.id === id);
-    if (plat) {
-      this.selectedPlat = plat;
-    }
-    this.nutrition.fetchPlats();
+  onSelectPlats(titre: string) {
+    console.log('titre du plat : ', titre);
+    this.nutrition.fetchPlats().then(plats => {
+      const plat = plats.find((plat:PlatI) => plat.titre === titre);
+      console.log('plat:', plat);
+      if (plat) {
+        this.selectedPlat = plat;
+      }
+    });
   }
 
   async onSubmitForm() {
-    try {
-      await this.nutrition.updateMenu(
-        this.selectedMenus!.id,
-        this.selectedMenus!
-      );
-      this.nutrition.fetchMenus(); // Pour mettre à jour le formulaire ngModel
-    } catch (error) {
-      console.error("Une erreur s'est produite :", error);
+    if (this.selectedPlat && this.selectedMenus && this.selectedMenus.plats) {
+      this.selectedMenus.plats.push(this.selectedPlat);
+      try {
+        await this.nutrition.updateMenu(
+          this.selectedMenus.id,
+          this.selectedMenus
+        );
+        this.nutrition.fetchMenus(); // Pour mettre à jour le formulaire ngModel
+      } catch (error) {
+        console.error("Une erreur s'est produite :", error);
+      }
     }
   }
-
   onCancelForm() {
     // Je réattribue à selectedPlats les valeurs stockées dans onSelectPlat()
     this.selectedMenus = undefined; // Pour ne plus afficher la div contenant le formulaire du plat
