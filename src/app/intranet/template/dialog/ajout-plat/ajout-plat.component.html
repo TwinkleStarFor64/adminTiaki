@@ -9,6 +9,22 @@
               <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="newPlat.description" name="description" required minlength="1"></textarea>
               <label for="float-input">Description</label>
             </span>
+            <span class="p-float-label">
+              <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="newPlat.qualites" name="qualites"></textarea>
+              <label for="float-input">Qualités</label>
+            </span>
+            <span class="p-float-label">
+              <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="newPlat.astuces" name="astuces"></textarea>
+              <label for="float-input">Astuces</label>
+            </span>
+            <span class="p-float-label">
+              <p-inputNumber id="inputNumber" inputId="integeronly" [(ngModel)]="newPlat.nbPersonnes" name="nbPersonnes" [showButtons]="true" [min]="0"> </p-inputNumber>
+              <label for="number-input">Nombres de personnes</label>
+            </span>
+            <span class="p-float-label">
+              <p-dropdown [options]="statut" [(ngModel)]="newPlat.statut" name="statut" placeholder="Statut de publication" inputId="float-label"></p-dropdown>
+              <label for="float-label">Statut de publication</label>
+            </span>
             <span>
               <h4>Ingrédients</h4> 
               <div id="divIngredients" *ngFor="let id of newPlat.ingredients; let i=index">
@@ -17,11 +33,12 @@
               </div>
             </span>
             <span>
-              <p>Protéines : {{ nutrition.totals['proteine'] | number: '1.2-2' }} Gr</p>
-            </span>
+              <p-dropdown [options]="nutrition.platsTypes" [(ngModel)]="newPlat.types" name="type" optionLabel="type" [showClear]="true" placeholder="Choisir un type"></p-dropdown> 
+              <p *ngIf="newPlat.types">le type : {{ selectedPlatsTypes.type }}</p>
+            </span>            
             <span id="spanButton">
-              <p-button styleClass="p-button-warning" (onClick)="onCancelNewPlatForm()">Annuler</p-button>              
-              <p-button styleClass="p-button-success" (onClick)="onSubmitNewPlatForm()" [disabled]="ajoutPlatForm.invalid!">Valider</p-button>
+              <p-button styleClass="p-button-warning" (onClick)="onCancelNewPlatForm({ buttonType: 'Cancel', summary: 'Annulation' })">Annuler</p-button>              
+              <p-button styleClass="p-button-success" (onClick)="onSubmitNewPlatForm({ summary: 'Validation' })" [disabled]="ajoutPlatForm.invalid!">Valider</p-button>
             </span>
           </form>
     </article>
@@ -35,7 +52,7 @@
       </span>
       <div>
         <!-- Utilisation du pipe ingredients pour rechercher des ingredients par leur alim_nom_fr -->        
-          <span *ngFor="let ingredients of nutrition.ciqual | ingredients:filtreIngredients | paginate: { itemsPerPage: 30, currentPage: nutrition.pageIngredients, id:'ingredients' }">
+          <span *ngFor="let ingredients of nutrition.ciqualJSON | ingredients:filtreIngredients | paginate: { itemsPerPage: 30, currentPage: nutrition.pageIngredients, id:'ingredients' }">
             <p (click)="onSelectIngredient(ingredients.alim_code)">{{ ingredients.alim_nom_fr }}</p>            
           </span>        
       </div>

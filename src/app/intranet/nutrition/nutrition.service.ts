@@ -4,6 +4,7 @@ import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { AuthSession, createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environement';
 import { HttpClient } from '@angular/common/http';
+import { UtilsService } from 'src/app/partage/services/utils.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ export class NutritionService {
   excludedArrayName = 'ingredients';
   menus: MenuI[] = [];
   plats: PlatI[] = [];
-  ciqual: CiqualI[] = [];
+  //ciqual: CiqualI[] = [];
   ciqualJSON: CiqualI[] = [];
   regimes: RegimesI[] = [];
   platsTypes: PlatTypeI[] = [];
@@ -27,10 +28,7 @@ export class NutritionService {
   mappedIngredients: any[] = []; // Utilisé dans fetchCiqual()
 
   totals: { [key: string]: number } = {}; // Objet pour stocker tous les totaux - Les crochets {} sont utilisés pour définir un objet
-  // totals est un objet qui peut avoir des clés(key) de type string (par exemple, 'proteine', 'glucides', 'lipides', etc.)
-  // et des valeurs associées de type number
-
-  //listePlats: any[] = [];
+  // totals est un objet qui peut avoir des clés(key) de type string (par exemple, 'proteine', 'glucides', 'lipides', etc.) et des valeurs associées de type number
 
   pageIngredients: number = 1; // Comme ci-dessus mais pour la liste d'ingrédients
   pagePlats: number = 1;
@@ -38,7 +36,7 @@ export class NutritionService {
   filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats 
   flitrePlats: string = ''; // Utiliser dans le ngModel affichant la liste des plats - Filtre de recherche
 
-  constructor(public supa: SupabaseService, private http: HttpClient) {
+  constructor(public supa: SupabaseService, private http: HttpClient, public utils: UtilsService) {
     this.supabase = createClient(
       environment.supabaseUrl,
       environment.supabaseKey
@@ -57,26 +55,6 @@ export class NutritionService {
     if (this.flitrePlats === '' || this.flitrePlats != '') {
       this.pagePlats = 1;
     }
-  }
-
-  flatNestedData(data: Array<any>, key: any): Array<any> {
-    data.forEach(d => {
-      for (let k in d) {
-        if (k === this.excludedArrayName) {
-          continue;
-        }
-        if (Array.isArray(d[k])) {
-          d[k] = this.mapNestedData(d[k], key);
-        }
-      }
-    });
-    return data;
-  }
-
-  mapNestedData(data: Array<any>, key: string) {
-    return data.map(d => {
-      if (d.hasOwnProperty(key)) return d = d[key]
-    });
   }
 
   // ---------------------Méthode pour fetch les plats et gérer leur affichage en HTML---------------------------
@@ -131,8 +109,8 @@ export class NutritionService {
       console.log('Erreur de la méthode getPlats : ', error);
     }
     if (data) {
-      console.log('Data de la méthode getPlats : ', data);
-      return this.flatNestedData(data, 'enfant');
+      //console.log('Data de la méthode getPlats : ', data);
+      return this.utils.flatNestedData(data, 'enfant');
     } else {
       return [];
     }
@@ -162,29 +140,15 @@ export class NutritionService {
     return this.ciqualJSON;
   }
 
-  //------------------------ Méthode pour récupérer TOUTE la table ciqual sur Supabase ------------------------------------------
-  async getAllCiqual(): Promise<void> {
-    const { data: ciqualBDD, error: ciqualError } = await this.supabase
-      .from('ciqualAnses')
-      .select('*');
-    if (ciqualError) {
-      console.log('Erreur de la méthode getAllCiqual : ', ciqualError);
-    }
-    if (ciqualBDD) {
-      // J'attribue à la variable ciqual de type CiqualI le résultat de ciqualBDD - je peux maintenant utiliser ciqual dans d'autres méthodes
-      this.ciqual = ciqualBDD;
-    }
-  }
-
   // ---------------------Méthode pour fetch les ingrédients sur la table ciqualAnses et gérer leur affichage en HTML--------------------------- 
   // ids correspond au tableau idIngredients sur la table plats (supabase) - attribuer via onSelectPlat sur plats.component
   async fetchCiqual(ids: Array<number> | undefined): Promise<any> {
     if (!ids) {
       // Si pas d'id en paramétres return tableau vide - évite un message d'erreur si je clique sur un plat ne contenant pas idIngredients
       return []
-    }
-    const listeIngredients = ids.map((id) => this.ciqual.find((ing) => ing['alim_code'] == id));
-    if (listeIngredients.length > 0) {
+    }    
+    const listeIngredients = ids.map((id) => this.ciqualJSON.find((ing) => ing['alim_code'] == id));
+    if (listeIngredients.length > 0) {      
       // Utilisez map pour transformer chaque élément de listeIngredients
       this.mappedIngredients = listeIngredients.map((item) => ({
         alim_nom_fr: item!['alim_nom_fr'],
@@ -259,14 +223,27 @@ export class NutritionService {
     description: string;
     date?: Date;
     ingredients: Array<number>;
+    qualites?: string;
+    astuces?: string;
+    nbPersonnes?: number;
+    statut?: number;    
   }) {
     newEntry.date = new Date();
     const { error: createError } = await this.supabase
       .from('plats')
-      .insert(newEntry)
-    if (createError) {
-      console.log(createError);
-    }
+      .insert(newEntry)      
+      if (createError) {
+        console.log(createError);              
+      }    
+  }
+
+  async createPlatType(id: number) {
+    const { error: typeError } = await this.supabase
+        .from('attribuerPlatsType')
+        .insert({idType: id})
+        if (typeError) {
+          console.log(typeError);          
+        }
   }
 
   // In your NutritionService
@@ -415,5 +392,52 @@ export class NutritionService {
     }
   }
 
+//-------------------------------- Méthode pour réupérer les types de plats (travail en cours) ------------------------
+  async getPlatsTypes() {
+    const { data, error } = await this.supabase
+      .from('platsTypes')
+      .select('*');
+    if (error) {
+      console.log("Erreur de la méthode getPlatsTypes : ", error);      
+    }
+    if (data) {
+      console.log('Data de la méthode getPlatsTypes : ', data);
+      this.platsTypes = data.map((item: { [x: string]: any }) => ({
+        id: item['id'],
+        type: item['type'],
+        description: item['description'],  
+      }));
+      console.log(this.platsTypes);
+      
+      return this.platsTypes;
+    } else {
+      return [];
+    }
+  }
+
+//-------------------------------- Méthode pour update avec un upsert (travail en cours) ------------------------------------------
+  async updatePlatsTypes(idPlat: number, idType: number) {
+    const { error } = await this.supabase
+      .from('attribuerPlatsTypes')
+      .upsert({idPlat: idPlat, idType: idType}, {onConflict: 'idPlat'})
+    if (error) {
+      console.log("Erreur updatePlatsTypes : ", error);      
+    }
+  }
 
 }
+
+
+  //------------------------ Méthode pour récupérer TOUTE la table ciqual sur Supabase - Remplacer par getCiqualJSON ------------------------------------------
+/*   async getAllCiqual(): Promise<void> {
+    const { data: ciqualBDD, error: ciqualError } = await this.supabase
+      .from('ciqualAnses')
+      .select('*');
+    if (ciqualError) {
+      console.log('Erreur de la méthode getAllCiqual : ', ciqualError);
+    }
+    if (ciqualBDD) {
+      // J'attribue à la variable ciqual de type CiqualI le résultat de ciqualBDD - je peux maintenant utiliser ciqual dans d'autres méthodes
+      this.ciqual = ciqualBDD;
+    }
+  } */

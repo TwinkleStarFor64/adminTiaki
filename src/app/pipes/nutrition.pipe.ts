@@ -74,7 +74,7 @@ export class GetIngredientPipe implements PipeTransform {
     } */
     // Je fais un find sur this.nutri.ciqual - ciqual de nutrition.service contenant la liste d'ingrédients ciqual
     // La condition de recherche est que la propriété alim_code de l'ingrédient doit être égale à la valeur de id
-    const ingredient = this.nutri.ciqual.find(ingredient => ingredient['alim_code'] == +id);
+    const ingredient = this.nutri.ciqualJSON.find(ingredient => ingredient['alim_code'] == +id);
     //console.log("Le pipe getIngredient : ",id, typeof id, ingredient);
     // Return d'une condition ternaire - Si ingredient existe retourne la valeur de l'attribut Sinon retourne une string vide
     // L'attribut est passé en tant qu'argument lors de l'utilisation du pipe - {{ id | getIngredient:'alim_nom_fr' }}  dans nutrition.component.html

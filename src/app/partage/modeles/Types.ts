@@ -40,7 +40,8 @@ export interface PlatI {
   id: number;
   titre: string;
   description: string;
-  statut?: StatutE,
+  statut: -1 | 0 | 1;
+  //statut?: StatutE;
   reaction?: string;
   ingredients?: Array<number>;
   qualites?: string; 
@@ -64,7 +65,7 @@ export interface MenuI {
 }
 
 export interface CiqualI {
-  //alim_code: number,
+  alim_code: number,
   alim_nom_fr: string;
   proteine: number;
   glucides: number;
@@ -102,20 +103,12 @@ export interface AllergeneI {
   type: 'ingredient' | 'nutriment'
 }
 
-
-
 export interface NutriProgrammeI {
   id: number;
   titre: string;
   description?: string;
+  //statut: StatutE;
   statut: -1 | 0 | 1;
-}
-/* -------------- ENUM --------------------- */
-
-export enum StatutE {
-  valide = '1',
-  invalide = '0',
-  enAttente = '-1'
 }
 
 export interface NutrimentI {
@@ -127,11 +120,12 @@ export interface NutrimentI {
   mesure: MesuresE;
 }
 
-export enum MesureE{
-  mcg ='',
-  gr ='',
-  kg=''
-}
+/* -------------- ENUM --------------------- */
+/* export enum StatutE {
+  valide = '1',
+  invalide = '0',
+  enAttente = '-1'
+} */
 
 export enum MenuE {
   valide = '1',

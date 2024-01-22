@@ -22,6 +22,18 @@ $foot: 150px; // Hauteur des menus du bas
 $l: 75px; // Largeur du menu de droite qui permet de calculer la largeur des éléments de la page
 $header: 160px; // Hauteur du header sur les interfaces
 
+/* Pour les boutons d'incrémentation sur la balise nombre de personnes de l'interface plats */
+.p-button.p-button-icon-only{
+  border-radius: 0;
+  background: #33bb27;
+  border: 1px solid #33bb27;
+}
+.p-button.p-button-icon-only:hover{
+  border-radius: 0;
+  background: #1f7217;
+  border: 1px solid #1f7217;
+}
+
 p-button-label {
   font-size: 15rem;  
 }

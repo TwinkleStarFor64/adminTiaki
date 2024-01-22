@@ -50,10 +50,10 @@
             </span>
             <span>
               <h4>Plats</h4> 
-              <div id="divPlats" *ngFor="let id of selectedMenus.plats; let i=index">
+              <div id="divIngredients" *ngFor="let plat of selectedPlat?.titre; let i=index">
                 <figure (click)="DeleteDialog(i, false)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
                 <!-- DeleteDialog() modal PrimeNG - En paramétres l'index du plat sur le tableau et la variable bolean del en false -->    
-                <p>{{ id }}</p>                               
+                <p>{{plat}}</p>                
               </div>
             </span>
             <span id="spanButton">
