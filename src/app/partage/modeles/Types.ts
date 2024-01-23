@@ -37,7 +37,7 @@ export interface UserCreationResponse {
 /* ---------------- Interface pour la nutrition ------------------- */
 export interface PlatI {
   //alim_code: number | null;
-  id: number;
+  id?: number;
   titre: string;
   description: string;
   statut: -1 | 0 | 1;
@@ -100,7 +100,7 @@ export interface AllergeneI {
   id: number;
   titre: string;
   description?: string;
-  type: 'ingredient' | 'nutriment'
+  type?: 'ingredient' | 'nutriment'
 }
 
 export interface NutriProgrammeI {

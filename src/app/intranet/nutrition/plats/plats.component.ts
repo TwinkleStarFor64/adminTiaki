@@ -185,7 +185,7 @@ onSelectIngredient(id: number) {
 async onSubmitForm() {
   try {
     await this.nutrition.updatePlat(
-      this.selectedPlats!.id,
+      this.selectedPlats!.id!,
       this.selectedPlats!
     );
     this.nutrition.fetchPlats(); // Pour mettre à jour le formulaire ngModel      
