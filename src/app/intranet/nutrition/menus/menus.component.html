@@ -48,12 +48,22 @@
               <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="selectedMenus.description" name="description"></textarea>
               <label for="float-input">Description</label>
             </span>
+            <span class="p-float-label">
+              <p>Statut de publication : {{ selectedMenus.statut }}</p>
+            </span>
+            <span class="p-float-label">
+              <textarea id="float-input" rows="4" cols="40" pInputTextarea [(ngModel)]="selectedMenus.reaction" name="reaction" required minlength="1"></textarea>
+              <label for="float-input">Réaction</label>
+            </span>
+            <span *ngFor="let types of selectedMenus.types">
+              <p>Types de plat : {{ types.type }}</p>
+            </span>
             <span>
               <h4>Plats</h4> 
               <div *ngIf="selectedPlat">
                 <div id="divIngredients">
-                  <p>{{selectedPlat.titre}}</p>                
-                  <figure (click)="DeleteDialog(selectedPlat.id, false)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
+                  <p>{{selectedMenus.plats}}</p>                
+                  <!-- <figure (click)="DeleteDialog(this.selectedPlat?.id,true)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure> -->
                   <!-- DeleteDialog() modal PrimeNG - En paramétres l'id du plat et la variable bolean del en false -->    
                 </div>
               </div>

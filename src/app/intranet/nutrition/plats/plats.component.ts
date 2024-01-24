@@ -150,7 +150,7 @@ export class PlatsComponent implements OnInit {
   async  deletePlat() {
     // Id correspond à plat.id au niveau du HTML récupérer via la méthode de la modal DeleteDialog()
     await this.nutrition
-      .deletePlatSupabase(this.selectedPlats!.id)
+      .deletePlatSupabase(this.selectedPlats?.id as number)
       .then(() => {
         this.nutrition.fetchPlats();
         this.selectedPlats = undefined; // Pour ne plus afficher la div contenant le formulaire du plat
@@ -185,7 +185,7 @@ onSelectIngredient(id: number) {
 async onSubmitForm() {
   try {
     await this.nutrition.updatePlat(
-      this.selectedPlats!.id,
+      this.selectedPlats!.id!,
       this.selectedPlats!
     );
     this.nutrition.fetchPlats(); // Pour mettre à jour le formulaire ngModel      

@@ -37,7 +37,7 @@ export interface UserCreationResponse {
 /* ---------------- Interface pour la nutrition ------------------- */
 export interface PlatI {
   //alim_code: number | null;
-  id: number;
+  id?: number;
   titre: string;
   description: string;
   statut: -1 | 0 | 1;
@@ -62,6 +62,12 @@ export interface MenuI {
   plats?: Array<PlatI>;
   statut?:MenuE ;
   reaction?: string;
+  allergenes?: Array<AllergeneI>;
+  nutriments?: Array<NutrimentI>;
+  regimes?: Array<RegimesI>;
+  types?: Array<PlatTypeI>;
+  liens?: Array<LienI>;
+  programmes?: Array<NutriProgrammeI>;
 }
 
 export interface CiqualI {
@@ -100,7 +106,7 @@ export interface AllergeneI {
   id: number;
   titre: string;
   description?: string;
-  type: 'ingredient' | 'nutriment'
+  type?: 'ingredient' | 'nutriment'
 }
 
 export interface NutriProgrammeI {

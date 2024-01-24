@@ -24,6 +24,8 @@ export class NutritionService {
   liens: LienI[] = [];
   nutriProgrammes: NutriProgrammeI[] = [];
   nutriments: NutrimentI[] = [];
+
+  createPlatId!: number;
   mappedPlats: any[] = []; // Utilisé dans fetchPlats()
   mappedIngredients: any[] = []; // Utilisé dans fetchCiqual()
 
@@ -219,6 +221,7 @@ export class NutritionService {
 
   //------------------------------- Méthode pour créer un nouveau plat --------------------------------------
   async createPlat(newEntry: {
+    id?: number;
     titre: string;
     description: string;
     date?: Date;
@@ -227,24 +230,44 @@ export class NutritionService {
     astuces?: string;
     nbPersonnes?: number;
     statut?: number;    
-  }) {
-    newEntry.date = new Date();
-    const { error: createError } = await this.supabase
-      .from('plats')
-      .insert(newEntry)      
+  }, idTypes:number, idAllergene:number) {
+    newEntry.date = new Date();    
+      const { data: createData, error: createError } = await this.supabase
+        .from('plats')
+        .insert(newEntry)
+        .select()  
       if (createError) {
-        console.log(createError);              
-      }    
-  }
-
-  async createPlatType(id: number) {
-    const { error: typeError } = await this.supabase
-        .from('attribuerPlatsType')
-        .insert({idType: id})
+          console.log(createError);              
+        }        
+        this.createPlatId = createData![0].id
+        //console.log("Ici createData : ", createData![0].id);
+        console.log("Ici l'id createPlatId : ", this.createPlatId); 
+      const { error:typeError } = await this.supabase
+        .from('attribuerPlatsTypes')
+        .upsert({idPlat: this.createPlatId, idType: idTypes})
         if (typeError) {
           console.log(typeError);          
         }
+        console.log("Ici insert : ", this.createPlatId); 
+      const { error:allergeneError} = await this.supabase
+        .from('attribuerAllergenes')
+        .upsert({idPlats: this.createPlatId, idAllergenes: idAllergene})
+      if (allergeneError) {
+        console.log(allergeneError);        
+      }      
   }
+
+  async insertPlatTypes(idTypes: number) {
+    const { error } = await this.supabase
+      .from('attribuerPlatsTypes')
+      .upsert({idPlat: this.createPlatId, idType: idTypes})
+      console.log("Ici insert : ", this.createPlatId);
+      
+    if (error) {
+      console.log("Erreur insertPlatsTypes : ", error);      
+    }
+  }
+  
 
   // In your NutritionService
   getPlatById(id: number): PlatI | undefined {
@@ -258,8 +281,8 @@ export class NutritionService {
     try {
       const menuData = await this.getMenus(); // Appelle la méthode getMenus ci-dessous
       if (menuData) {
-        //Ici, nous utilisons la méthode map pour créer un nouveau tableau de plats à partir de data.
-        //Chaque élément de data est représenté par l'objet { [x: string]: any; }, que nous convertissons en un objet PlatI en utilisant les propriétés nécessaires.
+        //Ici, nous utilisons la méthode map pour créer un nouveau tableau de menus à partir de data.
+        //Chaque élément de data est représenté par l'objet { [x: string]: any; }, que nous convertissons en un objet MenuI en utilisant les propriétés nécessaires.
         this.menus = menuData.map((item: { [x: string]: any }) => ({
           id: item['id'],
           titre: item['titre'],
@@ -277,7 +300,7 @@ export class NutritionService {
     }
   }
 
-  // ----------------------Méthode pour récupérer tout les plats sur la table Menus de supabase-------------------
+  // ----------------------Méthode pour récupérer tout les menus sur la table Menus de supabase-------------------
   async getMenus() {
     const { data, error } = await this.supabase.from('menus').select('*');
     if (error) {
@@ -392,7 +415,7 @@ export class NutritionService {
     }
   }
 
-//-------------------------------- Méthode pour réupérer les types de plats (travail en cours) ------------------------
+//-------------------------------- Méthode pour récupérer les types de plats (travail en cours) ------------------------
   async getPlatsTypes() {
     const { data, error } = await this.supabase
       .from('platsTypes')
@@ -415,16 +438,39 @@ export class NutritionService {
     }
   }
 
+//------------------------------- Méthode pour récupérer les allergènes -----------------------------------------
+async getAllergenes() {
+  const { data, error } = await this.supabase
+    .from('allergenes')
+    .select('*');
+  if (error) {
+    console.log("Erreur de la méthode getAllergenes : ", error);      
+  }
+  if (data) {
+    console.log('Data de la méthode getAllergenes : ', data);
+    this.allergenes = data.map((item: { [x: string]: any }) => ({
+      id: item['id'],
+      titre: item['titre'],
+      description: item['description'],
+      type: item['type'],  
+    }));
+    console.log(this.allergenes);
+    
+    return this.allergenes;
+  } else {
+    return [];
+  }
+}
+
 //-------------------------------- Méthode pour update avec un upsert (travail en cours) ------------------------------------------
-  async updatePlatsTypes(idPlat: number, idType: number) {
+  async insertData() {
     const { error } = await this.supabase
-      .from('attribuerPlatsTypes')
-      .upsert({idPlat: idPlat, idType: idType}, {onConflict: 'idPlat'})
+      .from('attribuerAllergenes')
+      .upsert({idPlats: 28, idAllergenes: 2})
     if (error) {
-      console.log("Erreur updatePlatsTypes : ", error);      
+      console.log("Erreur insertData : ", error);      
     }
   }
-
 }
 
 

@@ -233,7 +233,7 @@ export class MenusComponent {
     }
   }
   onCancelForm() {
-    // Je réattribue à selectedPlats les valeurs stockées dans onSelectPlat()
+    // Je réattribue à selectedMenus les valeurs stockées dans onSelectPlat()
     this.selectedMenus = undefined; // Pour ne plus afficher la div contenant le formulaire du plat
     this.nutrition.fetchMenus();
   }

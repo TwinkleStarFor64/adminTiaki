@@ -41,7 +41,7 @@ export class AjoutMenuComponent {
       await this.nutrition.createMenu({
         titre: this.newMenu.titre,
         description: this.newMenu.description,
-        plats: platIds,
+        plats: platIds as number[],
       });
       this.nutrition.fetchMenus();
     } catch (error) {

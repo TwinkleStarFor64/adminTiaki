@@ -33,12 +33,21 @@
               </div>
             </span>
             <span>
-              <p-dropdown [options]="nutrition.platsTypes" [(ngModel)]="newPlat.types" name="type" optionLabel="type" [showClear]="true" placeholder="Choisir un type"></p-dropdown> 
-              <p *ngIf="newPlat.types">le type : {{ selectedPlatsTypes.type }}</p>
-            </span>            
+              Type de plat :
+              <p-dropdown [options]="nutrition.platsTypes" [(ngModel)]="selectedPlatsTypes" name="platsTypes" optionLabel="type" [showClear]="true" placeholder="Choisir un type"></p-dropdown> 
+              <p *ngIf="selectedPlatsTypes">le type : {{ selectedPlatsTypes.type }}</p>
+              <!-- optionLabel pour voir la données suivant le typage (le titre, la description l'id etc....) -->
+            </span>
+            <span>
+              Type d'allergènes :
+              <p-dropdown [options]="nutrition.allergenes" [(ngModel)]="selectedAllergenes" name="allergenes" optionLabel="titre" [showClear]="true" placeholder="Choisir un allergène"></p-dropdown> 
+              <p *ngIf="selectedAllergenes">le type : {{ selectedAllergenes.titre }}</p>
+              <!-- Ici optionLabel correspond au titre d'un allergene comme reçue après le map dans getAllergenes() -->
+            </span>              
             <span id="spanButton">
               <p-button styleClass="p-button-warning" (onClick)="onCancelNewPlatForm({ buttonType: 'Cancel', summary: 'Annulation' })">Annuler</p-button>              
               <p-button styleClass="p-button-success" (onClick)="onSubmitNewPlatForm({ summary: 'Validation' })" [disabled]="ajoutPlatForm.invalid!">Valider</p-button>
+              <p-button styleClass="p-button-warning" (onClick)="nutrition.insertPlatTypes(selectedPlatsTypes.id)">Insert</p-button>  
             </span>
           </form>
     </article>
