@@ -35,13 +35,13 @@
             <span>
               Type de plat :
               <p-dropdown [options]="nutrition.platsTypes" [(ngModel)]="selectedPlatsTypes" name="platsTypes" optionLabel="type" [showClear]="true" placeholder="Choisir un type"></p-dropdown> 
-              <p *ngIf="selectedPlatsTypes">le type : {{ selectedPlatsTypes.type }}</p>
+              <p *ngIf="selectedPlatsTypes">le type : {{ selectedPlatsTypes.id }}</p>
               <!-- optionLabel pour voir la données suivant le typage (le titre, la description l'id etc....) -->
             </span>
             <span>
               Type d'allergènes :
               <p-dropdown [options]="nutrition.allergenes" [(ngModel)]="selectedAllergenes" name="allergenes" optionLabel="titre" [showClear]="true" placeholder="Choisir un allergène"></p-dropdown> 
-              <p *ngIf="selectedAllergenes">le type : {{ selectedAllergenes.titre }}</p>
+              <p *ngIf="selectedAllergenes">le type : {{ selectedAllergenes.id }}</p>
               <!-- Ici optionLabel correspond au titre d'un allergene comme reçue après le map dans getAllergenes() -->
             </span>              
             <span id="spanButton">

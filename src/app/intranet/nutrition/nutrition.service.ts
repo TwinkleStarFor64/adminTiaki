@@ -62,7 +62,7 @@ export class NutritionService {
     try {
       const platData = await this.getPlats(); // Appelle la méthode getPlats ci-dessous
       if (platData) {
-        console.log("Data de fetchPlats : ", platData);
+        //console.log("Data de fetchPlats : ", platData);
         //Ici, nous utilisons la méthode map pour créer un nouveau tableau de plats à partir de data.
         //Chaque élément de data est représenté par l'objet { [x: string]: any; }, que nous convertissons en un objet PlatI en utilisant les propriétés nécessaires.
         this.plats = platData.map((item: { [x: string]: any }) => ({
@@ -242,17 +242,49 @@ export class NutritionService {
         console.log("Ici l'id createPlatId : ", this.createPlatId); 
       const { error:typeError } = await this.supabase
         .from('attribuerPlatsTypes')
-        .upsert({idPlat: this.createPlatId, idType: idTypes})
+        .insert({idPlat: this.createPlatId, idType: idTypes})
         if (typeError) {
           console.log(typeError);          
         }
-        console.log("Ici insert : ", this.createPlatId); 
+        //console.log("Ici insert : ", this.createPlatId); 
       const { error:allergeneError} = await this.supabase
         .from('attribuerAllergenes')
-        .upsert({idPlats: this.createPlatId, idAllergenes: idAllergene})
+        .insert({idPlats: this.createPlatId, idAllergenes: idAllergene})
       if (allergeneError) {
         console.log(allergeneError);        
       }      
+  }
+
+  async createPlatBis(newEntry: {
+    id?: number;
+    titre: string;
+    description: string;
+    date?: Date;
+    ingredients: Array<number>;
+    qualites?: string;
+    astuces?: string;
+    nbPersonnes?: number;
+    statut?: number; 
+    allergenes?: number; 
+    types?: number;  
+  }) {
+    newEntry.date = new Date();    
+      const {data: createData, error: createError } = await this.supabase.rpc('insert_plat', {
+        plat_titre: newEntry.titre, 
+        plat_description: newEntry.description, 
+        plat_date: newEntry.date, 
+        plat_ingredients: newEntry.ingredients, 
+        plat_qualites: newEntry.qualites, 
+        plat_astuces: newEntry.astuces, 
+        plat_nbpersonnes: newEntry.nbPersonnes, 
+        //plat_statut: newEntry.statut
+        idAllergenes: newEntry.allergenes,
+        idType: newEntry.types,
+      });    
+      console.log("createData RPC : ", createData);           
+      if (createError) {
+          console.log(createError);              
+        }                  
   }
 
   async insertPlatTypes(idTypes: number) {
@@ -428,8 +460,7 @@ export class NutritionService {
         type: item['type'],
         description: item['description'],  
       }));
-      console.log(this.platsTypes);
-      
+      //console.log(this.platsTypes);      
       return this.platsTypes;
     } else {
       return [];
@@ -452,8 +483,7 @@ async getAllergenes() {
       description: item['description'],
       type: item['type'],  
     }));
-    console.log(this.allergenes);
-    
+    //console.log(this.allergenes);    
     return this.allergenes;
   } else {
     return [];
@@ -470,7 +500,12 @@ async getAllergenes() {
     }
   }
 
-
+  async testRpc() {
+    const { data, error } = await this.supabase.rpc('hello_world')
+    if (data) {
+      console.log(data);      
+    }
+  }
 
 }
 
