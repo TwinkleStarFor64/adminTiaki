@@ -265,10 +265,15 @@ export class NutritionService {
     astuces?: string;
     nbPersonnes?: number;
     statut?: number; 
-    allergenes?: number; 
-    types?: number;  
+    allergenes?: Array<number>; 
+    types?: Array<number>; 
+    regimes?: Array<number>;
+    programmes?: Array<number>;
+    nutriments?: Array<number>; 
+    liens?: Array<number>;
   }) {
     newEntry.date = new Date();    
+    console.log("Valeur de allergenes dans createPlatBis :", newEntry.allergenes);
       const {data: createData, error: createError } = await this.supabase.rpc('insert_plat', {
         plat_titre: newEntry.titre, 
         plat_description: newEntry.description, 
@@ -280,8 +285,15 @@ export class NutritionService {
         //plat_statut: newEntry.statut
         idAllergenes: newEntry.allergenes,
         idType: newEntry.types,
+        idRegimes: newEntry.regimes,
+        idNutriProgrammes: newEntry.programmes,
+        idNutriments: newEntry.nutriments,
+        idLiens: newEntry.liens,
       });    
-      console.log("createData RPC : ", createData);           
+      console.log("createData RPC : ", createData);
+      console.log();
+      
+                 
       if (createError) {
           console.log(createError);              
         }                  
@@ -445,7 +457,7 @@ export class NutritionService {
     }
   }
 
-//-------------------------------- Méthode pour récupérer les types de plats (travail en cours) ------------------------
+//-------------------------------- Méthode pour récupérer les types de plats ------------------------
   async getPlatsTypes() {
     const { data, error } = await this.supabase
       .from('platsTypes')
@@ -490,6 +502,100 @@ async getAllergenes() {
   }
 }
 
+//------------------------------- Méthode pour récupérer les régimes alimentaires -----------------------------------------
+async getRegimes() {
+  const { data, error } = await this.supabase
+    .from('regimes')
+    .select('*');
+  if (error) {
+    console.log("Erreur de la méthode getRegimes : ", error);      
+  }
+  if (data) {
+    console.log('Data de la méthode getRegimes : ', data);
+    this.regimes = data.map((item: { [x: string]: any }) => ({
+      id: item['id'],
+      titre: item['titre'],
+      description: item['description'],
+      type: item['type'],  
+    }));
+    //console.log(this.regimes);    
+    return this.regimes;
+  } else {
+    return [];
+  }
+}
+
+//------------------------------- Méthode pour récupérer les programmes alimentaires -----------------------------------------
+async getNutriProgrammes() {
+  const { data, error } = await this.supabase
+    .from('nutriProgrammes')
+    .select('*');
+  if (error) {
+    console.log("Erreur de la méthode getNutriProgrammes : ", error);      
+  }
+  if (data) {
+    console.log('Data de la méthode getNutriProgrammes : ', data);
+    this.nutriProgrammes = data.map((item: { [x: string]: any }) => ({
+      id: item['id'],
+      titre: item['titre'],
+      description: item['description'],
+      statut: item['statut'],  
+    }));
+    //console.log(this.nutriProgrammes);    
+    return this.nutriProgrammes;
+  } else {
+    return [];
+  }
+}
+
+//------------------------------- Méthode pour récupérer les liens -----------------------------------------
+async getLiens() {
+  const { data, error } = await this.supabase
+    .from('liens')
+    .select('*');
+  if (error) {
+    console.log("Erreur de la méthode getLiens : ", error);      
+  }
+  if (data) {
+    console.log('Data de la méthode getLiens : ', data);
+    this.liens = data.map((item: { [x: string]: any }) => ({
+      id: item['id'],
+      titre: item['titre'],
+      description: item['description'],
+      url: item['url'],
+      cible: item['cible'],  
+    }));
+    //console.log(this.liens);    
+    return this.liens;
+  } else {
+    return [];
+  }
+}
+
+//------------------------------- Méthode pour récupérer les nutriments -----------------------------------------
+async getNutrimentsBis() {
+  const { data, error } = await this.supabase
+    .from('nutriments')
+    .select('*');
+  if (error) {
+    console.log('Erreur de la méthode getNutriments : ', error);
+  }
+  if (data) {
+    console.log('Data de la méthode getNutriments: ', data);
+    this.nutriments = data.map((item: { [x: string]: any }) => ({
+      id: item['id'],
+      titre: item['titre'],
+      quantite: item['quantite'],
+      represente: item['represente'],
+      reaction: item['reaction'],
+      mesure: item['mesure'],  
+    }));
+    return data;
+  } else {
+    return [];
+  }
+}
+
 //-------------------------------- Méthode pour update avec un upsert (travail en cours) ------------------------------------------
   async insertData() {
     const { error } = await this.supabase
@@ -497,13 +603,6 @@ async getAllergenes() {
       .upsert({idPlats: 28, idAllergenes: 2})
     if (error) {
       console.log("Erreur insertData : ", error);      
-    }
-  }
-
-  async testRpc() {
-    const { data, error } = await this.supabase.rpc('hello_world')
-    if (data) {
-      console.log(data);      
     }
   }
 

@@ -3,7 +3,7 @@ import { PaginationService } from 'ngx-pagination';
 import { MessageService } from 'primeng/api';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { NutritionService } from 'src/app/intranet/nutrition/nutrition.service';
-import { AllergeneI, PlatI, PlatTypeI, StatutE } from 'src/app/partage/modeles/Types';
+import { AllergeneI, LienI, NutriProgrammeI, NutrimentI, PlatI, PlatTypeI, RegimesI, StatutE } from 'src/app/partage/modeles/Types';
 import { UtilsService } from 'src/app/partage/services/utils.service';
 
 @Component({
@@ -16,8 +16,12 @@ export class AjoutPlatComponent implements OnInit {
   newPlat!: PlatI;
   filtreIngredients: string = ''; // Utiliser dans le ngModel affichant la liste des ingrédients - Filtre de recherche
   //selectedPlats?: PlatI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
-  selectedPlatsTypes!: PlatTypeI;
-  selectedAllergenes!: AllergeneI;
+  selectedPlatsTypes!: PlatTypeI[];
+  selectedAllergenes!: AllergeneI[];
+  selectedRegimes!: RegimesI[];
+  selectedProgrammes!: NutriProgrammeI[];
+  selectedNutriments!: NutrimentI[];
+  selectedLiens!: LienI[];
 
   statut = Object.values(StatutE).map(value => value as StatutE);
 
@@ -25,7 +29,6 @@ export class AjoutPlatComponent implements OnInit {
 
   ngOnInit(): void {
     this.newPlat = {
-
       titre: '',
       description: '',
       ingredients: [],
@@ -39,20 +42,8 @@ export class AjoutPlatComponent implements OnInit {
   // Méthode pour le formulaire d'ajout d'un plat - data pour passer des données sur la modal ajoutPlat (Dans plats.component.ts)
   async onSubmitNewPlatForm(data: any) {
     try {
-      console.log(this.newPlat);
-      // Je configure les valeurs de newPlat pour correspondre à newEntry sur createPlat()  
-      /* await this.nutrition.createPlat({
-        titre: this.newPlat.titre,
-        description: this.newPlat.description,
-        ingredients: this.newPlat.ingredients!,
-        qualites: this.newPlat.qualites,
-        astuces: this.newPlat.astuces,
-        statut: this.newPlat.statut,
-        nbPersonnes: this.newPlat.nbPersonnes
-      },
-        this.selectedPlatsTypes.id,
-        this.selectedAllergenes.id); */
-
+      console.log(this.newPlat);      
+      // Je configure les valeurs de newPlat pour correspondre à newEntry sur createPlat() 
         await this.nutrition.createPlatBis({
           titre: this.newPlat.titre,
           description: this.newPlat.description,
@@ -61,12 +52,17 @@ export class AjoutPlatComponent implements OnInit {
           astuces: this.newPlat.astuces,
           nbPersonnes: this.newPlat.nbPersonnes,
           //statut: this.newPlat.statut,
-          allergenes: this.selectedAllergenes.id,
-          types: this.selectedPlatsTypes.id
+      // Ci-dessous je fais un map car j'envoie un tableau de nombre
+          allergenes: this.selectedAllergenes.map(allergene => allergene.id),
+          types: this.selectedPlatsTypes.map(type => type.id),
+          regimes: this.selectedRegimes.map(regime => regime.id),
+          programmes: this.selectedProgrammes.map(programme => programme.id),
+          nutriments: this.selectedNutriments.map(nutriment => nutriment.id),
+          liens: this.selectedLiens.map(lien => lien.id)
         });
       
-      this.nutrition.fetchPlats();
-      this.ref.close(data);
+      this.nutrition.fetchPlats(); // Pour mettre à jour la liste des plats après l'ajout d'un nouveau plat
+      this.ref.close(data); // Pour la fermeture de la modal
     } catch (error) {
       console.log("Erreur de la méthode onSubmitNewPlatForm : ", error);
     }
@@ -92,3 +88,17 @@ export class AjoutPlatComponent implements OnInit {
   }
 
 }
+
+
+
+/* await this.nutrition.createPlat({
+        titre: this.newPlat.titre,
+        description: this.newPlat.description,
+        ingredients: this.newPlat.ingredients!,
+        qualites: this.newPlat.qualites,
+        astuces: this.newPlat.astuces,
+        statut: this.newPlat.statut,
+        nbPersonnes: this.newPlat.nbPersonnes
+      },
+        this.selectedPlatsTypes.id,
+        this.selectedAllergenes.id); */
