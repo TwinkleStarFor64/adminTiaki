@@ -84,7 +84,7 @@ export class NutritionService {
           liens: item['liens'],
           programmes: item['programmes']
         }));
-        //console.log(this.plats.map((item) => item['allergenes']));
+        console.log(this.plats.map((item) => item['allergenes']));
         return this.plats;
       }
     } catch (error) {
