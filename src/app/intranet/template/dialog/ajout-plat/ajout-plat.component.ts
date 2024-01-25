@@ -34,9 +34,7 @@ export class AjoutPlatComponent implements OnInit {
       ingredients: [],
       statut: 0,
       nbPersonnes: 0,
-    };
-    this.nutrition.getPlatsTypes();
-    this.nutrition.getAllergenes();
+    };    
   }
 
   // Méthode pour le formulaire d'ajout d'un plat - data pour passer des données sur la modal ajoutPlat (Dans plats.component.ts)
@@ -44,7 +42,7 @@ export class AjoutPlatComponent implements OnInit {
     try {
       console.log(this.newPlat);      
       // Je configure les valeurs de newPlat pour correspondre à newEntry sur createPlat() 
-        await this.nutrition.createPlatBis({
+        await this.nutrition.createPlat({
           titre: this.newPlat.titre,
           description: this.newPlat.description,
           ingredients: this.newPlat.ingredients!,
@@ -59,8 +57,7 @@ export class AjoutPlatComponent implements OnInit {
           programmes: this.selectedProgrammes.map(programme => programme.id),
           nutriments: this.selectedNutriments.map(nutriment => nutriment.id),
           liens: this.selectedLiens.map(lien => lien.id)
-        });
-      
+        });      
       this.nutrition.fetchPlats(); // Pour mettre à jour la liste des plats après l'ajout d'un nouveau plat
       this.ref.close(data); // Pour la fermeture de la modal
     } catch (error) {

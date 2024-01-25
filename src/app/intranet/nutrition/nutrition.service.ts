@@ -227,43 +227,6 @@ export class NutritionService {
     qualites?: string;
     astuces?: string;
     nbPersonnes?: number;
-    statut?: number;    
-  }, idTypes:number, idAllergene:number) {
-    newEntry.date = new Date();    
-      const { data: createData, error: createError } = await this.supabase
-        .from('plats')
-        .insert(newEntry)
-        .select()  
-      if (createError) {
-          console.log(createError);              
-        }        
-        this.createPlatId = createData![0].id
-        //console.log("Ici createData : ", createData![0].id);
-        console.log("Ici l'id createPlatId : ", this.createPlatId); 
-      const { error:typeError } = await this.supabase
-        .from('attribuerPlatsTypes')
-        .insert({idPlat: this.createPlatId, idType: idTypes})
-        if (typeError) {
-          console.log(typeError);          
-        }
-        //console.log("Ici insert : ", this.createPlatId); 
-      const { error:allergeneError} = await this.supabase
-        .from('attribuerAllergenes')
-        .insert({idPlats: this.createPlatId, idAllergenes: idAllergene})
-      if (allergeneError) {
-        console.log(allergeneError);        
-      }      
-  }
-
-  async createPlatBis(newEntry: {
-    id?: number;
-    titre: string;
-    description: string;
-    date?: Date;
-    ingredients: Array<number>;
-    qualites?: string;
-    astuces?: string;
-    nbPersonnes?: number;
     statut?: number; 
     allergenes?: Array<number>; 
     types?: Array<number>; 
@@ -273,7 +236,7 @@ export class NutritionService {
     liens?: Array<number>;
   }) {
     newEntry.date = new Date();    
-    console.log("Valeur de allergenes dans createPlatBis :", newEntry.allergenes);
+    //console.log("Valeur de allergenes dans createPlatBis :", newEntry.allergenes);
       const {data: createData, error: createError } = await this.supabase.rpc('insert_plat', {
         plat_titre: newEntry.titre, 
         plat_description: newEntry.description, 
@@ -290,32 +253,16 @@ export class NutritionService {
         idNutriments: newEntry.nutriments,
         idLiens: newEntry.liens,
       });    
-      console.log("createData RPC : ", createData);
-      console.log();
-      
-                 
+      console.log("createData RPC : ", createData);                 
       if (createError) {
           console.log(createError);              
         }                  
-  }
-
-  async insertPlatTypes(idTypes: number) {
-    const { error } = await this.supabase
-      .from('attribuerPlatsTypes')
-      .upsert({idPlat: this.createPlatId, idType: idTypes})
-      console.log("Ici insert : ", this.createPlatId);
-      
-    if (error) {
-      console.log("Erreur insertPlatsTypes : ", error);      
-    }
-  }
-  
+  }  
 
   // In your NutritionService
   getPlatById(id: number): PlatI | undefined {
     console.log("Plat trouvé : ", this.plats.find(plat => plat.id === id));
     return this.plats.find(plat => plat.id === id);
-
   }
 
   /* --------------------------Méthode pour récupérer les menus sur la table menus de supabase--------------------------------*/
@@ -606,6 +553,17 @@ async getNutrimentsBis() {
     }
   }
 
+  async insertPlatTypes(idTypes: number) {
+    const { error } = await this.supabase
+      .from('attribuerPlatsTypes')
+      .upsert({idPlat: this.createPlatId, idType: idTypes})
+      console.log("Ici insert : ", this.createPlatId);
+      
+    if (error) {
+      console.log("Erreur insertPlatsTypes : ", error);      
+    }
+  }
+
 }
 
 
@@ -621,4 +579,42 @@ async getNutrimentsBis() {
       // J'attribue à la variable ciqual de type CiqualI le résultat de ciqualBDD - je peux maintenant utiliser ciqual dans d'autres méthodes
       this.ciqual = ciqualBDD;
     }
+  } */
+
+
+/*   async createPlat(newEntry: {
+    id?: number;
+    titre: string;
+    description: string;
+    date?: Date;
+    ingredients: Array<number>;
+    qualites?: string;
+    astuces?: string;
+    nbPersonnes?: number;
+    statut?: number;    
+  }, idTypes:number, idAllergene:number) {
+    newEntry.date = new Date();    
+      const { data: createData, error: createError } = await this.supabase
+        .from('plats')
+        .insert(newEntry)
+        .select()  
+      if (createError) {
+          console.log(createError);              
+        }        
+        this.createPlatId = createData![0].id
+        //console.log("Ici createData : ", createData![0].id);
+        console.log("Ici l'id createPlatId : ", this.createPlatId); 
+      const { error:typeError } = await this.supabase
+        .from('attribuerPlatsTypes')
+        .insert({idPlat: this.createPlatId, idType: idTypes})
+        if (typeError) {
+          console.log(typeError);          
+        }
+        //console.log("Ici insert : ", this.createPlatId); 
+      const { error:allergeneError} = await this.supabase
+        .from('attribuerAllergenes')
+        .insert({idPlats: this.createPlatId, idAllergenes: idAllergene})
+      if (allergeneError) {
+        console.log(allergeneError);        
+      }      
   } */

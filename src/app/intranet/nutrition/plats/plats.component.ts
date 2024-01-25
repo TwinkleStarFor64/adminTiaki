@@ -63,6 +63,8 @@ export class PlatsComponent implements OnInit {
     this.nutrition.fetchPlats();
   // La méthode getCiqualJSON() permet de voir la liste des ingrédients et d'attribuer des valeurs via la méthode onSelectPlat() qui à besoin des ingrédients
     this.nutrition.getCiqualJSON();
+    this.nutrition.getPlatsTypes();
+    this.nutrition.getAllergenes();
     this.nutrition.getRegimes();
     this.nutrition.getNutriProgrammes();
     this.nutrition.getLiens();

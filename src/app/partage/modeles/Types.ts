@@ -127,6 +127,12 @@ export interface NutrimentI {
   enAttente = '-1'
 } */
 
+export enum StatutE {
+  depublie = '-1',
+  brouillon = '0',
+  publie = '1',
+}
+
 export enum MenuE {
   valide = '1',
   invalide = '0',
@@ -147,8 +153,4 @@ gr = 'gr',
 kgs = 'kgs'
 }
 
-export enum StatutE {
-  depublie = '-1',
-  brouillon = '0',
-  publie = '1',
-}
+
