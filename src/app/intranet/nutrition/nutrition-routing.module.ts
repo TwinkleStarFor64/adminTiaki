@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { NutritionComponent } from './nutrition.component';
 import { MenusComponent } from './menus/menus.component';
 import { AllergenesComponent } from './allergenes/allergenes.component';
-import { ComplementsComponent } from './complements/complements.component';
 import { IngredientsComponent } from './ingredients/ingredients.component';
 import { PlatsComponent } from './plats/plats.component';
 import { NutrimentsComponent } from './nutriments/nutriments.component';

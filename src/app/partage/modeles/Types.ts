@@ -1,3 +1,11 @@
+export interface LienI {
+  id: number;
+  titre: string;
+  url: string;
+  description?: string;
+  cible?: '_self' | '_blank'
+}
+
 /**
  * @description Interface de l'aside bar
  */
@@ -21,19 +29,6 @@ export interface UtilisateurI {
   selected?: boolean;
 }
 
-// export interface UtilisateurData {
-//     id: any;
-//     email: string;
-//     nom: string;
-//     roles: RoleData[];
-//     selected?: boolean; 
-// }
-
-export interface RoleData {
-name: string;
-selected: boolean;
-}
-
 export interface UserCreationResponse {
   auth: any[] | undefined; 
   utilisateur: any[] | undefined; 
@@ -41,14 +36,107 @@ export interface UserCreationResponse {
 
 /* ---------------- Interface pour la nutrition ------------------- */
 export interface PlatI {
+  //alim_code: number | null;
   id: number;
   titre: string;
   description: string;
-  alim_code: number | null;
-  statut?: string;
+  statut?: StatutE,
   reaction?: string;
   ingredients?: Array<number>;
-  //types:PlatE
+  qualites?: string; 
+  astuces?: string;
+  nbPersonnes?: number;
+  allergenes?: Array<AllergeneI>;
+  nutriments?: Array<NutrimentI>;
+  regimes?: Array<RegimesI>;
+  types?: Array<PlatTypeI>;
+  liens?: Array<LienI>;
+  programmes?: Array<NutriProgrammeI>;
+}
+
+export interface MenuI {
+  id: number;
+  titre: string;
+  description: string;
+  plats?: Array<number>;
+  statut?:MenuE ;
+  reaction?: string;
+}
+
+export interface CiqualI {
+  //alim_code: number,
+  alim_nom_fr: string;
+  proteine: number;
+  glucides: number;
+  lipides: number;
+  sucres: number;
+  vitamineC: number;
+  vitamineB1: number;
+  vitamineB2: number;
+  vitamineB3: number;
+  vitamineB5: number;
+  magnesium: number;
+  potassium: number;
+  cuivre: number;
+  manganese: number;
+  [key: string]: number | string; // Pour la méthode calculateTotals() qui crée un objet de type clé et valeur - Variable totals dans nutrition.service
+}
+
+export interface RegimesI {
+  id: number;
+  titre: string;
+  description?: string;
+  type?: string;
+}
+
+export interface PlatTypeI {
+  id: number;
+  type: string;
+  descritpion?: string;
+}
+
+export interface AllergeneI {
+  id: number;
+  titre: string;
+  description?: string;
+  type: 'ingredient' | 'nutriment'
+}
+
+
+
+export interface NutriProgrammeI {
+  id: number;
+  titre: string;
+  description?: string;
+  statut: -1 | 0 | 1;
+}
+/* -------------- ENUM --------------------- */
+
+export enum StatutE {
+  valide = '1',
+  invalide = '0',
+  enAttente = '-1'
+}
+
+export interface NutrimentI {
+  id: number;
+  titre: string;
+  quantite: string;
+  represente?: string;
+  reaction?: string;
+  mesure: MesuresE;
+}
+
+export enum MesureE{
+  mcg ='',
+  gr ='',
+  kg=''
+}
+
+export enum MenuE {
+  valide = '1',
+  invalide = '0',
+  enAttente = '-1'
 }
 
 export enum PlatE {
@@ -65,20 +153,8 @@ gr = 'gr',
 kgs = 'kgs'
 }
 
-export interface CiqualI {
-  alim_nom_fr: string;
-  proteine: number;
-  glucides: number;
-  lipides: number;
-  sucres: number;
-  vitamineC: number;
-  vitamineB1: number;
-  vitamineB2: number;
-  vitamineB3: number;
-  vitamineB5: number;
-  magnesium: number;
-  potassium: number;
-  cuivre: number;
-  manganese: number;
-  [key: string]: number | string; // Pour la méthode calculateTotals() qui crée un objet de type clé et valeur - Variable totals dans nutrition.service
+export enum StatutE {
+  depublie = '-1',
+  brouillon = '0',
+  publie = '1',
 }

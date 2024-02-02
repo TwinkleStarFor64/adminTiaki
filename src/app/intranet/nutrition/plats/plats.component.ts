@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PlatI } from 'src/app/partage/modeles/Types';
+import { AllergeneI, PlatI, StatutE } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { NutritionService } from '../nutrition.service';
 import { ConfirmEventType, ConfirmationService, MessageService } from 'primeng/api';
@@ -17,9 +17,11 @@ export class PlatsComponent implements OnInit {
   pageIngredients: number = 1; // Comme ci-dessus mais pour la liste d'ingrédients
   filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats
   filtreIngredients: string = ''; // Utiliser dans le ngModel affichant la liste des ingrédients - Filtre de recherche
-
+  statutTexte: string = '';
+  plat!: PlatI;
+  allergene: AllergeneI[] =[];
   selectedPlats?: PlatI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
-    
+
   ref: DynamicDialogRef | undefined; // Pour la modal d'ajout de plat - DynamicDialogModule
 
   constructor(
@@ -38,13 +40,17 @@ export class PlatsComponent implements OnInit {
             contentStyle: { overflow: 'hidden' }, // Pour cacher l'overflow globale de la modal
             baseZIndex: 10000,
             maximizable: true
-    })
+    });
+    this.ref.onClose.subscribe(() => {       
+        this.messageService.add({severity:'info', summary: 'Product Selected', detail: 'confirmation'});      
+    });
+    
   }  
 
   async ngOnInit(): Promise<void> {
     this.nutrition.fetchPlats();
   // La méthode getAllCiqual() permet de voir la liste des ingrédients et d'attribuer des valeurs via la méthode onSelectPlat() qui à besoin des ingrédients
-    this.nutrition.getAllCiqual();   
+    this.nutrition.getAllCiqual();
   }
 
 // Méthode utiliser dans l'input de recherche d'ingrédients afin de le réinitialiser
@@ -62,9 +68,10 @@ export class PlatsComponent implements OnInit {
     console.log("ici selectedPlats : ", this.selectedPlats);    
   // J'attribue au paramétre id de la méthode le tableau d'alim_code contenu dans idIngredients
     this.selectedPlats.ingredients = id;
-    console.log("J'ai cliqué sur : " + this.selectedPlats.ingredients);
+    console.log("J'ai cliqué sur les alim_code : " + this.selectedPlats.ingredients);
   // Je passe en paramétre de la méthode fetchCiqual le tableau d'id obtenu au dessus
-    this.nutrition.fetchCiqual(id);
+    this.nutrition.fetchCiqual(id);    
+    console.log("Allergenes du plat : ", this.selectedPlats.allergenes);       
   }
 
 // Méthode pour la modal de suppression d'un plat OU d'un ingrédient
@@ -141,6 +148,7 @@ export class PlatsComponent implements OnInit {
       .deletePlatSupabase(id)
       .then(() => {
         this.nutrition.fetchPlats();
+        this.selectedPlats = undefined; // Pour ne plus afficher la div contenant le formulaire du plat
       })
       .catch((error) => {
         console.log(error);
@@ -188,6 +196,19 @@ onCancelForm() {
 }
 
 
+
+mapStatut(statut: StatutE): string {
+  switch (statut) {
+    case StatutE.depublie:
+      return 'Dépublié';
+    case StatutE.brouillon:
+      return 'Brouillon';
+    case StatutE.publie:
+      return 'Publié';
+    default:
+      return 'Inconnu';
+  }
+}
 
 
 }

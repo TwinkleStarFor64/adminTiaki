@@ -20,11 +20,11 @@
     <p-button styleClass="p-button-success" (onClick)="ajoutPlat()">Ajouter un plat</p-button>
     <span class="p-input-icon-left">
       <i class="pi pi-search"></i>
-      <input type="text" pInputText [(ngModel)]="filtre" />
+      <input type="text" pInputText [(ngModel)]="nutrition.filtre" />
     </span>
     <span>
       <!-- Utilisation du pipe plats pour rechercher des plats par leur noms -->
-      <ng-container *ngIf="nutrition.plats | plats:filtre as filteredPlats">
+      <ng-container *ngIf="nutrition.plats | plats:nutrition.filtre as filteredPlats">
       <!-- Utilisation de ngx-pagination - Doc : https://github.com/michaelbromley/ngx-pagination/blob/master/README.md#demo -->  
       <div *ngFor="let plat of filteredPlats | paginate: { itemsPerPage: 15, currentPage: pagePlats, id:'plats' }">
         <p (click)="onSelectPlat(plat, plat.ingredients)">{{ plat.titre }}</p>              
@@ -49,6 +49,28 @@
             <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="selectedPlats.description" name="description" required minlength="1"></textarea>
             <label for="float-input">Description</label>
           </span>
+          <span class="p-float-label">
+            <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="selectedPlats.astuces" name="astuces" required minlength="1"></textarea>
+            <label for="float-input">Astuces</label>
+          </span>
+          <span class="p-float-label">
+            <textarea id="float-input" rows="2" cols="40" pInputTextarea [(ngModel)]="selectedPlats.qualites" name="qualites" required minlength="1"></textarea>
+            <label for="float-input">Qualités</label>
+          </span>
+          <span *ngFor="let toto of selectedPlats.allergenes">
+            <p>{{ toto.titre }}</p>
+          </span>
+          <span *ngFor="let toto of selectedPlats.regimes">
+            <p>regimes</p>
+            <p>{{ toto.titre }}</p>
+          </span>
+          
+                     
+            <!-- <span class="p-float-label">
+              <p-inputNumber inputId="integeronly" [(ngModel)]="selectedPlats.nbPersonnes" name="nbPersonnes"> </p-inputNumber>
+              <label for="number-input">Number</label>
+            </span>  -->           
+          
           <span>
             <h4>Ingrédients</h4> 
             <div id="divIngredients" *ngFor="let id of selectedPlats.ingredients; let i=index">
@@ -85,7 +107,7 @@
               <p>Manganese : {{ nutrition.totals['manganese'] | number: '1.2-2' }} Mg </p>
             </span>
           </div>            
-        </span>    
+        </span>
     </div>
   </article> 
   <article>

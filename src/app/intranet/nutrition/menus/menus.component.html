@@ -17,45 +17,43 @@
         </figure>
         <h3>Gestion des menus</h3>
       </span>
-      <p-button styleClass="p-button-success" (click)="toggleFormVisibility(2)">Ajouter un menu</p-button>
+      <p-button styleClass="p-button-success" (onClick)="ajoutMenu()">Ajouter un menu</p-button>
       <span class="p-input-icon-left">
         <i class="pi pi-search"></i>
         <input type="text" pInputText [(ngModel)]="filtre" />
       </span>
       <span>
         <!-- Utilisation du pipe menus pour rechercher des menus par leur noms -->
-        <ng-container *ngIf="nutrition.plats | menus:filtre as filteredPlats">
-        <!-- Utilisation de ngx-pagination - Doc : https://github.com/michaelbromley/ngx-pagination/blob/master/README.md#demo --> 
-        <!-- Je précise un id:'plats' car j'utilise 2 paginator sur ce HTML (id:ingredients sur le second)--> 
-        <div *ngFor="let plat of filteredPlats | paginate: { itemsPerPage: 15, currentPage: pagePlats, id:'plats' }">
-          <p (click)="onSelectPlat(plat, plat.ingredients)" (click)="toggleFormVisibility(1)">{{ plat.titre }}</p>              
-          <figure (click)="DeleteDialog(plat.id, true)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
-        <!-- DeleteDialog() modal PrimeNG - En paramétres l'id du plat et la variable bolean del en true -->      
+        <ng-container *ngIf="nutrition.menus | menus:filtre as filteredMenus">
+        <div *ngFor="let menu of filteredMenus | paginate: { itemsPerPage: 15, currentPage: pageMenus, id:'menus' }">
+          <p (click)="onSelectMenu(menu, menu.plat)">{{ menu.titre }}</p>              
+          <figure (click)="DeleteDialog(menu.id, true)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
+        <!-- DeleteDialog() modal PrimeNG - En paramétres l'id du menu et la variable bolean del en true -->      
         </div>
       </ng-container>
       </span>      
       <span>
         <!-- [maxSize] pour le nombre de numéro de pages à afficher -->
-        <pagination-controls (pageChange)="pagePlats = $event" id="plats" previousLabel="Précédent" nextLabel="Suivant" [maxSize]="5"></pagination-controls>
+        <pagination-controls (pageChange)="pageMenus = $event" id="menus" previousLabel="Précédent" nextLabel="Suivant" [maxSize]="5"></pagination-controls>
       </span>
     </article>
     <article>    
-      <div *ngIf="selectedPlats && selectedPlatsVisible">  <!-- Le plat sur lequel j'ai cliqué -->     
+      <div *ngIf="selectedMenus">  <!-- Le menu sur lequel j'ai cliqué -->     
           <form #platForm="ngForm"> 
             <span class="p-float-label">
-              <input pInputText [(ngModel)]="selectedPlats.titre" name="titre" type="text" required minlength="1" />
+              <input pInputText [(ngModel)]="selectedMenus.titre" name="titre" type="text" required minlength="1" />
               <label htmlFor="nom">Nom</label>
             </span> 
             <span class="p-float-label">
-              <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="selectedPlats.description" name="description"></textarea>
+              <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="selectedMenus.description" name="description"></textarea>
               <label for="float-input">Description</label>
             </span>
             <span>
-              <h4>Ingrédients</h4> 
-              <div id="divIngredients" *ngFor="let id of selectedPlats.ingredients; let i=index">
+              <h4>Plats</h4> 
+              <div id="divIngredients" *ngFor="let id of selectedMenus?.plats; let i=index">
                 <figure (click)="DeleteDialog(i, false)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
-              <!-- DeleteDialog() modal PrimeNG - En paramétres l'index de l'ingrédients sur le tableau et la variable bolean del en false -->    
-                <p>{{ id | getIngredient:'alim_nom_fr' }}</p>                
+              <!-- DeleteDialog() modal PrimeNG - En paramétres l'index du plat sur le tableau et la variable bolean del en false -->    
+                <p></p>                
               </div>
             </span>
             <span id="spanButton">
@@ -64,12 +62,6 @@
             </span>
           </form>
           <span id="blocIngredients">                     
-            <!-- <div *ngFor="let ingredients of nutrition.ciqual">
-              <p>{{ ingredients["alim_nom_fr"] }}</p>
-            </div> -->
-            <!-- <div *ngFor="let id of selectedPlats.idIngredients; let i=index">
-              <p>{{ id | getIngredient:'alim_nom_fr' }} <button (click)="supprIngredient(i)">Supprimer</button></p>
-            </div> -->
             <h4>Nutriments</h4> 
             <div id="nutriments">
               <span>
@@ -94,91 +86,23 @@
             </div>            
           </span>    
       </div>
-      <div *ngIf="ajoutPlatsVisible">      
-        <!-- <form #ajoutPlatForm="ngForm"> 
-          <span class="p-float-label">
-            <input pInputText [(ngModel)]="newPlat.nom" name="nom" type="text" required minlength="1" />
-            <label htmlFor="nom">Nom</label>
-          </span> 
-          <span class="p-float-label">
-            <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="newPlat.description" name="description"></textarea>
-            <label for="float-input">Description</label>
-          </span>
-          <span>
-            <h4>Ingrédients</h4> 
-            <div id="divIngredients" *ngFor="let id of newPlat.idIngredients; let i=index">
-              <figure (click)="DeleteDialog(i, false)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>    
-              <p>{{ id | getIngredient:'alim_nom_fr' }}</p>
-            </div>
-          </span>
-          <span id="spanButton">
-            <p-button styleClass="p-button-warning">Annuler</p-button>              
-            <p-button styleClass="p-button-success" (onClick)="onSubmitNewPlatForm()" [disabled]="ajoutPlatForm.invalid!">Valider</p-button>
-          </span>
-        </form> -->
-        <form [formGroup]="newPlatForm" (ngSubmit)="onSubmitNewPlatForm()">
-          <span class="p-float-label">
-            <input pInputText formControlName="nom" type="text" required minlength="1" />
-            <label htmlFor="nom">Nom</label>
-          </span> 
-          <span class="p-float-label">
-            <textarea id="float-input" rows="5" cols="40" pInputTextarea formControlName="description"></textarea>
-            <label for="float-input">Description</label>
-          </span>
-          <span>
-            <h4>Ingrédients</h4> 
-            <div id="divIngredients" *ngFor="let id of newPlat.ingredients; let i=index">
-              <figure (click)="DeleteDialog(i, false)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>    
-              <p>{{ id | getIngredient:'alim_nom_fr' }}</p>
-            </div>
-          </span>
-          <span id="spanButton">
-            <p-button styleClass="p-button-warning">Annuler</p-button>              
-            <p-button styleClass="p-button-success" type="submit" [disabled]="newPlatForm.invalid!">Valider</p-button>
-          </span>
-        </form>
-        <span id="blocIngredients">         
-          <h4>Nutriments</h4> 
-          <div id="nutriments">
-            <span>
-              <p>Protéines : {{ nutrition.totals['proteine'] | number: '1.2-2' }} Gr</p>
-              <p>Glucides : {{ nutrition.totals['glucides'] | number: '1.2-2' }} Gr</p>
-              <p>Lipides : {{ nutrition.totals['lipides'] | number: '1.2-2' }} Gr</p>
-              <p>Sucres : {{ nutrition.totals['sucres'] | number: '1.2-2' }} Gr </p>
-            </span>
-            <span>
-              <p>Vitamine C : {{ nutrition.totals['vitamineC'] | number: '1.2-2' }} Mg </p>
-              <p>Vitamine B1 : {{ nutrition.totals['vitamineB1'] | number: '1.2-2' }} Mg </p>
-              <p>Vitamine B2 : {{ nutrition.totals['vitamineB2'] | number: '1.2-2' }} Mg </p>
-              <p>Vitamine B3 : {{ nutrition.totals['vitamineB3'] | number: '1.2-2' }} Mg </p>
-              <p>Vitamine B5 : {{ nutrition.totals['vitamineB5'] | number: '1.2-2' }} Mg </p>
-            </span>
-            <span>
-              <p>Magnesium : {{ nutrition.totals['magnesium'] | number: '1.2-2' }} Mg </p>
-              <p>Potassium : {{ nutrition.totals['potassium'] | number: '1.2-2' }} Mg </p>
-              <p>Cuivre : {{ nutrition.totals['cuivre'] | number: '1.2-2' }} Mg </p>
-              <p>Manganese : {{ nutrition.totals['manganese'] | number: '1.2-2' }} Mg </p>
-            </span>
-          </div>            
-        </span>    
-    </div>      
     </article> 
     <article>
-      <h4>Ajout d'ingrédients</h4>
+      <h4>Ajout de plats</h4>
       <span class="p-input-icon-left">
         <i class="pi pi-search"></i>
-        <input type="text" pInputText [(ngModel)]="filtreIngredients" (input)="onFilterChange()" />
+        <input type="text" pInputText [(ngModel)]="filtrePlats" (input)="nutrition.onFilterChange()" />
         <!-- Utilisation de onFilterChange() pour réinitialiser l'input -->
       </span>
       <div>
-        <!-- Utilisation du pipe ingredients pour rechercher des ingredients par leur alim_nom_fr -->        
-          <span *ngFor="let ingredients of nutrition.ciqual | ingredients:filtreIngredients | paginate: { itemsPerPage: 30, currentPage: pageIngredients, id:'ingredients' }">
-            <p (click)="onSelectIngredient(ingredients.alim_code)">{{ ingredients.alim_nom_fr }}</p>
+        <!-- Utilisation du pipe plats pour rechercher des plats -->        
+          <span *ngFor="let plat of nutrition.plats| plats:filtrePlats| paginate: { itemsPerPage: 30, currentPage: pageIngredients, id:'plats' }">
+            <p (click)="onSelectPlats(plat)">{{plat.titre }}</p>
           </span>        
       </div>
-      <span id="paginationIngredients">
+      <span id="paginationPlats">
         <!-- [maxSize] pour le nombre de numéro de pages à afficher -->
-        <pagination-controls (pageChange)="pageIngredients = $event" id="ingredients" previousLabel="Précédent" nextLabel="Suivant" [maxSize]="5"></pagination-controls>
+        <pagination-controls (pageChange)="pageIngredients = $event" id="plats" previousLabel="Précédent" nextLabel="Suivant" [maxSize]="5"></pagination-controls>
       </span>
     </article>   
   </section>

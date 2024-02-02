@@ -1,14 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NutritionComponent } from './nutrition.component';
 import { ButtonModule } from 'primeng/button';
-import { GetIngredientPipe, PlatsPipe } from 'src/app/pipes/plats.pipe';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { IngredientsPipe } from 'src/app/pipes/ingredients.pipe';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { GetIngredientPipe, IngredientsPipe, PlatsPipe } from 'src/app/pipes/nutrition.pipe';
 
 describe('NutritionComponent', () => {
   let component: NutritionComponent;
