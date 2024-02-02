@@ -25,9 +25,9 @@
         "url": "/intranet/nutrition/ingredients"
       },
       {
-        "nom": "Compléments",
+        "nom": "Nutriments",
         "image": "assets/imageAsidebar/complements.svg",
-        "url": "/intranet/nutrition/complements"
+        "url": "/intranet/nutrition/nutriments"
       },
       {
         "nom": "Allergènes",

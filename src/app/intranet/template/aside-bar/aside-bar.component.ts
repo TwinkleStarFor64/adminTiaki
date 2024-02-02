@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AsideI } from 'src/app/partage/modeles/Types';
 import { DonneesService } from 'src/app/partage/services/donnees.service';
 
 @Component({
