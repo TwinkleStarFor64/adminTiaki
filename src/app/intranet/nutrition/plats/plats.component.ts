@@ -83,7 +83,7 @@ export class PlatsComponent implements OnInit {
     this.nutrition.fetchCiqual(id);    
     //console.log("Allergenes du plat : ", this.selectedPlats.allergenes);
     console.log("statut ", this.selectedPlats.statut);
-    console.log("Youhou ", this.utils.convertStatut(this.selectedPlats.statut));
+    //console.log("Youhou ", this.utils.convertStatut(this.selectedPlats.statut));
         
   }
 

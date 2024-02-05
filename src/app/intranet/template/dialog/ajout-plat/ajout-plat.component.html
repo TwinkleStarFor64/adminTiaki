@@ -53,6 +53,7 @@
             </span>
             <span>
               <h4>Ingrédients</h4> 
+              <p>Choisir les ingrédients à rajouter</p>
               <div id="divIngredients" *ngFor="let id of newPlat.ingredients; let i=index">
                 <figure (click)="onDeleteIngredient(i)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
                 <p>{{ id | getIngredient:'alim_nom_fr' }}</p>

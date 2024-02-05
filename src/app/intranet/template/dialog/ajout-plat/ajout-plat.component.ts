@@ -25,7 +25,6 @@ export class AjoutPlatComponent implements OnInit {
 
   statut = Object.values(StatutE).map(value => value as StatutE);
   
-
   constructor(public ref: DynamicDialogRef, public nutrition: NutritionService, public utils: UtilsService, private messageService: MessageService) { }
 
   ngOnInit(): void {
@@ -33,7 +32,7 @@ export class AjoutPlatComponent implements OnInit {
       titre: '',
       description: '',
       ingredients: [],
-      statut: 0,
+      //statut: 0,
       nbPersonnes: 0,
     };    
   }
