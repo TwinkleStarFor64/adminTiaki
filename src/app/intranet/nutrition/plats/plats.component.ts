@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { AllergeneI, PlatI, StatutE } from 'src/app/partage/modeles/Types';
+import { AllergeneI, PlatI, PlatTypeI, StatutE } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { NutritionService } from '../nutrition.service';
 import { ConfirmEventType, ConfirmationService, MessageService } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AjoutPlatComponent } from '../../template/dialog/ajout-plat/ajout-plat.component';
+import { UtilsService } from 'src/app/partage/services/utils.service';
 
 @Component({
   selector: 'app-plats',
@@ -17,19 +18,20 @@ export class PlatsComponent implements OnInit {
   pageIngredients: number = 1; // Comme ci-dessus mais pour la liste d'ingrédients
   filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats
   filtreIngredients: string = ''; // Utiliser dans le ngModel affichant la liste des ingrédients - Filtre de recherche
-  statutTexte: string = '';
   plat!: PlatI;
   allergene: AllergeneI[] =[];
   selectedPlats?: PlatI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
-
+  selectedType: PlatTypeI | undefined;
+  //statut = Object.values(StatutE).map(value => value as StatutE); 
   ref: DynamicDialogRef | undefined; // Pour la modal d'ajout de plat - DynamicDialogModule
-
+  
   constructor(
     public supa: SupabaseService,
     public nutrition: NutritionService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
-    public dialogService: DialogService    
+    public dialogService: DialogService,
+    public utils: UtilsService,    
   ) {}
 
   ajoutPlat() { // La méthode pour la modal d'ajout d'un nouveau plat
@@ -41,25 +43,33 @@ export class PlatsComponent implements OnInit {
             baseZIndex: 10000,
             maximizable: true
     });
-    this.ref.onClose.subscribe(() => {       
-        this.messageService.add({severity:'info', summary: 'Product Selected', detail: 'confirmation'});      
-    });
-    
-  }  
+    // Ci-dessous code pour gérer les différentes fermeture de la modal
+    this.ref.onClose.subscribe((data: any) => { // data récupérer depuis ajout-plat.component.ts
+        let summaryAndDetail;       
+        if (data) {
+          //console.log(data.buttonType);
+          const buttonType = data?.buttonType;
+          // Si un buttonType est défini premier message sinon le second
+          summaryAndDetail = buttonType ? { summary :'Annulation', detail : 'Vous avez annuler', severity: 'error' } : { summary :'Validation', detail : 'Plat enregistré', severity: 'info' };
+        } else {
+          // Message pour la fermeture depuis l'icône de croix
+          summaryAndDetail = { summary :'Fermeture', detail : 'Vous avez fermer', severity: 'warn' };
+        }
+        this.messageService.add({...summaryAndDetail});      
+    });    
+  };  
 
   async ngOnInit(): Promise<void> {
     this.nutrition.fetchPlats();
-  // La méthode getAllCiqual() permet de voir la liste des ingrédients et d'attribuer des valeurs via la méthode onSelectPlat() qui à besoin des ingrédients
-    this.nutrition.getAllCiqual();
+  // La méthode getCiqualJSON() permet de voir la liste des ingrédients et d'attribuer des valeurs via la méthode onSelectPlat() qui à besoin des ingrédients
+    this.nutrition.getCiqualJSON();
+    this.nutrition.getPlatsTypes();
+    this.nutrition.getAllergenes();
+    this.nutrition.getRegimes();
+    this.nutrition.getNutriProgrammes();
+    this.nutrition.getLiens();
+    this.nutrition.getNutrimentsBis();
   }
-
-// Méthode utiliser dans l'input de recherche d'ingrédients afin de le réinitialiser
-// Si l'input et vide ou pas vide la premiére page (pageIngredients) est défini à 1 afin de retrouver l'affichage initial
-  /* onFilterChange() {
-    if (this.filtre === '' || this.filtre != '') {
-      this.pageIngredients = 1;
-    }
-  } */
 
 // Méthode qui attribue des valeurs aux variables correspondant à l'objet sur lequel je clique - Utilisé sur le nom du plat en HTML
   onSelectPlat(plat: PlatI, id: Array<number>) {
@@ -68,10 +78,13 @@ export class PlatsComponent implements OnInit {
     console.log("ici selectedPlats : ", this.selectedPlats);    
   // J'attribue au paramétre id de la méthode le tableau d'alim_code contenu dans idIngredients
     this.selectedPlats.ingredients = id;
-    console.log("J'ai cliqué sur les alim_code : " + this.selectedPlats.ingredients);
+    //console.log("J'ai cliqué sur les alim_code : " + this.selectedPlats.ingredients);
   // Je passe en paramétre de la méthode fetchCiqual le tableau d'id obtenu au dessus
     this.nutrition.fetchCiqual(id);    
-    console.log("Allergenes du plat : ", this.selectedPlats.allergenes);       
+    //console.log("Allergenes du plat : ", this.selectedPlats.allergenes);
+    console.log("statut ", this.selectedPlats.statut);
+    //console.log("Youhou ", this.utils.convertStatut(this.selectedPlats.statut));
+        
   }
 
 // Méthode pour la modal de suppression d'un plat OU d'un ingrédient
@@ -180,7 +193,7 @@ onSelectIngredient(id: number) {
 async onSubmitForm() {
   try {
     await this.nutrition.updatePlat(
-      this.selectedPlats!.id,
+      this.selectedPlats!.id!,
       this.selectedPlats!
     );
     this.nutrition.fetchPlats(); // Pour mettre à jour le formulaire ngModel      
@@ -197,18 +210,7 @@ onCancelForm() {
 
 
 
-mapStatut(statut: StatutE): string {
-  switch (statut) {
-    case StatutE.depublie:
-      return 'Dépublié';
-    case StatutE.brouillon:
-      return 'Brouillon';
-    case StatutE.publie:
-      return 'Publié';
-    default:
-      return 'Inconnu';
-  }
-}
+
 
 
 }

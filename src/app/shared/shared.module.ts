@@ -14,8 +14,9 @@ import { TableModule } from 'primeng/table';
 import { GestionUtilisateursPipe } from '../pipes/gestion-utilisateurs.pipe';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { GetIngredientPipe, IngredientsPipe, MenusPipe, NutrimentsPipe, PlatsPipe } from '../pipes/nutrition.pipe';
-
+import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 
 @NgModule({
@@ -42,7 +43,9 @@ import { InputNumberModule } from 'primeng/inputnumber';
     CheckboxModule,
     TableModule, 
     DynamicDialogModule,
-    InputNumberModule 
+    InputNumberModule,
+    DropdownModule,
+    MultiSelectModule
   ],
   exports: [
     PlatsPipe,
@@ -64,6 +67,9 @@ import { InputNumberModule } from 'primeng/inputnumber';
     CheckboxModule,
     HttpClientModule,
     DynamicDialogModule,
+    InputNumberModule,
+    DropdownModule,
+    MultiSelectModule
   ],
   providers: [
 

@@ -37,10 +37,11 @@ export interface UserCreationResponse {
 /* ---------------- Interface pour la nutrition ------------------- */
 export interface PlatI {
   //alim_code: number | null;
-  id: number;
+  id?: number;
   titre: string;
   description: string;
-  statut?: StatutE,
+  statut?: -1 | 0 | 1;
+  //statut?: StatutE;
   reaction?: string;
   ingredients?: Array<number>;
   qualites?: string; 
@@ -64,7 +65,7 @@ export interface MenuI {
 }
 
 export interface CiqualI {
-  //alim_code: number,
+  alim_code: number,
   alim_nom_fr: string;
   proteine: number;
   glucides: number;
@@ -99,23 +100,15 @@ export interface AllergeneI {
   id: number;
   titre: string;
   description?: string;
-  type: 'ingredient' | 'nutriment'
+  type?: 'ingredient' | 'nutriment'
 }
-
-
 
 export interface NutriProgrammeI {
   id: number;
   titre: string;
   description?: string;
+  //statut: StatutE;
   statut: -1 | 0 | 1;
-}
-/* -------------- ENUM --------------------- */
-
-export enum StatutE {
-  valide = '1',
-  invalide = '0',
-  enAttente = '-1'
 }
 
 export interface NutrimentI {
@@ -127,10 +120,17 @@ export interface NutrimentI {
   mesure: MesuresE;
 }
 
-export enum MesureE{
-  mcg ='',
-  gr ='',
-  kg=''
+/* -------------- ENUM --------------------- */
+/* export enum StatutE {
+  valide = '1',
+  invalide = '0',
+  enAttente = '-1'
+} */
+
+export enum StatutE {
+  depublie = '-1',
+  brouillon = '0',
+  publie = '1',
 }
 
 export enum MenuE {
@@ -153,8 +153,4 @@ gr = 'gr',
 kgs = 'kgs'
 }
 
-export enum StatutE {
-  depublie = '-1',
-  brouillon = '0',
-  publie = '1',
-}
+
