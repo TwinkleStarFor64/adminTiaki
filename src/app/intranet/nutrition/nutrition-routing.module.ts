@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: '', component: NutritionComponent, children: [
   { path: '', component: PlatsComponent },
   { path : 'allergenes', component: AllergenesComponent },
+  { path: 'complements', component: NutrimentsComponent },
   { path: 'nutriments', component: NutrimentsComponent },
   { path: 'ingredients', component: IngredientsComponent },
   { path: 'menus', component: MenusComponent }
