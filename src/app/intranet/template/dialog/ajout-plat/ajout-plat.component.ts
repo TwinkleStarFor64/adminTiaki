@@ -24,6 +24,7 @@ export class AjoutPlatComponent implements OnInit {
   selectedLiens!: LienI[];
 
   statut = Object.values(StatutE).map(value => value as StatutE);
+  
 
   constructor(public ref: DynamicDialogRef, public nutrition: NutritionService, public utils: UtilsService, private messageService: MessageService) { }
 
@@ -49,14 +50,14 @@ export class AjoutPlatComponent implements OnInit {
           qualites: this.newPlat.qualites,
           astuces: this.newPlat.astuces,
           nbPersonnes: this.newPlat.nbPersonnes,
-          //statut: this.newPlat.statut,
-      // Ci-dessous je fais un map car j'envoie un tableau de nombre
-          allergenes: this.selectedAllergenes.map(allergene => allergene.id),
-          types: this.selectedPlatsTypes.map(type => type.id),
-          regimes: this.selectedRegimes.map(regime => regime.id),
-          programmes: this.selectedProgrammes.map(programme => programme.id),
-          nutriments: this.selectedNutriments.map(nutriment => nutriment.id),
-          liens: this.selectedLiens.map(lien => lien.id)
+          statut: this.newPlat.statut,
+      // Ci-dessous je fais un map car j'envoie un tableau de nombre - Ajout de ? car je peux ne pas avoir de données
+          allergenes: this.selectedAllergenes?.map(allergene => allergene.id),
+          types: this.selectedPlatsTypes?.map(type => type.id),
+          regimes: this.selectedRegimes?.map(regime => regime.id),
+          programmes: this.selectedProgrammes?.map(programme => programme.id),
+          nutriments: this.selectedNutriments?.map(nutriment => nutriment.id),
+          liens: this.selectedLiens?.map(lien => lien.id)
         });      
       this.nutrition.fetchPlats(); // Pour mettre à jour la liste des plats après l'ajout d'un nouveau plat
       this.ref.close(data); // Pour la fermeture de la modal

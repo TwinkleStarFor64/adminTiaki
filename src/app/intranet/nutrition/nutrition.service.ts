@@ -237,21 +237,22 @@ export class NutritionService {
   }) {
     newEntry.date = new Date();    
     //console.log("Valeur de allergenes dans createPlatBis :", newEntry.allergenes);
+    // Ci-dessous appelle de la fonction insert_plat contenant le code SQL sur Supabase - Je remplis ces paramètres avec les valeurs de newEntry
       const {data: createData, error: createError } = await this.supabase.rpc('insert_plat', {
         plat_titre: newEntry.titre, 
         plat_description: newEntry.description, 
         plat_date: newEntry.date, 
         plat_ingredients: newEntry.ingredients, 
-        plat_qualites: newEntry.qualites, 
-        plat_astuces: newEntry.astuces, 
+        plat_qualites: newEntry.qualites ?? null, // Utilisation de ?? en cas de valeur null
+        plat_astuces: newEntry.astuces ?? null, 
         plat_nbpersonnes: newEntry.nbPersonnes, 
-        //plat_statut: newEntry.statut
-        idAllergenes: newEntry.allergenes,
-        idType: newEntry.types,
-        idRegimes: newEntry.regimes,
-        idNutriProgrammes: newEntry.programmes,
-        idNutriments: newEntry.nutriments,
-        idLiens: newEntry.liens,
+        plat_statut: newEntry.statut,
+        idAllergenes: newEntry.allergenes || [], // Utilisation de || [] en cas de valeur null
+        idType: newEntry.types || [],
+        idRegimes: newEntry.regimes || [],
+        idNutriProgrammes: newEntry.programmes || [],
+        idNutriments: newEntry.nutriments || [],
+        idLiens: newEntry.liens || [],
       });    
       console.log("createData RPC : ", createData);                 
       if (createError) {
@@ -413,7 +414,7 @@ export class NutritionService {
       console.log("Erreur de la méthode getPlatsTypes : ", error);      
     }
     if (data) {
-      console.log('Data de la méthode getPlatsTypes : ', data);
+      //console.log('Data de la méthode getPlatsTypes : ', data);
       this.platsTypes = data.map((item: { [x: string]: any }) => ({
         id: item['id'],
         type: item['type'],
@@ -435,7 +436,7 @@ async getAllergenes() {
     console.log("Erreur de la méthode getAllergenes : ", error);      
   }
   if (data) {
-    console.log('Data de la méthode getAllergenes : ', data);
+    //console.log('Data de la méthode getAllergenes : ', data);
     this.allergenes = data.map((item: { [x: string]: any }) => ({
       id: item['id'],
       titre: item['titre'],
@@ -458,7 +459,7 @@ async getRegimes() {
     console.log("Erreur de la méthode getRegimes : ", error);      
   }
   if (data) {
-    console.log('Data de la méthode getRegimes : ', data);
+    //console.log('Data de la méthode getRegimes : ', data);
     this.regimes = data.map((item: { [x: string]: any }) => ({
       id: item['id'],
       titre: item['titre'],
@@ -481,7 +482,7 @@ async getNutriProgrammes() {
     console.log("Erreur de la méthode getNutriProgrammes : ", error);      
   }
   if (data) {
-    console.log('Data de la méthode getNutriProgrammes : ', data);
+    //console.log('Data de la méthode getNutriProgrammes : ', data);
     this.nutriProgrammes = data.map((item: { [x: string]: any }) => ({
       id: item['id'],
       titre: item['titre'],
@@ -504,7 +505,7 @@ async getLiens() {
     console.log("Erreur de la méthode getLiens : ", error);      
   }
   if (data) {
-    console.log('Data de la méthode getLiens : ', data);
+    //console.log('Data de la méthode getLiens : ', data);
     this.liens = data.map((item: { [x: string]: any }) => ({
       id: item['id'],
       titre: item['titre'],
@@ -528,7 +529,7 @@ async getNutrimentsBis() {
     console.log('Erreur de la méthode getNutriments : ', error);
   }
   if (data) {
-    console.log('Data de la méthode getNutriments: ', data);
+    //console.log('Data de la méthode getNutriments: ', data);
     this.nutriments = data.map((item: { [x: string]: any }) => ({
       id: item['id'],
       titre: item['titre'],
