@@ -9,7 +9,6 @@ import { PlatsComponent } from './plats/plats.component';
 import { NutrimentsComponent } from './nutriments/nutriments.component';
 
 
-
 @NgModule({
   declarations: [
     AllergenesComponent,
@@ -17,6 +16,8 @@ import { NutrimentsComponent } from './nutriments/nutriments.component';
     MenusComponent,
     PlatsComponent,
     NutrimentsComponent,
+    
+
   ],
   imports: [
     CommonModule,

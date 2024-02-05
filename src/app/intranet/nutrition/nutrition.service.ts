@@ -149,6 +149,7 @@ export class NutritionService {
     }    
     const listeIngredients = ids.map((id) => this.ciqualJSON.find((ing) => ing['alim_code'] == id));
     if (listeIngredients.length > 0) {      
+
       // Utilisez map pour transformer chaque élément de listeIngredients
       this.mappedIngredients = listeIngredients.map((item) => ({
         alim_nom_fr: item!['alim_nom_fr'],
@@ -206,7 +207,7 @@ export class NutritionService {
     //console.log('Totaux :', this.totals);
   }
 
-  //------------------------------- Méthode pour modifier un plat -------------------------------------  
+  //------------------------------- Méthode pour modifier un plat -------------------------------------
   async updatePlat(id: number, plat: PlatI) {
     const { error: platError } = await this.supabase
       .from('plats')

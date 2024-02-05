@@ -7,7 +7,6 @@ import { adminGuard } from '../guards/admin.guard';
 import { redacteurOptoGuard } from '../guards/redacteur-opto.guard';
 import { redacteurKineGuard } from '../guards/redacteur-kine.guard';
 import { redacteurNutritionGuard } from '../guards/redacteur-nutrition.guard';
-
 const routes: Routes = [
   {
     path: '',
@@ -44,7 +43,7 @@ const routes: Routes = [
   }
 ];
 /**
- * @description Utilisation de forChild caril y a un loadChildren dans app-routing.module
+ * @description Utilisation de forChild car il y a un loadChildren dans app-routing.module
  */
 @NgModule({
   imports: [RouterModule.forChild(routes)],
