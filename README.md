@@ -32,3 +32,6 @@ https://www.youtube.com/watch?v=tFsCynatnlo
 
 Vidéo pour se connecter en utilisant le systéme d'authentification de Supabase 
 https://www.youtube.com/watch?v=hPI8OegHPYc
+
+## Supabase fonction SQL
+![test images](src/assets/images/notfound.gif)
