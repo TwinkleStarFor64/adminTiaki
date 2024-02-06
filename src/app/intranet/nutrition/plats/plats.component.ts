@@ -24,7 +24,8 @@ export class PlatsComponent implements OnInit {
   //statut = Object.values(StatutE).map(value => value as StatutE); 
   ref: DynamicDialogRef | undefined; // Pour la modal d'ajout de plat - DynamicDialogModule
 
-  groupedTypes!: SelectItemGroup[];
+  allergeneTitles: string[] = [];
+ // groupedTypes!: SelectItemGroup[];
   
   constructor(
     public supa: SupabaseService,
@@ -82,9 +83,14 @@ export class PlatsComponent implements OnInit {
     //console.log("J'ai cliqué sur les alim_code : " + this.selectedPlats.ingredients);
   // Je passe en paramétre de la méthode fetchCiqual le tableau d'id obtenu au dessus
     this.nutrition.fetchCiqual(id);    
-    //console.log("Allergenes du plat : ", this.selectedPlats.allergenes);
     //console.log("statut ", this.selectedPlats.statut);
-    console.log(this.selectedPlats.types);         
+    //console.log("Type de plat : " ,this.selectedPlats.types);      
+    console.log("Allergenes du plat : ", this.selectedPlats.allergenes);
+    
+
+    console.log("Regimes du plat : ", this.selectedPlats.regimes);
+    
+     
   }
 
 // Méthode pour la modal de suppression d'un plat OU d'un ingrédient
@@ -191,10 +197,25 @@ onSelectIngredient(id: number) {
 
 // Formulaire pour modifier un plat existant
 async onSubmitForm() {
+  console.log("this.selectedPlats dans onSubmitForm", this.selectedPlats!);
+  // Créer l'objet updateEntry avec les valeurs du formulaire
+  const updateEntry = {
+    id: this.selectedPlats!.id!,
+    titre: this.selectedPlats!.titre,
+    description: this.selectedPlats!.description,
+    ingredients: this.selectedPlats!.ingredients!,
+    qualites: this.selectedPlats!.qualites,
+    astuces: this.selectedPlats!.astuces,
+    nbpersonnes: this.selectedPlats!.nbpersonnes,
+    regimes: this.selectedPlats!.regimes!.map(regime => regime.id)
+  };
+  console.log("updateEntry dans onSubmitForm", updateEntry);
+  
   try {
     await this.nutrition.updatePlat(
-      this.selectedPlats!.id!,
-      this.selectedPlats!      
+      //this.selectedPlats!.id!,
+      //this.selectedPlats!
+      updateEntry            
     );
     this.nutrition.fetchPlats(); // Pour mettre à jour le formulaire ngModel      
   } catch (error) {

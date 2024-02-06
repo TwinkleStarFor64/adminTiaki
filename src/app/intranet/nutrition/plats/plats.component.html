@@ -61,14 +61,14 @@
             <p-inputNumber id="inputNumber" inputId="integeronly" [(ngModel)]="selectedPlats.nbpersonnes" name="nbpersonnes" [showButtons]="true" [min]="0"> </p-inputNumber>
             <label for="number-input">Nombres de personnes</label>
           </span> 
-          <!-- <span class="p-float-label">
+          <span class="p-float-label">
             <p-multiSelect inputId="float-label" [options]="nutrition.platsTypes" [(ngModel)]="selectedPlats.types" name="platsTypes" optionLabel="type"></p-multiSelect>
             <label for="float-label">Type de plat</label>
-          </span>          
+          </span>                   
           <span>
             <p>Statut de publication : {{ utils.convertStatut(selectedPlats.statut!) }}</p>
             <p>Statut de publication : {{ selectedPlats.statut }}</p>
-          </span> -->
+          </span>
           <span id="spanIngredients">
             <h4>Ingrédients</h4> 
             <div id="divIngredients" *ngFor="let id of selectedPlats.ingredients; let i=index">
@@ -100,19 +100,28 @@
                 <p>Manganese : {{ nutrition.totals['manganese'] | number: '1.2-2' }} Mg </p>
               </span>
             </div>            
-          </span>
-          <!-- <div id="platData">
-            <h4>Allergènes</h4>
+          </span>          
+          <div id="platData">
+            <h4>Allergènes</h4>           
+            <!-- Ici optionLabel correspond au titre d'un allergene comme reçue après le map dans getAllergenes() -->
+            <!-- <span class="p-float-label">
+              <p-multiSelect inputId="float-label" [options]="nutrition.allergenes" [(ngModel)]="selectedPlats.allergenes" name="allergenes" optionLabel="titre"></p-multiSelect>
+              <label for="float-label">Type d'allergènes</label>
+            </span> -->
               <span *ngFor="let allergenes of selectedPlats.allergenes">
                 <p>Types d'allergènes : {{ allergenes.titre }}</p>
                 <p>{{ allergenes.description }}</p>
               </span>
             <h4>Régimes alimentaires</h4>
-              <span *ngFor="let regime of selectedPlats.regimes">
+            <span class="p-float-label">
+              <p-multiSelect inputId="float-label" [options]="nutrition.regimes" [(ngModel)]="selectedPlats.regimes" name="regimes" optionLabel="titre"></p-multiSelect>
+              <label for="float-label">Type de régimes</label>              
+            </span>
+              <!-- <span *ngFor="let regime of selectedPlats.regimes">
                 <p>Nom du régime : {{ regime.titre }}</p>
                 <p>Description : {{ regime.description }}</p>
                 <p>Type de régime : {{ regime.type }}</p>
-              </span>
+              </span> -->
             <h4>Programmes alimentaires</h4>
               <span *ngFor="let programme of selectedPlats.programmes">
                 <p>Nom du programme : {{ programme.titre }}</p>
@@ -120,7 +129,7 @@
                 <p>Statut de publication : {{ utils.convertStatut(programme.statut)  }}</p>
                 <p>Statut de publication : {{ programme.statut }}</p>
               </span>
-          </div> -->
+          </div>
           <span id="spanButton">
             <p-button styleClass="p-button-warning" (onClick)="onCancelForm()">Annuler</p-button>              
             <p-button styleClass="p-button-success" (onClick)="ConfirmDialog($event)" [disabled]="platForm.invalid!">Valider</p-button>

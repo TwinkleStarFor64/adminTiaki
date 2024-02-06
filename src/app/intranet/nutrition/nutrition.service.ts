@@ -208,13 +208,36 @@ export class NutritionService {
   }
 
   //------------------------------- Méthode pour modifier un plat -------------------------------------
-  async updatePlat(id: number, plat: PlatI) {
-    const { error: platError } = await this.supabase
-      .from('plats')
-      .update(plat) // Update de tout l'objet plat qui correspond au type PlatI    
-      .eq('id', id);
-    if (platError) {
-      console.log(platError);
+  // plat: PlatI, id: number,
+  async updatePlat(updateEntry: {
+    id: number;
+    titre: string;
+    description: string;
+    ingredients: Array<number>;
+    qualites?: string;
+    astuces?: string;
+    nbpersonnes?: number;
+    regimes?: Array<number>;
+  }) {
+    const { data: updatePlatData, error: updatePlatError } = await this.supabase.rpc('update_plat', {
+      plat_id: updateEntry.id,
+      plat_titre: updateEntry.titre,
+      plat_description: updateEntry.description,
+      plat_ingredients: updateEntry.ingredients,
+      plat_qualites: updateEntry.qualites,
+      plat_astuces: updateEntry.astuces,
+      plat_nbpersonnes: updateEntry.nbpersonnes,
+      idRegimes: updateEntry.regimes,
+    });
+      //.from('plats')
+      //.update(plat) // Update de tout l'objet plat qui correspond au type PlatI 
+      //.update(updateEntry)   
+      //.eq('id', id);           
+    if (updatePlatError) {
+      console.log(updatePlatError);
+    }
+    if (updatePlatData) {
+      console.log("Ici updatePlatData : ", updatePlatData);
     }
   }
 
