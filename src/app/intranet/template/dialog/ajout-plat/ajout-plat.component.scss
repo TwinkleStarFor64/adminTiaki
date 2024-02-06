@@ -1,0 +1,89 @@
+$card-nutri: #D9042B;
+
+::-webkit-scrollbar {
+    background-color: #e7adb7;
+    width: 10px;
+}  
+::-webkit-scrollbar-thumb {
+    height: 200px;
+    background-color: $card-nutri;
+}
+:host ::ng-deep .p-dropdown{ //La balise dropdown pour le statut de publication
+    min-width: 15vw;
+}
+:host ::ng-deep .p-multiselect{ //Les balises multiselect - :host ::ngdeep pour appliquer le css
+    min-width: 15vw;
+}
+
+section{    
+    article:nth-child(1){ // Le premier article contient le formulaire        
+        width: 60%;
+        height: 65vh;
+        flex-direction: column;
+        align-items: flex-start; 
+        overflow-y: auto;
+        margin-right: 5px; 
+        form {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px; 
+            margin-bottom: 50px;               
+            gap: 25px;
+            #inputNumber{ // L'input pour le nombres de personnes
+                height: 50px;
+            }
+            span{
+                #divIngredients{ // La div contenant les ingrédients qui sont ajouter
+                    display: flex;
+                    flex-direction: row;
+                     align-items: center;
+                    figure{
+                        cursor: pointer;
+                    }   
+                }
+            }
+            #spanButton{ // Contient les boutons Annuler & Valider               
+                display: flex;
+                justify-content: flex-end;
+                gap: 0.5vw;                
+            }
+        }      
+    }
+    article:nth-child(2){ // Le second article contient la liste des ingrédients
+        width: 40%;
+        height: 80vh;
+        border-left: $card-nutri 2px dashed;
+        padding-left: 10px;
+        div{
+            h4{ // La balise Ajout d'ingrédients           
+                font-weight: 600;            
+            }
+            div{ // Div contenant le span avec le ngFor
+                overflow-y: auto;
+                height: 50vh;
+                margin-top: 5px;     
+                span{
+                    p{
+                        cursor: pointer;       
+                    }
+                    p:hover{
+                        background-color: #CECFD0;
+                    }
+                }
+            }
+            #paginationIngredients{ // Balise span avec la pagination
+                padding-top: 5px;           
+            }
+            #paginationIngredients::ng-deep .ngx-pagination{ // le composant ngx-paginator           
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;            
+                padding: 0;            
+            }
+            #paginationIngredients::ng-deep .ngx-pagination .current{ // le bouton de la page courante
+                background-color: $card-nutri;
+            }
+        }
+    }
+}

@@ -1,3 +1,388 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;400;600;800&display=swap');
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
+//@import "assets/tiaki.css";
+@import "assets/tiakiV2.css";
 
+/** Variables SCSS */
 $font-family: 'Raleway', sans-serif;
+$card-nutri: #D9042B;
+$card-kine: #F22F1D;
+$card-opto: #F28705;
+$aside-color1: #270140;
+$aside-color2: #805E96;
+$aside-color3: #F0C02E;
+
+$clair: white;
+$sombre: black;
+
+$head: 60px; // Hauteur de l'entête des pages
+$foot: 150px; // Hauteur des menus du bas
+$l: 75px; // Largeur du menu de droite qui permet de calculer la largeur des éléments de la page
+$header: 160px; // Hauteur du header sur les interfaces
+
+/* Pour les boutons d'incrémentation sur la balise nombre de personnes de l'interface plats */
+.p-button.p-button-icon-only{
+  border-radius: 0;
+  background: #33bb27;
+  border: 1px solid #33bb27;
+}
+.p-button.p-button-icon-only:hover{
+  border-radius: 0;
+  background: #1f7217;
+  border: 1px solid #1f7217;
+}
+
+p-button-label {
+  font-size: 15rem;  
+}
+
+/* Code ci-dessous pour la popup <p-confirmPopup> dans nutrition.component.html */
+.p-confirm-popup-footer{
+  button:nth-child(1){
+    background-color: #F0C02E!important;
+    border-color: #F0C02E!important;
+    color: white;
+    transition: all .3s ease; // all récupére le css du hover ci-dessous 
+  }
+  button:nth-child(1):hover{
+    background-color: #F0C02E;
+    border-color: #F0C02E;
+    color: white!important;
+  }
+  button:nth-child(2){    
+    background-color: #33BB27!important;
+    border-color: #33BB27!important;    
+    color: white;
+    transition: all .3s ease; // all récupére le css du hover ci-dessous 
+  }
+  button:nth-child(2):hover{
+    background-color: #33BB27;
+    border-color: #33BB27;
+    color: white!important;
+  }
+}
+
+/** BALISES GENERIQUES HTML */
+html,
+body {
+  height:100%;
+  width:100%;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: url('./assets/images/bg/bg.svg') no-repeat center center fixed;
+  background-size: cover;
+  font-family: $font-family;
+  font-size: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+main,
+section,
+article,
+header,
+footer {
+  display: flex;
+}
+main{
+  width:100vw;
+  height:100vh;
+}
+button{
+  padding:25px 20px;
+  border:none;
+  transition:all .3s ease;
+  cursor: pointer;
+  font-weight:600;
+  width: fit-content;
+  background-color:$clair;
+  color:$aside-color1;
+  font-size: 16px;
+}
+button:hover{
+  background-color: $aside-color3;
+  color: $aside-color1;
+  transform: scale(1.1);
+}
+/** CLASSES GENERIQUES */
+.logo{
+  width:150px;
+}
+.ariane{
+  display:flex;
+  flex-flow: row nowrap;
+  align-items: flex-end;
+  color: $aside-color2;
+  height:$head;
+}
+.ariane h1, .ariane h2{
+  font-weight: 100;
+  margin-left:20px;
+  a{
+    text-decoration: none;
+  }
+}
+.ariane h2:before{
+  content:'...... '
+}
+.ariane h2:after{
+  content:' ......'
+}
+/** CLASSES POUR LES COULEURS DE LA CHARTE GRAPHIQUE */
+.bg-nutrition{
+  color:$clair;
+  background-color: $card-nutri;
+}
+.bg-opto{
+  color:$clair;
+  background-color: $card-opto;
+}
+.bg-kine{
+  color:$clair;
+  background-color: $card-kine;
+}
+.bg-admin{
+  color:$clair;
+  background-color: $aside-color1;
+}
+.nutrition{
+  color: $card-nutri;
+}
+.opto{
+  color:$card-opto
+}
+.kine{
+  color:$card-kine;
+}
+app-accueil {
+  height: 100vh;
+  flex-direction: column;
+}
+section.accueil {
+  flex-direction: row;
+  height: calc(100vh - $head);
+}
+article.cartel {
+  margin: auto 2% 0;
+  flex-direction: column;
+  text-align: center;
+  color: $clair;
+  transition: all .3s ease;
+  height: 75%;
+  flex: 1 1 0px;
+  overflow: hidden;
+  justify-content: space-between;
+
+  h2 {
+    font-size: 2rem;
+  }
+  p {
+    padding: 15px;
+  }
+
+  &:nth-child(1) {
+    background-color: $card-opto ;
+
+    button {
+      color: $card-opto;
+    }
+  }
+
+  &:nth-child(2) {
+    background-color: $card-nutri ;
+
+    button {
+      color: $card-nutri;
+    }
+  }
+
+  &:nth-child(3) {
+    background-color: $card-kine ;
+
+    button {
+      color: $card-kine;
+
+    }
+  }
+
+  &:nth-child(4) {
+    background-color: $aside-color3 ;
+
+    button {
+      color: $aside-color3;
+    }
+  }
+  & > div{
+    height:66%;
+    display:flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    padding:20px;
+    transition:all .3s ease;
+  }
+  & > div > *{
+    margin:0 auto;
+  }
+  figure{
+    margin:0 -20px -20px;
+    padding:0;
+    border-top-left-radius:70%;
+    border-top-right-radius: 50%;
+    height:34%;
+    overflow: hidden;
+    transition:all .5s ease;
+  }
+  figure > div {
+    width:100%;
+    height:100%;
+    margin:0 -20px -20px;
+    // background-position:0 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    img {
+      width: 100%;
+    }
+  }
+  a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    text-decoration: none;
+    button:hover{
+      background-color: $clair;
+    }
+    &:nth-child(2) {
+      color: $card-nutri;
+    }
+  }
+  // Animation sur le hover
+  &:hover {
+    padding:30px 50px 0;
+    transform: scale(1.1);
+  }
+  &:hover > div {
+    height:50%;
+    padding-bottom:40px;
+  }
+  &:hover > figure {
+    margin:0 -70px 0;
+    border-radius: 0;
+    height:50%;
+  }
+
+}
+
+@media screen and (max-width: 960px) {
+  section.accueil {
+    flex-direction: column;
+  }
+  article.cartel {
+    flex-direction: row;
+    margin:0;
+
+    &:hover {
+      padding:0;
+      transform: scale(1);
+    }
+    &:hover > div {
+      height:100%;
+      padding-bottom:0;
+    }
+    &:hover > figure {
+      margin:0 -70px 0;
+      border-radius: 0;
+      height:100%;
+    }
+  }
+  article.cartel div{
+    width:55%;
+    height:100%;
+  }
+  article.cartel figure{
+    width:45%;
+    height:100%;
+    border-top-right-radius: 0;
+    border-top-left-radius: 15%;
+    border-bottom-left-radius: 15%;
+  }
+
+}
+
+/* Header commun à toutes les pages de l'application */
+header {
+  flex-direction: row;
+  height: $header;
+  article:nth-child(1) {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    figure {
+      margin-bottom: 10px; // Le gros logo Tiaki
+    }
+    div {
+      display: flex;
+      align-items: center;
+      border-bottom: #805E96 dashed 1px;
+      //height: 80%;
+      width: 65vw;
+      margin-left: 120px;
+      h1{        
+        font-size: 3rem;
+        font-weight: 200;
+        margin: 0px 0px 30px 0px;
+        a{
+          text-decoration: none;
+        }
+      }
+      h1:after {
+        content: ' ......'
+      }
+      h2 {
+        font-size: 1.8rem;
+        font-weight: 600;        
+        margin: 0px 0px 15px 20px;       
+      }
+    }
+  }
+  article:nth-child(2) {
+    border-bottom: #805E96 dashed 1px;
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+    width: 12vw;
+    margin-left: 20px;
+    figure {
+      margin: 0;
+    }
+  }
+}
+/*Bouton accept et reject*/
+.acceptButton {    
+  background-color: #33BB27;
+  border-color: #33BB27;
+  transition: all .3s ease; // all récupére le css du hover ci-dessous    
+}
+.acceptButton:hover {
+  background-color: #33BB27 !important;
+  border-color: #33BB27 !important;
+}
+.rejectButton {
+  background-color: #F0C02E;
+  border-color: #F0C02E;
+  transition: all .3s ease; // all récupére le css du hover ci-dessous 
+}
+.rejectButton:hover {
+  background-color: #F0C02E !important;
+  border-color: #F0C02E !important;
+}

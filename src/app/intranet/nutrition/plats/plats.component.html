@@ -1,0 +1,166 @@
+<header>
+  <article>
+    <figure>
+      <img src="assets/images/logos/logo_tiaki.png" alt="" />
+    </figure>
+    <div>
+      <h1><a routerLink="/intranet">Tiaki</a></h1>
+      <h2>Les Plats</h2>
+    </div>
+  </article>    
+</header>
+<section>
+  <article>
+    <span id="firstSpan">
+      <figure>
+        <img src="assets/images/icones/icones-communs/iconeNutrition.svg" alt="" />
+      </figure>
+      <h3>Gestion des plats</h3>
+    </span>    
+    <p-button styleClass="p-button-success" (onClick)="ajoutPlat()">Ajouter un plat</p-button>
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input type="text" pInputText [(ngModel)]="nutrition.filtre" />
+    </span>
+    <span>
+      <!-- Utilisation du pipe plats pour rechercher des plats par leur noms -->
+      <ng-container *ngIf="nutrition.plats | plats:nutrition.filtre as filteredPlats">
+      <!-- Utilisation de ngx-pagination - Doc : https://github.com/michaelbromley/ngx-pagination/blob/master/README.md#demo -->  
+      <div *ngFor="let plat of filteredPlats | paginate: { itemsPerPage: 15, currentPage: pagePlats, id:'plats' }">
+        <p (click)="onSelectPlat(plat, plat.ingredients)">{{ plat.titre }}</p>              
+        <figure (click)="DeleteDialog(plat.id, true, plat.ingredients)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
+      <!-- DeleteDialog() modal PrimeNG - En paramétres l'id du plat et la variable bolean del en true -->      
+      </div>
+    </ng-container>
+    </span>      
+    <span>
+      <!-- [maxSize] pour le nombre de numéro de pages à afficher -->
+      <pagination-controls (pageChange)="pagePlats = $event" id="plats" previousLabel="Précédent" nextLabel="Suivant" [maxSize]="5"></pagination-controls>
+    </span>
+  </article>
+  <article>    
+    <div *ngIf="selectedPlats">  <!-- Le plat sur lequel j'ai cliqué -->     
+        <form #platForm="ngForm">          
+          <span class="p-float-label">
+            <input pInputText [(ngModel)]="selectedPlats.titre" name="titre" type="text" required minlength="1"/>
+            <label htmlFor="nom">Nom</label>
+          </span> 
+          <span class="p-float-label">
+            <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="selectedPlats.description" name="description" required minlength="1"></textarea>
+            <label for="float-input">Description</label>
+          </span>
+          <span class="p-float-label">
+            <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="selectedPlats.astuces" name="astuces" required minlength="1"></textarea>
+            <label for="float-input">Astuces</label>
+          </span>
+          <span class="p-float-label">
+            <textarea id="float-input" rows="4" cols="40" pInputTextarea [(ngModel)]="selectedPlats.qualites" name="qualites" required minlength="1"></textarea>
+            <label for="float-input">Qualités</label>
+          </span>
+          <span class="p-float-label">
+            <p-inputNumber id="inputNumber" inputId="integeronly" [(ngModel)]="selectedPlats.nbPersonnes" name="nbPersonnes" [showButtons]="true" [min]="0"> </p-inputNumber>
+            <label for="number-input">Nombres de personnes</label>
+          </span> 
+          <!-- <p-dropdown [options]="nutrition.platsTypes" [(ngModel)]="selectedType"  name="type" optionLabel="type" [showClear]="true" placeholder="Choisir un type"></p-dropdown>  --> 
+          <span *ngFor="let types of selectedPlats.types">
+            <p>Types de plat : {{ types.type }}</p>
+          </span>
+          <!-- <p-dropdown [options]="utils.statuts" [(ngModel)]="statutTexte" name="statut" optionLabel="statut" placeholder="Choisir un statut"></p-dropdown> -->
+          <span>
+            <p>Statut de publication : {{ utils.convertStatut(selectedPlats.statut!) }}</p>
+            <p>Statut de publication : {{ selectedPlats.statut }}</p>
+          </span>
+          <span id="spanIngredients">
+            <h4>Ingrédients</h4> 
+            <div id="divIngredients" *ngFor="let id of selectedPlats.ingredients; let i=index">
+              <figure (click)="DeleteDialog(i, false, selectedPlats.ingredients)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
+            <!-- DeleteDialog() modal PrimeNG - En paramétres l'index de l'ingrédients sur le tableau et la variable bolean del en false -->    
+              <p>{{ id | getIngredient:'alim_nom_fr' }}</p>                               
+            </div>
+          </span>
+          <span id="blocIngredients">                     
+            <h4>Nutriments</h4> 
+            <div id="nutriments">
+              <span>
+                <p>Protéines : {{ nutrition.totals['proteine'] | number: '1.2-2' }} Gr</p>
+                <p>Glucides : {{ nutrition.totals['glucides'] | number: '1.2-2' }} Gr</p>
+                <p>Lipides : {{ nutrition.totals['lipides'] | number: '1.2-2' }} Gr</p>
+                <p>Sucres : {{ nutrition.totals['sucres'] | number: '1.2-2' }} Gr </p>
+              </span>
+              <span>
+                <p>Vitamine C : {{ nutrition.totals['vitamineC'] | number: '1.2-2' }} Mg </p>
+                <p>Vitamine B1 : {{ nutrition.totals['vitamineB1'] | number: '1.2-2' }} Mg </p>
+                <p>Vitamine B2 : {{ nutrition.totals['vitamineB2'] | number: '1.2-2' }} Mg </p>
+                <p>Vitamine B3 : {{ nutrition.totals['vitamineB3'] | number: '1.2-2' }} Mg </p>
+                <p>Vitamine B5 : {{ nutrition.totals['vitamineB5'] | number: '1.2-2' }} Mg </p>
+              </span>
+              <span>
+                <p>Magnesium : {{ nutrition.totals['magnesium'] | number: '1.2-2' }} Mg </p>
+                <p>Potassium : {{ nutrition.totals['potassium'] | number: '1.2-2' }} Mg </p>
+                <p>Cuivre : {{ nutrition.totals['cuivre'] | number: '1.2-2' }} Mg </p>
+                <p>Manganese : {{ nutrition.totals['manganese'] | number: '1.2-2' }} Mg </p>
+              </span>
+            </div>            
+          </span>
+          <div id="platData">
+            <h4>Allergènes</h4>
+              <span *ngFor="let allergenes of selectedPlats.allergenes">
+                <p>Types d'allergènes : {{ allergenes.titre }}</p>
+                <p>{{ allergenes.description }}</p>
+              </span>
+            <h4>Régimes alimentaires</h4>
+              <span *ngFor="let regime of selectedPlats.regimes">
+                <p>Nom du régime : {{ regime.titre }}</p>
+                <p>Description : {{ regime.description }}</p>
+                <p>Type de régime : {{ regime.type }}</p>
+              </span>
+            <h4>Programmes alimentaires</h4>
+              <span *ngFor="let programme of selectedPlats.programmes">
+                <p>Nom du programme : {{ programme.titre }}</p>
+                <p>Description : {{ programme.description }}</p>
+                <p>Statut de publication : {{ utils.convertStatut(programme.statut)  }}</p>
+                <p>Statut de publication : {{ programme.statut }}</p>
+              </span>
+          </div>
+          <span id="spanButton">
+            <p-button styleClass="p-button-warning" (onClick)="onCancelForm()">Annuler</p-button>              
+            <p-button styleClass="p-button-success" (onClick)="ConfirmDialog($event)" [disabled]="platForm.invalid!">Valider</p-button>
+          </span>
+        </form>        
+    </div>
+  </article> 
+  <article>
+    <h4>Ajout d'ingrédients</h4>
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input type="text" pInputText [(ngModel)]="filtreIngredients" (input)="nutrition.onFilterChange()" />
+      <!-- Utilisation de onFilterChange() pour réinitialiser l'input -->
+    </span>
+    <div>
+      <!-- Utilisation du pipe ingredients pour rechercher des ingredients par leur alim_nom_fr -->        
+        <span *ngFor="let ingredients of nutrition.ciqualJSON | ingredients:filtreIngredients | paginate: { itemsPerPage: 30, currentPage: pageIngredients, id:'ingredients' }">
+          <p (click)="onSelectIngredient(ingredients.alim_code)">{{ ingredients.alim_nom_fr }}</p>
+        </span>        
+    </div>
+    <span id="paginationIngredients">
+      <!-- [maxSize] pour le nombre de numéro de pages à afficher -->
+      <pagination-controls (pageChange)="pageIngredients = $event" id="ingredients" previousLabel="Précédent" nextLabel="Suivant" [maxSize]="5"></pagination-controls>
+    </span>
+  </article>   
+</section>
+
+
+
+<!-- Pour la pop-up MessageService -->
+<p-toast></p-toast>
+
+<!-- Le contenu de la Modal PrimeNG pour supprimer un plat OU un ingrédient -->
+<p-confirmDialog #cd [style]="{ width: '40vw' }">
+<ng-template pTemplate="footer">
+  <button type="button" class="rejectButton" pButton icon="pi pi-times" label="Non" (click)="cd.reject()"></button>
+  <button type="submit" class="acceptButton" pButton icon="pi pi-check" label="Oui" (click)="cd.accept()"></button>
+</ng-template>
+</p-confirmDialog>
+
+<!-- La modal de type pop-up pour valider les modifications du formulaire -->
+<p-confirmPopup key="formulaire"></p-confirmPopup>

@@ -1,0 +1,70 @@
+header {
+    figure {
+        height: 100%;
+    }
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    justify-content:space-evenly;
+    align-items: center;
+    height: 60%;
+    article{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1vw;
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 200;
+            color: #D9042B;
+            margin: 0;
+        }
+        h1:before {
+            content: '...... '
+        }
+        h1:after {
+             content: ' ......'
+         }
+    
+    
+    
+        h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #270140;
+            margin: 0;
+        }
+    }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5vw;           
+    
+            p {
+                width: 50%;
+                font-size: 1.3rem;
+            }
+    
+            div {
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                gap: 1vw;
+                width: 100%;
+                height: 4vh;
+                margin-left: 100px;
+                margin-top: 50px;
+    
+                p {
+                    font-size: 1rem;
+                }   
+                
+                
+            }
+        }
+
+}

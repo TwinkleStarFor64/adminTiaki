@@ -1,0 +1,17 @@
+<main>
+    <p>Renseignez votre adresse mail afin de recevoir un lien pour réinitialiser votre mot de passe</p>
+    <form (ngSubmit)="onSubmit()">
+        <span class="p-float-label">
+            <input pInputText type="email" name="email" [(ngModel)]="email" [pattern]="emailRegex" #uname="ngModel" required/>
+            <label htmlFor="email">Email</label>
+        </span>
+        <p-button id="buttonMdp" styleClass="p-button-help" type="submit" [disabled]="!uname.valid">Envoyer</p-button>
+        <p *ngIf="uname.errors?.['pattern']">Format d'Email invalide</p>
+    </form>
+    <p *ngIf="popup && !badEmail">Consultez votre boite mail</p>
+    <p *ngIf="badEmail">L'email n'existe pas sur l'application Tiaki</p>
+</main>
+
+
+
+
