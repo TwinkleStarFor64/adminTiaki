@@ -73,7 +73,7 @@ export class NutritionService {
           ingredients: item['ingredients'],
           qualites: item['qualites'],
           astuces: item['astuces'],
-          nbPersonnes: item['nbPersonnes'],
+          nbpersonnes: item['nbpersonnes'], //nbpersonnes sans P pour correspondre à la colonne en BDD
           statut: item['statut'],
           allergenes: item['allergenes'],
           nutriments: item['nutriments'],
@@ -211,7 +211,7 @@ export class NutritionService {
   async updatePlat(id: number, plat: PlatI) {
     const { error: platError } = await this.supabase
       .from('plats')
-      .update(plat) // Update de tout l'objet plat qui correspond au type PlatI
+      .update(plat) // Update de tout l'objet plat qui correspond au type PlatI    
       .eq('id', id);
     if (platError) {
       console.log(platError);

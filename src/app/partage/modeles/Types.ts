@@ -46,7 +46,7 @@ export interface PlatI {
   ingredients?: Array<number>;
   qualites?: string; 
   astuces?: string;
-  nbPersonnes?: number;
+  nbpersonnes?: number;
   allergenes?: Array<AllergeneI>;
   nutriments?: Array<NutrimentI>;
   regimes?: Array<RegimesI>;

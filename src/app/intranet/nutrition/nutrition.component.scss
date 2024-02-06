@@ -90,7 +90,7 @@ section {
         overflow-y: auto;
         height: calc(100vh - $header);
         padding-bottom: 10px;
-        div:nth-child(1){
+        #divFormulaire{ /* La div contenant les différents input */
             padding-left: 40px;
             form{
                 display: flex;

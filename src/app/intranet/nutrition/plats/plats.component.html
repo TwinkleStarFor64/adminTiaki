@@ -39,7 +39,7 @@
     </span>
   </article>
   <article>    
-    <div *ngIf="selectedPlats">  <!-- Le plat sur lequel j'ai cliqué -->     
+    <div id="divFormulaire" *ngIf="selectedPlats">  <!-- Le plat sur lequel j'ai cliqué -->     
         <form #platForm="ngForm">          
           <span class="p-float-label">
             <input pInputText [(ngModel)]="selectedPlats.titre" name="titre" type="text" required minlength="1"/>
@@ -58,18 +58,17 @@
             <label for="float-input">Qualités</label>
           </span>
           <span class="p-float-label">
-            <p-inputNumber id="inputNumber" inputId="integeronly" [(ngModel)]="selectedPlats.nbPersonnes" name="nbPersonnes" [showButtons]="true" [min]="0"> </p-inputNumber>
+            <p-inputNumber id="inputNumber" inputId="integeronly" [(ngModel)]="selectedPlats.nbpersonnes" name="nbpersonnes" [showButtons]="true" [min]="0"> </p-inputNumber>
             <label for="number-input">Nombres de personnes</label>
           </span> 
-          <!-- <p-dropdown [options]="nutrition.platsTypes" [(ngModel)]="selectedType"  name="type" optionLabel="type" [showClear]="true" placeholder="Choisir un type"></p-dropdown>  --> 
-          <span *ngFor="let types of selectedPlats.types">
-            <p>Types de plat : {{ types.type }}</p>
-          </span>
-          <!-- <p-dropdown [options]="utils.statuts" [(ngModel)]="statutTexte" name="statut" optionLabel="statut" placeholder="Choisir un statut"></p-dropdown> -->
+          <!-- <span class="p-float-label">
+            <p-multiSelect inputId="float-label" [options]="nutrition.platsTypes" [(ngModel)]="selectedPlats.types" name="platsTypes" optionLabel="type"></p-multiSelect>
+            <label for="float-label">Type de plat</label>
+          </span>          
           <span>
             <p>Statut de publication : {{ utils.convertStatut(selectedPlats.statut!) }}</p>
             <p>Statut de publication : {{ selectedPlats.statut }}</p>
-          </span>
+          </span> -->
           <span id="spanIngredients">
             <h4>Ingrédients</h4> 
             <div id="divIngredients" *ngFor="let id of selectedPlats.ingredients; let i=index">
@@ -102,7 +101,7 @@
               </span>
             </div>            
           </span>
-          <div id="platData">
+          <!-- <div id="platData">
             <h4>Allergènes</h4>
               <span *ngFor="let allergenes of selectedPlats.allergenes">
                 <p>Types d'allergènes : {{ allergenes.titre }}</p>
@@ -121,7 +120,7 @@
                 <p>Statut de publication : {{ utils.convertStatut(programme.statut)  }}</p>
                 <p>Statut de publication : {{ programme.statut }}</p>
               </span>
-          </div>
+          </div> -->
           <span id="spanButton">
             <p-button styleClass="p-button-warning" (onClick)="onCancelForm()">Annuler</p-button>              
             <p-button styleClass="p-button-success" (onClick)="ConfirmDialog($event)" [disabled]="platForm.invalid!">Valider</p-button>

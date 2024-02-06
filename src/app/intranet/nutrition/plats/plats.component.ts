@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AllergeneI, PlatI, PlatTypeI, StatutE } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { NutritionService } from '../nutrition.service';
-import { ConfirmEventType, ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmEventType, ConfirmationService, MessageService, SelectItemGroup } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AjoutPlatComponent } from '../../template/dialog/ajout-plat/ajout-plat.component';
 import { UtilsService } from 'src/app/partage/services/utils.service';
@@ -21,9 +21,10 @@ export class PlatsComponent implements OnInit {
   plat!: PlatI;
   allergene: AllergeneI[] =[];
   selectedPlats?: PlatI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
-  selectedType: PlatTypeI | undefined;
   //statut = Object.values(StatutE).map(value => value as StatutE); 
   ref: DynamicDialogRef | undefined; // Pour la modal d'ajout de plat - DynamicDialogModule
+
+  groupedTypes!: SelectItemGroup[];
   
   constructor(
     public supa: SupabaseService,
@@ -82,9 +83,8 @@ export class PlatsComponent implements OnInit {
   // Je passe en paramétre de la méthode fetchCiqual le tableau d'id obtenu au dessus
     this.nutrition.fetchCiqual(id);    
     //console.log("Allergenes du plat : ", this.selectedPlats.allergenes);
-    console.log("statut ", this.selectedPlats.statut);
-    //console.log("Youhou ", this.utils.convertStatut(this.selectedPlats.statut));
-        
+    //console.log("statut ", this.selectedPlats.statut);
+    console.log(this.selectedPlats.types);         
   }
 
 // Méthode pour la modal de suppression d'un plat OU d'un ingrédient
@@ -194,7 +194,7 @@ async onSubmitForm() {
   try {
     await this.nutrition.updatePlat(
       this.selectedPlats!.id!,
-      this.selectedPlats!
+      this.selectedPlats!      
     );
     this.nutrition.fetchPlats(); // Pour mettre à jour le formulaire ngModel      
   } catch (error) {
