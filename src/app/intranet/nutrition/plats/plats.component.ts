@@ -53,38 +53,32 @@ export class PlatsComponent implements OnInit {
       baseZIndex: 10000,
       maximizable: true,
     });
-    this.ref.onClose.subscribe((data: any) => {
-      let summaryAndDetail;
-      if (data) {
-        //console.log(data.buttonType);
-        const buttonType = data?.buttonType;
-        // Si un buttonType est défini premier message sinon le second
-        summaryAndDetail = buttonType
-          ? {
-              summary: 'Annulation',
-              detail: 'Vous avez annuler',
-              severity: 'error',
-            }
-          : {
-              summary: 'Validation',
-              detail: 'Plat enregistré',
-              severity: 'info',
-            };
-      } else {
-        summaryAndDetail = {
-          summary: 'Fermeture',
-          detail: 'Vous avez fermer',
-          severity: 'warn',
-        };
-      }
-      this.messageService.add({ ...summaryAndDetail });
-    });
-  }
+    // Ci-dessous code pour gérer les différentes fermeture de la modal
+    this.ref.onClose.subscribe((data: any) => { // data récupérer depuis ajout-plat.component.ts
+        let summaryAndDetail;       
+        if (data) {
+          //console.log(data.buttonType);
+          const buttonType = data?.buttonType;
+          // Si un buttonType est défini premier message sinon le second
+          summaryAndDetail = buttonType ? { summary :'Annulation', detail : 'Vous avez annuler', severity: 'error' } : { summary :'Validation', detail : 'Plat enregistré', severity: 'info' };
+        } else {
+          // Message pour la fermeture depuis l'icône de croix
+          summaryAndDetail = { summary :'Fermeture', detail : 'Vous avez fermer', severity: 'warn' };
+        }
+        this.messageService.add({...summaryAndDetail});      
+    });    
+  };  
 
   async ngOnInit(): Promise<void> {
     this.nutrition.fetchPlats();
     // La méthode getCiqualJSON() permet de voir la liste des ingrédients et d'attribuer des valeurs via la méthode onSelectPlat() qui à besoin des ingrédients
     this.nutrition.getCiqualJSON();
+    this.nutrition.getPlatsTypes();
+    this.nutrition.getAllergenes();
+    this.nutrition.getRegimes();
+    this.nutrition.getNutriProgrammes();
+    this.nutrition.getLiens();
+    this.nutrition.getNutrimentsBis();
   }
 
   // Méthode qui attribue des valeurs aux variables correspondant à l'objet sur lequel je clique - Utilisé sur le nom du plat en HTML
@@ -98,8 +92,9 @@ export class PlatsComponent implements OnInit {
     // Je passe en paramétre de la méthode fetchCiqual le tableau d'id obtenu au dessus
     this.nutrition.fetchCiqual(id);
     //console.log("Allergenes du plat : ", this.selectedPlats.allergenes);
-    console.log('statut ', this.selectedPlats.statut);
-    console.log('Youhou ', this.utils.convertStatut(this.selectedPlats.statut));
+    console.log("statut ", this.selectedPlats.statut);
+    //console.log("Youhou ", this.utils.convertStatut(this.selectedPlats.statut));
+        
   }
 
   // Méthode pour la modal de suppression d'un plat OU d'un ingrédient

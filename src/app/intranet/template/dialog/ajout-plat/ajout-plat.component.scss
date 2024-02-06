@@ -8,9 +8,15 @@ $card-nutri: #D9042B;
     height: 200px;
     background-color: $card-nutri;
 }
+:host ::ng-deep .p-dropdown{ //La balise dropdown pour le statut de publication
+    min-width: 15vw;
+}
+:host ::ng-deep .p-multiselect{ //Les balises multiselect - :host ::ngdeep pour appliquer le css
+    min-width: 15vw;
+}
 
 section{    
-    article:nth-child(1){        
+    article:nth-child(1){ // Le premier article contient le formulaire        
         width: 60%;
         height: 65vh;
         flex-direction: column;
@@ -20,13 +26,14 @@ section{
         form {
             display: flex;
             flex-direction: column;
-            margin-top: 20px;                
+            margin-top: 20px; 
+            margin-bottom: 50px;               
             gap: 25px;
             #inputNumber{ // L'input pour le nombres de personnes
                 height: 50px;
             }
             span{
-                #divIngredients{
+                #divIngredients{ // La div contenant les ingrédients qui sont ajouter
                     display: flex;
                     flex-direction: row;
                      align-items: center;
@@ -35,14 +42,14 @@ section{
                     }   
                 }
             }
-            #spanButton{                
+            #spanButton{ // Contient les boutons Annuler & Valider               
                 display: flex;
                 justify-content: flex-end;
                 gap: 0.5vw;                
             }
         }      
     }
-    article:nth-child(2){
+    article:nth-child(2){ // Le second article contient la liste des ingrédients
         width: 40%;
         height: 80vh;
         border-left: $card-nutri 2px dashed;
@@ -60,7 +67,7 @@ section{
                         cursor: pointer;       
                     }
                     p:hover{
-                        font-size: 18px;
+                        background-color: #CECFD0;
                     }
                 }
             }

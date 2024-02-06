@@ -40,7 +40,7 @@ export interface PlatI {
   id?: number;
   titre: string;
   description: string;
-  statut: -1 | 0 | 1;
+  statut?: -1 | 0 | 1;
   //statut?: StatutE;
   reaction?: string;
   ingredients?: Array<number>;
@@ -133,6 +133,12 @@ export interface NutrimentI {
   enAttente = '-1'
 } */
 
+export enum StatutE {
+  depublie = '-1',
+  brouillon = '0',
+  publie = '1',
+}
+
 export enum MenuE {
   valide = '1',
   invalide = '0',
@@ -153,8 +159,4 @@ gr = 'gr',
 kgs = 'kgs'
 }
 
-export enum StatutE {
-  depublie = '-1',
-  brouillon = '0',
-  publie = '1',
-}
+

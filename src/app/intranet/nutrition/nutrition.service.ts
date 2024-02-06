@@ -64,7 +64,7 @@ export class NutritionService {
     try {
       const platData = await this.getPlats(); // Appelle la méthode getPlats ci-dessous
       if (platData) {
-        console.log("Data de fetchPlats : ", platData);
+        //console.log("Data de fetchPlats : ", platData);
         //Ici, nous utilisons la méthode map pour créer un nouveau tableau de plats à partir de data.
         //Chaque élément de data est représenté par l'objet { [x: string]: any; }, que nous convertissons en un objet PlatI en utilisant les propriétés nécessaires.
         this.plats = platData.map((item: { [x: string]: any }) => ({
@@ -151,6 +151,7 @@ export class NutritionService {
     }    
     const listeIngredients = ids.map((id) => this.ciqualJSON.find((ing) => ing['alim_code'] == id));
     if (listeIngredients.length > 0) {      
+
       // Utilisez map pour transformer chaque élément de listeIngredients
       this.mappedIngredients = listeIngredients.map((item) => ({
         alim_nom_fr: item!['alim_nom_fr'],
@@ -208,7 +209,7 @@ export class NutritionService {
     //console.log('Totaux :', this.totals);
   }
 
-  //------------------------------- Méthode pour modifier un plat -------------------------------------  
+  //------------------------------- Méthode pour modifier un plat -------------------------------------
   async updatePlat(id: number, plat: PlatI) {
     const { error: platError } = await this.supabase
       .from('plats')
@@ -229,51 +230,43 @@ export class NutritionService {
     qualites?: string;
     astuces?: string;
     nbPersonnes?: number;
-    statut?: number;    
-  }, idTypes:number, idAllergene:number) {
+    statut?: number; 
+    allergenes?: Array<number>; 
+    types?: Array<number>; 
+    regimes?: Array<number>;
+    programmes?: Array<number>;
+    nutriments?: Array<number>; 
+    liens?: Array<number>;
+  }) {
     newEntry.date = new Date();    
-      const { data: createData, error: createError } = await this.supabase
-        .from('plats')
-        .insert(newEntry)
-        .select()  
+    //console.log("Valeur de allergenes dans createPlatBis :", newEntry.allergenes);
+    // Ci-dessous appelle de la fonction insert_plat contenant le code SQL sur Supabase - Je remplis ces paramètres avec les valeurs de newEntry
+      const {data: createData, error: createError } = await this.supabase.rpc('insert_plat', {
+        plat_titre: newEntry.titre, 
+        plat_description: newEntry.description, 
+        plat_date: newEntry.date, 
+        plat_ingredients: newEntry.ingredients, 
+        plat_qualites: newEntry.qualites ?? null, // Utilisation de ?? en cas de valeur null
+        plat_astuces: newEntry.astuces ?? null, 
+        plat_nbpersonnes: newEntry.nbPersonnes, 
+        plat_statut: newEntry.statut,
+        idAllergenes: newEntry.allergenes || [], // Utilisation de || [] en cas de valeur null
+        idType: newEntry.types || [],
+        idRegimes: newEntry.regimes || [],
+        idNutriProgrammes: newEntry.programmes || [],
+        idNutriments: newEntry.nutriments || [],
+        idLiens: newEntry.liens || [],
+      });    
+      console.log("createData RPC : ", createData);                 
       if (createError) {
           console.log(createError);              
-        }        
-        this.createPlatId = createData![0].id
-        //console.log("Ici createData : ", createData![0].id);
-        console.log("Ici l'id createPlatId : ", this.createPlatId); 
-      const { error:typeError } = await this.supabase
-        .from('attribuerPlatsTypes')
-        .upsert({idPlat: this.createPlatId, idType: idTypes})
-        if (typeError) {
-          console.log(typeError);          
-        }
-        console.log("Ici insert : ", this.createPlatId); 
-      const { error:allergeneError} = await this.supabase
-        .from('attribuerAllergenes')
-        .upsert({idPlats: this.createPlatId, idAllergenes: idAllergene})
-      if (allergeneError) {
-        console.log(allergeneError);        
-      }      
-  }
-
-  async insertPlatTypes(idTypes: number) {
-    const { error } = await this.supabase
-      .from('attribuerPlatsTypes')
-      .upsert({idPlat: this.createPlatId, idType: idTypes})
-      console.log("Ici insert : ", this.createPlatId);
-      
-    if (error) {
-      console.log("Erreur insertPlatsTypes : ", error);      
-    }
-  }
-  
+        }                  
+  }  
 
   // In your NutritionService
   getPlatById(id: number): PlatI | undefined {
     console.log("Plat trouvé : ", this.plats.find(plat => plat.id === id));
     return this.plats.find(plat => plat.id === id);
-
   }
 
   /* --------------------------Méthode pour récupérer les menus sur la table menus de supabase--------------------------------*/
@@ -415,7 +408,7 @@ export class NutritionService {
     }
   }
 
-//-------------------------------- Méthode pour récupérer les types de plats (travail en cours) ------------------------
+//-------------------------------- Méthode pour récupérer les types de plats ------------------------
   async getPlatsTypes() {
     const { data, error } = await this.supabase
       .from('platsTypes')
@@ -424,14 +417,13 @@ export class NutritionService {
       console.log("Erreur de la méthode getPlatsTypes : ", error);      
     }
     if (data) {
-      console.log('Data de la méthode getPlatsTypes : ', data);
+      //console.log('Data de la méthode getPlatsTypes : ', data);
       this.platsTypes = data.map((item: { [x: string]: any }) => ({
         id: item['id'],
         type: item['type'],
         description: item['description'],  
       }));
-      console.log(this.platsTypes);
-      
+      //console.log(this.platsTypes);      
       return this.platsTypes;
     } else {
       return [];
@@ -447,16 +439,109 @@ async getAllergenes() {
     console.log("Erreur de la méthode getAllergenes : ", error);      
   }
   if (data) {
-    console.log('Data de la méthode getAllergenes : ', data);
+    //console.log('Data de la méthode getAllergenes : ', data);
     this.allergenes = data.map((item: { [x: string]: any }) => ({
       id: item['id'],
       titre: item['titre'],
       description: item['description'],
       type: item['type'],  
     }));
-    console.log(this.allergenes);
-    
+    //console.log(this.allergenes);    
     return this.allergenes;
+  } else {
+    return [];
+  }
+}
+
+//------------------------------- Méthode pour récupérer les régimes alimentaires -----------------------------------------
+async getRegimes() {
+  const { data, error } = await this.supabase
+    .from('regimes')
+    .select('*');
+  if (error) {
+    console.log("Erreur de la méthode getRegimes : ", error);      
+  }
+  if (data) {
+    //console.log('Data de la méthode getRegimes : ', data);
+    this.regimes = data.map((item: { [x: string]: any }) => ({
+      id: item['id'],
+      titre: item['titre'],
+      description: item['description'],
+      type: item['type'],  
+    }));
+    //console.log(this.regimes);    
+    return this.regimes;
+  } else {
+    return [];
+  }
+}
+
+//------------------------------- Méthode pour récupérer les programmes alimentaires -----------------------------------------
+async getNutriProgrammes() {
+  const { data, error } = await this.supabase
+    .from('nutriProgrammes')
+    .select('*');
+  if (error) {
+    console.log("Erreur de la méthode getNutriProgrammes : ", error);      
+  }
+  if (data) {
+    //console.log('Data de la méthode getNutriProgrammes : ', data);
+    this.nutriProgrammes = data.map((item: { [x: string]: any }) => ({
+      id: item['id'],
+      titre: item['titre'],
+      description: item['description'],
+      statut: item['statut'],  
+    }));
+    //console.log(this.nutriProgrammes);    
+    return this.nutriProgrammes;
+  } else {
+    return [];
+  }
+}
+
+//------------------------------- Méthode pour récupérer les liens -----------------------------------------
+async getLiens() {
+  const { data, error } = await this.supabase
+    .from('liens')
+    .select('*');
+  if (error) {
+    console.log("Erreur de la méthode getLiens : ", error);      
+  }
+  if (data) {
+    //console.log('Data de la méthode getLiens : ', data);
+    this.liens = data.map((item: { [x: string]: any }) => ({
+      id: item['id'],
+      titre: item['titre'],
+      description: item['description'],
+      url: item['url'],
+      cible: item['cible'],  
+    }));
+    //console.log(this.liens);    
+    return this.liens;
+  } else {
+    return [];
+  }
+}
+
+//------------------------------- Méthode pour récupérer les nutriments -----------------------------------------
+async getNutrimentsBis() {
+  const { data, error } = await this.supabase
+    .from('nutriments')
+    .select('*');
+  if (error) {
+    console.log('Erreur de la méthode getNutriments : ', error);
+  }
+  if (data) {
+    //console.log('Data de la méthode getNutriments: ', data);
+    this.nutriments = data.map((item: { [x: string]: any }) => ({
+      id: item['id'],
+      titre: item['titre'],
+      quantite: item['quantite'],
+      represente: item['represente'],
+      reaction: item['reaction'],
+      mesure: item['mesure'],  
+    }));
+    return data;
   } else {
     return [];
   }
@@ -471,6 +556,18 @@ async getAllergenes() {
       console.log("Erreur insertData : ", error);      
     }
   }
+
+  async insertPlatTypes(idTypes: number) {
+    const { error } = await this.supabase
+      .from('attribuerPlatsTypes')
+      .upsert({idPlat: this.createPlatId, idType: idTypes})
+      console.log("Ici insert : ", this.createPlatId);
+      
+    if (error) {
+      console.log("Erreur insertPlatsTypes : ", error);      
+    }
+  }
+
 }
 
 
@@ -486,4 +583,42 @@ async getAllergenes() {
       // J'attribue à la variable ciqual de type CiqualI le résultat de ciqualBDD - je peux maintenant utiliser ciqual dans d'autres méthodes
       this.ciqual = ciqualBDD;
     }
+  } */
+
+
+/*   async createPlat(newEntry: {
+    id?: number;
+    titre: string;
+    description: string;
+    date?: Date;
+    ingredients: Array<number>;
+    qualites?: string;
+    astuces?: string;
+    nbPersonnes?: number;
+    statut?: number;    
+  }, idTypes:number, idAllergene:number) {
+    newEntry.date = new Date();    
+      const { data: createData, error: createError } = await this.supabase
+        .from('plats')
+        .insert(newEntry)
+        .select()  
+      if (createError) {
+          console.log(createError);              
+        }        
+        this.createPlatId = createData![0].id
+        //console.log("Ici createData : ", createData![0].id);
+        console.log("Ici l'id createPlatId : ", this.createPlatId); 
+      const { error:typeError } = await this.supabase
+        .from('attribuerPlatsTypes')
+        .insert({idPlat: this.createPlatId, idType: idTypes})
+        if (typeError) {
+          console.log(typeError);          
+        }
+        //console.log("Ici insert : ", this.createPlatId); 
+      const { error:allergeneError} = await this.supabase
+        .from('attribuerAllergenes')
+        .insert({idPlats: this.createPlatId, idAllergenes: idAllergene})
+      if (allergeneError) {
+        console.log(allergeneError);        
+      }      
   } */
