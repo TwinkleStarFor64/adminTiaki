@@ -64,10 +64,11 @@
           <span class="p-float-label">
             <p-multiSelect inputId="float-label" [options]="nutrition.platsTypes" [(ngModel)]="selectedPlats.types" name="platsTypes" optionLabel="type"></p-multiSelect>
             <label for="float-label">Type de plat</label>
-          </span>                   
-          <span>
-            <p>Statut de publication : {{ utils.convertStatut(selectedPlats.statut!) }}</p>
-            <p>Statut de publication : {{ selectedPlats.statut }}</p>
+          </span>
+          <span class="p-float-label">
+            <p-dropdown [options]="statut" [(ngModel)]="selectedPlats.statut" name="statut" placeholder="Statut de publication" inputId="float-label"></p-dropdown>
+            <label for="float-label">Statut de publication</label>
+            <p>-1 = Dépublié | 0 = Brouillon | 1 = Publié</p>
           </span>
           <span id="spanIngredients">
             <h4>Ingrédients</h4> 
@@ -78,7 +79,7 @@
             </div>
           </span>
           <span id="blocIngredients">                     
-            <h4>Nutriments</h4> 
+            <h4>Composition des ingrédients</h4> 
             <div id="nutriments">
               <span>
                 <p>Protéines : {{ nutrition.totals['proteine'] | number: '1.2-2' }} Gr</p>
@@ -104,11 +105,11 @@
           <div id="platData">
             <h4>Allergènes</h4>           
             <!-- Ici optionLabel correspond au titre d'un allergene comme reçue après le map dans getAllergenes() -->
-            <!-- <span class="p-float-label">
+            <span class="p-float-label">
               <p-multiSelect inputId="float-label" [options]="nutrition.allergenes" [(ngModel)]="selectedPlats.allergenes" name="allergenes" optionLabel="titre"></p-multiSelect>
               <label for="float-label">Type d'allergènes</label>
-            </span> -->
-              <span *ngFor="let allergenes of selectedPlats.allergenes">
+            </span>
+                <span *ngFor="let allergenes of selectedPlats.allergenes">
                 <p>Types d'allergènes : {{ allergenes.titre }}</p>
                 <p>{{ allergenes.description }}</p>
               </span>
@@ -117,17 +118,35 @@
               <p-multiSelect inputId="float-label" [options]="nutrition.regimes" [(ngModel)]="selectedPlats.regimes" name="regimes" optionLabel="titre"></p-multiSelect>
               <label for="float-label">Type de régimes</label>              
             </span>
-              <!-- <span *ngFor="let regime of selectedPlats.regimes">
-                <p>Nom du régime : {{ regime.titre }}</p>
+              <span *ngFor="let regime of selectedPlats.regimes">
+                <!-- <p>Nom du régime : {{ regime.titre }}</p> -->
                 <p>Description : {{ regime.description }}</p>
                 <p>Type de régime : {{ regime.type }}</p>
-              </span> -->
+              </span>
             <h4>Programmes alimentaires</h4>
-              <span *ngFor="let programme of selectedPlats.programmes">
-                <p>Nom du programme : {{ programme.titre }}</p>
-                <p>Description : {{ programme.description }}</p>
-                <p>Statut de publication : {{ utils.convertStatut(programme.statut)  }}</p>
+            <span class="p-float-label">
+              <p-multiSelect inputId="float-label" [options]="nutrition.nutriProgrammes" [(ngModel)]="selectedPlats.programmes" name="programmes" optionLabel="titre"></p-multiSelect>
+              <label for="float-label">Programmes alimentaires</label>              
+            </span>
+              <span *ngFor="let programme of selectedPlats.programmes">                
+                <p>Description : {{ programme.description }}</p>                
                 <p>Statut de publication : {{ programme.statut }}</p>
+              </span>
+              <h4>Nutriments</h4>
+              <span class="p-float-label">
+                <p-multiSelect inputId="float-label" [options]="nutrition.nutriments" [(ngModel)]="selectedPlats.nutriments" name="nutriments" optionLabel="titre"></p-multiSelect>
+                <label for="float-label">Nutriments</label>              
+              </span>
+              <span *ngFor="let nutriment of selectedPlats.nutriments">                
+                <p>Titre : {{ nutriment.titre }}</p>
+              </span>
+              <h4>Liens</h4>
+              <span class="p-float-label">
+                <p-multiSelect inputId="float-label" [options]="nutrition.liens" [(ngModel)]="selectedPlats.liens" name="liens" optionLabel="titre"></p-multiSelect>
+                <label for="float-label">Liens</label>              
+              </span>
+              <span *ngFor="let lien of selectedPlats.liens">                
+                <p>Titre : {{ lien.titre }}</p>
               </span>
           </div>
           <span id="spanButton">

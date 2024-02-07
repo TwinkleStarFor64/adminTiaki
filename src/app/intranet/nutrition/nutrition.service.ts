@@ -22,7 +22,7 @@ export class NutritionService {
   allergenes: AllergeneI[] = [];
   liens: LienI[] = [];
   nutriProgrammes: NutriProgrammeI[] = [];
-  nutriments: NutrimentI[] = [];
+  nutriments: NutrimentI[] = [];  
 
   createPlatId!: number;
   mappedIngredients: any[] = []; // Utilisé dans fetchCiqual()
@@ -217,7 +217,13 @@ export class NutritionService {
     qualites?: string;
     astuces?: string;
     nbpersonnes?: number;
+    statut?: number;
+    allergenes?: Array<number>;
+    types?: Array<number>;
     regimes?: Array<number>;
+    programmes?: Array<number>;
+    nutriments?: Array<number>;
+    liens?: Array<number>;
   }) {
     const { data: updatePlatData, error: updatePlatError } = await this.supabase.rpc('update_plat', {
       plat_id: updateEntry.id,
@@ -227,7 +233,13 @@ export class NutritionService {
       plat_qualites: updateEntry.qualites,
       plat_astuces: updateEntry.astuces,
       plat_nbpersonnes: updateEntry.nbpersonnes,
+      plat_statut: updateEntry.statut,
+      idAllergenes: updateEntry.allergenes,
+      idType: updateEntry.types,
       idRegimes: updateEntry.regimes,
+      idNutriProgrammes: updateEntry.programmes,
+      idNutriments: updateEntry.nutriments,
+      idLiens: updateEntry.liens
     });
       //.from('plats')
       //.update(plat) // Update de tout l'objet plat qui correspond au type PlatI 
@@ -567,27 +579,6 @@ async getNutrimentsBis() {
     return [];
   }
 }
-
-//-------------------------------- Méthode pour update avec un upsert (travail en cours) ------------------------------------------
-  async insertData() {
-    const { error } = await this.supabase
-      .from('attribuerAllergenes')
-      .upsert({idPlats: 28, idAllergenes: 2})
-    if (error) {
-      console.log("Erreur insertData : ", error);      
-    }
-  }
-
-  async insertPlatTypes(idTypes: number) {
-    const { error } = await this.supabase
-      .from('attribuerPlatsTypes')
-      .upsert({idPlat: this.createPlatId, idType: idTypes})
-      console.log("Ici insert : ", this.createPlatId);
-      
-    if (error) {
-      console.log("Erreur insertPlatsTypes : ", error);      
-    }
-  }
 
 }
 

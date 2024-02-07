@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AllergeneI, PlatI, PlatTypeI, StatutE } from 'src/app/partage/modeles/Types';
+import { PlatI, StatutE } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { NutritionService } from '../nutrition.service';
-import { ConfirmEventType, ConfirmationService, MessageService, SelectItemGroup } from 'primeng/api';
+import { ConfirmEventType, ConfirmationService, MessageService } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AjoutPlatComponent } from '../../template/dialog/ajout-plat/ajout-plat.component';
 import { UtilsService } from 'src/app/partage/services/utils.service';
@@ -19,14 +19,11 @@ export class PlatsComponent implements OnInit {
   filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats
   filtreIngredients: string = ''; // Utiliser dans le ngModel affichant la liste des ingrédients - Filtre de recherche
   plat!: PlatI;
-  allergene: AllergeneI[] =[];
   selectedPlats?: PlatI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
-  //statut = Object.values(StatutE).map(value => value as StatutE); 
+  statut = Object.values(StatutE).map(value => value as StatutE); 
   ref: DynamicDialogRef | undefined; // Pour la modal d'ajout de plat - DynamicDialogModule
 
-  allergeneTitles: string[] = [];
- // groupedTypes!: SelectItemGroup[];
-  
+    
   constructor(
     public supa: SupabaseService,
     public nutrition: NutritionService,
@@ -87,9 +84,7 @@ export class PlatsComponent implements OnInit {
     //console.log("Type de plat : " ,this.selectedPlats.types);      
     console.log("Allergenes du plat : ", this.selectedPlats.allergenes);
     
-
-    console.log("Regimes du plat : ", this.selectedPlats.regimes);
-    
+    console.log("Regimes du plat : ", this.selectedPlats.regimes);   
      
   }
 
@@ -207,7 +202,13 @@ async onSubmitForm() {
     qualites: this.selectedPlats!.qualites,
     astuces: this.selectedPlats!.astuces,
     nbpersonnes: this.selectedPlats!.nbpersonnes,
-    regimes: this.selectedPlats!.regimes!.map(regime => regime.id)
+    statut: this.selectedPlats!.statut,
+    allergenes: this.selectedPlats!.allergenes!.map(allergene => allergene.id),
+    types: this.selectedPlats!.types!.map(type => type.id),
+    regimes: this.selectedPlats!.regimes!.map(regime => regime.id),
+    programmes: this.selectedPlats!.programmes!.map(programme => programme.id),
+    nutriments: this.selectedPlats!.nutriments!.map(nutriment => nutriment.id),
+    liens: this.selectedPlats?.liens?.map(lien => lien.id)
   };
   console.log("updateEntry dans onSubmitForm", updateEntry);
   
