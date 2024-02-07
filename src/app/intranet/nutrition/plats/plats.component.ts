@@ -22,7 +22,7 @@ export class PlatsComponent implements OnInit {
   selectedPlats?: PlatI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
   statut = Object.values(StatutE).map(value => value as StatutE); 
   ref: DynamicDialogRef | undefined; // Pour la modal d'ajout de plat - DynamicDialogModule
-
+  toto: string[] = [];
     
   constructor(
     public supa: SupabaseService,
@@ -79,12 +79,12 @@ export class PlatsComponent implements OnInit {
     this.selectedPlats.ingredients = id;
     //console.log("J'ai cliqué sur les alim_code : " + this.selectedPlats.ingredients);
   // Je passe en paramétre de la méthode fetchCiqual le tableau d'id obtenu au dessus
-    this.nutrition.fetchCiqual(id);    
-    //console.log("statut ", this.selectedPlats.statut);
-    //console.log("Type de plat : " ,this.selectedPlats.types);      
-    console.log("Allergenes du plat : ", this.selectedPlats.allergenes);
-    
-    console.log("Regimes du plat : ", this.selectedPlats.regimes);   
+    this.nutrition.fetchCiqual(id);
+          
+    console.log("Allergenes du plat : ", this.selectedPlats.allergenes);    
+    console.log("Regimes du plat : ", this.selectedPlats.regimes);    
+    this.toto = this.selectedPlats.allergenes!.map(allergene => allergene.titre)   
+    console.log("ici toto : " + this.toto);
      
   }
 

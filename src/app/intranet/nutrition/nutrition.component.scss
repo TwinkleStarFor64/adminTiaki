@@ -19,6 +19,34 @@ main{
     height: 200px;
     background-color: $card-nutri;
 }
+//Les balises multiselect - :host ::ngdeep pour appliquer le css
+:host ::ng-deep .p-multiselect{ 
+    min-width: 15vw;
+}
+
+//Ci-dessous CSS pour p-tabView
+:host ::ng-deep .p-tabview{
+    background: none;
+}
+:host ::ng-deep .p-tabview-nav{
+    background: none;
+    margin-bottom: 15px;
+}
+:host ::ng-deep .p-tabview-selected{
+    background: none;
+    
+}
+:host ::ng-deep .p-tabview-panels{
+    background: none;
+}
+:host ::ng-deep .p-tabview-panel{
+    background: none;
+}
+:host ::ng-deep .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link{
+    background-color: none;
+    color: black;
+    border-color: black;
+}
 
 section {
     height: calc(100vh - $header);
@@ -91,7 +119,8 @@ section {
         height: calc(100vh - $header);
         padding-bottom: 10px;
         #divFormulaire{ /* La div contenant les différents input */
-            padding-left: 40px;
+            padding-left: 20px;
+            padding-right: 20px;
             form{
                 display: flex;
                 flex-direction: column;
@@ -128,6 +157,10 @@ section {
                         font-weight: 600;
                         padding-bottom: 5px;                        
                     }
+                }
+                fieldset{
+                    border: none;
+                    min-height: 30vh;
                 }
             }
             #blocIngredients{ /* Le span avec la liste d'ingrédients et leurs nutriments */               

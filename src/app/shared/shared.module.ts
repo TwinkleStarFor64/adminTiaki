@@ -17,6 +17,7 @@ import { GetIngredientPipe, IngredientsPipe, MenusPipe, NutrimentsPipe, PlatsPip
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { TabViewModule } from 'primeng/tabview';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
     DynamicDialogModule,
     InputNumberModule,
     DropdownModule,
-    MultiSelectModule
+    MultiSelectModule,
+    TabViewModule
   ],
   exports: [
     PlatsPipe,
@@ -69,7 +71,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
     DynamicDialogModule,
     InputNumberModule,
     DropdownModule,
-    MultiSelectModule
+    MultiSelectModule,
+    TabViewModule
   ],
   providers: [
 

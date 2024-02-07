@@ -15,7 +15,6 @@ export class NutritionService {
 
   menus: MenuI[] = [];
   plats: PlatI[] = [];
-  //ciqual: CiqualI[] = [];
   ciqualJSON: CiqualI[] = [];
   regimes: RegimesI[] = [];
   platsTypes: PlatTypeI[] = [];
@@ -24,7 +23,7 @@ export class NutritionService {
   nutriProgrammes: NutriProgrammeI[] = [];
   nutriments: NutrimentI[] = [];  
 
-  createPlatId!: number;
+  //createPlatId!: number;
   mappedIngredients: any[] = []; // Utilisé dans fetchCiqual()
 
   totals: { [key: string]: number } = {}; // Objet pour stocker tous les totaux - Les crochets {} sont utilisés pour définir un objet
@@ -37,10 +36,7 @@ export class NutritionService {
   flitrePlats: string = ''; // Utiliser dans le ngModel affichant la liste des plats - Filtre de recherche
 
   constructor(public supa: SupabaseService, private http: HttpClient, public utils: UtilsService) {
-    this.supabase = createClient(
-      environment.supabaseUrl,
-      environment.supabaseKey
-    );
+    this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
   }
 
   // Méthode utiliser dans l'input de recherche d'ingrédients afin de le réinitialiser
@@ -208,7 +204,6 @@ export class NutritionService {
   }
 
   //------------------------------- Méthode pour modifier un plat -------------------------------------
-  // plat: PlatI, id: number,
   async updatePlat(updateEntry: {
     id: number;
     titre: string;
@@ -240,11 +235,7 @@ export class NutritionService {
       idNutriProgrammes: updateEntry.programmes,
       idNutriments: updateEntry.nutriments,
       idLiens: updateEntry.liens
-    });
-      //.from('plats')
-      //.update(plat) // Update de tout l'objet plat qui correspond au type PlatI 
-      //.update(updateEntry)   
-      //.eq('id', id);           
+    });           
     if (updatePlatError) {
       console.log(updatePlatError);
     }
@@ -296,11 +287,7 @@ export class NutritionService {
         }                  
   }  
 
-  // In your NutritionService
-  getPlatById(id: number): PlatI | undefined {
-    console.log("Plat trouvé : ", this.plats.find(plat => plat.id === id));
-    return this.plats.find(plat => plat.id === id);
-  }
+
 
   /* --------------------------Méthode pour récupérer les menus sur la table menus de supabase--------------------------------*/
   async fetchMenus(): Promise<any> {
@@ -579,6 +566,12 @@ async getNutrimentsBis() {
     return [];
   }
 }
+
+  // In your NutritionService
+  getPlatById(id: number): PlatI | undefined {
+    console.log("Plat trouvé : ", this.plats.find(plat => plat.id === id));
+    return this.plats.find(plat => plat.id === id);
+  }
 
 }
 
