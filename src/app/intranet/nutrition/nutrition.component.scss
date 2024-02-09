@@ -45,8 +45,13 @@ main{
 :host ::ng-deep .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link{
     background-color: none;
     color: black;
-    border-color: black;
+    border-color: black;    
 }
+//Pour enlever le hoover sur <p-tabPanel header="Allergènes">
+:host ::ng-deep .p-tabview .p-tabview-nav li .p-tabview-nav-link:not(.p-disabled):focus{
+    box-shadow: none;
+}
+
 
 section {
     height: calc(100vh - $header);
@@ -190,7 +195,9 @@ section {
             overflow-y: auto;
             span{
                 p{
-                    cursor: pointer;       
+                    cursor: pointer; 
+                    margin: 0; 
+                    padding: 6px;     
                 }
                 p:hover{
                     background-color: #CECFD0;

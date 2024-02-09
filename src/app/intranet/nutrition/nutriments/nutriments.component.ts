@@ -51,8 +51,8 @@ export class NutrimentsComponent {
       titre: '',
       quantite: '',
       represente: '',
-      reaction: '',
-      mesure: MesuresE.mgr,
+      //reaction: '',
+      mesure: MesuresE.mcg,
     }
   }
 

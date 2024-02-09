@@ -76,9 +76,9 @@ export class NutritionService {
           regimes: item['regimes'],
           types: item['types'],
           liens: item['liens'],
-          programmes: item['programmes']
+          programmes: item['programmes'],          
         }));
-        //console.log(this.plats.map((item) => item['allergenes']));
+        //console.log("Map des allergènes de fetchPlats : ",this.plats.map((item) => item['allergenes']));
         return this.plats;
       }
     } catch (error) {
@@ -110,7 +110,7 @@ export class NutritionService {
     } else {
       return [];
     }
-  }
+  } 
 
   // -------------------------Méthode pour supprimer un plat-------------------------------------
   async deletePlatSupabase(id: number) {
@@ -130,7 +130,7 @@ export class NutritionService {
       {
         next: (res) => (this.ciqualJSON = res),
         error: (err) => console.log(err),
-        complete: () => console.log(this.ciqualJSON),
+        complete: () => {}, // Si besoin de voir le résultat - console.log(this.ciqualJSON) au lieu de {}
       }
     );
     return this.ciqualJSON;
@@ -465,6 +465,7 @@ async getAllergenes() {
       titre: item['titre'],
       description: item['description'],
       type: item['type'],  
+      slug: item['slug'],
     }));
     //console.log(this.allergenes);    
     return this.allergenes;
@@ -558,7 +559,7 @@ async getNutrimentsBis() {
       titre: item['titre'],
       quantite: item['quantite'],
       represente: item['represente'],
-      reaction: item['reaction'],
+      //reaction: item['reaction'],
       mesure: item['mesure'],  
     }));
     return data;
