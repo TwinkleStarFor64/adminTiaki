@@ -143,6 +143,20 @@ section {
                   
                 #inputNumber{
                     height: 50px;
+                } 
+                #formContainer{ /* La section avec les premiers input du formulaire  */
+                    height: auto;
+                    display: flex;
+                    flex-direction: row;
+                    gap: 20px;
+                    justify-content: center;
+                    fieldset{
+                        border: none;
+                        display: flex;
+                        flex-direction: column;
+                        margin-top: 25px; 
+                        gap: 35px;
+                    }
                 }            
                 #spanIngredients{
                     h4{/* La balise Ingrédients*/ 
@@ -166,13 +180,7 @@ section {
                     gap: 1vw;
                     padding-right: 1vw;
                 }
-                #platData{ /* La div contenant les Allergènes les Régimes et les Programmes */
-                    h4{
-                        border-bottom: black dashed 1px;                       
-                        font-weight: 600;
-                        padding-bottom: 5px;                        
-                    }
-                }
+                
                 #fieldsetTab{
                     border: none;
                     min-height: 30vh;
@@ -263,20 +271,7 @@ section {
     border-color: #F0C02E;
 }
 
-#formContainer{    
-    height: auto;
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    justify-content: center;
-    fieldset{
-        border: none;
-        display: flex;
-        flex-direction: column;
-        margin-top: 25px; 
-        gap: 35px;
-    }
-}  
+ 
 /* Code ci-dessous pour le composant p-accordionTab */
 :host ::ng-deep .p-accordion .p-accordion-header .p-accordion-header-link{ /* Le header de p-accordionTab */
     background: none;

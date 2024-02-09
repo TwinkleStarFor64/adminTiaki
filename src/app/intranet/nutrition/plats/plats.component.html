@@ -41,7 +41,7 @@
   <article>    
     <div id="divFormulaire" *ngIf="selectedPlats">  <!-- Le plat sur lequel j'ai cliqué -->     
         <form #platForm="ngForm"> 
-          <section id="formContainer">
+        <section id="formContainer">
           <fieldset>        
           <span class="p-float-label">
             <input pInputText [(ngModel)]="selectedPlats.titre" name="titre" type="text" required minlength="1"/>
