@@ -18,6 +18,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TabViewModule } from 'primeng/tabview';
+import { AccordionModule } from 'primeng/accordion';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { TabViewModule } from 'primeng/tabview';
     InputNumberModule,
     DropdownModule,
     MultiSelectModule,
-    TabViewModule
+    TabViewModule,
+    AccordionModule
   ],
   exports: [
     PlatsPipe,
@@ -72,7 +74,8 @@ import { TabViewModule } from 'primeng/tabview';
     InputNumberModule,
     DropdownModule,
     MultiSelectModule,
-    TabViewModule
+    TabViewModule,
+    AccordionModule
   ],
   providers: [
 

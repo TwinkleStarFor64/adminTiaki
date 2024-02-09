@@ -1,8 +1,11 @@
 $card-nutri: #D9042B;
 $header: 160px; /* Hauteur du header sur les interfaces*/
 
-h1,h2,h3{
+h1,h2,h3,h4{
     color: $card-nutri;
+}
+h4{
+    font-size: 1.17em;  /* Pour harmoniser avec les h3 */
 }
 a{
     color: $card-nutri;
@@ -19,32 +22,38 @@ main{
     height: 200px;
     background-color: $card-nutri;
 }
-//Les balises multiselect - :host ::ngdeep pour appliquer le css
+/* Les balises multiselect - :host ::ngdeep pour appliquer le css */
 :host ::ng-deep .p-multiselect{ 
     min-width: 15vw;
 }
 
-//Ci-dessous CSS pour p-tabView
+/* Ci-dessous CSS pour p-tabView */
 :host ::ng-deep .p-tabview{
     background: none;
 }
 :host ::ng-deep .p-tabview-nav{
     background: none;
     margin-bottom: 15px;
+    color: black;
+    font-family: "Raleway", sans-serif;
 }
 :host ::ng-deep .p-tabview-selected{
-    background: none;
-    
+    background: none;    
 }
 :host ::ng-deep .p-tabview-panels{
     background: none;
+    color: black;
+    font-family: "Raleway", sans-serif;
 }
 :host ::ng-deep .p-tabview-panel{
     background: none;
+    color: black;
+    font-family: "Raleway", sans-serif;
 }
 :host ::ng-deep .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link{
     background-color: none;
     color: black;
+    font-family: "Raleway", sans-serif;
     border-color: black;    
 }
 //Pour enlever le hoover sur <p-tabPanel header="Allergènes">
@@ -130,7 +139,8 @@ section {
                 display: flex;
                 flex-direction: column;
                 margin-top: 25px;                
-                gap: 35px;    
+                gap: 35px;
+                  
                 #inputNumber{
                     height: 50px;
                 }            
@@ -138,7 +148,7 @@ section {
                     h4{/* La balise Ingrédients*/ 
                         border-bottom: black dashed 1px;                       
                         font-weight: 600;
-                        padding-bottom: 5px;                        
+                        padding-bottom: 5px; 
                     }
                     div{ /*Div avec le nom des aliments et l'icône de corbeille*/
                         display: flex;
@@ -163,7 +173,7 @@ section {
                         padding-bottom: 5px;                        
                     }
                 }
-                fieldset{
+                #fieldsetTab{
                     border: none;
                     min-height: 30vh;
                 }
@@ -188,8 +198,21 @@ section {
         width: 25vw;
         border-left: $card-nutri 2px dashed;
         padding-left: 10px;
-        h4{ /* La balise Ajout d'ingrédients */          
-            font-weight: 600;            
+        #headerIngredient{
+            border-bottom: #805E96 dashed 1px;
+            display: flex;
+            align-items: flex-start;
+            gap: 1vw;
+            width: 12vw;
+            margin-bottom: 15px;
+            padding-top: 10px;
+            figure {
+              margin: 0;              
+            }
+            h4{ /* La balise Ajout d'ingrédients */
+                color: $card-nutri;                    
+                margin: 0 0 1em 0;    
+            }
         }
         div{ /* Div contenant le span avec le ngFor*/
             overflow-y: auto;
@@ -238,5 +261,55 @@ section {
 .rejectButton:hover {
     background-color: #F0C02E;
     border-color: #F0C02E;
+}
+
+#formContainer{    
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+    fieldset{
+        border: none;
+        display: flex;
+        flex-direction: column;
+        margin-top: 25px; 
+        gap: 35px;
+    }
+}  
+/* Code ci-dessous pour le composant p-accordionTab */
+:host ::ng-deep .p-accordion .p-accordion-header .p-accordion-header-link{ /* Le header de p-accordionTab */
+    background: none;
+    color: $card-nutri;
+    font-family: "Raleway", sans-serif;
+    font-size: 1.17em;  /* Pour harmoniser avec les h3 */
+    font-weight: 600;
+    transition: none;        
+}
+:host ::ng-deep .p-accordion .p-accordion-header .p-accordion-header-link:hover{
+    color:$card-nutri
+}
+:host ::ng-deep .p-accordion .p-accordion-content{ /* Le content de p-accordionTab */   
+    display: flex;
+    flex-direction: row;
+    gap: 1vw;
+    border: none;
+    background-color: none;
+    color: black;
+    font-family: "Raleway", sans-serif;
+}
+/* Pour désactiver l'effet de hoover en transition sur le clic */
+:host ::ng-deep .p-accordion .p-accordion-header:not(.p-disabled) .p-accordion-header-link:focus{
+    box-shadow: none;
+    font-family: "Raleway", sans-serif;
+    //color: $card-nutri;
+}
+:host ::ng-deep .p-accordion .p-accordion-header:not(.p-disabled).p-highlight .p-accordion-header-link{
+    color: $card-nutri;
+    font-family: "Raleway", sans-serif;
+}
+:host ::ng-deep .p-accordion-header-link {
+    color: $card-nutri;
+    font-family: "Raleway", sans-serif;
 }
 

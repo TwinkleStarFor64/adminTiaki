@@ -64,7 +64,9 @@ section{
                 margin-top: 5px;     
                 span{
                     p{
-                        cursor: pointer;       
+                        cursor: pointer; 
+                        margin: 0; 
+                        padding: 6px;      
                     }
                     p:hover{
                         background-color: #CECFD0;
