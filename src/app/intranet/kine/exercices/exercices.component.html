@@ -1,0 +1,41 @@
+<header>
+    <article>
+      <figure>
+        <img src="assets/images/logos/logo_tiaki.png" alt="" />
+      </figure>
+      <div>
+        <h1><a routerLink="/intranet">Tiaki</a></h1>
+        <h2>Les exercices de kinésithérapies</h2>
+      </div>
+    </article>    
+  </header>
+  <section>
+    <article>
+      <span id="firstSpan">
+        <figure>
+          <img src="assets/images/icones/icones-communs/iconeExercices.svg" alt="" />
+        </figure>
+        <h3>Gestion des exercices</h3>
+      </span>    
+      <button styleClass="p-button-success">Ajouter un exercices</button>
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input type="text" pInputText />
+      </span>
+      <span>
+        <!-- Utilisation du pipe plats pour rechercher des plats par leur noms -->
+        <ng-container >
+        <!-- Utilisation de ngx-pagination - Doc : https://github.com/michaelbromley/ngx-pagination/blob/master/README.md#demo -->  
+        <div>
+          <p></p>              
+          <figure><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
+        <!-- DeleteDialog() modal PrimeNG - En paramétres l'id du plat et la variable bolean del en true -->      
+        </div>
+      </ng-container>
+      </span>      
+      <span>
+        <!-- [maxSize] pour le nombre de numéro de pages à afficher -->
+        <!-- <pagination-controls (pageChange)="pagePlats = $event" id="plats" previousLabel="Précédent" nextLabel="Suivant" [maxSize]="5"></pagination-controls> -->
+      </span>
+    </article>
+    <article>    

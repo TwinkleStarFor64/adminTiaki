@@ -1,13 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { KineComponent } from './kine.component';
-import { ProgrammeKineComponent } from './programme-kine/programme-kine.component';
+import { ProgrammesKineComponent } from './programmes-kine/programmes-kine.component';
+import { ExercicesComponent } from './exercices/exercices.component';
+
 
 
 const routes: Routes = [
-  { path:'', component: KineComponent },
+  { path:'', component: KineComponent, children: [
+    { path:'', component: ExercicesComponent },
+    { path:'programmes-kine', component: ProgrammesKineComponent },
+  ] },
   // { path: '/modifier/:id', component: EditKineComponent}
-  { path:'programme-kine', component: ProgrammeKineComponent }
   // { path: 'programme-kine/modifier/:id', component: EditProgrammeKineComponent}
 ]
 

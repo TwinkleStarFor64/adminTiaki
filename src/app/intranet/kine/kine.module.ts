@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProgrammeKineComponent } from './programme-kine/programme-kine.component';
 import { KineRoutingModule } from './kine-routing.module';
+import { ExercicesComponent } from './exercices/exercices.component';
+import { ProgrammesKineComponent } from './programmes-kine/programmes-kine.component';
 
 
 
 @NgModule({
   declarations: [
-    ProgrammeKineComponent,
+    ExercicesComponent,
+    ProgrammesKineComponent,
   ],
   imports: [
     CommonModule,
