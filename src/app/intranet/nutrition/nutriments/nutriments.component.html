@@ -48,15 +48,26 @@
           <label htmlFor="nom">Nom</label>
         </span>
         <span class="p-float-label">
-          <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="selectedNutriments.quantite"
-            name="description"></textarea>
-          <label for="float-input">Description</label>
+          <input pInputText [(ngModel)]="selectedNutriments.quantite" id="float-input" type="text" name="quantite" required minlength="1" />
+          <label for="float-input">Quantite</label>
+        </span>
+        <span class="p-float-label">
+          <input pInputText [(ngModel)]="selectedNutriments.reaction" id="float-input" type="text" name="reaction" required minlength="1" />
+          <label for="float-input">Réaction</label>
+        </span>
+        <span class="p-float-label">
+          <input pInputText [(ngModel)]="selectedNutriments.represente" id="float-input" type="text" name="represente" required minlength="1" />
+          <label for="float-input">Représente</label>
+        </span>
+        <span class="p-float-label">
+          <input pInputText [(ngModel)]="selectedNutriments.mesure" id="float-input" type="text" name="mesure" required minlength="1" />
+          <label for="float-input">mesure en:</label>
         </span>
         <span>
           <h4>Informations</h4>
           <div id="divIngredients" *ngFor="let id of selectedNutriments?.titre; let i=index">
             <figure (click)="DeleteDialog(i, false)"><img src="assets/images/icones/icones-communs/corbeille.svg"
-                alt=""></figure>
+                alt=""></figure> 
           </div>
         </span>
         <span id="spanButton">

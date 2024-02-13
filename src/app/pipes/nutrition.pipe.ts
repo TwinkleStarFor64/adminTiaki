@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { NutritionService } from '../intranet/nutrition/nutrition.service';
+import { PlatI } from '../partage/modeles/Types';
 
 @Pipe({
   name: 'nutrition'
@@ -34,7 +35,6 @@ export class MenusPipe implements PipeTransform {
   }
 
 }
-
 @Pipe({
   name: 'getPlat'
 })
@@ -42,16 +42,19 @@ export class GetPlatPipe implements PipeTransform {
 
   constructor(private nutri: NutritionService) { };
 
-  transform(id: number): string {
+  transform(id: number, attribut: string): string | number {
     if (!id) {
       return ''
     }
-     const plat = this.nutri.getPlatById(id);
+    const plat = this.nutri.plats.find(plat => plat.id == +id);
     console.log("Le pipe getPlat : ", plat);
-
-    return plat ? plat.titre : '';
+    // Vérifiez si plat existe et si plat[attribut] est de type string ou number
+    if (plat && (typeof plat[attribut as keyof PlatI] === 'string' || typeof plat[attribut as keyof PlatI] === 'number')) {
+      return plat[attribut as keyof PlatI] as string | number;
+    }
+    // Si plat[attribut] n'est pas de type string ou number, retournez une string vide
+    return '';
   }
-
 }
 @Pipe({
   name: 'getIngredient' // Le nom du pipe

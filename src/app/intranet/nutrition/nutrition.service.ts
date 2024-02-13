@@ -12,7 +12,8 @@ import { UtilsService } from 'src/app/partage/services/utils.service';
 export class NutritionService {
   private supabase: SupabaseClient; // Instance du client Supabase
   _session: AuthSession | null = null; // Session d'authentification Supabase
-
+ 
+  excludedArrayName = 'ingredients';
   menus: MenuI[] = [];
   plats: PlatI[] = [];
   ciqualJSON: CiqualI[] = [];
@@ -294,8 +295,8 @@ export class NutritionService {
     try {
       const menuData = await this.getMenus(); // Appelle la méthode getMenus ci-dessous
       if (menuData) {
-        //Ici, nous utilisons la méthode map pour créer un nouveau tableau de plats à partir de data.
-        //Chaque élément de data est représenté par l'objet { [x: string]: any; }, que nous convertissons en un objet PlatI en utilisant les propriétés nécessaires.
+        //Ici, nous utilisons la méthode map pour créer un nouveau tableau de menus à partir de data.
+        //Chaque élément de data est représenté par l'objet { [x: string]: any; }, que nous convertissons en un objet MenuI en utilisant les propriétés nécessaires.
         this.menus = menuData.map((item: { [x: string]: any }) => ({
           id: item['id'],
           titre: item['titre'],
@@ -313,7 +314,7 @@ export class NutritionService {
     }
   }
 
-  // ----------------------Méthode pour récupérer tout les plats sur la table Menus de supabase-------------------
+  // ----------------------Méthode pour récupérer tout les menus sur la table Menus de supabase-------------------
   async getMenus() {
     const { data, error } = await this.supabase.from('menus').select('*');
     if (error) {

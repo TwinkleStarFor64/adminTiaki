@@ -26,7 +26,7 @@
         <!-- Utilisation du pipe menus pour rechercher des menus par leur noms -->
         <ng-container *ngIf="nutrition.menus | menus:filtre as filteredMenus">
         <div *ngFor="let menu of filteredMenus | paginate: { itemsPerPage: 15, currentPage: pageMenus, id:'menus' }">
-          <p (click)="onSelectMenu(menu, menu.plat)">{{ menu.titre }}</p>              
+          <p (click)="onSelectMenu(menu, menu.plats)">{{ menu.titre }}</p>              
           <figure (click)="DeleteDialog(menu.id, true)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
         <!-- DeleteDialog() modal PrimeNG - En paramétres l'id du menu et la variable bolean del en true -->      
         </div>
@@ -48,12 +48,24 @@
               <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="selectedMenus.description" name="description"></textarea>
               <label for="float-input">Description</label>
             </span>
+            <span class="p-float-label">
+              <p>Statut de publication : {{ selectedMenus.statut }}</p>
+            </span>
+            <span class="p-float-label">
+              <textarea id="float-input" rows="4" cols="40" pInputTextarea [(ngModel)]="selectedMenus.reaction" name="reaction" required minlength="1"></textarea>
+              <label for="float-input">Réaction</label>
+            </span>
+            <span *ngFor="let types of selectedMenus.types">
+              <p>Types de plat : {{ types.type }}</p>
+            </span>
             <span>
               <h4>Plats</h4> 
-              <div id="divIngredients" *ngFor="let id of selectedMenus?.plats; let i=index">
-                <figure (click)="DeleteDialog(i, false)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
-              <!-- DeleteDialog() modal PrimeNG - En paramétres l'index du plat sur le tableau et la variable bolean del en false -->    
-                <p></p>                
+              <div *ngIf="selectedPlat">
+                <div id="divIngredients">
+                  <p>{{selectedMenus.plats}}</p>                
+                  <!-- <figure (click)="DeleteDialog(this.selectedPlat?.id,true)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure> -->
+                  <!-- DeleteDialog() modal PrimeNG - En paramétres l'id du plat et la variable bolean del en false -->    
+                </div>
               </div>
             </span>
             <span id="spanButton">
@@ -97,7 +109,7 @@
       <div>
         <!-- Utilisation du pipe plats pour rechercher des plats -->        
           <span *ngFor="let plat of nutrition.plats| plats:filtrePlats| paginate: { itemsPerPage: 30, currentPage: pageIngredients, id:'plats' }">
-            <p (click)="onSelectPlats(plat)">{{plat.titre }}</p>
+            <p (click)="onSelectPlats(plat.titre)">{{ plat.titre }}</p>
           </span>        
       </div>
       <span id="paginationPlats">
@@ -106,12 +118,8 @@
       </span>
     </article>   
   </section>
-
-
-
   <!-- Pour la pop-up MessageService -->
 <p-toast></p-toast>
-
 <!-- Le contenu de la Modal PrimeNG pour supprimer un plat OU un ingrédient -->
 <p-confirmDialog #cd [style]="{ width: '40vw' }">
   <ng-template pTemplate="footer">

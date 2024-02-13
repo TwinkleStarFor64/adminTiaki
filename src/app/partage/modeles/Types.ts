@@ -59,9 +59,15 @@ export interface MenuI {
   id: number;
   titre: string;
   description: string;
-  plats?: Array<number>;
+  plats?: Array<PlatI>;
   statut?:MenuE ;
   reaction?: string;
+  allergenes?: Array<AllergeneI>;
+  nutriments?: Array<NutrimentI>;
+  regimes?: Array<RegimesI>;
+  types?: Array<PlatTypeI>;
+  liens?: Array<LienI>;
+  programmes?: Array<NutriProgrammeI>;
 }
 
 export interface CiqualI {

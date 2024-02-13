@@ -36,11 +36,12 @@ export class AjoutMenuComponent {
   async onSubmitNewMenuForm() {
     try {
       console.log(this.newMenu);
-      // Je configure les valeurs de newMenu pour correspondre à newEntry sur createMenu()
+      const platIds = this.newMenu.plats?.map((plat) => plat.id) || [];
+      // Passer les ID des plats à la méthode createMenu
       await this.nutrition.createMenu({
         titre: this.newMenu.titre,
         description: this.newMenu.description,
-        plats: this.newMenu.plats!,
+        plats: platIds as number[],
       });
       this.nutrition.fetchMenus();
     } catch (error) {
@@ -53,16 +54,16 @@ export class AjoutMenuComponent {
   }
 
   // Ajouter un Plat
-  onSelectPlat(id: number) {
-    console.log("id du plat", id);
-    const plat = this.nutri.getPlatById(id);
-    if (plat) {
-      if (this.newMenu && this.newMenu.plats) {
-        this.newMenu.plats.push(id);
-        this.platsTitres.push(plat.titre);
+  onSelectPlats(id: number) {
+    console.log('id du plat : ', id);
+    if (this.selectedMenus?.plats) {
+      // Trouver le plat avec l'ID correspondant
+      const plat = this.nutrition.plats.find((plat) => plat.id === id);
+      if (plat) {
+        // Ajouter l'objet plat complet à this.selectedMenus.plats
+        this.selectedMenus.plats.push(plat);
       }
-    } else {
-      console.log(`Aucun plat trouvé avec l'ID ${id}`);
+      this.nutrition.fetchPlats();
     }
   }
   // Supprimer un Plat
