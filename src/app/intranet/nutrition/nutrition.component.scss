@@ -194,24 +194,25 @@ section {
                             background-color: #CECFD0;
                         } 
                     }
-                }
-                #infoIngredient{
-                    margin: 0;
-                    font-style: italic;
-                }
+                }                
                 table{                    
                     border-collapse: collapse;
-                    border: 2px solid #CECFD0;  
+                    border: 2px solid #CECFD0; 
+                    caption{
+                        font-style: italic;
+                    } 
                     th{
                         font-weight: 600;
                     } 
                     th,td {
                         border: 1px solid #CECFD0;
-                        padding: 8px 10px;
+                        padding: 10px 10px;
                         text-align: center;
                     } 
                     #inputQuantite{
-                        height: 30px;                        
+                        height: 25px;    
+                        width: 55px; 
+                        text-align: center;                   
                     }                
                     
                 }
