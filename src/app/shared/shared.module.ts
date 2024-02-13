@@ -21,6 +21,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { AccordionModule } from 'primeng/accordion';
 
 
+
 @NgModule({
   declarations: [
     IngredientsPipe,

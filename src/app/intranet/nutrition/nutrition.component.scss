@@ -156,6 +156,9 @@ section {
                         flex-direction: column;
                         margin-top: 25px; 
                         gap: 35px;
+                        #infoItalique {
+                            font-style: italic;
+                        }
                     }
                 }            
                 #spanIngredients{
@@ -164,14 +167,53 @@ section {
                         font-weight: 600;
                         padding-bottom: 5px; 
                     }
-                    div{ /*Div avec le nom des aliments et l'icône de corbeille*/
-                        display: flex;
-                        flex-direction: row;
-                        align-items: center;
-                        figure{
-                            cursor: pointer;
-                        }                        
-                    }                    
+                    article{
+                        padding-bottom: 0;
+                        width: auto;
+                        height: auto;
+                        flex-flow: row wrap;
+                        gap: 5px;
+                        div{ /*Div avec le nom des aliments et l'icône de croix*/
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                            gap: 8px;
+                            border-radius: 20px;
+                            padding: 0 8px 0 8px;
+                            width: auto;
+                            background-color: #E5E7EB;
+                            p{
+                                cursor: pointer;
+                            }
+                            figure{
+                                cursor: pointer;
+                                margin: 0;
+                            }                        
+                        }         
+                        div:hover{
+                            background-color: #CECFD0;
+                        } 
+                    }
+                }
+                #infoIngredient{
+                    margin: 0;
+                    font-style: italic;
+                }
+                table{                    
+                    border-collapse: collapse;
+                    border: 2px solid #CECFD0;  
+                    th{
+                        font-weight: 600;
+                    } 
+                    th,td {
+                        border: 1px solid #CECFD0;
+                        padding: 8px 10px;
+                        text-align: center;
+                    } 
+                    #inputQuantite{
+                        height: 30px;                        
+                    }                
+                    
                 }
                 #spanButton{ /*Le span avec les boutons annuler & valider*/
                     width: 50vw;
@@ -227,8 +269,9 @@ section {
             span{
                 p{
                     cursor: pointer; 
-                    margin: 0; 
-                    padding: 6px;     
+                    margin-top: 0.5px; 
+                    padding: 6px; 
+                    border-bottom: #D9042B 1px dashed;    
                 }
                 p:hover{
                     background-color: #CECFD0;

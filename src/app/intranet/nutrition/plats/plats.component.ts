@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AllergeneI, PlatI, StatutE } from 'src/app/partage/modeles/Types';
+import { CiqualI, PlatI, StatutE } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { NutritionService } from '../nutrition.service';
 import { ConfirmEventType, ConfirmationService, MessageService } from 'primeng/api';
@@ -23,17 +23,7 @@ export class PlatsComponent implements OnInit {
   statut = Object.values(StatutE).map(value => value as StatutE); 
   ref: DynamicDialogRef | undefined; // Pour la modal d'ajout de plat - DynamicDialogModule
 
-  tmp:any = [
-    {id:1, titre:'Oeuf', description:'Un oeuf'},
-    {id:2, titre:'Lait', description:'Du lait de vache'},
-    {id:3, titre:'Soja', description:'Du soja'},
-    {id:4, titre:'Noix', description:'Une noix'}
-  ];
-  tmp_aller: AllergeneI[] = [
-    {id:1, titre:'Oeuf', description:'Un oeuf'},
-    {id:2, titre:'Lait', description:'Du lait de vache'},
-    
-  ];
+  selectedingredient?: CiqualI;
     
   constructor(
     public supa: SupabaseService,
@@ -78,14 +68,30 @@ export class PlatsComponent implements OnInit {
     await this.nutrition.getRegimes();
     await this.nutrition.getNutriProgrammes();
     await this.nutrition.getLiens();
-    await this.nutrition.getNutrimentsBis();    
-  }  
+    await this.nutrition.getNutrimentsBis();   
 
-  
+  }   
+    //this.selectedingredients = ingredient;
+    //console.log("ici selectedIngredients : ", this.selectedingredients);
+  onViewIngredient(alimCode: number) {    
+    console.log("Cliqué sur l'ingrédient avec alim_code :", alimCode);
+    // Recherche de l'ingrédient dans ciqualJSON
+    this.selectedingredient = this.nutrition.ciqualJSON.find(ingredient => ingredient['alim_code'] == +alimCode); 
+
+    if (this.selectedingredient) {
+      // Faites quelque chose avec les détails de l'ingrédient sélectionné
+      console.log("Détails de l'ingrédient sélectionné :", this.selectedingredient);
+      console.log(this.selectedingredient.alim_nom_fr);
+      
+    } else {
+      console.log("Aucun ingrédient trouvé avec alim_code :", alimCode);
+    }
+
+  }
 
 // Méthode qui attribue des valeurs aux variables correspondant à l'objet sur lequel je clique - Utilisé sur le nom du plat en HTML
-  onSelectPlat(plat: PlatI, id: Array<number>) {
-    console.log("Avant mise à jour - selectedPlats :", this.selectedPlats);
+  onSelectPlat(plat: PlatI, id: Array<number>) {   
+    this.selectedingredient = undefined; // Pour réinitialiser l'ingrédients sur lequel j'ai cliquer pour en voir les détails - onViewIngredient()
   // J'attribue à selectedPlats la value du plat ou j'ai cliqué - Utile pour le ngIf selectedPlats
     this.selectedPlats = plat;
     console.log("ici selectedPlats : ", this.selectedPlats);    
@@ -93,10 +99,7 @@ export class PlatsComponent implements OnInit {
     this.selectedPlats.ingredients = id;
     //console.log("J'ai cliqué sur les alim_code : " + this.selectedPlats.ingredients);
   // Je passe en paramétre de la méthode fetchCiqual le tableau d'id obtenu au dessus
-    this.nutrition.fetchCiqual(id);    
-    
-    console.log("Allergenes du plat : ", this.selectedPlats.allergenes);    
-    console.log("Regimes du plat : ", this.selectedPlats.regimes);        
+    this.nutrition.fetchCiqual(id);       
   }
 
 // Méthode pour la modal de suppression d'un plat OU d'un ingrédient
