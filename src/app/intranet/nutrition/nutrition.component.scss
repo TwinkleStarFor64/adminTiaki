@@ -176,23 +176,24 @@ section {
                         div{ /*Div avec le nom des aliments et l'icône de croix*/
                             display: flex;
                             flex-direction: row;
-                            align-items: center;
-                            gap: 8px;
-                            border-radius: 20px;
-                            padding: 0 8px 0 8px;
-                            width: auto;
-                            background-color: #E5E7EB;
+                            width: auto; 
                             p{
                                 cursor: pointer;
+                                display: flex;
+                                align-items: center;
+                                border-radius: 20px;
+                                padding: 10px 8px 10px 8px;
+                                background-color: #E5E7EB;
+                                gap: 8px;
+                            }
+                            p:hover{
+                                background-color: #CECFD0;
                             }
                             figure{
                                 cursor: pointer;
                                 margin: 0;
                             }                        
-                        }         
-                        div:hover{
-                            background-color: #CECFD0;
-                        } 
+                        }
                     }
                 }                
                 table{                    
@@ -222,6 +223,7 @@ section {
                     justify-content: flex-end;
                     gap: 1vw;
                     padding-right: 1vw;
+                    padding-bottom: 15px;
                 }
                 
                 #fieldsetTab{

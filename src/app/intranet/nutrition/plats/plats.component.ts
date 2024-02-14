@@ -68,16 +68,14 @@ export class PlatsComponent implements OnInit {
     await this.nutrition.getRegimes();
     await this.nutrition.getNutriProgrammes();
     await this.nutrition.getLiens();
-    await this.nutrition.getNutrimentsBis();   
-
+    await this.nutrition.getNutrimentsBis();  
   }   
-    //this.selectedingredients = ingredient;
-    //console.log("ici selectedIngredients : ", this.selectedingredients);
+    
   onViewIngredient(alimCode: number) {    
     console.log("Cliqué sur l'ingrédient avec alim_code :", alimCode);
     // Recherche de l'ingrédient dans ciqualJSON
     this.selectedingredient = this.nutrition.ciqualJSON.find(ingredient => ingredient['alim_code'] == +alimCode); 
-
+    
     if (this.selectedingredient) {
       // Faites quelque chose avec les détails de l'ingrédient sélectionné
       console.log("Détails de l'ingrédient sélectionné :", this.selectedingredient);

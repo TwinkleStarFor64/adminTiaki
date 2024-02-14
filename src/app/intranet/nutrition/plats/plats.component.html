@@ -72,7 +72,7 @@
           <span class="p-float-label">
             <p-dropdown [options]="statut" [(ngModel)]="selectedPlats.statut" name="statut" placeholder="Statut de publication" inputId="float-label"></p-dropdown>
             <label for="float-label">Statut de publication</label>
-            <p id="infoItalique" icon="pi pi-apple"><i class="pi pi-info-circle"></i> -1 = Dépublié | 0 = Brouillon | 1 = Publié</p>
+            <p id="infoItalique"><i class="pi pi-info-circle"></i> -1 = Dépublié | 0 = Brouillon | 1 = Publié</p>
           </span>
         </fieldset> 
       </section>
@@ -81,8 +81,11 @@
             <article>
               <div id="divIngredients" *ngFor="let id of selectedPlats.ingredients; let i=index">
                 <!-- <figure (click)="DeleteDialog(i, false, selectedPlats.ingredients)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure> -->               
-                <p (click)="onViewIngredient(id)">{{ id | getIngredient:'alim_nom_fr' }}</p>
-                <figure (click)="DeleteDialog(i, false, selectedPlats.ingredients)"><i class="pi pi-times-circle"></i></figure>
+                <p (click)="onViewIngredient(id)">{{ id | getIngredient:'alim_nom_fr' }}
+                  <figure (click)="DeleteDialog(i, false, selectedPlats.ingredients)">
+                  <i class="pi pi-times-circle"></i></figure>
+                </p>
+                <!-- <figure (click)="DeleteDialog(i, false, selectedPlats.ingredients)"><i class="pi pi-times-circle"></i></figure> -->
                 <!-- DeleteDialog() modal PrimeNG - En paramétres l'index de l'ingrédients sur le tableau et la variable bolean del en false --> 
               </div>
             </article>
@@ -94,7 +97,7 @@
             </caption>
             <caption *ngIf="selectedingredient">
               <i class="pi pi-info-circle"></i>
-              Composition de l'ingrédient sélectionné
+              Composition de l'ingrédient sélectionné selon la quantité
             </caption>
             <thead>
               <tr>
@@ -111,68 +114,80 @@
                 <td>-</td>
                 <!-- <td><input type="number" name="quantiteIngredient" id="inputQuantite" label="Quantité"></td> -->
                 <td>                  
-                  <p-inputNumber  [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="0"></p-inputNumber> 
+                  <p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="0"></p-inputNumber> 
                 </td>
               </tr>
               <tr>
                 <th scope="row">Glucides</th>
                 <td>{{ selectedingredient['Glucides (g/100 g)'] }} Gr</td>
                 <td>-</td>
+                <td><p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="0"></p-inputNumber></td>
               </tr>
               <tr>
                 <th scope="row">Lipides</th>
                 <td>{{ selectedingredient['Lipides (g/100 g)'] }} Gr</td>
                 <td>-</td>
+                <td><p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="0"></p-inputNumber></td>
               </tr>
               <tr>
                 <th scope="row">Sucres</th>
                 <td>{{ selectedingredient['Sucres (g/100 g)']}} Gr</td>
                 <td>-</td>
+                <td><p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="0"></p-inputNumber></td>
               </tr>
               <tr>
                 <th scope="row">Vitamine C</th>
                 <td>{{ selectedingredient['Vitamine C (mg/100 g)']}} Mg</td>
                 <td>-</td>
+                <td><p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="0"></p-inputNumber></td>
               </tr>
               <tr>
                 <th scope="row">Vitamine B1</th>
                 <td>{{ selectedingredient['Vitamine B1 ou Thiamine (mg/100 g)']}} Mg</td>
                 <td>-</td>
+                <td><p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="0"></p-inputNumber></td>
               </tr>
               <tr>
                 <th scope="row">Vitamine B2</th>
                 <td>{{ selectedingredient['Vitamine B2 ou Riboflavine (mg/100 g)']}} Mg</td>
                 <td>-</td>
+                <td><p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="0"></p-inputNumber></td>
               </tr>
               <tr>
                 <th scope="row">Vitamine B3</th>
                 <td>{{ selectedingredient['Vitamine B3 ou PP ou Niacine (mg/100 g)']}} Mg</td>
                 <td>-</td>
+                <td><p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="0"></p-inputNumber></td>
               </tr>
               <tr>
                 <th scope="row">Vitamine B5</th>
                 <td>{{ selectedingredient['Vitamine B5 ou Acide pantothénique (mg/100 g)']}} Mg</td>
                 <td>-</td>
+                <td><p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="0"></p-inputNumber></td>
               </tr>
               <tr>
                 <th scope="row">Magnesium</th>
                 <td>{{ selectedingredient['Magnésium (mg/100 g)']}} Mg</td>
                 <td>-</td>
+                <td><p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="0"></p-inputNumber></td>
               </tr>
               <tr>
                 <th scope="row">Potassium</th>
                 <td>{{ selectedingredient['Potassium (mg/100 g)']}} Mg</td>
                 <td>-</td>
+                <td><p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="0"></p-inputNumber></td>
               </tr>
               <tr>
                 <th scope="row">Cuivre</th>
                 <td>{{ selectedingredient['Cuivre (mg/100 g)']}} Mg</td>
                 <td>-</td>
+                <td><p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="0"></p-inputNumber></td>
               </tr>
               <tr>
                 <th scope="row">Manganese</th>
                 <td>{{ selectedingredient['Manganèse (mg/100 g)']}} Mg</td>
                 <td>-</td>
+                <td><p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="0"></p-inputNumber></td>
               </tr>
             </tbody>
           </table>
@@ -254,7 +269,8 @@
                   <ng-container *ngFor="let programme of selectedPlats.programmes">                
                     <p>Description : {{ programme.description }}</p>                
                     <p>Statut de publication : {{ programme.statut }}</p>
-                    <p>-1 = Dépublié | 0 = Brouillon | 1 = Publié</p>
+                    <p style="font-style: italic;"><i class="pi pi-info-circle"></i> -1 = Dépublié | 0 = Brouillon | 1 = Publié</p>
+                    <!-- <p>-1 = Dépublié | 0 = Brouillon | 1 = Publié</p> -->
                   </ng-container>
                 </p-tabPanel>
                 <p-tabPanel header="Nutriments">
