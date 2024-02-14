@@ -37,12 +37,38 @@ export class PlatsComponent implements OnInit {
   ajoutPlat() { // La méthode pour la modal d'ajout d'un nouveau plat
     this.ref = this.dialogService.open(AjoutPlatComponent, {
             header: 'Ajouter un plat',
-            width: '70%',
+            width: '70vw',
             height: '80vh',
             contentStyle: { overflow: 'hidden' }, // Pour cacher l'overflow globale de la modal
             baseZIndex: 10000,
-            maximizable: true
+            maximizable: true            
     });
+    
+    this.ref.onMaximize.subscribe(() => {
+      const articleOne = document.getElementById('articleOne');
+      if (articleOne) {
+        articleOne.style.height = '90vh';
+        articleOne.style.width = '65vw';
+      }
+      const divOne = document.getElementById('divOne');
+      if (divOne) {
+        divOne.style.height = '70vh'; 
+        divOne.style.width = '32.5vw';       
+      }
+    });     
+
+    this.ref.onResizeInit.subscribe(() => {
+      // Rétablissez les styles à leur état initial lors de la fermeture de la modal
+      const articleOne = document.getElementById('articleOne');
+      if (articleOne) {
+        articleOne.style.height = '65vh'; // Remise à la valeur par défaut (laissez vide)
+      }
+      const divOne = document.getElementById('divOne');
+      if (divOne) {
+        divOne.style.height = '50vh'; // Remise à la valeur par défaut (laissez vide)      
+      }
+    }); 
+
     // Ci-dessous code pour gérer les différentes fermeture de la modal
     this.ref.onClose.subscribe((data: any) => { // data récupérer depuis ajout-plat.component.ts
         let summaryAndDetail;       

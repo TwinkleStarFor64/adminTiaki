@@ -1,5 +1,5 @@
 <section>
-    <article>
+    <article id="articleOne">
         <form #ajoutPlatForm="ngForm"> 
             <span class="p-float-label">
               <input pInputText [(ngModel)]="newPlat.titre" name="nom" type="text" required minlength="1"/>
@@ -54,10 +54,17 @@
             </span>
             <span>
               <h4>Ingrédients</h4> 
-              <p>Choisir les ingrédients à rajouter</p>
+              <p style="font-style: italic;"><i class="pi pi-info-circle"></i> Choisir les ingrédients à rajouter</p>
               <div id="divIngredients" *ngFor="let id of newPlat.ingredients; let i=index">
-                <figure (click)="onDeleteIngredient(i)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
-                <p>{{ id | getIngredient:'alim_nom_fr' }}</p>
+                <!-- <figure (click)="onDeleteIngredient(i)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure> -->
+                <p>{{ id | getIngredient:'alim_nom_fr' }}
+                    <figure (click)="onDeleteIngredient(i)">
+                    <i class="pi pi-times-circle"></i></figure>
+                </p>
+                <span class="p-float-label">
+                  <p-inputNumber id="inputNumber" inputId="integeronly" name="quantite" [showButtons]="true" [min]="0"> </p-inputNumber>
+                  <label for="number-input">Quantité</label>
+                </span> 
               </div>
             </span>  
             <span id="spanButton">
@@ -74,7 +81,7 @@
         <input type="text" pInputText [(ngModel)]="filtreIngredients" (input)="nutrition.onFilterChange()" />
         <!-- Utilisation de onFilterChange() pour réinitialiser l'input -->
       </span>
-      <div>
+      <div id="divOne">
         <!-- Utilisation du pipe ingredients pour rechercher des ingredients par leur alim_nom_fr -->        
           <span *ngFor="let ingredients of nutrition.ciqualJSON | ingredients:filtreIngredients | paginate: { itemsPerPage: 30, currentPage: nutrition.pageIngredients, id:'ingredients' }">
             <p (click)="onSelectIngredient(ingredients.alim_code)">{{ ingredients.alim_nom_fr }}</p>            

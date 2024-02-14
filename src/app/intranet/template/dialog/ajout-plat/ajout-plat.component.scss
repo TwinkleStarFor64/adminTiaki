@@ -16,11 +16,12 @@ $card-nutri: #D9042B;
 }
 
 
-section{    
+section{
     article:nth-child(1){ // Le premier article contient le formulaire        
-        width: 60%;
+        //width: 60%;
+        width: 45vw;
         height: 65vh;
-        flex-direction: column;
+        flex-direction: column;        
         align-items: flex-start; 
         overflow-y: auto;
         margin-right: 5px; 
@@ -36,10 +37,24 @@ section{
             span{
                 #divIngredients{ // La div contenant les ingrédients qui sont ajouter
                     display: flex;
-                    flex-direction: row;
-                     align-items: center;
+                    flex-direction: column;
+                    align-items: flex-start;
+                     p{
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        border-radius: 20px;
+                        padding: 10px 8px 10px 8px;
+                        gap: 8px;
+                        margin-bottom: 25px;
+                        background-color: #E5E7EB;                        
+                     }
+                     p:hover{
+                        background-color: #CECFD0;
+                    }
                     figure{
                         cursor: pointer;
+                        margin: 0;
                     }   
                 }
             }
@@ -51,7 +66,8 @@ section{
         }      
     }
     article:nth-child(2){ // Le second article contient la liste des ingrédients
-        width: 40%;
+        //width: 40%;
+        width: 25vw;
         height: 80vh;
         border-left: $card-nutri 2px dashed;
         padding-left: 10px;
@@ -64,7 +80,8 @@ section{
             div{ // Div contenant le span avec le ngFor
                 overflow-y: auto;
                 height: 50vh;
-                margin-top: 5px;     
+                margin-top: 5px;
+                width: 25vw;    
                 span{
                     p{
                         cursor: pointer; 

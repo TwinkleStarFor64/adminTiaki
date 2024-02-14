@@ -257,6 +257,7 @@ section {
         }
         div{ /* Div contenant le span avec le ngFor*/
             overflow-y: auto;
+            height: 70vh;
             span{
                 p{
                     cursor: pointer; 
