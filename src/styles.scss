@@ -42,6 +42,10 @@ p-button-label {
   background: $card-nutri;
 }
 
+.p-dialog .p-dialog-header{ /* La balise Ajouter un plat dans la modal de création d'un nouveau plat */
+  color: $card-nutri;
+}
+
 /* Code ci-dessous pour la popup <p-confirmPopup> dans nutrition.component.html */
 .p-confirm-popup-footer{
   button:nth-child(1){

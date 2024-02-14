@@ -231,18 +231,6 @@ section {
                     min-height: 30vh;
                 }
             }
-            #blocIngredients{ /* Le span avec la liste d'ingrédients et leurs nutriments */               
-                h4{ /* La balise Nutriments*/
-                    border-bottom: black dashed 1px;
-                    font-weight: 600;
-                    padding-bottom: 5px;
-                }
-                #nutriments{ /* La div avec la liste des nutriments*/
-                    display: flex;
-                    flex-direction: row;
-                    gap: 1vw;
-                }                
-            }
         }
     }
     article:nth-child(3){ /* Article sur la droite avec la liste d'ingrédients*/

@@ -15,6 +15,7 @@ $card-nutri: #D9042B;
     min-width: 15vw;
 }
 
+
 section{    
     article:nth-child(1){ // Le premier article contient le formulaire        
         width: 60%;
@@ -56,7 +57,9 @@ section{
         padding-left: 10px;
         div{
             h4{ // La balise Ajout d'ingrédients           
-                font-weight: 600;            
+                font-weight: 600; 
+                font-size: 1.25rem;
+                color: $card-nutri;           
             }
             div{ // Div contenant le span avec le ngFor
                 overflow-y: auto;
@@ -65,8 +68,9 @@ section{
                 span{
                     p{
                         cursor: pointer; 
-                        margin: 0; 
-                        padding: 6px;      
+                        margin-top: 0.5px; 
+                        padding: 6px; 
+                        border-bottom: #D9042B 1px dashed;      
                     }
                     p:hover{
                         background-color: #CECFD0;
