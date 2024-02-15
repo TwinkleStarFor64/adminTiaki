@@ -17,9 +17,10 @@ import { NutritionService } from '../nutrition.service';
 export class NutrimentsComponent {
  
   pageNutriments: number = 1; 
-  filtre: string = ''; 
-  filtreNutriments: string = ''; 
   selectedNutriments?: NutrimentI; 
+  
+  filtre: string = ''; 
+  filtreNutriments: string = '';  
   initialSelectedNutrimentsState!: NutrimentI; 
   ajoutMenuVisible: boolean = false; 
   selectedMenusVisible: boolean = false; 
@@ -38,7 +39,7 @@ export class NutrimentsComponent {
 
 
   async ngOnInit(): Promise<void> {
-    this.nutrition.fetchNutriments();
+   //this.nutrition.fetchNutriments();
 
     this.newNutrimentForm = this.formbuilder.group({
       titre: ['', Validators.required],
@@ -54,17 +55,25 @@ export class NutrimentsComponent {
       //reaction: '',
       mesure: MesuresE.mcg,
     }
+
+    this.nutrition.getNutrimentsBis();
+  }
+
+  onSelectNutriments(nutriment: NutrimentI) {
+    this.selectedNutriments = nutriment;
+    console.log("Ici selectedNutriments : ", this.selectedNutriments.titre);
+    
   }
 
 
   // Méthode qui attribue des valeurs aux variables correspondant à l'objet sur lequel je clique - Utilisé sur le nom du menu en HTML
-  onSelectNutriments(nutriment: NutrimentI, id: Array<number>) {
+  /* onSelectNutriments(nutriment: NutrimentI, id: Array<number>) {
     this.initialSelectedNutrimentsState = { ...nutriment };
     console.log(this.initialSelectedNutrimentsState);
     this.selectedNutriments = nutriment;
     console.log("J'ai cliqué sur : " + this.selectedNutriments.titre);
     this.nutrition.fetchPlats();
-  }
+  } */
 
   // Méthode pour la modal de suppression d'un menu OU d'un plat
   DeleteDialog(id: number, del: boolean) {

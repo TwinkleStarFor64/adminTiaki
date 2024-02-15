@@ -20,10 +20,11 @@ export class PlatsComponent implements OnInit {
   filtreIngredients: string = ''; // Utiliser dans le ngModel affichant la liste des ingrédients - Filtre de recherche
   plat!: PlatI;
   selectedPlats?: PlatI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
-  statut = Object.values(StatutE).map(value => value as StatutE); 
-  ref: DynamicDialogRef | undefined; // Pour la modal d'ajout de plat - DynamicDialogModule
+  selectedingredient?: CiqualI; // Utiliser dans onViewIngredient
 
-  selectedingredient?: CiqualI;
+  statut = Object.values(StatutE).map(value => value as StatutE); // Utiliser comme [options] dans le p-dropdown du statut de publication d'un plat
+
+  ref: DynamicDialogRef | undefined; // Pour la modal d'ajout de plat - DynamicDialogModule  
     
   constructor(
     public supa: SupabaseService,
@@ -44,7 +45,7 @@ export class PlatsComponent implements OnInit {
             maximizable: true            
     });
 
-    this.ref.onMaximize.subscribe(() => {
+    this.ref.onMaximize.subscribe(() => { // Pour modifier le CSS quand la modal est aggrandie
       const articleOne = document.getElementById('articleOne');
       if (articleOne) { 
           articleOne.style.height = '90vh';
@@ -85,16 +86,13 @@ export class PlatsComponent implements OnInit {
     await this.nutrition.getNutrimentsBis();  
   }   
     
+// Méthode pour voir la composition d'un ingrédient sur un plat existant
   onViewIngredient(alimCode: number) {    
     console.log("Cliqué sur l'ingrédient avec alim_code :", alimCode);
-    // Recherche de l'ingrédient dans ciqualJSON
-    this.selectedingredient = this.nutrition.ciqualJSON.find(ingredient => ingredient['alim_code'] == +alimCode); 
-    
-    if (this.selectedingredient) {
-      // Faites quelque chose avec les détails de l'ingrédient sélectionné
+    // Recherche de l'ingrédient dans ciqualJSON en utilisant son alim_code
+    this.selectedingredient = this.nutrition.ciqualJSON.find(ingredient => ingredient['alim_code'] == +alimCode);    
+    if (this.selectedingredient) {      
       console.log("Détails de l'ingrédient sélectionné :", this.selectedingredient);
-      console.log(this.selectedingredient.alim_nom_fr);
-      
     } else {
       console.log("Aucun ingrédient trouvé avec alim_code :", alimCode);
     }

@@ -23,8 +23,7 @@
             <input type="text" pInputText [(ngModel)]="nutrition.filtre" />
         </span>
         <span>
-            <div
-                *ngFor="let ingredients of nutrition.ciqualJSON |ingredients:nutrition.filtre| paginate: { itemsPerPage: 30, currentPage: pageIngredients, id:'ingredients' }">
+            <div *ngFor="let ingredients of nutrition.ciqualJSON |ingredients:nutrition.filtre| paginate: { itemsPerPage: 30, currentPage: pageIngredients, id:'ingredients' }">
                 <p (click)="onSelectIngredient(ingredients)">{{ ingredients.alim_nom_fr}}</p>
             </div>
         </span>

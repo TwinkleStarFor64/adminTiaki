@@ -5,7 +5,7 @@
     </figure>
     <div>
       <h1><a routerLink="/intranet">Tiaki</a></h1>
-      <h2>Les nutriments</h2>
+      <h2>Les Nutriments</h2>
     </div>
   </article>
 </header>
@@ -25,57 +25,20 @@
     <span>
       <!-- Utilisation du pipe menus pour rechercher des menus par leur noms -->
       <ng-container *ngIf="nutrition.nutriments | menus:filtre as filteredNutriments">
-        <div *ngFor="let nutriment of filteredNutriments | paginate: { itemsPerPage: 15, currentPage: pageNutriments
-            , id:'nutriments' }">
-          <p (click)="onSelectNutriments(nutriment, nutriment.titre)">{{ nutriment.titre }}</p>
-          <figure (click)="DeleteDialog(nutriment.id, true)"><img
-              src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
-          <!-- DeleteDialog() modal PrimeNG - En paramétres l'id du menu et la variable bolean del en true -->
+        <div *ngFor="let nutriment of filteredNutriments | paginate: { itemsPerPage: 15, currentPage: pageNutriments, id:'nutriments' }">
+          <p (click)="onSelectNutriments(nutriment)">{{ nutriment.titre }}</p>         
         </div>
       </ng-container>
     </span>
     <span>
       <!-- [maxSize] pour le nombre de numéro de pages à afficher -->
-      <pagination-controls (pageChange)="pageNutriments = $event" id="menus" previousLabel="Précédent"
-        nextLabel="Suivant" [maxSize]="5"></pagination-controls>
+      <pagination-controls (pageChange)="pageNutriments = $event" id="menus" previousLabel="Précédent" nextLabel="Suivant" [maxSize]="5"></pagination-controls>
     </span>
   </article>
   <article>
     <div *ngIf="selectedNutriments"> <!-- Le nutriment sur lequel j'ai cliqué -->
-      <form #platForm="ngForm">
-        <span class="p-float-label">
-          <input pInputText [(ngModel)]="selectedNutriments.titre" name="titre" type="text" required minlength="1" />
-          <label htmlFor="nom">Nom</label>
-        </span>
-        <span class="p-float-label">
-          <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="selectedNutriments.quantite"
-            name="description"></textarea>
-          <label for="float-input">Description</label>
-        </span>
-        <span>
-          <h4>Informations</h4>
-          <div id="divIngredients" *ngFor="let id of selectedNutriments?.titre; let i=index">
-            <figure (click)="DeleteDialog(i, false)"><img src="assets/images/icones/icones-communs/corbeille.svg"
-                alt=""></figure>
-          </div>
-        </span>
-        <span id="spanButton">
-          <p-button styleClass="p-button-warning" (onClick)="onCancelForm()">Annuler</p-button>
-          <p-button styleClass="p-button-success" (onClick)="ConfirmDialog($event)"
-            [disabled]="platForm.invalid!">Valider</p-button>
-        </span>
-      </form>
+      <h4>{{ selectedNutriments.titre }}</h4>
+      <p>{{ selectedNutriments.quantite }} {{ selectedNutriments.mesure }}</p>
     </div>
   </article>
 </section>
-<!-- Pour la pop-up MessageService -->
-<p-toast></p-toast>
-<!-- Le contenu de la Modal PrimeNG pour supprimer un plat OU un ingrédient -->
-<p-confirmDialog #cd [style]="{ width: '40vw' }">
-  <ng-template pTemplate="footer">
-    <button type="button" class="rejectButton" pButton icon="pi pi-times" label="Non" (click)="cd.reject()"></button>
-    <button type="submit" class="acceptButton" pButton icon="pi pi-check" label="Oui" (click)="cd.accept()"></button>
-  </ng-template>
-</p-confirmDialog>
-<!-- La modal de type pop-up pour valider les modifications du formulaire -->
-<p-confirmPopup key="formulaire"></p-confirmPopup>
