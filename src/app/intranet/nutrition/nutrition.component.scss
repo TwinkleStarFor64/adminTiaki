@@ -257,16 +257,19 @@ section {
         }
         div{ /* Div contenant le span avec le ngFor*/
             overflow-y: auto;
+            overflow-x: hidden;
             height: 70vh;
             span{
                 p{
                     cursor: pointer; 
-                    margin-top: 0.5px; 
-                    padding: 6px; 
-                    border-bottom: #D9042B 1px dashed;    
+                    padding: 16px 12px; 
+                    margin: 0; 
+                    border-bottom: #D9042B 1px dashed; 
+                    transition: all .3s ease;   
                 }
                 p:hover{
                     background-color: #CECFD0;
+                    transform: scale(1.05); 
                 }
             }
         }
