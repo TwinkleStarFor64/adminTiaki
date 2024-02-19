@@ -13,10 +13,13 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TableModule } from 'primeng/table';
 import { GestionUtilisateursPipe } from '../pipes/gestion-utilisateurs.pipe';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
-import { GetIngredientPipe, IngredientsPipe, MenusPipe, NutrimentsPipe, PlatsPipe } from '../pipes/nutrition.pipe';
+import { AllergenesPipe, GetIngredientPipe, IngredientsPipe, MenusPipe, NutrimentsPipe, PlatsPipe } from '../pipes/nutrition.pipe';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { TabViewModule } from 'primeng/tabview';
+import { AccordionModule } from 'primeng/accordion';
+
 
 
 @NgModule({
@@ -26,7 +29,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
     GetIngredientPipe,
     PlatsPipe,
     GestionUtilisateursPipe,
-    NutrimentsPipe
+    NutrimentsPipe,
+    AllergenesPipe
   ],
   imports: [
     CommonModule,
@@ -45,7 +49,9 @@ import { MultiSelectModule } from 'primeng/multiselect';
     DynamicDialogModule,
     InputNumberModule,
     DropdownModule,
-    MultiSelectModule
+    MultiSelectModule,
+    TabViewModule,
+    AccordionModule
   ],
   exports: [
     PlatsPipe,
@@ -69,7 +75,11 @@ import { MultiSelectModule } from 'primeng/multiselect';
     DynamicDialogModule,
     InputNumberModule,
     DropdownModule,
-    MultiSelectModule
+    MultiSelectModule,
+    TabViewModule,
+    AccordionModule,
+    AllergenesPipe,
+    NutrimentsPipe
   ],
   providers: [
 

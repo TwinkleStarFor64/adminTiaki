@@ -1,10 +1,11 @@
 <section>
-    <article>
-        <form #ajoutPlatForm="ngForm"> 
+    <article id="articleOne">
+        <form #ajoutPlatForm="ngForm">          
             <span class="p-float-label">
               <input pInputText [(ngModel)]="newPlat.titre" name="nom" type="text" required minlength="1"/>
               <label htmlFor="nom">Nom</label>
-            </span> 
+            </span>
+            <fieldset>              
             <span class="p-float-label">
               <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="newPlat.description" name="description" required minlength="1"></textarea>
               <label for="float-input">Description</label>
@@ -16,15 +17,9 @@
             <span class="p-float-label">
               <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="newPlat.astuces" name="astuces"></textarea>
               <label for="float-input">Astuces</label>
-            </span>
-            <span class="p-float-label">
-              <p-inputNumber id="inputNumber" inputId="integeronly" [(ngModel)]="newPlat.nbPersonnes" name="nbPersonnes" [showButtons]="true" [min]="0"> </p-inputNumber>
-              <label for="number-input">Nombres de personnes</label>
-            </span>
-            <span class="p-float-label">
-              <p-dropdown [options]="statut" [(ngModel)]="newPlat.statut" name="statut" placeholder="Statut de publication" inputId="float-label"></p-dropdown>
-              <label for="float-label">Statut de publication</label>
-            </span>                       
+            </span> 
+            </fieldset>              
+            <fieldset> 
             <span class="p-float-label">
               <!-- optionLabel pour voir la données suivant le typage (le titre, la description l'id etc....) dans le menu déroulant -->
               <p-multiSelect inputId="float-label" [options]="nutrition.platsTypes" [(ngModel)]="selectedPlatsTypes" name="platsTypes" optionLabel="type"></p-multiSelect>
@@ -51,14 +46,31 @@
               <p-multiSelect inputId="float-label" [options]="nutrition.liens" [(ngModel)]="selectedLiens" name="liens" optionLabel="titre"></p-multiSelect>
               <label for="float-label">Liens</label>              
             </span>
+            <span class="p-float-label" style="display: flex; flex-direction: row;">
+              <p-dropdown [options]="statut" [(ngModel)]="newPlat.statut" name="statut" placeholder="Statut de publication" inputId="float-label"></p-dropdown>
+              <label for="float-label">Statut de publication</label>
+              <p style="font-style: italic; margin-left: 25px;"><i class="pi pi-info-circle"></i> -1 = Dépublié | 0 = Brouillon | 1 = Publié</p>                     
+            </span>
+          </fieldset>                  
+          <span class="p-float-label">
+            <p-inputNumber id="inputNumber" inputId="integeronly" [(ngModel)]="newPlat.nbpersonnes" name="nbPersonnes" [showButtons]="true" [min]="0"> </p-inputNumber>
+            <label for="number-input">Nombres de personnes</label>
+          </span> 
             <span>
               <h4>Ingrédients</h4> 
-              <p>Choisir les ingrédients à rajouter</p>
+              <p style="font-style: italic;"><i class="pi pi-info-circle"></i> Choisir les ingrédients à rajouter</p>
               <div id="divIngredients" *ngFor="let id of newPlat.ingredients; let i=index">
-                <figure (click)="onDeleteIngredient(i)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
-                <p>{{ id | getIngredient:'alim_nom_fr' }}</p>
+                <!-- <figure (click)="onDeleteIngredient(i)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure> -->
+                <p>{{ id | getIngredient:'alim_nom_fr' }}
+                    <figure (click)="onDeleteIngredient(i)">
+                    <i class="pi pi-times-circle"></i></figure>
+                </p>
+                <span class="p-float-label">
+                  <p-inputNumber id="inputNumber" inputId="integeronly" name="quantite" [showButtons]="true" [min]="0"> </p-inputNumber>
+                  <label for="number-input">Quantité</label>
+                </span> 
               </div>
-            </span>  
+            </span>          
             <span id="spanButton">
               <p-button styleClass="p-button-warning" (onClick)="onCancelNewPlatForm({ buttonType: 'Cancel', summary: 'Annulation' })">Annuler</p-button>              
               <p-button styleClass="p-button-success" (onClick)="onSubmitNewPlatForm({ summary: 'Validation' })" [disabled]="ajoutPlatForm.invalid!">Valider</p-button> 
@@ -73,7 +85,7 @@
         <input type="text" pInputText [(ngModel)]="filtreIngredients" (input)="nutrition.onFilterChange()" />
         <!-- Utilisation de onFilterChange() pour réinitialiser l'input -->
       </span>
-      <div>
+      <div id="divOne">
         <!-- Utilisation du pipe ingredients pour rechercher des ingredients par leur alim_nom_fr -->        
           <span *ngFor="let ingredients of nutrition.ciqualJSON | ingredients:filtreIngredients | paginate: { itemsPerPage: 30, currentPage: nutrition.pageIngredients, id:'ingredients' }">
             <p (click)="onSelectIngredient(ingredients.alim_code)">{{ ingredients.alim_nom_fr }}</p>            

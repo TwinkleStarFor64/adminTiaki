@@ -32,3 +32,53 @@ https://www.youtube.com/watch?v=tFsCynatnlo
 
 Vidéo pour se connecter en utilisant le systéme d'authentification de Supabase 
 https://www.youtube.com/watch?v=hPI8OegHPYc
+
+## Supabase fonction SQL
+
+### Création de la fonction sur Supabase
+
+Depuis l'interface de Supabase se rendre sur l'éditeur de code SQL et cliquer sur New query pour créer une nouvelle requête SQL
+
+![Éditeur de code SQL sur Supabase](src/assets/images-README/01.png)
+
+Créer la fonction comme sur l'exemple ci-dessous en lui donnant un nom précéder de la mention public
+
+Créer des paramètres adéquats à la fonction - Return en language plpsql - Supabase utilise PostgreSQL
+
+![Exemple de création d'une fonction avec son nom et ces paramètres](src/assets/images-README/02.png)
+
+Ajouter le code SQL nécessaire entre les balises BEGIN et END
+
+![Exemple d'un code SQL qui insére des données sur la table Plats](src/assets/images-README/04.png)
+
+Pour exécuter la fonction cliquer sur le bouton RUN, le résultat est visible dans la console et permet de gérer d'éventuelles erreurs
+
+![Bouton Run sur l'interface Supabase](src/assets/images-README/07.png)
+
+Pour accéder aux fonctions depuis l’interface de supabase il suffit de cliquer sur l’onglet Database puis sur Functions
+
+![Accès aux fonctions sur Supabase](src/assets/images-README/08.png)
+
+Toutes les fonctions existantes sont lister sur cette interface, en cliquant sur l'icône à leurs droites on peux voir le code SQL contenue
+
+![Interface des fonctions sur Supabase](src/assets/images-README/09.png)
+
+Pour utiliser la fonction depuis le code créer une méthode reprenant les paramètres de la fonction SQL
+
+![Création de la méthode dans le code](src/assets/images-README/10.png)
+
+Dans notre méthode Angular faire appelle à la fonction créer sur supabase avec **.rpc** suivi du nom de la fonction SQL
+
+Adapter ensuite les valeurs attendues
+
+![Appelle de la fonction SQL avec .rpc](src/assets/images-README/11.png)
+
+En cas d'erreur il est possible de supprimer la fonction soit avec un code SQL soit depuis l'interface Supabase
+
+Exemple avec un code SQL
+
+![Code SQL pour supprimer une fonction](src/assets/images-README/14.png)
+
+Exemple depuis l'interface Supabase
+
+![Supprimer une fonction depuis l'interface Supabase](src/assets/images-README/DeleteFunction.png)

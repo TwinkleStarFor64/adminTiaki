@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AllergeneI, PlatI, PlatTypeI, StatutE } from 'src/app/partage/modeles/Types';
+import { CiqualI, PlatI, StatutE } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { NutritionService } from '../nutrition.service';
 import { ConfirmEventType, ConfirmationService, MessageService } from 'primeng/api';
@@ -19,12 +19,13 @@ export class PlatsComponent implements OnInit {
   filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats
   filtreIngredients: string = ''; // Utiliser dans le ngModel affichant la liste des ingrédients - Filtre de recherche
   plat!: PlatI;
-  allergene: AllergeneI[] =[];
   selectedPlats?: PlatI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
-  selectedType: PlatTypeI | undefined;
-  //statut = Object.values(StatutE).map(value => value as StatutE); 
-  ref: DynamicDialogRef | undefined; // Pour la modal d'ajout de plat - DynamicDialogModule
-  
+  selectedingredient?: CiqualI; // Utiliser dans onViewIngredient
+
+  statut = Object.values(StatutE).map(value => value as StatutE); // Utiliser comme [options] dans le p-dropdown du statut de publication d'un plat
+
+  ref: DynamicDialogRef | undefined; // Pour la modal d'ajout de plat - DynamicDialogModule  
+    
   constructor(
     public supa: SupabaseService,
     public nutrition: NutritionService,
@@ -37,12 +38,26 @@ export class PlatsComponent implements OnInit {
   ajoutPlat() { // La méthode pour la modal d'ajout d'un nouveau plat
     this.ref = this.dialogService.open(AjoutPlatComponent, {
             header: 'Ajouter un plat',
-            width: '70%',
+            width: '70vw',
             height: '80vh',
             contentStyle: { overflow: 'hidden' }, // Pour cacher l'overflow globale de la modal
             baseZIndex: 10000,
-            maximizable: true
+            maximizable: true            
     });
+
+    this.ref.onMaximize.subscribe(() => { // Pour modifier le CSS quand la modal est aggrandie
+      const articleOne = document.getElementById('articleOne');
+      if (articleOne) { 
+          articleOne.style.height = '90vh';
+          articleOne.style.width = '65vw';          
+        }      
+      const divOne = document.getElementById('divOne');
+      if (divOne) {
+        divOne.style.height = '70vh'; 
+        divOne.style.width = '32.5vw';       
+      }
+    });        
+
     // Ci-dessous code pour gérer les différentes fermeture de la modal
     this.ref.onClose.subscribe((data: any) => { // data récupérer depuis ajout-plat.component.ts
         let summaryAndDetail;       
@@ -60,19 +75,32 @@ export class PlatsComponent implements OnInit {
   };  
 
   async ngOnInit(): Promise<void> {
-    this.nutrition.fetchPlats();
+    await this.nutrition.fetchPlats();
   // La méthode getCiqualJSON() permet de voir la liste des ingrédients et d'attribuer des valeurs via la méthode onSelectPlat() qui à besoin des ingrédients
     this.nutrition.getCiqualJSON();
-    this.nutrition.getPlatsTypes();
-    this.nutrition.getAllergenes();
-    this.nutrition.getRegimes();
-    this.nutrition.getNutriProgrammes();
-    this.nutrition.getLiens();
-    this.nutrition.getNutrimentsBis();
+    await this.nutrition.getPlatsTypes();
+    await this.nutrition.getAllergenes();
+    await this.nutrition.getRegimes();
+    await this.nutrition.getNutriProgrammes();
+    await this.nutrition.getLiens();
+    await this.nutrition.getNutrimentsBis();  
+  }   
+    
+// Méthode pour voir la composition d'un ingrédient sur un plat existant
+  onViewIngredient(alimCode: number) {    
+    console.log("Cliqué sur l'ingrédient avec alim_code :", alimCode);
+    // Recherche de l'ingrédient dans ciqualJSON en utilisant son alim_code
+    this.selectedingredient = this.nutrition.ciqualJSON.find(ingredient => ingredient['alim_code'] == +alimCode);    
+    if (this.selectedingredient) {      
+      console.log("Détails de l'ingrédient sélectionné :", this.selectedingredient);
+    } else {
+      console.log("Aucun ingrédient trouvé avec alim_code :", alimCode);
+    }
   }
 
 // Méthode qui attribue des valeurs aux variables correspondant à l'objet sur lequel je clique - Utilisé sur le nom du plat en HTML
-  onSelectPlat(plat: PlatI, id: Array<number>) {
+  onSelectPlat(plat: PlatI, id: Array<number>) {   
+    this.selectedingredient = undefined; // Pour réinitialiser l'ingrédients sur lequel j'ai cliquer pour en voir les détails - onViewIngredient()
   // J'attribue à selectedPlats la value du plat ou j'ai cliqué - Utile pour le ngIf selectedPlats
     this.selectedPlats = plat;
     console.log("ici selectedPlats : ", this.selectedPlats);    
@@ -80,11 +108,7 @@ export class PlatsComponent implements OnInit {
     this.selectedPlats.ingredients = id;
     //console.log("J'ai cliqué sur les alim_code : " + this.selectedPlats.ingredients);
   // Je passe en paramétre de la méthode fetchCiqual le tableau d'id obtenu au dessus
-    this.nutrition.fetchCiqual(id);    
-    //console.log("Allergenes du plat : ", this.selectedPlats.allergenes);
-    console.log("statut ", this.selectedPlats.statut);
-    //console.log("Youhou ", this.utils.convertStatut(this.selectedPlats.statut));
-        
+    this.nutrition.fetchCiqual(id);       
   }
 
 // Méthode pour la modal de suppression d'un plat OU d'un ingrédient
@@ -191,10 +215,31 @@ onSelectIngredient(id: number) {
 
 // Formulaire pour modifier un plat existant
 async onSubmitForm() {
+  console.log("this.selectedPlats dans onSubmitForm", this.selectedPlats!);
+  // Créer l'objet updateEntry avec les valeurs du formulaire
+  const updateEntry = {
+    id: this.selectedPlats!.id!,
+    titre: this.selectedPlats!.titre,
+    description: this.selectedPlats!.description,
+    ingredients: this.selectedPlats!.ingredients!,
+    qualites: this.selectedPlats!.qualites,
+    astuces: this.selectedPlats!.astuces,
+    nbpersonnes: this.selectedPlats!.nbpersonnes,
+    statut: this.selectedPlats!.statut,
+    allergenes: this.selectedPlats!.allergenes!.map(allergene => allergene.id),
+    types: this.selectedPlats!.types!.map(type => type.id),
+    regimes: this.selectedPlats!.regimes!.map(regime => regime.id),
+    programmes: this.selectedPlats!.programmes!.map(programme => programme.id),
+    nutriments: this.selectedPlats!.nutriments!.map(nutriment => nutriment.id),
+    liens: this.selectedPlats?.liens?.map(lien => lien.id)
+  };
+  console.log("updateEntry dans onSubmitForm", updateEntry);
+  
   try {
     await this.nutrition.updatePlat(
-      this.selectedPlats!.id!,
-      this.selectedPlats!
+      //this.selectedPlats!.id!,
+      //this.selectedPlats!
+      updateEntry            
     );
     this.nutrition.fetchPlats(); // Pour mettre à jour le formulaire ngModel      
   } catch (error) {

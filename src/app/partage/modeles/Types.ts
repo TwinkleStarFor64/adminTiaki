@@ -46,13 +46,13 @@ export interface PlatI {
   ingredients?: Array<number>;
   qualites?: string; 
   astuces?: string;
-  nbPersonnes?: number;
+  nbpersonnes?: number;
   allergenes?: Array<AllergeneI>;
   nutriments?: Array<NutrimentI>;
   regimes?: Array<RegimesI>;
   types?: Array<PlatTypeI>;
   liens?: Array<LienI>;
-  programmes?: Array<NutriProgrammeI>;
+  programmes?: Array<NutriProgrammeI>;  
 }
 
 export interface MenuI {
@@ -100,7 +100,8 @@ export interface AllergeneI {
   id: number;
   titre: string;
   description?: string;
-  type?: 'ingredient' | 'nutriment'
+  type?: 'ingredient' | 'nutriment';
+  slug?: string;
 }
 
 export interface NutriProgrammeI {
@@ -116,7 +117,7 @@ export interface NutrimentI {
   titre: string;
   quantite: string;
   represente?: string;
-  reaction?: string;
+  //reaction?: string;
   mesure: MesuresE;
 }
 
@@ -148,9 +149,19 @@ diner= 'diner'
 }
 
 export enum MesuresE {
-mgr = 'mgr',
+mcg = 'mcg',
 gr = 'gr',
-kgs = 'kgs'
+kg = 'kg',
+mg = 'mg',
+kcal = 'kcal'
+}
+
+export enum AllergeneE {
+  ingredient = 'ingredient',
+  nutriment = 'nutriment',
+  plat = 'plat',
+  menu = 'menu',
+  autre = 'autre'
 }
 
 

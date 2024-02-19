@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { StatutE } from '../modeles/Types';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UtilsService  {
+export class UtilsService  {  
   
   excludedArrayName = 'ingredients'; //Utiliser dans flatNestedData - pour exclure le tableau 'ingredients'
   statuts: { statut: string }[] = []; 
@@ -38,53 +37,7 @@ export class UtilsService  {
     });
   }
 
-  convertStatut(statut: number): string {
-    switch (statut) {
-      case -1:
-        return 'Dépublié';
-      case 0:
-        return 'Brouillon';
-      case 1:
-        return 'Publié';
-      default:
-        return 'Statut inconnu';
-    }
-  }
-
-  onSelectStatut(statut: number) {
-    if (statut == -1) {
-      this.statutTexte = "Dépublié";
-    }
-    if (statut == 0) {
-      this.statutTexte = "Brouillon";
-    }
-    if (statut == 1) {
-      this.statutTexte = "Publié";
-    } else {
-      this.statutTexte = "Aucun statut"
-    }
-  }
-
-// Méthode pour convertir l'enum statut de sa valeur en number en string
-  convertirStatutEnTexte(statut: string): string {
-    switch (statut) {
-      case StatutE.depublie:
-        return 'Dépublié';
-      case StatutE.brouillon:
-        return 'Brouillon';
-      case StatutE.publie:
-        return 'Publié';
-      default:
-        return 'Statut inconnu';
-    }
-  }
-
-// Méthode pour map les valeurs de l'enum StatutE
-  getStatutEnum(): StatutE[] {
-    return Object.values(StatutE).map(value => value as StatutE);
-  }
-
-
+  
 
   
 

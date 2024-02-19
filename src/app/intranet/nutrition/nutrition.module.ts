@@ -16,8 +16,6 @@ import { NutrimentsComponent } from './nutriments/nutriments.component';
     MenusComponent,
     PlatsComponent,
     NutrimentsComponent,
-    
-
   ],
   imports: [
     CommonModule,

@@ -24,6 +24,8 @@ export class AjoutPlatComponent implements OnInit {
   selectedLiens!: LienI[];
 
   statut = Object.values(StatutE).map(value => value as StatutE);
+
+  fakeValue!: number;
   
   constructor(public ref: DynamicDialogRef, public nutrition: NutritionService, public utils: UtilsService, private messageService: MessageService) { }
 
@@ -33,7 +35,7 @@ export class AjoutPlatComponent implements OnInit {
       description: '',
       ingredients: [],
       //statut: 0,
-      nbPersonnes: 0,
+      nbpersonnes: 0,
     };    
   }
 
@@ -48,7 +50,7 @@ export class AjoutPlatComponent implements OnInit {
           ingredients: this.newPlat.ingredients!,
           qualites: this.newPlat.qualites,
           astuces: this.newPlat.astuces,
-          nbPersonnes: this.newPlat.nbPersonnes,
+          nbPersonnes: this.newPlat.nbpersonnes,
           statut: this.newPlat.statut,
       // Ci-dessous je fais un map car j'envoie un tableau de nombre - Ajout de ? car je peux ne pas avoir de données
           allergenes: this.selectedAllergenes?.map(allergene => allergene.id),

@@ -15,16 +15,15 @@ export class NutritionService {
 
   menus: MenuI[] = [];
   plats: PlatI[] = [];
-  //ciqual: CiqualI[] = [];
   ciqualJSON: CiqualI[] = [];
   regimes: RegimesI[] = [];
   platsTypes: PlatTypeI[] = [];
   allergenes: AllergeneI[] = [];
   liens: LienI[] = [];
   nutriProgrammes: NutriProgrammeI[] = [];
-  nutriments: NutrimentI[] = [];
+  nutriments: NutrimentI[] = [];  
 
-  createPlatId!: number;
+  //createPlatId!: number;
   mappedIngredients: any[] = []; // Utilisé dans fetchCiqual()
 
   totals: { [key: string]: number } = {}; // Objet pour stocker tous les totaux - Les crochets {} sont utilisés pour définir un objet
@@ -37,10 +36,7 @@ export class NutritionService {
   flitrePlats: string = ''; // Utiliser dans le ngModel affichant la liste des plats - Filtre de recherche
 
   constructor(public supa: SupabaseService, private http: HttpClient, public utils: UtilsService) {
-    this.supabase = createClient(
-      environment.supabaseUrl,
-      environment.supabaseKey
-    );
+    this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
   }
 
   // Méthode utiliser dans l'input de recherche d'ingrédients afin de le réinitialiser
@@ -73,16 +69,16 @@ export class NutritionService {
           ingredients: item['ingredients'],
           qualites: item['qualites'],
           astuces: item['astuces'],
-          nbPersonnes: item['nbPersonnes'],
+          nbpersonnes: item['nbpersonnes'], //nbpersonnes sans P pour correspondre à la colonne en BDD
           statut: item['statut'],
           allergenes: item['allergenes'],
           nutriments: item['nutriments'],
           regimes: item['regimes'],
           types: item['types'],
           liens: item['liens'],
-          programmes: item['programmes']
+          programmes: item['programmes'],          
         }));
-        //console.log(this.plats.map((item) => item['allergenes']));
+        //console.log("Map des allergènes de fetchPlats : ",this.plats.map((item) => item['allergenes']));
         return this.plats;
       }
     } catch (error) {
@@ -114,7 +110,7 @@ export class NutritionService {
     } else {
       return [];
     }
-  }
+  } 
 
   // -------------------------Méthode pour supprimer un plat-------------------------------------
   async deletePlatSupabase(id: number) {
@@ -134,7 +130,7 @@ export class NutritionService {
       {
         next: (res) => (this.ciqualJSON = res),
         error: (err) => console.log(err),
-        complete: () => console.log(this.ciqualJSON),
+        complete: () => {}, // Si besoin de voir le résultat - console.log(this.ciqualJSON) au lieu de {}
       }
     );
     return this.ciqualJSON;
@@ -208,13 +204,43 @@ export class NutritionService {
   }
 
   //------------------------------- Méthode pour modifier un plat -------------------------------------
-  async updatePlat(id: number, plat: PlatI) {
-    const { error: platError } = await this.supabase
-      .from('plats')
-      .update(plat) // Update de tout l'objet plat qui correspond au type PlatI
-      .eq('id', id);
-    if (platError) {
-      console.log(platError);
+  async updatePlat(updateEntry: {
+    id: number;
+    titre: string;
+    description: string;
+    ingredients: Array<number>;
+    qualites?: string;
+    astuces?: string;
+    nbpersonnes?: number;
+    statut?: number;
+    allergenes?: Array<number>;
+    types?: Array<number>;
+    regimes?: Array<number>;
+    programmes?: Array<number>;
+    nutriments?: Array<number>;
+    liens?: Array<number>;
+  }) {
+    const { data: updatePlatData, error: updatePlatError } = await this.supabase.rpc('update_plat', {
+      plat_id: updateEntry.id,
+      plat_titre: updateEntry.titre,
+      plat_description: updateEntry.description,
+      plat_ingredients: updateEntry.ingredients,
+      plat_qualites: updateEntry.qualites,
+      plat_astuces: updateEntry.astuces,
+      plat_nbpersonnes: updateEntry.nbpersonnes,
+      plat_statut: updateEntry.statut,
+      idAllergenes: updateEntry.allergenes,
+      idType: updateEntry.types,
+      idRegimes: updateEntry.regimes,
+      idNutriProgrammes: updateEntry.programmes,
+      idNutriments: updateEntry.nutriments,
+      idLiens: updateEntry.liens
+    });           
+    if (updatePlatError) {
+      console.log(updatePlatError);
+    }
+    if (updatePlatData) {
+      console.log("Ici updatePlatData : ", updatePlatData);
     }
   }
 
@@ -261,11 +287,7 @@ export class NutritionService {
         }                  
   }  
 
-  // In your NutritionService
-  getPlatById(id: number): PlatI | undefined {
-    console.log("Plat trouvé : ", this.plats.find(plat => plat.id === id));
-    return this.plats.find(plat => plat.id === id);
-  }
+
 
   /* --------------------------Méthode pour récupérer les menus sur la table menus de supabase--------------------------------*/
   async fetchMenus(): Promise<any> {
@@ -443,6 +465,7 @@ async getAllergenes() {
       titre: item['titre'],
       description: item['description'],
       type: item['type'],  
+      slug: item['slug'],
     }));
     //console.log(this.allergenes);    
     return this.allergenes;
@@ -536,7 +559,7 @@ async getNutrimentsBis() {
       titre: item['titre'],
       quantite: item['quantite'],
       represente: item['represente'],
-      reaction: item['reaction'],
+      //reaction: item['reaction'],
       mesure: item['mesure'],  
     }));
     return data;
@@ -545,25 +568,10 @@ async getNutrimentsBis() {
   }
 }
 
-//-------------------------------- Méthode pour update avec un upsert (travail en cours) ------------------------------------------
-  async insertData() {
-    const { error } = await this.supabase
-      .from('attribuerAllergenes')
-      .upsert({idPlats: 28, idAllergenes: 2})
-    if (error) {
-      console.log("Erreur insertData : ", error);      
-    }
-  }
-
-  async insertPlatTypes(idTypes: number) {
-    const { error } = await this.supabase
-      .from('attribuerPlatsTypes')
-      .upsert({idPlat: this.createPlatId, idType: idTypes})
-      console.log("Ici insert : ", this.createPlatId);
-      
-    if (error) {
-      console.log("Erreur insertPlatsTypes : ", error);      
-    }
+  // In your NutritionService
+  getPlatById(id: number): PlatI | undefined {
+    console.log("Plat trouvé : ", this.plats.find(plat => plat.id === id));
+    return this.plats.find(plat => plat.id === id);
   }
 
 }
