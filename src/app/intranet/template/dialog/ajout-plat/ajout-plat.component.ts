@@ -24,6 +24,8 @@ export class AjoutPlatComponent implements OnInit {
   selectedLiens!: LienI[];
 
   statut = Object.values(StatutE).map(value => value as StatutE);
+
+  fakeValue!: number;
   
   constructor(public ref: DynamicDialogRef, public nutrition: NutritionService, public utils: UtilsService, private messageService: MessageService) { }
 

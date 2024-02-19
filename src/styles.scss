@@ -38,6 +38,14 @@ p-button-label {
   font-size: 15rem;  
 }
 
+.p-button.p-button-danger{ /* Le bouton - dans l'input quantite du tableau des ingrédients (interface plats) */
+  background: $card-nutri;
+}
+
+.p-dialog .p-dialog-header{ /* La balise Ajouter un plat dans la modal de création d'un nouveau plat */
+  color: $card-nutri;
+}
+
 /* Code ci-dessous pour la popup <p-confirmPopup> dans nutrition.component.html */
 .p-confirm-popup-footer{
   button:nth-child(1){

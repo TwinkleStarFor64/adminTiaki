@@ -1,1 +1,43 @@
-<p>allergenes works!</p>
+<header>
+    <article>
+        <figure>
+            <img src="assets/images/logos/logo_tiaki.png" alt="" />
+        </figure>
+        <div>
+            <h1><a routerLink="/intranet">Tiaki</a></h1>
+            <h2>Les Allergènes</h2>
+        </div>
+    </article>
+</header>
+<section id="sectionLeft">
+    <article>
+        <span id="firstSpan">
+            <figure>
+                <img src="assets/images/icones/icones-communs/iconeNutrition.svg" alt="" />
+            </figure>
+            <h3>Gestion des allergènes</h3>
+        </span>
+        <p-button styleClass="p-button-success">Ajouter un allergène</p-button>
+        <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input type="text" pInputText [(ngModel)]="nutrition.filtre" />
+        </span>
+        <span>
+            <ng-container *ngIf="nutrition.allergenes | allergenes:nutrition.filtre as filteredAllergenes">
+                <div *ngFor="let allergenes of filteredAllergenes | paginate: { itemsPerPage: 15, currentPage: pageAllergene, id:'allergenes' }">
+                    <p (click)="onSelectAllergene(allergenes)">{{ allergenes.titre}}</p>
+                </div>
+            </ng-container>            
+        </span>
+        <span id="spanPagination">
+            <!-- [maxSize] pour le nombre de numéro de pages à afficher -->
+            <pagination-controls (pageChange)="pageAllergene = $event" id="allergenes" previousLabel="Précédent" nextLabel="Suivant" [maxSize]="5"></pagination-controls>
+        </span>
+    </article>
+    <article>
+        <div id="divNutriIngreAller" *ngIf="selectedAllergene">
+            <h4>{{ selectedAllergene.titre }}</h4>
+            <p>{{ selectedAllergene.description }}</p>            
+        </div>
+    </article>
+</section>

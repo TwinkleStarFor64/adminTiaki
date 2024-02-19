@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AllergeneI, PlatI, StatutE } from 'src/app/partage/modeles/Types';
+import { CiqualI, PlatI, StatutE } from 'src/app/partage/modeles/Types';
 import { SupabaseService } from 'src/app/partage/services/supabase.service';
 import { NutritionService } from '../nutrition.service';
 import { ConfirmEventType, ConfirmationService, MessageService } from 'primeng/api';
@@ -20,20 +20,11 @@ export class PlatsComponent implements OnInit {
   filtreIngredients: string = ''; // Utiliser dans le ngModel affichant la liste des ingrédients - Filtre de recherche
   plat!: PlatI;
   selectedPlats?: PlatI; // Utiliser dans onSelectPlat() - Pour savoir sur quel plat je clique et gérer le *ngIf
-  statut = Object.values(StatutE).map(value => value as StatutE); 
-  ref: DynamicDialogRef | undefined; // Pour la modal d'ajout de plat - DynamicDialogModule
+  selectedingredient?: CiqualI; // Utiliser dans onViewIngredient
 
-  tmp:any = [
-    {id:1, titre:'Oeuf', description:'Un oeuf'},
-    {id:2, titre:'Lait', description:'Du lait de vache'},
-    {id:3, titre:'Soja', description:'Du soja'},
-    {id:4, titre:'Noix', description:'Une noix'}
-  ];
-  tmp_aller: AllergeneI[] = [
-    {id:1, titre:'Oeuf', description:'Un oeuf'},
-    {id:2, titre:'Lait', description:'Du lait de vache'},
-    
-  ];
+  statut = Object.values(StatutE).map(value => value as StatutE); // Utiliser comme [options] dans le p-dropdown du statut de publication d'un plat
+
+  ref: DynamicDialogRef | undefined; // Pour la modal d'ajout de plat - DynamicDialogModule  
     
   constructor(
     public supa: SupabaseService,
@@ -47,12 +38,26 @@ export class PlatsComponent implements OnInit {
   ajoutPlat() { // La méthode pour la modal d'ajout d'un nouveau plat
     this.ref = this.dialogService.open(AjoutPlatComponent, {
             header: 'Ajouter un plat',
-            width: '70%',
+            width: '70vw',
             height: '80vh',
             contentStyle: { overflow: 'hidden' }, // Pour cacher l'overflow globale de la modal
             baseZIndex: 10000,
-            maximizable: true
+            maximizable: true            
     });
+
+    this.ref.onMaximize.subscribe(() => { // Pour modifier le CSS quand la modal est aggrandie
+      const articleOne = document.getElementById('articleOne');
+      if (articleOne) { 
+          articleOne.style.height = '90vh';
+          articleOne.style.width = '65vw';          
+        }      
+      const divOne = document.getElementById('divOne');
+      if (divOne) {
+        divOne.style.height = '70vh'; 
+        divOne.style.width = '32.5vw';       
+      }
+    });        
+
     // Ci-dessous code pour gérer les différentes fermeture de la modal
     this.ref.onClose.subscribe((data: any) => { // data récupérer depuis ajout-plat.component.ts
         let summaryAndDetail;       
@@ -78,14 +83,24 @@ export class PlatsComponent implements OnInit {
     await this.nutrition.getRegimes();
     await this.nutrition.getNutriProgrammes();
     await this.nutrition.getLiens();
-    await this.nutrition.getNutrimentsBis();    
-  }  
-
-  
+    await this.nutrition.getNutrimentsBis();  
+  }   
+    
+// Méthode pour voir la composition d'un ingrédient sur un plat existant
+  onViewIngredient(alimCode: number) {    
+    console.log("Cliqué sur l'ingrédient avec alim_code :", alimCode);
+    // Recherche de l'ingrédient dans ciqualJSON en utilisant son alim_code
+    this.selectedingredient = this.nutrition.ciqualJSON.find(ingredient => ingredient['alim_code'] == +alimCode);    
+    if (this.selectedingredient) {      
+      console.log("Détails de l'ingrédient sélectionné :", this.selectedingredient);
+    } else {
+      console.log("Aucun ingrédient trouvé avec alim_code :", alimCode);
+    }
+  }
 
 // Méthode qui attribue des valeurs aux variables correspondant à l'objet sur lequel je clique - Utilisé sur le nom du plat en HTML
-  onSelectPlat(plat: PlatI, id: Array<number>) {
-    console.log("Avant mise à jour - selectedPlats :", this.selectedPlats);
+  onSelectPlat(plat: PlatI, id: Array<number>) {   
+    this.selectedingredient = undefined; // Pour réinitialiser l'ingrédients sur lequel j'ai cliquer pour en voir les détails - onViewIngredient()
   // J'attribue à selectedPlats la value du plat ou j'ai cliqué - Utile pour le ngIf selectedPlats
     this.selectedPlats = plat;
     console.log("ici selectedPlats : ", this.selectedPlats);    
@@ -93,10 +108,7 @@ export class PlatsComponent implements OnInit {
     this.selectedPlats.ingredients = id;
     //console.log("J'ai cliqué sur les alim_code : " + this.selectedPlats.ingredients);
   // Je passe en paramétre de la méthode fetchCiqual le tableau d'id obtenu au dessus
-    this.nutrition.fetchCiqual(id);    
-    
-    console.log("Allergenes du plat : ", this.selectedPlats.allergenes);    
-    console.log("Regimes du plat : ", this.selectedPlats.regimes);        
+    this.nutrition.fetchCiqual(id);       
   }
 
 // Méthode pour la modal de suppression d'un plat OU d'un ingrédient
