@@ -61,7 +61,6 @@ main{
     box-shadow: none;
 }
 
-
 section {
     height: calc(100vh - $header);
     article:nth-child(1){   
@@ -355,8 +354,7 @@ section {
 /* Pour désactiver l'effet de hoover en transition sur le clic */
 :host ::ng-deep .p-accordion .p-accordion-header:not(.p-disabled) .p-accordion-header-link:focus{
     box-shadow: none;
-    font-family: "Raleway", sans-serif;
-    //color: $card-nutri;
+    font-family: "Raleway", sans-serif;    
 }
 :host ::ng-deep .p-accordion .p-accordion-header:not(.p-disabled).p-highlight .p-accordion-header-link{
     color: $card-nutri;
