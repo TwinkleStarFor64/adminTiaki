@@ -20,8 +20,7 @@ export class AllergenesComponent implements OnInit{
 
   onSelectAllergene(allergene: AllergeneI) {
     this.selectedAllergene = allergene;
-    console.log("ici selectedAllergene : ", this.selectedAllergene.titre);
-    
+    console.log("ici selectedAllergene : ", this.selectedAllergene.titre);    
   }
 
 }
