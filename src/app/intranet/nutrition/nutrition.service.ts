@@ -429,7 +429,7 @@ export class NutritionService {
   }
 
 //-------------------------------- Méthode pour récupérer les types de plats ------------------------
-  async getPlatsTypes() {
+  async getPlatsTypes(): Promise<PlatTypeI[]> {
     const { data, error } = await this.supabase
       .from('platsTypes')
       .select('*');
@@ -451,7 +451,7 @@ export class NutritionService {
   }
 
 //------------------------------- Méthode pour récupérer les allergènes -----------------------------------------
-async getAllergenes() {
+async getAllergenes(): Promise<AllergeneI[]> {
   const { data, error } = await this.supabase
     .from('allergenes')
     .select('*');
@@ -475,7 +475,7 @@ async getAllergenes() {
 }
 
 //------------------------------- Méthode pour récupérer les régimes alimentaires -----------------------------------------
-async getRegimes() {
+async getRegimes(): Promise<RegimesI[]>{
   const { data, error } = await this.supabase
     .from('regimes')
     .select('*');
@@ -483,14 +483,14 @@ async getRegimes() {
     console.log("Erreur de la méthode getRegimes : ", error);      
   }
   if (data) {
-    //console.log('Data de la méthode getRegimes : ', data);
+    console.log('Data de la méthode getRegimes : ', data);
     this.regimes = data.map((item: { [x: string]: any }) => ({
       id: item['id'],
       titre: item['titre'],
       description: item['description'],
       type: item['type'],  
     }));
-    //console.log(this.regimes);    
+    console.log(this.regimes);    
     return this.regimes;
   } else {
     return [];
@@ -498,7 +498,7 @@ async getRegimes() {
 }
 
 //------------------------------- Méthode pour récupérer les programmes alimentaires -----------------------------------------
-async getNutriProgrammes() {
+async getNutriProgrammes(): Promise<NutriProgrammeI[]> {
   const { data, error } = await this.supabase
     .from('nutriProgrammes')
     .select('*');
@@ -521,7 +521,7 @@ async getNutriProgrammes() {
 }
 
 //------------------------------- Méthode pour récupérer les liens -----------------------------------------
-async getLiens() {
+async getLiens(): Promise<LienI[]> {
   const { data, error } = await this.supabase
     .from('liens')
     .select('*');
@@ -545,7 +545,7 @@ async getLiens() {
 }
 
 //------------------------------- Méthode pour récupérer les nutriments -----------------------------------------
-async getNutrimentsBis() {
+async getNutrimentsBis(): Promise<NutrimentI[]> {
   const { data, error } = await this.supabase
     .from('nutriments')
     .select('*');
