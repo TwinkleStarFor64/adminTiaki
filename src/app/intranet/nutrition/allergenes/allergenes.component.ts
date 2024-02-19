@@ -5,7 +5,7 @@ import { AllergeneI } from 'src/app/partage/modeles/Types';
 @Component({
   selector: 'app-allergenes',
   templateUrl: './allergenes.component.html',
-  styleUrls: ['./allergenes.component.scss']
+  styleUrls: ['./allergenes.component.scss', '../nutrition.component.scss']
 })
 export class AllergenesComponent implements OnInit{
 

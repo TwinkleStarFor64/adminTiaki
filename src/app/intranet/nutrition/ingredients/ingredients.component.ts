@@ -5,7 +5,7 @@ import { CiqualI } from 'src/app/partage/modeles/Types';
 @Component({
   selector: 'app-ingredients',
   templateUrl: './ingredients.component.html',
-  styleUrls: ['./ingredients.component.scss']
+  styleUrls: ['./ingredients.component.scss','../nutrition.component.scss']
 })
 export class IngredientsComponent implements OnInit {
 

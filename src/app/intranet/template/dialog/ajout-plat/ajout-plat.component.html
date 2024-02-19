@@ -49,13 +49,13 @@
             <span class="p-float-label" style="display: flex; flex-direction: row;">
               <p-dropdown [options]="statut" [(ngModel)]="newPlat.statut" name="statut" placeholder="Statut de publication" inputId="float-label"></p-dropdown>
               <label for="float-label">Statut de publication</label>
-              <p style="font-style: italic; margin-left: 10px;"><i class="pi pi-info-circle"></i> -1 = Dépublié | 0 = Brouillon | 1 = Publié</p>                     
+              <p style="font-style: italic; margin-left: 25px;"><i class="pi pi-info-circle"></i> -1 = Dépublié | 0 = Brouillon | 1 = Publié</p>                     
             </span>
-            <span class="p-float-label">
-              <p-inputNumber id="inputNumber" inputId="integeronly" [(ngModel)]="newPlat.nbpersonnes" name="nbPersonnes" [showButtons]="true" [min]="0"> </p-inputNumber>
-              <label for="number-input">Nombres de personnes</label>
-            </span> 
           </fieldset>                  
+          <span class="p-float-label">
+            <p-inputNumber id="inputNumber" inputId="integeronly" [(ngModel)]="newPlat.nbpersonnes" name="nbPersonnes" [showButtons]="true" [min]="0"> </p-inputNumber>
+            <label for="number-input">Nombres de personnes</label>
+          </span> 
             <span>
               <h4>Ingrédients</h4> 
               <p style="font-style: italic;"><i class="pi pi-info-circle"></i> Choisir les ingrédients à rajouter</p>

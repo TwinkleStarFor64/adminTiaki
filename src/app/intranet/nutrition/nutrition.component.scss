@@ -289,6 +289,27 @@ section {
     }
 }
 
+#divNutriIngreAller{ /* Div utilisé pour Nutriments Ingrédients et Allergènes - voir dans leur HTML */
+    padding-left: 40px;
+    display: flex;
+    flex-direction: column;            
+    h4{                
+        font-weight: 400;
+        border: #C4C4C4 solid 2px;
+        border-radius: 5%;
+        padding: 10px;
+        color: black;
+    }      
+    #valeurs{  /* La balise <p> Valeurs et composition */
+        font-weight: 600;
+    }
+    div{
+        display: flex;
+        flex-direction: row;
+        gap: 25px;                             
+    }               
+}
+
 /* Le css pour les boutons de la modal PrineNG*/
 .acceptButton {    
     background-color: #33BB27;
