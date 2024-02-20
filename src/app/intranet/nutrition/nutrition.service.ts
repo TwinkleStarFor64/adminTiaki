@@ -94,7 +94,7 @@ export class NutritionService {
     const { data, error } = await this.supabase
       .from('plats')
       .select(`*,
-      allergenes:attribuerAllergenes!attribuerAllergenes_idPlats_fkey(enfant:allergenes!inner!idAllergenes(*)),
+      allergenes:attribuerAllergenes!attribuerAllergenes_idPlats_fkey(enfant:allergenes!idAllergenes(*)),
       nutriments:attribuerNutriments!attribuerNutriments_idPlats_fkey(enfant:nutriments!idNutriments(*)),
       regimes:attribuerRegimes!attribuerRegimes_idPlats_fkey(enfant:regimes!idRegimes(*)),
       types:attribuerPlatsTypes!attribuerPlatsTypes_idPlat_fkey(enfant:platsTypes!idType(*)),
@@ -483,14 +483,14 @@ async getRegimes(): Promise<RegimesI[]>{
     console.log("Erreur de la méthode getRegimes : ", error);      
   }
   if (data) {
-    console.log('Data de la méthode getRegimes : ', data);
+    //console.log('Data de la méthode getRegimes : ', data);
     this.regimes = data.map((item: { [x: string]: any }) => ({
       id: item['id'],
       titre: item['titre'],
       description: item['description'],
       type: item['type'],  
     }));
-    console.log(this.regimes);    
+    //console.log(this.regimes);    
     return this.regimes;
   } else {
     return [];
