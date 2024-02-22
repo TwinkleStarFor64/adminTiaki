@@ -253,9 +253,4 @@ onCancelForm() {
   this.nutrition.fetchPlats();  
 }
 
-
-
-
-
-
 }
