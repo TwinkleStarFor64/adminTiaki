@@ -1,0 +1,618 @@
+{
+    "total_count": 87648,
+    "results": [
+        {
+            "nomcommercial": "Gomme Abis Canigo Propolis",
+            "marque": "Abis Canigo",
+            "formegalenique": "Gomme",
+            "responsableetiquetage": "ABIES LAGRIMUS",
+            "dosejournaliere": "3/4",
+            "modeemploi": "sucer en bouche",
+            "misesengarde": null,
+            "gamme": "Gommes tendres",
+            "aromes": null,
+            "population_a_risques": [
+                "Enfants en bas âge (1 à 3 ans)",
+                "Nourrissons (moins de 1 an)"
+            ],
+            "plantes": [
+                "Abies alba Mill."
+            ],
+            "familles_plantes": [
+                "Pinaceae"
+            ],
+            "parties_plantes": [
+                "Résine"
+            ],
+            "autres_ingredients": [
+                "sucre roux",
+                "sirop de glucose",
+                "miel",
+                "Propolis",
+                "E414",
+                "Arôme - eucalyptus",
+                "Arôme - Pin des montagnes"
+            ],
+            "objectif_effet": null
+        },
+        {
+            "nomcommercial": "Complexe élixir floral Confiance en soi",
+            "marque": "ladrôme",
+            "formegalenique": "Spray",
+            "responsableetiquetage": "LA DROME PROVENCALE",
+            "dosejournaliere": "0.6 ml",
+            "modeemploi": "2 pulverisations sous la langue 4 fois par jour",
+            "misesengarde": "Ne pas dépasser la dose journalière indiquée. Tenir hors de portée des enfants. Déconseillé aux enfants de moins de 6 ans et aux femmes enceintes. Ne pas vaporiser vers une source de chaleur. Eviter tout contact avec les yeux.",
+            "gamme": "Elixirs floraux selon la méthode du Dr Bach",
+            "aromes": null,
+            "population_a_risques": null,
+            "plantes": [
+                "Ceratostigma willmottianum Stapf",
+                "Juglans regia L.",
+                "Larix decidua Mill.",
+                "Scleranthus annuus L",
+                "Ulmus minor Mill."
+            ],
+            "familles_plantes": null,
+            "parties_plantes": null,
+            "autres_ingredients": null,
+            "objectif_effet": null
+        },
+        {
+            "nomcommercial": "Ortie Extra",
+            "marque": "Boutique Nature",
+            "formegalenique": "Gélule",
+            "responsableetiquetage": "NATURE",
+            "dosejournaliere": "2 gélules",
+            "modeemploi": "Prendre 2 gélules par jour avec un grand verre d'eau",
+            "misesengarde": null,
+            "gamme": null,
+            "aromes": null,
+            "population_a_risques": null,
+            "plantes": [
+                "Urtica dioica L."
+            ],
+            "familles_plantes": [
+                "Urticaceae"
+            ],
+            "parties_plantes": [
+                "Feuille"
+            ],
+            "autres_ingredients": [
+                "E460",
+                "E967",
+                "E1201",
+                "E904",
+                "Gélule végétale"
+            ],
+            "objectif_effet": [
+                "Peau"
+            ]
+        },
+        {
+            "nomcommercial": "GINKGO BILOBA",
+            "marque": "ACB PHARMA",
+            "formegalenique": "Ampoule",
+            "responsableetiquetage": "ACBPHARMA",
+            "dosejournaliere": "1",
+            "modeemploi": "A utiliser dans le cadre d'une alimentation équilibrée",
+            "misesengarde": "Ne pas dépasser la dose journalière recommandée",
+            "gamme": null,
+            "aromes": null,
+            "population_a_risques": [
+                "Allaitement",
+                "Grossesse",
+                "Sous anticoagulants",
+                "Sous antidépresseurs"
+            ],
+            "plantes": [
+                "Ginkgo biloba L."
+            ],
+            "familles_plantes": [
+                "Ginkgoaceae"
+            ],
+            "parties_plantes": [
+                "Feuille"
+            ],
+            "autres_ingredients": null,
+            "objectif_effet": null
+        },
+        {
+            "nomcommercial": "GARCI MINCEUR",
+            "marque": null,
+            "formegalenique": "Gélule",
+            "responsableetiquetage": "MONSIEUR CHRISTOPHE BARRAS",
+            "dosejournaliere": "4 gélules",
+            "modeemploi": "2 gélules matin et soir",
+            "misesengarde": null,
+            "gamme": null,
+            "aromes": null,
+            "population_a_risques": null,
+            "plantes": [
+                "Garcinia gummi-gutta (L.) Roxb."
+            ],
+            "familles_plantes": [
+                "Clusiaceae"
+            ],
+            "parties_plantes": [
+                "Fruit (écorce)"
+            ],
+            "autres_ingredients": [
+                "E470b",
+                "gélatine",
+                "E141"
+            ],
+            "objectif_effet": [
+                "Minceur / Modérateur d'appétit"
+            ]
+        },
+        {
+            "nomcommercial": "PHYSIONORM BABY",
+            "marque": null,
+            "formegalenique": "Compte-gouttes",
+            "responsableetiquetage": "LABORATOIRE IMMUBIO",
+            "dosejournaliere": "6 gouttes soit 0.25 mL",
+            "modeemploi": "prendre 6 gouttes par jour directement dans la bouche ou mélangées à un liquide",
+            "misesengarde": "Bien agiter le flacon avant emploi Ce complément alimentaire doit être pris dans le cadre d'un suivi médical.",
+            "gamme": null,
+            "aromes": null,
+            "population_a_risques": null,
+            "plantes": null,
+            "familles_plantes": null,
+            "parties_plantes": null,
+            "autres_ingredients": [
+                "huile de tournesol",
+                "Fructo-oligosaccharides",
+                "Cholécalciférol"
+            ],
+            "objectif_effet": null
+        },
+        {
+            "nomcommercial": "Gélule Cardère",
+            "marque": "PHYTOFORCE",
+            "formegalenique": "Gélule",
+            "responsableetiquetage": "VECTEUR ENERGY",
+            "dosejournaliere": "6",
+            "modeemploi": "Prendre 1 à 6 gélules par jour avec un grand verre d'eau.",
+            "misesengarde": null,
+            "gamme": "Gélules",
+            "aromes": null,
+            "population_a_risques": null,
+            "plantes": [
+                "Dipsacus fullonum L."
+            ],
+            "familles_plantes": [
+                "Caprifoliaceae"
+            ],
+            "parties_plantes": [
+                "Racine"
+            ],
+            "autres_ingredients": [
+                "Hydroxypropyl Méthyl Cellulose"
+            ],
+            "objectif_effet": [
+                "Immunité"
+            ]
+        },
+        {
+            "nomcommercial": "BCAA 12.1.1",
+            "marque": "NUTRYTEC",
+            "formegalenique": "Poudre",
+            "responsableetiquetage": "NUTRYTEC LABORATORIOS, S.A.",
+            "dosejournaliere": "11,2 g",
+            "modeemploi": "Mélanger 5,6 g (2 cuillère doseuse de 5 ml à ras bord) avec 100-150 ml d´eau. Prendre deux fois par",
+            "misesengarde": "E-122: Peut avoir des effets négatifs sur l´activité et l´attention des enfants.",
+            "gamme": "GST",
+            "aromes": "FRUITS DES BOIS",
+            "population_a_risques": [
+                "Autre (à préciser)"
+            ],
+            "plantes": [
+                "Piper nigrum L."
+            ],
+            "familles_plantes": [
+                "Piperaceae"
+            ],
+            "parties_plantes": [
+                "Fruit"
+            ],
+            "autres_ingredients": [
+                "Leucine",
+                "Isoleucine",
+                "Valine",
+                "E330",
+                "Poudre de fraise",
+                "E551",
+                "E955",
+                "E122",
+                "Arôme - framboise",
+                "arôme - fruit des bois"
+            ],
+            "objectif_effet": [
+                "Sport"
+            ]
+        },
+        {
+            "nomcommercial": "Vision +",
+            "marque": null,
+            "formegalenique": "Gélule",
+            "responsableetiquetage": "BI",
+            "dosejournaliere": "2 gélules",
+            "modeemploi": "2 gélules par jour",
+            "misesengarde": "Consultez votre médecin en cas de prise simultanée d'anticoagulants.",
+            "gamme": null,
+            "aromes": null,
+            "population_a_risques": [
+                "Sous anticoagulants"
+            ],
+            "plantes": [
+                "Ginkgo biloba L.",
+                "Ribes nigrum L.",
+                "Tagetes erecta L.",
+                "Tagetes erecta L.",
+                "Vaccinium myrtillus L."
+            ],
+            "familles_plantes": null,
+            "parties_plantes": null,
+            "autres_ingredients": [
+                "gélatine",
+                "Acide L-ascorbique",
+                "Gluconate de zinc",
+                "Oligo-proanthocyanidines"
+            ],
+            "objectif_effet": [
+                "Œil / Vision"
+            ]
+        },
+        {
+            "nomcommercial": "VEINOKRIL",
+            "marque": "VIE & NUTRITION",
+            "formegalenique": "Gélule",
+            "responsableetiquetage": "VIE ET NUTRITION",
+            "dosejournaliere": "1 gélule / jour",
+            "modeemploi": "Prendre 1 gélule le matin avec un grand verre d'eau",
+            "misesengarde": "Contient du fragon : l'emploi chez les femmes enceintes est déconseillé Contient du marronnier d'Inde : L'emploi aux personnes sous traitement anti-coagulant est déconseillé",
+            "gamme": null,
+            "aromes": null,
+            "population_a_risques": [
+                "Grossesse",
+                "Sous anticoagulants"
+            ],
+            "plantes": [
+                "Aesculus hippocastanum L.",
+                "Curcuma longa L.",
+                "Hamamelis virginiana L.",
+                "Ruscus aculeatus L.",
+                "Vaccinium myrtillus L.",
+                "Vitis vinifera L."
+            ],
+            "familles_plantes": null,
+            "parties_plantes": null,
+            "autres_ingredients": [
+                "Sélénite de sodium",
+                "E464"
+            ],
+            "objectif_effet": [
+                "Circulation sanguine et lymphatique"
+            ]
+        },
+        {
+            "nomcommercial": "CHRONODORM Mélatonine 1mg",
+            "marque": "CHRONODORM",
+            "formegalenique": "Comprimé",
+            "responsableetiquetage": "LABORATOIRES IPRAD SANTE",
+            "dosejournaliere": "1 comprimé par jour pendant 15 jours",
+            "modeemploi": "1 comprimé par jour à faire fondre sous la langue une demi-heure avant le coucher.",
+            "misesengarde": "La dose recommandée est de 1 comprimé par jour à faire fondre sous la langue une demi-heure avant le coucher. À prendre sur une période de 15 jours ou ponctuellement. À renouveler si nécessaire. Précautions d'emploi : • Produit réservé à l’adulte. • Femmes enceintes et allaitantes : demandez conseil à votre médecin ou votre pharmacien • Allergie connue à l’un des constituants du produit • Tenir hors de portée des enfants • Ne pas dépasser la dose journalière recommandée • A utiliser dans le cadre d’une alimentation variée, équilibrée et d’un mode de vie sain. • A conserver à température ambiante à l’abri de la chaleur.",
+            "gamme": "CHRONODORM",
+            "aromes": null,
+            "population_a_risques": [
+                "Adolescents (moins de 18 ans)",
+                "Enfants en bas âge (1 à 3 ans)",
+                "Nourrissons (moins de 1 an)"
+            ],
+            "plantes": null,
+            "familles_plantes": null,
+            "parties_plantes": null,
+            "autres_ingredients": [
+                "Mélatonine",
+                "maltodextrine",
+                "E460",
+                "E468",
+                "E470b"
+            ],
+            "objectif_effet": [
+                "Sommeil"
+            ]
+        },
+        {
+            "nomcommercial": "Sirop aux Coquelicots",
+            "marque": null,
+            "formegalenique": "Sirop",
+            "responsableetiquetage": "LABO AROMA PHYTO HERB TRAD PHYTOFRANCE",
+            "dosejournaliere": "1 cuillère à soupe",
+            "modeemploi": "Enfants à partir de 6 ans : 1 à 2 cuillères à café par jour, le soir au couché",
+            "misesengarde": null,
+            "gamme": null,
+            "aromes": null,
+            "population_a_risques": null,
+            "plantes": [
+                "Aloysia citriodora Palau",
+                "Eucalyptus radiata A.Cunn. ex DC.",
+                "Galium odoratum (L.) Scop.",
+                "Hibiscus sabdariffa L.",
+                "Malva sylvestris L.",
+                "Melissa officinalis L.",
+                "Papaver rhoeas L.",
+                "Passiflora incarnata L.",
+                "Tilia tomentosa Moench"
+            ],
+            "familles_plantes": null,
+            "parties_plantes": null,
+            "autres_ingredients": [
+                "sirop de riz",
+                "E422",
+                "miel",
+                "Propolis",
+                "Eau purifiée",
+                "E330"
+            ],
+            "objectif_effet": [
+                "Sommeil"
+            ]
+        },
+        {
+            "nomcommercial": "BIO MINCEUR",
+            "marque": "3 CHENES",
+            "formegalenique": "Ampoule",
+            "responsableetiquetage": "LES TROIS CHENES",
+            "dosejournaliere": "10 mL",
+            "modeemploi": "1 ampoule par joir dilué dans un verre d'eau ou de jus de fruit",
+            "misesengarde": "Teneur élevé en caféine déconseillé aux enfants et aux femmes enceintes ou allaitantes (350mg/100mL)",
+            "gamme": null,
+            "aromes": null,
+            "population_a_risques": [
+                "Adolescents (moins de 18 ans)",
+                "Allaitement",
+                "En dehors des repas",
+                "Enfants (moins de 12 ans)",
+                "Grossesse"
+            ],
+            "plantes": [
+                "Camellia sinensis (L.) Kuntze",
+                "Paullinia cupana Kunth"
+            ],
+            "familles_plantes": null,
+            "parties_plantes": null,
+            "autres_ingredients": [
+                "eau",
+                "jus d'ananas",
+                "jus de citron",
+                "purée de papaye",
+                "arôme - citron"
+            ],
+            "objectif_effet": [
+                "Minceur / Brûleur"
+            ]
+        },
+        {
+            "nomcommercial": [
+                "THE VERT",
+                "THE VERT"
+            ],
+            "marque": null,
+            "formegalenique": [
+                "Gélule",
+                "Gélule"
+            ],
+            "responsableetiquetage": [
+                "SARL S.I.D. NUTRITION (SOC INTER...)",
+                "SARL S.I.D. NUTRITION (SOC INTER...)"
+            ],
+            "dosejournaliere": [
+                "1 à 2 gélules par jour",
+                "1 à 2 gélules par jour"
+            ],
+            "modeemploi": [
+                "1 à 2 gélules par jour à avaler avec un grand verre d'eau.",
+                "1 à 2 gélules par jour à avaler avec un grand verre d'eau."
+            ],
+            "misesengarde": [
+                "Réservé à l'adulte, déconseillé en dehors des repas, ainsi que chez les enfants, les adolescents, les femmes enceintes ou allaitantes. Contient de la caféine (9,5 mg pour 2 gélules)",
+                "Réservé à l’adulte. Contient de la caféine (7,2 mg pour 2 gélules) et de l’EGCG (9,6 mg pour 2 gélules). Ne doit pas être consommé à jeun. Ne doit pas être consommé par les femmes enceintes ou allaitantes et par les enfants de moins de 18 ans, et si vous prenez le même jour d’autres produits contenant du thé vert. EGCG : Epigallocatéchine-gallate"
+            ],
+            "gamme": null,
+            "aromes": null,
+            "population_a_risques": [
+                "Adolescents (moins de 18 ans)",
+                "Allaitement",
+                "Enfants (moins de 12 ans)",
+                "Grossesse",
+                "Adolescents (moins de 18 ans)",
+                "Allaitement",
+                "Autre (à préciser)",
+                "En dehors des repas",
+                "Enfants (moins de 12 ans)",
+                "Grossesse"
+            ],
+            "plantes": null,
+            "familles_plantes": null,
+            "parties_plantes": null,
+            "autres_ingredients": null,
+            "objectif_effet": [
+                "Minceur / Brûleur",
+                "Minceur / Brûleur"
+            ]
+        },
+        {
+            "nomcommercial": "GARCINIA",
+            "marque": "GPH DIFFUSION",
+            "formegalenique": "Gélule",
+            "responsableetiquetage": "GPH DIFFUSION",
+            "dosejournaliere": "3",
+            "modeemploi": "Autiliser dans le cadre d'une alimentation équilibrée",
+            "misesengarde": "Ne pas dépasser la dose journalière recommandée",
+            "gamme": null,
+            "aromes": null,
+            "population_a_risques": null,
+            "plantes": [
+                "Garcinia gummi-gutta (L.) Roxb."
+            ],
+            "familles_plantes": [
+                "Clusiaceae"
+            ],
+            "parties_plantes": [
+                "Fruit"
+            ],
+            "autres_ingredients": [
+                "gélatine",
+                "E422"
+            ],
+            "objectif_effet": null
+        },
+        {
+            "nomcommercial": "OMEGA 3",
+            "marque": "SCIENCE FOR YOU - SFY",
+            "formegalenique": "Capsule",
+            "responsableetiquetage": "PRINCIPE",
+            "dosejournaliere": "6 perles (4,2 gr)",
+            "modeemploi": "Prendre 6 perles par jour réparties en 3 prises.",
+            "misesengarde": "Ne pas dépasser la consommation quotidienne recommandée. Ne pas utiliser comme substitut d'une alimentation variée et équilibrée et avoir un mode de vie sain. Garder hors de portée des enfants.",
+            "gamme": "acide gras essentiel",
+            "aromes": "Neutre",
+            "population_a_risques": [
+                "Enfants (moins de 12 ans)"
+            ],
+            "plantes": null,
+            "familles_plantes": null,
+            "parties_plantes": null,
+            "autres_ingredients": [
+                "Huile de poisson",
+                "gélatine",
+                "E422"
+            ],
+            "objectif_effet": [
+                "Sport"
+            ]
+        },
+        {
+            "nomcommercial": [
+                "pensee sauvage bio ",
+                "pensee sauvage bio "
+            ],
+            "marque": [
+                "FRANCE HERBORISTERIE",
+                "FRANCE HERBORISTERIE"
+            ],
+            "formegalenique": [
+                "Comprimé",
+                "Comprimé"
+            ],
+            "responsableetiquetage": [
+                "SAS VERVEINE MENTHE",
+                "SAS VERVEINE MENTHE"
+            ],
+            "dosejournaliere": [
+                "3",
+                "3 comprimés par jour"
+            ],
+            "modeemploi": [
+                "A utiliser dans le cadre d'une alimentation équilibrée",
+                "2 à 3 comprimés par jour avec un grand verre d'eau au cours des repas."
+            ],
+            "misesengarde": [
+                "Ne pas dépasser la dose journalière recommandée ",
+                "Ne pas dépasser la dose journalière recommandée "
+            ],
+            "gamme": null,
+            "aromes": null,
+            "population_a_risques": null,
+            "plantes": null,
+            "familles_plantes": null,
+            "parties_plantes": null,
+            "autres_ingredients": null,
+            "objectif_effet": null
+        },
+        {
+            "nomcommercial": "GLUTAMINE KYOWA",
+            "marque": "YAMAMOTO NUTRITION",
+            "formegalenique": "Poudre",
+            "responsableetiquetage": "MONSIEUR KEVIN SEBBAN",
+            "dosejournaliere": "Prendre une dosette par jour (5g)",
+            "modeemploi": "Mélanger 1 dosette (5g) du produit dans 300ml d’eau ou jus de fruit, après l’entraînement.",
+            "misesengarde": "Les compléments alimentaires ne doivent pas être utilisés comme substitut d’un régime alimentaire équilibré et varié et un mode de vie sain. Ne pas dépasser la dose journalière recommandée. Tenir hors de portée des enfants. Ne pas consommer si vous êtes enceinte ou si vous allaitez. Informations allergènes : Fabriqué dans un atelier qui utilise des ingrédients à base de lait, de blé, d’orge, d’avoine, de crustacés (glucosamine). Conservation : A conserver dans un endroit frais et sec, bien fermé à l’abri de la lumière et hors de portée des enfants. Ce produit est fabriqué en Italie par Yamamoto Nutrition. Distribué par Power Nutrition – 22 rue Pablo Picasso – 31170 Tournefeuille – France A consommer de préférence avant le / numéro de lot : Voir sur l’emballage.",
+            "gamme": "ACIDE AMINE",
+            "aromes": "NEUTRE",
+            "population_a_risques": [
+                "Adolescents (moins de 18 ans)",
+                "Allaitement",
+                "Enfants (moins de 12 ans)",
+                "Enfants en bas âge (1 à 3 ans)",
+                "Grossesse",
+                "Nourrissons (moins de 1 an)"
+            ],
+            "plantes": null,
+            "familles_plantes": null,
+            "parties_plantes": null,
+            "autres_ingredients": [
+                "L-Glutamine"
+            ],
+            "objectif_effet": [
+                "Croissance et developpement",
+                "Digestion",
+                "Sport"
+            ]
+        },
+        {
+            "nomcommercial": "CARNO-TIME",
+            "marque": "GEVEDIET",
+            "formegalenique": "Gélule",
+            "responsableetiquetage": "GEVEDIET sarl",
+            "dosejournaliere": "1 à 3 gélules",
+            "modeemploi": "1 à 3 gélules par jour",
+            "misesengarde": null,
+            "gamme": null,
+            "aromes": null,
+            "population_a_risques": null,
+            "plantes": null,
+            "familles_plantes": null,
+            "parties_plantes": null,
+            "autres_ingredients": [
+                "Carnosine",
+                "E460",
+                "E470b",
+                "gélatine"
+            ],
+            "objectif_effet": null
+        },
+        {
+            "nomcommercial": "SOMMEIL DETENTE",
+            "marque": null,
+            "formegalenique": "Gélule",
+            "responsableetiquetage": "NATALI NATURE BIO",
+            "dosejournaliere": "3 gélules",
+            "modeemploi": "3 gélules par jour",
+            "misesengarde": "Informez votre médecin ou pharmacien en cas de prise simultanée de médicaments.",
+            "gamme": null,
+            "aromes": null,
+            "population_a_risques": [
+                "Autre (à préciser)"
+            ],
+            "plantes": [
+                "Eschscholzia californica Cham.",
+                "Griffonia simplicifolia (DC.) Baill.",
+                "Hypericum perforatum L.",
+                "Passiflora incarnata L.",
+                "Sedum roseum (L.) Scop."
+            ],
+            "familles_plantes": null,
+            "parties_plantes": null,
+            "autres_ingredients": [
+                "E464"
+            ],
+            "objectif_effet": [
+                "Sommeil"
+            ]
+        }
+    ]
+}

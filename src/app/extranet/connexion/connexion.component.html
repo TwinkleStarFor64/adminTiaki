@@ -1,0 +1,29 @@
+<header>
+    <figure>
+        <img src="assets/images/logos/logo_tiaki.png" alt="">
+    </figure>
+</header>
+<section>
+    <article>
+        <h1>Tiaki</h1>
+        <h2>Interface administrateur de l'application</h2>
+    </article>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmitForm()">
+        <span class="p-float-label">
+            <input pInputText id="email" formControlName="email" type="email" value="email"/>
+            <label htmlFor="Email">Email</label>
+        </span>
+        <span class="p-float-label">
+            <input pInputText id="password" formControlName="password" type="password" value="password"/>
+            <label htmlFor="password">Mot de passe</label>
+        </span>        
+        <div>
+            <p><a href="/recovery">Mot de passe oublié?</a></p>
+            <p-button class="connexion" styleClass="p-button-help" type="submit" [disabled]="loginForm.invalid">Se connecter</p-button>                   
+        </div>
+    </form>
+    <div *ngIf="badLogin">
+        <p>Identifiants incorrects !</p>
+    </div>
+</section>
+

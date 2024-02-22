@@ -1,0 +1,105 @@
+::-webkit-scrollbar {
+    background-color: #eed68d;
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    height: auto;
+    background-color: #f0c02e;
+}
+
+h1,
+h2,
+h3 {
+    color: #f0c02e;
+}
+
+
+section {
+    overflow-y: auto;
+    display: flex;
+    background-color: #FFF1C6;
+    width: 80%;
+    height: 70%;
+    margin: 0 auto;
+    /* Centre horizontalement */
+    margin-top: 50px;
+    justify-content: space-around;
+
+
+        form {
+            display: flex;
+            flex-direction: column;
+            max-width: 400px;
+            margin: 0 auto;
+          
+            h4 {
+              font-size: 1.2rem;
+              margin: 10px 0;
+            }
+          
+            span.p-float-label {
+              display: block;
+              margin: 10px 0;
+            }
+          
+            input[type="text"],
+            input[type="password"] {
+              width: 100%;
+              padding: 10px;
+              border: 1px solid #ccc;
+              border-radius: 5px;
+              font-size: 1rem;
+            }
+          
+            div {
+              display: flex;
+              align-items: center;
+              margin: 10px 0;
+          
+              input[type="checkbox"] {
+                margin-right: 5px;
+              }
+            }
+          
+            p-button {
+              margin: 20px 0;
+              width: 100%;
+              color: #fff; // Couleur du texte
+              border: none;
+              border-radius: 5px;
+              font-size: 1rem;
+              cursor: pointer;
+            }
+          }
+          
+
+        #buttonMdp {
+            padding-bottom: 20px;
+        }
+    }
+
+
+
+
+.acceptButton {
+    background-color: #33BB27;
+    border-color: #33BB27;
+    transition: all .3s ease; // all récupére le css du hover ci-dessous    
+}
+
+.acceptButton:hover {
+    background-color: #33BB27;
+    border-color: #33BB27;
+}
+
+.rejectButton {
+    background-color: #F0C02E;
+    border-color: #F0C02E;
+    transition: all .3s ease; // all récupére le css du hover ci-dessous 
+}
+
+.rejectButton:hover {
+    background-color: #F0C02E;
+    border-color: #F0C02E;
+}

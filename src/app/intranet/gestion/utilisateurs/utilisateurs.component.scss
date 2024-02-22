@@ -1,0 +1,231 @@
+::-webkit-scrollbar {
+  background-color: #f1d98e;
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  height: auto;
+  background-color: #f0c02e;
+}
+
+header {
+  color: #f0c02e;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2vh;
+
+  .search {
+    display: flex;
+    align-items: center;
+    gap: 4vw;
+    background-color: #fff1c6;
+    width: 80%;
+    height: 10vh;
+    margin-top: 20px;
+    border-radius: 5px;
+
+    form {
+      display: flex;
+      width: 100%;
+      gap: 2vw;
+      align-items: center;
+      justify-content: center;
+
+      input {
+        margin-left: 50px;
+        height: 3vh;
+        border-radius: 5px;
+      }
+
+      select {
+        margin-left: 50px;
+        height: 3vh;
+        border-radius: 5px;
+
+        .option {
+          border-radius: 5px;
+        }
+      }
+
+      .clear {
+        margin-left: 70px;
+        background-color: rgb(209, 147, 31);
+        border: rgb(209, 147, 31);
+      }
+    }
+  }
+
+  .table-users {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    max-height: 60vh;
+    overflow-y: auto;
+    scrollbar-width: auto;
+
+    ::-webkit-scrollbar {
+      background-color: chocolate;
+    }
+
+    table {
+      width: 80%;
+
+      thead {
+        width: 80%;
+
+        tr {
+          th {
+            border-bottom: 1px solid #000000;
+            font-weight: 600;
+          }
+
+          .tri {
+            cursor: pointer;
+
+            i {
+              height: 4vh;
+            }
+          }
+        }
+      }
+
+      tbody {
+        td {
+          border-bottom: 1px dashed #000000;
+
+          figure {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    width: 80%;
+    max-width: 1000px;
+    padding: 20px;
+    border: 1px solid #888;
+    background: rgb(252, 247, 231);
+
+    &.show {
+      display: block;
+    }
+
+    .modal-content {
+
+      p {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #f0c02e;
+        margin-top: 10px;
+
+      }
+
+      .close {
+        cursor: pointer;
+        float: right;
+
+      }
+
+      section {
+        display: flex;
+        flex-direction: column;
+
+        .modalArticle {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          width: 100%;
+          height: 100%;
+          padding: 10px;
+          border: 1px solid #888;
+          background: #ffffff;
+          border-radius: 5px;
+
+          label {
+            font-weight: 600;
+          }
+          div {
+            margin-bottom: 10px;
+            display: flex;
+            gap: 10px;
+            width: 20vw;
+            height: 4vh;
+
+            label {
+              font-weight: 600;
+            }
+
+            input[type="text"] {
+              width: 100%;
+              padding: 5px;
+              border-radius: 5px;
+            }
+          }
+
+          input[type="checkbox"] {
+            display: none;
+          }
+
+          /* Crée une nouvelle case à cocher personnalisée */
+          input[type="checkbox"]+label {
+            position: relative;
+            padding-left: 35px;
+            cursor: pointer;
+          }
+
+          input[type="checkbox"]+label:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #000;
+            border-radius: 3px;
+          }
+
+          /* Change la couleur de la case à cocher lorsque elle est cochée */
+          input[type="checkbox"]:checked+label:before {
+            background-color: #f0c02e;
+          }
+        }
+
+        button {
+          margin-top: 10px;
+          width: 6vw;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          align-self: center;
+        }
+      }
+    }
+    .modalArticle:first-of-type {
+      div:nth-child(1), div:nth-child(2) {
+        display: flex;
+        align-items: center;
+      }
+    }
+    @media screen and (max-width: 600px) {
+      width: 100%;
+      height: 100%;
+      padding: 10px;
+    }
+  }
+
+}

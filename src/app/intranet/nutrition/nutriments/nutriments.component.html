@@ -1,0 +1,45 @@
+<header>
+  <article>
+    <figure>
+      <img src="assets/images/logos/logo_tiaki.png" alt="" />
+    </figure>
+    <div>
+      <h1><a routerLink="/intranet">Tiaki</a></h1>
+      <h2>Les Nutriments</h2>
+    </div>
+  </article>
+</header>
+<section>
+  <article>
+    <span id="firstSpan">
+      <figure>
+        <img src="assets/images/icones/icones-communs/iconeNutrition.svg" alt="" />
+      </figure>
+      <h3>Gestion des nutriments</h3>
+    </span>
+    <p-button styleClass="p-button-success">Ajouter un nutriment</p-button>
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input type="text" pInputText [(ngModel)]="nutrition.filtre" />
+    </span>
+    <span>
+      <!-- Utilisation du pipe nutriments pour rechercher des nutriments par leur noms -->
+      <ng-container *ngIf="nutrition.nutriments | nutriments:nutrition.filtre as filteredNutriments">
+        <div *ngFor="let nutriment of filteredNutriments | paginate: { itemsPerPage: 15, currentPage: pageNutriments, id:'nutriment' }">
+          <p (click)="onSelectNutriments(nutriment)">{{ nutriment.titre }}</p>
+        </div>
+      </ng-container>
+    </span>
+    <span id="spanPagination">
+      <!-- [maxSize] pour le nombre de numéro de pages à afficher -->
+      <pagination-controls (pageChange)="pageNutriments = $event" id="nutriment" previousLabel="Précédent"
+        nextLabel="Suivant" [maxSize]="5"></pagination-controls>
+    </span>
+  </article>
+  <article>
+    <div id="divNutriIngreAller" *ngIf="selectedNutriments"> <!-- Le nutriment sur lequel j'ai cliqué -->
+      <h4>{{ selectedNutriments.titre }}</h4>
+      <p>{{ selectedNutriments.quantite }} {{ selectedNutriments.mesure }}</p>
+    </div>
+  </article>
+</section>

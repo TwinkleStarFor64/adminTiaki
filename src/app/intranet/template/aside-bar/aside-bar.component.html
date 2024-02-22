@@ -1,0 +1,10 @@
+<nav [class.active]="navbarVisible">
+  <ul>
+    <li *ngFor="let lien of donnees.aside; let i = index">
+      <a [routerLink]="[lien.url]" [title]="lien.nom" (click)="logout(i)">
+        <img [src]="lien.image" [alt]="" />
+        <span>{{ lien.nom }}</span>
+      </a>
+    </li>
+  </ul>
+</nav>

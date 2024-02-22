@@ -1,0 +1,52 @@
+<section>
+  <article>
+    <form #ajoutPlatForm="ngForm">
+      <span class="p-float-label">
+        <input pInputText [(ngModel)]="newMenu.titre" name="nom" type="text" required minlength="1" />
+        <label htmlFor="nom">Nom</label>
+      </span>
+      <span class="p-float-label">
+        <textarea id="float-input" rows="5" cols="40" pInputTextarea [(ngModel)]="newMenu.description"
+          name="description" required minlength="1"></textarea>
+        <label for="float-input">Description</label>
+      </span>
+      <span>
+        <h4>Plats</h4>
+        <div id="divIngredients" *ngFor="let id of newMenu.plats ; let i=index">
+          <figure (click)="onDeletePlat(i)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
+          <p *ngFor="let plat of newMenu.plats ">{{plat}}</p>
+        </div>
+      </span>
+      <span>
+        <p></p>
+      </span>
+      <span id="spanButton">
+        <p-button styleClass="p-button-warning" (onClick)="onCancelNewMenuForm()">Annuler</p-button>
+        <p-button styleClass="p-button-success" (onClick)="onSubmitNewMenuForm()"
+          [disabled]="ajoutPlatForm.invalid!">Valider</p-button>
+      </span>
+    </form>
+  </article>
+  <article>
+    <div>
+      <h4>Ajout de plats</h4>
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input type="text" pInputText [(ngModel)]="filtrePlats" (input)="nutrition.onFilterChange()" />
+        <!-- Utilisation de onFilterChange() pour réinitialiser l'input -->
+      </span>
+      <div>
+        <!-- Utilisation du pipe plat pour rechercher des plats  -->
+        <span
+          *ngFor="let plat of nutrition.plats | plats:filtrePlats | paginate: { itemsPerPage: 30, currentPage: nutrition.pageIngredients, id:'plats' }">
+          <p (click)="onSelectPlat(plat)">{{ plat.titre }}</p>
+        </span>
+      </div>
+      <span id="paginationPlats">
+        <!-- [maxSize] pour le nombre de numéro de pages à afficher -->
+        <pagination-controls (pageChange)="nutrition.pagePlats = $event" id="plats" previousLabel="Précédent"
+          nextLabel="Suivant" [maxSize]="5"></pagination-controls>
+      </span>
+    </div>
+  </article>
+</section>
