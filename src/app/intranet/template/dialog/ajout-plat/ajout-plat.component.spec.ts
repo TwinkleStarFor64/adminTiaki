@@ -39,7 +39,7 @@ describe('AjoutPlatComponent', () => {
 
   it('should submit new plat form', async () => {
 // Arrange - Préparation des données de l'objet newPlat 
-    component.newPlat = {
+    const newPlat = component.newPlat = {
       titre: 'Test Unitaire Titre',
       description: 'Test Unitaire Description',
       ingredients: [1, 2],
@@ -59,13 +59,13 @@ describe('AjoutPlatComponent', () => {
     const fetchPlatsSpy = spyOn(component.nutrition, 'fetchPlats').and.callThrough();
 
 // Action - Simulation de la soumission du formulaire
-    await component.onSubmitNewPlatForm({});
+    await component.onSubmitNewPlatForm(newPlat);
 
 // Assertion - Vérifier que la la méthode fetchPlats est appelée
     expect(fetchPlatsSpy).toHaveBeenCalled();
 
 // Vérifier la fermeture de la modal DynamicDialog
-    expect(dynamicDialogRefStub.close).toHaveBeenCalledWith({});
+    expect(dynamicDialogRefStub.close).toHaveBeenCalledWith(newPlat);
   });
 
 });
