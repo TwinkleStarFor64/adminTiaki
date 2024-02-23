@@ -81,12 +81,11 @@
             <article>
               <div id="divIngredients" *ngFor="let id of selectedPlats.ingredients; let i=index">
                 <!-- <figure (click)="DeleteDialog(i, false, selectedPlats.ingredients)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure> -->               
-                <p (click)="onViewIngredient(id)">{{ id | getIngredient:'alim_nom_fr' }}
+                <p id="nomIngredients" (click)="onViewIngredient(id)">{{ id | getIngredient:'alim_nom_fr' }}
                   <!-- DeleteDialog() modal PrimeNG - En paramétres l'index de l'ingrédients sur le tableau et la variable bolean del en false --> 
                   <figure (click)="DeleteDialog(i, false, selectedPlats.ingredients)">
                   <i class="pi pi-times-circle"></i></figure>
-                </p>
-                
+                </p>                
               </div>
             </article>
           </span> 
@@ -285,7 +284,7 @@
     </span>
     <div>
       <!-- Utilisation du pipe ingredients pour rechercher des ingredients par leur alim_nom_fr -->        
-        <span *ngFor="let ingredients of nutrition.ciqualJSON | ingredients:filtreIngredients | paginate: { itemsPerPage: 30, currentPage: pageIngredients, id:'ingredients' }">
+        <span *ngFor="let ingredients of nutrition.ciqualJSON | ingredients:filtreIngredients| paginate: { itemsPerPage: 30, currentPage: pageIngredients, id:'ingredients' }">
           <p (click)="onSelectIngredient(ingredients.alim_code)">{{ ingredients.alim_nom_fr }}</p>
         </span>        
     </div>

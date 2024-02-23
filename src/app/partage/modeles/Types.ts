@@ -59,8 +59,8 @@ export interface MenuI {
   id: number;
   titre: string;
   description: string;
-  plats?: Array<number>;
-  statut?:MenuE ;
+  plats?: Array<PlatI>;
+  statut?:-1 | 0 | 1 ;
   reaction?: string;
 }
 
