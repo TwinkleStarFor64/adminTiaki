@@ -33,7 +33,7 @@ export class NutritionService {
   pagePlats: number = 1;
 
   filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats 
-  flitrePlats: string = ''; // Utiliser dans le ngModel affichant la liste des plats - Filtre de recherche
+  //filtrePlats: string = ''; // Utiliser dans le ngModel affichant la liste des plats - Filtre de recherche
 
   constructor(public supa: SupabaseService, private http: HttpClient, public utils: UtilsService) {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
@@ -47,11 +47,11 @@ export class NutritionService {
     }
   }
 
-  onFilterChangePlats() {
-    if (this.flitrePlats === '' || this.flitrePlats != '') {
+  /* onFilterChangePlats() {
+    if (this.filtrePlats === '' || this.filtrePlats != '') {
       this.pagePlats = 1;
     }
-  }
+  } */
 
   // ---------------------Méthode pour fetch les plats et gérer leur affichage en HTML---------------------------
   async fetchPlats(): Promise<any> {
@@ -285,15 +285,14 @@ export class NutritionService {
       if (createError) {
           console.log(createError);              
         }                  
-  }  
-
-
+  }
 
   /* --------------------------Méthode pour récupérer les menus sur la table menus de supabase--------------------------------*/
   async fetchMenus(): Promise<any> {
     try {
       const menuData = await this.getMenus(); // Appelle la méthode getMenus ci-dessous
       if (menuData) {
+        console.log("Data de fetchMenus", menuData);        
         //Ici, nous utilisons la méthode map pour créer un nouveau tableau de plats à partir de data.
         //Chaque élément de data est représenté par l'objet { [x: string]: any; }, que nous convertissons en un objet PlatI en utilisant les propriétés nécessaires.
         this.menus = menuData.map((item: { [x: string]: any }) => ({
@@ -301,27 +300,29 @@ export class NutritionService {
           titre: item['titre'],
           description: item['description'],
           statut: item['statut'],
+          plats: item['plats']
         }));
         console.log(this.menus.map((item) => item['titre']));
         return this.menus;
       }
     } catch (error) {
-      console.error(
-        "Une erreur s'est produite sur la méthode fetchPlats :",
-        error
-      );
+      console.error("Une erreur s'est produite sur la méthode fetchPlats :", error);
     }
   }
 
   // ----------------------Méthode pour récupérer tout les plats sur la table Menus de supabase-------------------
   async getMenus() {
-    const { data, error } = await this.supabase.from('menus').select('*');
+    const { data, error } = await this.supabase
+    .from('menus')
+    .select(`*,
+    plats:attribuerPlats!attribuerPlats_idMenus_fkey(enfant:plats!idPlats(*))`    
+    );
     if (error) {
       console.log('Erreur de la méthode getMenus : ', error);
     }
     if (data) {
       console.log('Data de la méthode getMenus: ', data);
-      return data;
+      return this.utils.flatNestedData(data, 'enfant');
     } else {
       return [];
     }

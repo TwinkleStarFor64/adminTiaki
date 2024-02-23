@@ -176,7 +176,7 @@ section {
                             display: flex;
                             flex-direction: row;
                             width: auto; 
-                            p{
+                            #nomIngredients{ /* La balise <p> avec le nom des ingrédients */
                                 cursor: pointer;
                                 display: flex;
                                 align-items: center;
@@ -185,13 +185,26 @@ section {
                                 background-color: #E5E7EB;
                                 gap: 8px;
                             }
-                            p:hover{
+                            #nomIngredients:hover{
                                 background-color: #CECFD0;
                             }
                             figure{
                                 cursor: pointer;
                                 margin: 0;
                             }                        
+                        }
+                    }
+                    #articleMenu{ /* Balise article seulement sur la page menus */
+                        flex-flow: column wrap;
+                        border: none;
+                        padding-left: 0px;
+                        div{
+                            gap: 10px;
+                            flex-direction: column;
+                            height: auto;
+                            p{
+                                margin: 0;
+                            }
                         }
                     }
                 }                

@@ -40,7 +40,7 @@ export class AjoutMenuComponent {
       await this.nutrition.createMenu({
         titre: this.newMenu.titre,
         description: this.newMenu.description,
-        plats: this.newMenu.plats!,
+        //plats: this.newMenu.plats!,
       });
       this.nutrition.fetchMenus();
     } catch (error) {
@@ -58,7 +58,7 @@ export class AjoutMenuComponent {
     const plat = this.nutri.getPlatById(id);
     if (plat) {
       if (this.newMenu && this.newMenu.plats) {
-        this.newMenu.plats.push(id);
+        //this.newMenu.plats.push(id);
         this.platsTitres.push(plat.titre);
       }
     } else {
