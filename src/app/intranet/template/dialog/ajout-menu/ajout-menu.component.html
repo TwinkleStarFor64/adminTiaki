@@ -39,7 +39,7 @@
         <!-- Utilisation du pipe plat pour rechercher des plats  -->
         <span
           *ngFor="let plat of nutrition.plats | plats:filtrePlats | paginate: { itemsPerPage: 30, currentPage: nutrition.pageIngredients, id:'plats' }">
-          <p (click)="onSelectPlats(plat)">{{ plat.titre }}</p>
+          <p>{{ plat.titre }}</p>
         </span>
       </div>
       <span id="paginationPlats">
@@ -61,7 +61,7 @@
         <!-- Utilisation du pipe plat pour rechercher des plats  -->
         <span
           *ngFor="let plat of nutrition.plats | plats:filtrePlats | paginate: { itemsPerPage: 30, currentPage: nutrition.pageIngredients, id:'plats' }">
-          <p (click)="onSelectPlats(plat)">{{ plat.titre }}</p>
+          <p>{{ plat.titre }}</p>
         </span>
       </div>
       <span id="paginationPlats">

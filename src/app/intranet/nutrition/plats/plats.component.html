@@ -72,20 +72,123 @@
           <span class="p-float-label">
             <p-dropdown [options]="statut" [(ngModel)]="selectedPlats.statut" name="statut" placeholder="Statut de publication" inputId="float-label"></p-dropdown>
             <label for="float-label">Statut de publication</label>
-            <p>-1 = Dépublié | 0 = Brouillon | 1 = Publié</p>
+            <p id="infoItalique"><i class="pi pi-info-circle"></i> -1 = Dépublié | 0 = Brouillon | 1 = Publié</p>
           </span>
         </fieldset> 
       </section>
           <span id="spanIngredients">
             <h4>Ingrédients</h4> 
-            <div id="divIngredients" *ngFor="let id of selectedPlats.ingredients; let i=index">
-              <figure (click)="DeleteDialog(i, false, selectedPlats.ingredients)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure>
-            <!-- DeleteDialog() modal PrimeNG - En paramétres l'index de l'ingrédients sur le tableau et la variable bolean del en false -->    
-              <p>{{ id | getIngredient:'alim_nom_fr' }}</p>                               
-            </div>
+            <article>
+              <div id="divIngredients" *ngFor="let id of selectedPlats.ingredients; let i=index">
+                <!-- <figure (click)="DeleteDialog(i, false, selectedPlats.ingredients)"><img src="assets/images/icones/icones-communs/corbeille.svg" alt=""></figure> -->               
+                <p id="nomIngredients" (click)="onViewIngredient(id)">{{ id | getIngredient:'alim_nom_fr' }}
+                  <!-- DeleteDialog() modal PrimeNG - En paramétres l'index de l'ingrédients sur le tableau et la variable bolean del en false --> 
+                  <figure (click)="DeleteDialog(i, false, selectedPlats.ingredients)">
+                  <i class="pi pi-times-circle"></i></figure>
+                </p>                
+              </div>
+            </article>
           </span> 
+          <table >
+            <caption *ngIf="!selectedingredient">
+              <i class="pi pi-info-circle"></i>
+              Choisir un ingrédient pour en voir les détails
+            </caption>
+            <caption *ngIf="selectedingredient">
+              <i class="pi pi-info-circle"></i>
+              Composition de l'ingrédient sélectionné selon la quantité
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Nutriment</th>
+                <th scope="col">100 Gr</th>
+                <th scope="col">1 cuil. café</th>
+                <th scope="col">Quantité</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="selectedingredient">
+              <tr>
+                <th scope="row">Protéines</th>
+                <td>{{ selectedingredient['Protéines, N x 6.25 (g/100 g)'] }} Gr</td>
+                <td>-</td>
+                <!-- <td><input type="number" name="quantiteIngredient" id="inputQuantite" label="Quantité"></td> -->
+                <td><p-inputNumber id="inputNumber" inputId="integeronly" name="quantite" [showButtons]="true" [min]="0"></p-inputNumber></td>
+              </tr>
+              <tr>
+                <th scope="row">Glucides</th>
+                <td>{{ selectedingredient['Glucides (g/100 g)'] }} Gr</td>
+                <td>-</td>
+                <td><p-inputNumber id="inputNumber" inputId="integeronly" name="quantite" [showButtons]="true" [min]="0"></p-inputNumber></td>
+              </tr>
+              <tr>
+                <th scope="row">Lipides</th>
+                <td>{{ selectedingredient['Lipides (g/100 g)'] }} Gr</td>
+                <td>-</td>
+                <td><p-inputNumber id="inputNumber" inputId="integeronly" name="quantite" [showButtons]="true" [min]="0"></p-inputNumber></td>
+              </tr>
+              <tr>
+                <th scope="row">Sucres</th>
+                <td>{{ selectedingredient['Sucres (g/100 g)']}} Gr</td>
+                <td>-</td>
+                <td><p-inputNumber id="inputNumber" inputId="integeronly" name="quantite" [showButtons]="true" [min]="0"></p-inputNumber></td>
+              </tr>
+              <tr>
+                <th scope="row">Vitamine C</th>
+                <td>{{ selectedingredient['Vitamine C (mg/100 g)']}} Mg</td>
+                <td>-</td>
+                <td><p-inputNumber id="inputNumber" inputId="integeronly" name="quantite" [showButtons]="true" [min]="0"></p-inputNumber></td>
+              </tr>
+              <tr>
+                <th scope="row">Vitamine B1</th>
+                <td>{{ selectedingredient['Vitamine B1 ou Thiamine (mg/100 g)']}} Mg</td>
+                <td>-</td>
+                <td><p-inputNumber id="inputNumber" inputId="integeronly" name="quantite" [showButtons]="true" [min]="0"></p-inputNumber></td>
+              </tr>
+              <tr>
+                <th scope="row">Vitamine B2</th>
+                <td>{{ selectedingredient['Vitamine B2 ou Riboflavine (mg/100 g)']}} Mg</td>
+                <td>-</td>
+                <td><p-inputNumber id="inputNumber" inputId="integeronly" name="quantite" [showButtons]="true" [min]="0"></p-inputNumber></td>
+              <tr>
+                <th scope="row">Vitamine B3</th>
+                <td>{{ selectedingredient['Vitamine B3 ou PP ou Niacine (mg/100 g)']}} Mg</td>
+                <td>-</td>
+                <td><p-inputNumber id="inputNumber" inputId="integeronly" name="quantite" [showButtons]="true" [min]="0"></p-inputNumber></td>
+              </tr>
+              <tr>
+                <th scope="row">Vitamine B5</th>
+                <td>{{ selectedingredient['Vitamine B5 ou Acide pantothénique (mg/100 g)']}} Mg</td>
+                <td>-</td>
+                <td><p-inputNumber id="inputNumber" inputId="integeronly" name="quantite" [showButtons]="true" [min]="0"></p-inputNumber></td>
+              </tr>
+              <tr>
+                <th scope="row">Magnesium</th>
+                <td>{{ selectedingredient['Magnésium (mg/100 g)']}} Mg</td>
+                <td>-</td>
+                <td><p-inputNumber id="inputNumber" inputId="integeronly" name="quantite" [showButtons]="true" [min]="0"></p-inputNumber></td>
+              </tr>
+              <tr>
+                <th scope="row">Potassium</th>
+                <td>{{ selectedingredient['Potassium (mg/100 g)']}} Mg</td>
+                <td>-</td>
+                <td><p-inputNumber id="inputNumber" inputId="integeronly" name="quantite" [showButtons]="true" [min]="0"></p-inputNumber></td>
+              </tr>
+              <tr>
+                <th scope="row">Cuivre</th>
+                <td>{{ selectedingredient['Cuivre (mg/100 g)']}} Mg</td>
+                <td>-</td>
+                <td><p-inputNumber id="inputNumber" inputId="integeronly" name="quantite" [showButtons]="true" [min]="0"></p-inputNumber></td>
+              </tr>
+              <tr>
+                <th scope="row">Manganese</th>
+                <td>{{ selectedingredient['Manganèse (mg/100 g)']}} Mg</td>
+                <td>-</td>
+                <td><p-inputNumber id="inputNumber" inputId="integeronly" name="quantite" [showButtons]="true" [min]="0"></p-inputNumber></td>
+              </tr>
+            </tbody>
+          </table>
           <p-accordion>
-            <p-accordionTab header="Composition des ingrédients">
+            <p-accordionTab header="Composition totale des ingrédients">
               <span>
                 <p>Protéines : {{ nutrition.totals['proteine'] | number: '1.2-2' }} Gr</p>
                 <p>Glucides : {{ nutrition.totals['glucides'] | number: '1.2-2' }} Gr</p>
@@ -107,30 +210,6 @@
               </span>
             </p-accordionTab>
           </p-accordion>
-          <span id="blocIngredients">                     
-            <h4>Composition des ingrédients</h4> 
-            <div id="nutriments">
-              <span>
-                <p>Protéines : {{ nutrition.totals['proteine'] | number: '1.2-2' }} Gr</p>
-                <p>Glucides : {{ nutrition.totals['glucides'] | number: '1.2-2' }} Gr</p>
-                <p>Lipides : {{ nutrition.totals['lipides'] | number: '1.2-2' }} Gr</p>
-                <p>Sucres : {{ nutrition.totals['sucres'] | number: '1.2-2' }} Gr </p>
-              </span>
-              <span>
-                <p>Vitamine C : {{ nutrition.totals['vitamineC'] | number: '1.2-2' }} Mg </p>
-                <p>Vitamine B1 : {{ nutrition.totals['vitamineB1'] | number: '1.2-2' }} Mg </p>
-                <p>Vitamine B2 : {{ nutrition.totals['vitamineB2'] | number: '1.2-2' }} Mg </p>
-                <p>Vitamine B3 : {{ nutrition.totals['vitamineB3'] | number: '1.2-2' }} Mg </p>
-                <p>Vitamine B5 : {{ nutrition.totals['vitamineB5'] | number: '1.2-2' }} Mg </p>
-              </span>
-              <span>
-                <p>Magnesium : {{ nutrition.totals['magnesium'] | number: '1.2-2' }} Mg </p>
-                <p>Potassium : {{ nutrition.totals['potassium'] | number: '1.2-2' }} Mg </p>
-                <p>Cuivre : {{ nutrition.totals['cuivre'] | number: '1.2-2' }} Mg </p>
-                <p>Manganese : {{ nutrition.totals['manganese'] | number: '1.2-2' }} Mg </p>
-              </span>
-            </div>            
-          </span>  
           <fieldset id="fieldsetTab">
             <p-tabView>
                 <p-tabPanel header="Allergènes">                       
@@ -161,7 +240,7 @@
                   <ng-container *ngFor="let programme of selectedPlats.programmes">                
                     <p>Description : {{ programme.description }}</p>                
                     <p>Statut de publication : {{ programme.statut }}</p>
-                    <p>-1 = Dépublié | 0 = Brouillon | 1 = Publié</p>
+                    <p style="font-style: italic;"><i class="pi pi-info-circle"></i> -1 = Dépublié | 0 = Brouillon | 1 = Publié</p>
                   </ng-container>
                 </p-tabPanel>
                 <p-tabPanel header="Nutriments">
@@ -205,7 +284,7 @@
     </span>
     <div>
       <!-- Utilisation du pipe ingredients pour rechercher des ingredients par leur alim_nom_fr -->        
-        <span *ngFor="let ingredients of nutrition.ciqualJSON | ingredients:filtreIngredients | paginate: { itemsPerPage: 30, currentPage: pageIngredients, id:'ingredients' }">
+        <span *ngFor="let ingredients of nutrition.ciqualJSON | ingredients:filtreIngredients| paginate: { itemsPerPage: 30, currentPage: pageIngredients, id:'ingredients' }">
           <p (click)="onSelectIngredient(ingredients.alim_code)">{{ ingredients.alim_nom_fr }}</p>
         </span>        
     </div>
@@ -215,8 +294,6 @@
     </span>
   </article>   
 </section>
-
-
 
 <!-- Pour la pop-up MessageService -->
 <p-toast></p-toast>

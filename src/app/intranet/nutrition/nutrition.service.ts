@@ -34,7 +34,7 @@ export class NutritionService {
   pagePlats: number = 1;
 
   filtre: string = ''; // Ce qui va servir à filtrer le tableau des ingrédients - utiliser dans le ngModel affichant la liste des plats 
-  flitrePlats: string = ''; // Utiliser dans le ngModel affichant la liste des plats - Filtre de recherche
+  //filtrePlats: string = ''; // Utiliser dans le ngModel affichant la liste des plats - Filtre de recherche
 
   constructor(public supa: SupabaseService, private http: HttpClient, public utils: UtilsService) {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
@@ -48,11 +48,11 @@ export class NutritionService {
     }
   }
 
-  onFilterChangePlats() {
-    if (this.flitrePlats === '' || this.flitrePlats != '') {
+  /* onFilterChangePlats() {
+    if (this.filtrePlats === '' || this.filtrePlats != '') {
       this.pagePlats = 1;
     }
-  }
+  } */
 
   // ---------------------Méthode pour fetch les plats et gérer leur affichage en HTML---------------------------
   async fetchPlats(): Promise<any> {
@@ -95,7 +95,7 @@ export class NutritionService {
     const { data, error } = await this.supabase
       .from('plats')
       .select(`*,
-      allergenes:attribuerAllergenes!attribuerAllergenes_idPlats_fkey(enfant:allergenes!inner!idAllergenes(*)),
+      allergenes:attribuerAllergenes!attribuerAllergenes_idPlats_fkey(enfant:allergenes!idAllergenes(*)),
       nutriments:attribuerNutriments!attribuerNutriments_idPlats_fkey(enfant:nutriments!idNutriments(*)),
       regimes:attribuerRegimes!attribuerRegimes_idPlats_fkey(enfant:regimes!idRegimes(*)),
       types:attribuerPlatsTypes!attribuerPlatsTypes_idPlat_fkey(enfant:platsTypes!idType(*)),
@@ -286,43 +286,44 @@ export class NutritionService {
       if (createError) {
           console.log(createError);              
         }                  
-  }  
-
-
+  }
 
   /* --------------------------Méthode pour récupérer les menus sur la table menus de supabase--------------------------------*/
   async fetchMenus(): Promise<any> {
     try {
       const menuData = await this.getMenus(); // Appelle la méthode getMenus ci-dessous
       if (menuData) {
-        //Ici, nous utilisons la méthode map pour créer un nouveau tableau de menus à partir de data.
-        //Chaque élément de data est représenté par l'objet { [x: string]: any; }, que nous convertissons en un objet MenuI en utilisant les propriétés nécessaires.
+        console.log("Data de fetchMenus", menuData);        
+        //Ici, nous utilisons la méthode map pour créer un nouveau tableau de plats à partir de data.
+        //Chaque élément de data est représenté par l'objet { [x: string]: any; }, que nous convertissons en un objet PlatI en utilisant les propriétés nécessaires.
         this.menus = menuData.map((item: { [x: string]: any }) => ({
           id: item['id'],
           titre: item['titre'],
           description: item['description'],
           statut: item['statut'],
+          plats: item['plats']
         }));
         console.log(this.menus.map((item) => item['titre']));
         return this.menus;
       }
     } catch (error) {
-      console.error(
-        "Une erreur s'est produite sur la méthode fetchPlats :",
-        error
-      );
+      console.error("Une erreur s'est produite sur la méthode fetchPlats :", error);
     }
   }
 
   // ----------------------Méthode pour récupérer tout les menus sur la table Menus de supabase-------------------
   async getMenus() {
-    const { data, error } = await this.supabase.from('menus').select('*');
+    const { data, error } = await this.supabase
+    .from('menus')
+    .select(`*,
+    plats:attribuerPlats!attribuerPlats_idMenus_fkey(enfant:plats!idPlats(*))`    
+    );
     if (error) {
       console.log('Erreur de la méthode getMenus : ', error);
     }
     if (data) {
       console.log('Data de la méthode getMenus: ', data);
-      return data;
+      return this.utils.flatNestedData(data, 'enfant');
     } else {
       return [];
     }
@@ -430,7 +431,7 @@ export class NutritionService {
   }
 
 //-------------------------------- Méthode pour récupérer les types de plats ------------------------
-  async getPlatsTypes() {
+  async getPlatsTypes(): Promise<PlatTypeI[]> {
     const { data, error } = await this.supabase
       .from('platsTypes')
       .select('*');
@@ -452,7 +453,7 @@ export class NutritionService {
   }
 
 //------------------------------- Méthode pour récupérer les allergènes -----------------------------------------
-async getAllergenes() {
+async getAllergenes(): Promise<AllergeneI[]> {
   const { data, error } = await this.supabase
     .from('allergenes')
     .select('*');
@@ -476,7 +477,7 @@ async getAllergenes() {
 }
 
 //------------------------------- Méthode pour récupérer les régimes alimentaires -----------------------------------------
-async getRegimes() {
+async getRegimes(): Promise<RegimesI[]>{
   const { data, error } = await this.supabase
     .from('regimes')
     .select('*');
@@ -499,7 +500,7 @@ async getRegimes() {
 }
 
 //------------------------------- Méthode pour récupérer les programmes alimentaires -----------------------------------------
-async getNutriProgrammes() {
+async getNutriProgrammes(): Promise<NutriProgrammeI[]> {
   const { data, error } = await this.supabase
     .from('nutriProgrammes')
     .select('*');
@@ -522,7 +523,7 @@ async getNutriProgrammes() {
 }
 
 //------------------------------- Méthode pour récupérer les liens -----------------------------------------
-async getLiens() {
+async getLiens(): Promise<LienI[]> {
   const { data, error } = await this.supabase
     .from('liens')
     .select('*');
@@ -546,7 +547,7 @@ async getLiens() {
 }
 
 //------------------------------- Méthode pour récupérer les nutriments -----------------------------------------
-async getNutrimentsBis() {
+async getNutrimentsBis(): Promise<NutrimentI[]> {
   const { data, error } = await this.supabase
     .from('nutriments')
     .select('*');

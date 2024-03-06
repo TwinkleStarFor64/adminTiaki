@@ -61,7 +61,6 @@ main{
     box-shadow: none;
 }
 
-
 section {
     height: calc(100vh - $header);
     article:nth-child(1){   
@@ -156,6 +155,9 @@ section {
                         flex-direction: column;
                         margin-top: 25px; 
                         gap: 35px;
+                        #infoItalique {
+                            font-style: italic;
+                        }
                     }
                 }            
                 #spanIngredients{
@@ -164,14 +166,68 @@ section {
                         font-weight: 600;
                         padding-bottom: 5px; 
                     }
-                    div{ /*Div avec le nom des aliments et l'icône de corbeille*/
-                        display: flex;
-                        flex-direction: row;
-                        align-items: center;
-                        figure{
-                            cursor: pointer;
-                        }                        
-                    }                    
+                    article{
+                        padding-bottom: 0;
+                        width: auto;
+                        height: auto;
+                        flex-flow: row wrap;
+                        gap: 5px;
+                        div{ /*Div avec le nom des aliments et l'icône de croix*/
+                            display: flex;
+                            flex-direction: row;
+                            width: auto; 
+                            #nomIngredients{ /* La balise <p> avec le nom des ingrédients */
+                                cursor: pointer;
+                                display: flex;
+                                align-items: center;
+                                border-radius: 20px;
+                                padding: 10px 8px 10px 8px;
+                                background-color: #E5E7EB;
+                                gap: 8px;
+                            }
+                            #nomIngredients:hover{
+                                background-color: #CECFD0;
+                            }
+                            figure{
+                                cursor: pointer;
+                                margin: 0;
+                            }                        
+                        }
+                    }
+                    #articleMenu{ /* Balise article seulement sur la page menus */
+                        flex-flow: column wrap;
+                        border: none;
+                        padding-left: 0px;
+                        div{
+                            gap: 10px;
+                            flex-direction: column;
+                            height: auto;
+                            p{
+                                margin: 0;
+                            }
+                        }
+                    }
+                }                
+                table{                    
+                    border-collapse: collapse;
+                    border: 2px solid #CECFD0; 
+                    caption{
+                        font-style: italic;
+                    } 
+                    th{
+                        font-weight: 600;
+                    } 
+                    th,td {
+                        border: 1px solid #CECFD0;
+                        padding: 10px 10px;
+                        text-align: center;
+                    } 
+                    #inputQuantite{
+                        height: 25px;    
+                        width: 55px; 
+                        text-align: center;                   
+                    }                
+                    
                 }
                 #spanButton{ /*Le span avec les boutons annuler & valider*/
                     width: 50vw;
@@ -179,24 +235,13 @@ section {
                     justify-content: flex-end;
                     gap: 1vw;
                     padding-right: 1vw;
+                    padding-bottom: 15px;
                 }
                 
                 #fieldsetTab{
                     border: none;
                     min-height: 30vh;
                 }
-            }
-            #blocIngredients{ /* Le span avec la liste d'ingrédients et leurs nutriments */               
-                h4{ /* La balise Nutriments*/
-                    border-bottom: black dashed 1px;
-                    font-weight: 600;
-                    padding-bottom: 5px;
-                }
-                #nutriments{ /* La div avec la liste des nutriments*/
-                    display: flex;
-                    flex-direction: row;
-                    gap: 1vw;
-                }                
             }
         }
     }
@@ -224,14 +269,19 @@ section {
         }
         div{ /* Div contenant le span avec le ngFor*/
             overflow-y: auto;
+            overflow-x: hidden;
+            height: 70vh;
             span{
                 p{
                     cursor: pointer; 
+                    padding: 16px 12px; 
                     margin: 0; 
-                    padding: 6px;     
+                    border-bottom: #D9042B 1px dashed; 
+                    transition: all .3s ease;   
                 }
                 p:hover{
                     background-color: #CECFD0;
+                    transform: scale(1.05); 
                 }
             }
         }
@@ -249,6 +299,27 @@ section {
             background-color: $card-nutri;
         }
     }
+}
+
+#divNutriIngreAller{ /* Div utilisé pour Nutriments Ingrédients et Allergènes - voir dans leur HTML */
+    padding-left: 40px;
+    display: flex;
+    flex-direction: column;            
+    h4{                
+        font-weight: 400;
+        border: #C4C4C4 solid 2px;
+        border-radius: 5%;
+        padding: 10px;
+        color: black;
+    }      
+    #valeurs{  /* La balise <p> Valeurs et composition */
+        font-weight: 600;
+    }
+    div{
+        display: flex;
+        flex-direction: row;
+        gap: 25px;                             
+    }               
 }
 
 /* Le css pour les boutons de la modal PrineNG*/
@@ -296,8 +367,7 @@ section {
 /* Pour désactiver l'effet de hoover en transition sur le clic */
 :host ::ng-deep .p-accordion .p-accordion-header:not(.p-disabled) .p-accordion-header-link:focus{
     box-shadow: none;
-    font-family: "Raleway", sans-serif;
-    //color: $card-nutri;
+    font-family: "Raleway", sans-serif;    
 }
 :host ::ng-deep .p-accordion .p-accordion-header:not(.p-disabled).p-highlight .p-accordion-header-link{
     color: $card-nutri;

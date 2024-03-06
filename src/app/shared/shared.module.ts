@@ -13,12 +13,13 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TableModule } from 'primeng/table';
 import { GestionUtilisateursPipe } from '../pipes/gestion-utilisateurs.pipe';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
-import { GetIngredientPipe, IngredientsPipe, MenusPipe, NutrimentsPipe, PlatsPipe } from '../pipes/nutrition.pipe';
+import { AllergenesPipe, GetIngredientPipe, IngredientsPipe, MenusPipe, NutrimentsPipe, PlatsPipe } from '../pipes/nutrition.pipe';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TabViewModule } from 'primeng/tabview';
 import { AccordionModule } from 'primeng/accordion';
+
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { AccordionModule } from 'primeng/accordion';
     GetIngredientPipe,
     PlatsPipe,
     GestionUtilisateursPipe,
-    NutrimentsPipe
+    NutrimentsPipe,
+    AllergenesPipe
   ],
   imports: [
     CommonModule,
@@ -75,7 +77,9 @@ import { AccordionModule } from 'primeng/accordion';
     DropdownModule,
     MultiSelectModule,
     TabViewModule,
-    AccordionModule
+    AccordionModule,
+    AllergenesPipe,
+    NutrimentsPipe
   ],
   providers: [
 
