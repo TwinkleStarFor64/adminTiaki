@@ -123,7 +123,7 @@ export interface NutrimentI {
   titre: string;
   quantite: string;
   represente?: string;
-  //reaction?: string;
+  reaction?: string;
   mesure: MesuresE;
 }
 
