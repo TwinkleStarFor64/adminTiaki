@@ -41,7 +41,6 @@ export interface PlatI {
   titre: string;
   description: string;
   statut?: -1 | 0 | 1;
-  //statut?: StatutE;
   reaction?: string;
   ingredients?: Array<number>;
   qualites?: string; 

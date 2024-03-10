@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RecoveryComponent } from './recovery.component';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { of } from 'rxjs';
 
 describe('RecoveryComponent', () => {
   let component: RecoveryComponent;

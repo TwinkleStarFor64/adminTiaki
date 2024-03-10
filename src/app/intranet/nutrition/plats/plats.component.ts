@@ -236,11 +236,7 @@ async onSubmitForm() {
   console.log("updateEntry dans onSubmitForm", updateEntry);
   
   try {
-    await this.nutrition.updatePlat(
-      //this.selectedPlats!.id!,
-      //this.selectedPlats!
-      updateEntry            
-    );
+    await this.nutrition.updatePlat(updateEntry);
     this.nutrition.fetchPlats(); // Pour mettre à jour le formulaire ngModel      
   } catch (error) {
     console.error("Une erreur s'est produite :", error);

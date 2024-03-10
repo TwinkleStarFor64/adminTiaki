@@ -23,8 +23,7 @@ export class ConnexionComponent implements OnInit {
 
  async onSubmitForm() {
 // J'utilise la méthode signIn de supabase.service.ts afin de comparer la value Email et Password du formulaire à l'email et MDP enregistré sur supabase
-  await this.supa.signIn(this.loginForm.value.email, this.loginForm.value.password);          
-  console.log("DANGER !!",this.loginForm.value.password); // DANGER !!!! je vois le mdp ??!! viens du HTTP au lieu du HTTPS ??!!    
+  await this.supa.signIn(this.loginForm.value.email, this.loginForm.value.password);   
   this.badLogin = this.supa.badLogin; // Pour faire apparaître la balise HTML "identifiants incorrects"       
   }
 
